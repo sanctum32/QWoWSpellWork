@@ -614,4 +614,28 @@ struct SpellEntry
     std::array<const SpellEffectEntry*, MAX_SPELL_EFFECTS> m_spellEffects{};
 };
 
+struct FactionEntry
+{
+    FactionEntry() = default;
+    explicit FactionEntry(DBCFileLoader::Record const& record);
+
+    uint32_t  Id{0};                                          // 0
+    int32_t   ReputationIndex{0};                             // 1
+    uint32_t  ReputationRaceMask[4]{0};                       // 2 - 5
+    uint32_t  ReputationClassMask[4]{0};                      // 6 - 9
+    int32_t   ReputationBase[4]{0};                           // 10 - 13
+    uint32_t  ReputationFlags[4]{0};                          // 14 - 17
+    uint32_t  ParentFactionID{0};                             // 18
+    float     ParentFactionMod[2]{0.0f};                      // 19 - 20 Faction gains incoming rep * spilloverRateIn and  Faction outputs rep * spilloverRateOut as spillover reputation
+    uint32_t  ParentFactionCap[2]{0};                         // 21 - 22 The highest rank the faction will profit from incoming spillover and It does not seem to be the max standing at which a faction outputs spillover ...so no idea
+    std::string   Name;                                       // 23
+    std::string   Description;                                // 24
+    uint32_t  Expansion{0};                                   // 25
+
+    static char const* GetDBCFormat()
+    {
+        return "iiiiiiiiiiiiiiiiiiiffiissi";
+    }
+};
+
 #endif // DBC_H

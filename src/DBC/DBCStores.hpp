@@ -44,6 +44,7 @@ public:
     std::map<uint32_t, OverrideSpellDataEntry>       m_OverrideSpellDataEntries;                 // OverrideSpellData.dbc
     std::map<uint32_t, ScreenEffectEntry>            m_ScreenEffectEntries;                      // ScreenEffect.dbc
     std::map<uint32_t, SpellRadiusEntry>             m_SpellRadiusEntries;                       // SpellRadius.dbc
+    std::map<uint32_t, FactionEntry>                 m_FactionEntries;                           // Faction.dbc
 };
 
 #define sDBCStores DBCStore::instance()

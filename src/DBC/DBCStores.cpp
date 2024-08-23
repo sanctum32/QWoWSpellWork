@@ -39,6 +39,7 @@ bool DBCStore::LoadDBCDatas()
     DBCFileLoader overrideSpellDataEntriesDBC("dbc/OverrideSpellData.dbc", OverrideSpellDataEntry::GetDBCFormat());
     DBCFileLoader screenEffectDBC("dbc/ScreenEffect.dbc", ScreenEffectEntry::GetDBCFormat());
     DBCFileLoader spellRadiusDBC("dbc/SpellRadius.dbc", SpellRadiusEntry::GetDBCFormat());
+    DBCFileLoader factionDBC("dbc/Faction.dbc", FactionEntry::GetDBCFormat());
 
     if (!spellDBC.IsLoaded() ||
         !spellEffectDBC.IsLoaded() ||
@@ -67,7 +68,8 @@ bool DBCStore::LoadDBCDatas()
         !gtSpellScalingDBC.IsLoaded() ||
         !overrideSpellDataEntriesDBC.IsLoaded() ||
         !screenEffectDBC.IsLoaded() ||
-        !spellRadiusDBC.IsLoaded())
+        !spellRadiusDBC.IsLoaded() ||
+        !factionDBC.IsLoaded())
     {
         return false;
     }
@@ -99,6 +101,7 @@ bool DBCStore::LoadDBCDatas()
     ReadDBCRows(overrideSpellDataEntriesDBC, m_OverrideSpellDataEntries);
     ReadDBCRows(screenEffectDBC, m_ScreenEffectEntries);
     ReadDBCRows(spellRadiusDBC, m_SpellRadiusEntries);
+    ReadDBCRows(factionDBC, m_FactionEntries);
 
     // link spell related pointers
     for (const auto& spellEffectItr : m_SpellEffectEntries)

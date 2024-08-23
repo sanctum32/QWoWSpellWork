@@ -2,7 +2,7 @@
 #include "DBCStores.hpp"
 #include "Enums/SpellEnumStr.hpp"
 #include "JsonData/JsonData.hpp"
-#include <qdebug.h>
+#include <QDebug>
 
 constexpr char const* line = "==============================================<br>";
 
@@ -410,7 +410,7 @@ inline void PrintSpellAuraOptions(QString& result, uint32_t SpellAuraOptionsId)
         if (spellAuraOptionEntry->procFlags != 0)
         {
             result += "<br>";
-            result += QString("<b>Proc flag 0x%1, chance = %2, charges - %3<br>")
+            result += QString("Proc flag 0x%1, chance = %2, charges - %3<br>")
                              .arg(spellAuraOptionEntry->procFlags, 8, 16, QLatin1Char('0'))
                              .arg(spellAuraOptionEntry->procChance)
                              .arg(spellAuraOptionEntry->procCharges);
@@ -680,7 +680,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             const auto& effectnameItr = QSpellWorkJson::SpellEffectNames.find(effectInfo->Effect);
             if (effectnameItr != QSpellWorkJson::SpellEffectNames.end())
             {
-                result += QString("<b>Effect %1: Id %2 (%3)<b><br>").arg(effIndex).arg(effectInfo->Effect).arg(effectnameItr->second);
+                result += QString("<b>Effect %1: Id %2 (%3)</b><br>").arg(effIndex).arg(effectInfo->Effect).arg(effectnameItr->second);
             }
         }
 
@@ -923,6 +923,16 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                 }
                 break;
             }
+            case SPELL_AURA_MOD_FACTION:
+            {
+                result += "Effected faction: " + QString::number(effectInfo->EffectMiscValue);
+                if (const auto* factionEntry = GetDBCEntry(effectInfo->EffectMiscValue, sDBCStores->m_FactionEntries))
+                {
+                    result += QString("\"%1\"").arg(factionEntry->Name.c_str());
+                }
+                result += "<br";
+                break;
+            }
             default:
                 break;
             }
@@ -1006,7 +1016,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 
                 if (!triggerSpell->ToolTip.empty())
                 {
-                    result += QString("   ToolTip: %1<br>").arg(triggerSpell->ToolTip.c_str());
+                    result += QString("ToolTip: %1<br>").arg(triggerSpell->ToolTip.c_str());
                 }
 
                 result += "</span>";
@@ -1069,6 +1079,7 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
 
     spellText += line;
     spellText += QString("ToolTip: %1<br>").arg(ToolTip.c_str());
+    spellText += line;
     spellText += QString("Category = %1, SpellIconID = %2, activeIconID = %3, SpellVisual = (%4, %5)<br>")
                      .arg(SpellCategoriesId)
                      .arg(SpellIconID)

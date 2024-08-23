@@ -405,3 +405,46 @@ SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
     SpellTotemsId               = record.getUInt(id++);
     ResearchProject             = record.getUInt(id++);
 }
+
+FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
+{
+    uint8_t i = 0;
+    Id                  = record.getUInt(i++);
+    ReputationIndex     = record.getInt(i++);
+
+    for (auto& val : ReputationRaceMask)
+    {
+        val = record.getUInt(i++);
+    }
+
+    for (auto& val : ReputationClassMask)
+    {
+        val = record.getUInt(i++);
+    }
+
+    for (auto& val : ReputationBase)
+    {
+        val = record.getInt(i++);
+    }
+
+    for (auto& val : ReputationFlags)
+    {
+        val = record.getUInt(i++);
+    }
+
+    ParentFactionID = record.getUInt(i++);
+
+    for (auto& val : ParentFactionMod)
+    {
+        val = record.getFloat(i++);
+    }
+
+    for (auto& val : ParentFactionCap)
+    {
+        val = record.getUInt(i++);
+    }
+
+    Name = record.getString(i++);
+    Description = record.getString(i++);
+    Expansion = record.getUInt(i++);
+}
