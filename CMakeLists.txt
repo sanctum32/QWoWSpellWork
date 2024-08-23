@@ -22,23 +22,23 @@ include_directories(
 set(TS_FILES QSpellWork_en_GB.ts)
 
 set(PROJECT_SOURCES
-    src/DBC/DBCStructures.h
-        src/DBC/DBCFileLoader.h
+    src/DBC/DBCStructures.hpp
+    src/DBC/DBCFileLoader.hpp
         src/DBC/DBCFileLoader.cpp
         src/DBC/DBCStructures.cpp
-        src/DBC/DBCStores.h
+        src/DBC/DBCStores.hpp
         src/DBC/DBCStores.cpp
         src/DBC/SpellInfoHelper.cpp
         src/SpellInfoTabEvents.cpp
-        src/Enums/SpellEnums.h
-        src/Enums/SpellEnumStr.h
+        src/Enums/SpellEnums.hpp
+        src/Enums/SpellEnumStr.hpp
         src/JsonData/JsonData.hpp
         src/JsonData/JsonData.cpp
         src/appSettings.hpp
         src/appSettings.cpp
         src/main.cpp
         src/mainwindow.cpp
-        src/mainwindow.h
+        src/mainwindow.hpp
         src/mainwindow.ui
         src/${TS_FILES}
 )

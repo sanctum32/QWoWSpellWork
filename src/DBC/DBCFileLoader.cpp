@@ -3,7 +3,7 @@
 #include <cstring>
 #include <cassert>
 
-#include "DBCFileLoader.h"
+#include "DBCFileLoader.hpp"
 
 DBCFileLoader::DBCFileLoader(const char *filename, const char *fmt) :
     fieldsOffset(nullptr),

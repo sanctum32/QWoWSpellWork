@@ -1,4 +1,4 @@
-#include "DBCStructures.h"
+#include "DBCStructures.hpp"
 
 SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
 {

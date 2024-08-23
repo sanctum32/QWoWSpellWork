@@ -1,6 +1,6 @@
-#include "DBC/DBCStructures.h"
-#include "DBCStores.h"
-#include "Enums/SpellEnumStr.h"
+#include "DBC/DBCStructures.hpp"
+#include "DBCStores.hpp"
+#include "Enums/SpellEnumStr.hpp"
 #include "JsonData/JsonData.hpp"
 #include <qdebug.h>
 

@@ -1,4 +1,4 @@
-#include "DBCStores.h"
+#include "DBCStores.hpp"
 
 template<class T>
 void ReadDBCRows(DBCFileLoader& dbcFile, std::map<uint32_t, T>& storage)

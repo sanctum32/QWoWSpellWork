@@ -1,5 +1,5 @@
 // Qt
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
@@ -12,7 +12,7 @@
 #include <QSql>
 
 // App
-#include "DBC/DBCStores.h"
+#include "DBC/DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
 #include "appSettings.hpp"
 

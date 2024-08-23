@@ -1,8 +1,8 @@
 #ifndef DBC_STRUCTURES_H
 #define DBC_STRUCTURES_H
 
-#include "DBCFileLoader.h"
-#include "../Enums/SpellEnums.h"
+#include "DBCFileLoader.hpp"
+#include "../Enums/SpellEnums.hpp"
 #include <QString>
 #include <qdebug.h>
 

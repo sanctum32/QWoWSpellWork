@@ -2,7 +2,7 @@
 
 #include <QString>
 #include <QJsonDocument>
-#include "Enums/SpellEnums.h"
+#include "Enums/SpellEnums.hpp"
 #include <array>
 #include <unordered_map>
 

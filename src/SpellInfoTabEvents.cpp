@@ -3,9 +3,9 @@
 #include <QTableWidget>
 
 // project
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 #include "./ui_mainwindow.h"
-#include "DBC/DBCStores.h"
+#include "DBC/DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
 #include <cassert>
 #include <optional>
