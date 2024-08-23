@@ -1080,7 +1080,7 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
     PrintSpellClassOptions(spellText, SpellClassOptionsId);
     PrintSpellCategory(spellText, SpellCategoriesId);
     PrintAttributes(spellText, this);
-    PrintTargetRestrictions(spellText, SpellTargetRestrictionsId, SpellLevelsId, (Attributes[5] & 0x00000020 /*SPELL_ATTR5_LIMIT_N*/) != 0);
+    PrintTargetRestrictions(spellText, SpellTargetRestrictionsId, SpellLevelsId, (Attributes[5] & SPELL_ATTR5_LIMIT_N) != 0);
     PrintShapeShiftingInfo(spellText, SpellShapeshiftId);
     PrintSkillLinks(spellText, Id);
     PrintReagents(spellText, SpellReagentsId);
