@@ -3,7 +3,6 @@
 #include <QFile>
 #include <QDebug>
 #include <QJsonObject>
-#include <QTCore>
 
 std::unordered_map<uint32_t /*id*/, QString /*name*/> QSpellWorkJson::SpellSchools;
 std::unordered_map<uint32_t /*hex*/, QString /*name*/> QSpellWorkJson::SpellSchoolMasks;
