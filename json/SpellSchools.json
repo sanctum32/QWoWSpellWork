@@ -1,0 +1,23 @@
+{
+    "SpellSchool":
+    [
+        { "Id":0,   "Name":"SPELL_SCHOOL_NORMAL"    },
+        { "Id":1,   "Name":"SPELL_SCHOOL_HOLY"      },
+        { "Id":2,   "Name":"SPELL_SCHOOL_FIRE"      },
+        { "Id":3,   "Name":"SPELL_SCHOOL_NATURE"    },
+        { "Id":4,   "Name":"SPELL_SCHOOL_FROST"     },
+        { "Id":6,   "Name":"SPELL_SCHOOL_SHADOW"    },
+        { "Id":7,   "Name":"SPELL_SCHOOL_ARCANE"    }
+    ],
+    "SpellSchoolMask":
+    [
+        { "Id":0,   "Name":"SPELL_SCHOOL_MASK_NONE",   "hex":"0x01"   },
+        { "Id":1,   "Name":"SPELL_SCHOOL_MASK_NORMAL", "hex":"0x02" },
+        { "Id":2,   "Name":"SPELL_SCHOOL_MASK_HOLY",   "hex":"0x04"   },
+        { "Id":4,   "Name":"SPELL_SCHOOL_MASK_FIRE",   "hex":"0x08"   },
+        { "Id":8,   "Name":"SPELL_SCHOOL_MASK_NATURE", "hex":"0x10" },
+        { "Id":16,  "Name":"SPELL_SCHOOL_MASK_FROST", "hex":"0x20"  },
+        { "Id":32,  "Name":"SPELL_SCHOOL_MASK_SHADOW", "hex":"0x40" },
+        { "Id":64,  "Name":"SPELL_SCHOOL_MASK_ARCANE", "hex":"0x80" }
+    ]
+}

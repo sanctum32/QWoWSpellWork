@@ -1,0 +1,15 @@
+[
+    {"Id": 0, "Name": "SPELLFAMILY_GENERIC" },
+    {"Id": 3, "Name": "SPELLFAMILY_MAGE" },
+    {"Id": 4, "Name": "SPELLFAMILY_WARRIOR" },
+    {"Id": 5, "Name": "SPELLFAMILY_WARLOCK" },
+    {"Id": 6, "Name": "SPELLFAMILY_PRIEST" },
+    {"Id": 7, "Name": "SPELLFAMILY_DRUID" },
+    {"Id": 8, "Name": "SPELLFAMILY_ROGUE" },
+    {"Id": 9, "Name": "SPELLFAMILY_HUNTER" },
+    {"Id": 10, "Name": "SPELLFAMILY_PALADIN" },
+    {"Id": 11, "Name": "SPELLFAMILY_SHAMAN" },
+    {"Id": 13, "Name": "SPELLFAMILY_POTION" },
+    {"Id": 15, "Name": "SPELLFAMILY_DEATHKNIGHT" },
+    {"Id": 17, "Name": "SPELLFAMILY_PET" }
+]

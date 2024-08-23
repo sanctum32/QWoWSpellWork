@@ -1,0 +1,48 @@
+{
+    "SpellInterruptFlags":
+    [
+        { "Flag": 0, "Name":"None",           "hex":"0x00"},
+        { "Flag": 1, "Name":"Movement",                 "hex":"0x01"},
+        { "Flag": 2, "Name":"DamagePushbackPlayerOnly", "hex":"0x02"},
+        { "Flag": 4, "Name":"Stun",                     "hex":"0x04"},
+        { "Flag": 8, "Name":"Combat",                   "hex":"0x08"},
+        { "Flag": 16, "Name":"DamageCancelsPlayerOnly", "hex":"0x10"},
+        { "Flag": 32, "Name":"MeleeCombat",             "hex":"0x20"}
+    ],
+    "AuraInterruptFlags":
+    [
+        { "Flag": 0, "Name":"None",                         "hex":"0x00000000"},
+        { "Flag": 1, "Name":"HostileActionReceived",        "hex":"0x00000001"},
+        { "Flag": 2, "Name":"Damage",                       "hex":"0x00000002"},
+        { "Flag": 4, "Name":"Action",                       "hex":"0x00000004"},
+        { "Flag": 8, "Name":"Moving",                       "hex":"0x00000008"},
+        { "Flag": 16, "Name":"Turning",                     "hex":"0x00000010"},
+        { "Flag": 32, "Name":"Anim",                        "hex":"0x00000020"},
+        { "Flag": 64, "Name":"Dismount",                    "hex":"0x00000040"},
+        { "Flag": 128, "Name":"UnderWater",                 "hex":"0x00000080"},
+        { "Flag": 256, "Name":"AboveWater",                 "hex":"0x00000100"},
+        { "Flag": 512, "Name":"Sheathing",                  "hex":"0x00000200"},
+        { "Flag": 1024, "Name":"Interacting",               "hex":"0x00000400"},
+        { "Flag": 2048, "Name":"Looting",                   "hex":"0x00000800"},
+        { "Flag": 4096, "Name":"Attacking",                 "hex":"0x00001000"},
+        { "Flag": 8192, "Name":"ItemUse",                   "hex":"0x00002000"},
+        { "Flag": 16384, "Name":"DamageChannelDuration",    "hex":"0x00004000"},
+        { "Flag": 32768, "Name":"Shapeshifting",            "hex":"0x00008000"},
+        { "Flag": 65536, "Name":"ActionDelayed",            "hex":"0x00010000"},
+        { "Flag": 131072, "Name":"Mount",                   "hex":"0x00020000"},
+        { "Flag": 262144, "Name":"Standing",                "hex":"0x00040000"},
+        { "Flag": 524288, "Name":"LeaveWorld",              "hex":"0x00080000"},
+        { "Flag": 1048576, "Name":"StealthOrInvis",         "hex":"0x00100000"},
+        { "Flag": 2097152, "Name":"InvulnerabilityBuff",    "hex":"0x00200000"},
+        { "Flag": 4194304, "Name":"EnterWorld",             "hex":"0x00400000"},
+        { "Flag": 8388608, "Name":"PvPActive",              "hex":"0x00800000"},
+        { "Flag": 16777216, "Name":"NonPeriodicDamage",     "hex":"0x01000000"},
+        { "Flag": 33554432, "Name":"LandingOrFlight",       "hex":"0x02000000"},
+        { "Flag": 67108864, "Name":"Release",               "hex":"0x04000000"},
+        { "Flag": 134217728, "Name":"DamageCancelsScript",  "hex":"0x08000000"},
+        { "Flag": 268435456, "Name":"EnteringCombat",       "hex":"0x10000000"},
+        { "Flag": 536870912, "Name":"Login",                "hex":"0x20000000"},
+        { "Flag": 1073741824, "Name":"Summon",              "hex":"0x40000000"},
+        { "Flag": 2147483648, "Name":"LeavingCombat",       "hex":"0x80000000"}
+    ]
+}
