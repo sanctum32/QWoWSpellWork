@@ -39,15 +39,10 @@ bool QSpellWorkJson::OpenJson(const QString& fileName, std::function<bool(const 
             qDebug() << "JSON: Successfully loaded data from " << fileName << ".";
             return true;
         }
-        else
-        {
-            qDebug() << "JSON: Failed to loaded data from " << fileName << ".";
-            return false;
-        }
     }
 
     qDebug() << "JSON: Failed to loaded data from " << fileName << ".";
-    return true;
+    return false;
 }
 
 template<class T>
