@@ -27,4 +27,5 @@ namespace QSpellWorkJson
     extern std::array<std::unordered_map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;
     extern std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellEffectNames;
     extern std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
+    extern std::unordered_map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
 }

@@ -333,35 +333,6 @@ constexpr std::array<char const*, UNIT_MOD_END> UnitModsStr={
     printEnum(UNIT_MOD_DAMAGE_RANGED)
 };
 
-constexpr std::array<char const*, MAX_COMBAT_RATING> CombatRatingStr={
-    printEnum(CR_WEAPON_SKILL),
-    printEnum(CR_DEFENSE_SKILL),
-    printEnum(CR_DODGE),
-    printEnum(CR_PARRY),
-    printEnum(CR_BLOCK),
-    printEnum(CR_HIT_MELEE),
-    printEnum(CR_HIT_RANGED),
-    printEnum(CR_HIT_SPELL),
-    printEnum(CR_CRIT_MELEE),
-    printEnum(CR_CRIT_RANGED),
-    printEnum(CR_CRIT_SPELL),
-    printEnum(CR_HIT_TAKEN_MELEE),
-    printEnum(CR_HIT_TAKEN_RANGED),
-    printEnum(CR_HIT_TAKEN_SPELL),
-    printEnum(CR_RESILIENCE_CRIT_TAKEN),
-    printEnum(CR_RESILIENCE_PLAYER_DAMAGE_TAKEN),
-    printEnum(CR_CRIT_TAKEN_SPELL),
-    printEnum(CR_HASTE_MELEE),
-    printEnum(CR_HASTE_RANGED),
-    printEnum(CR_HASTE_SPELL),
-    printEnum(CR_WEAPON_SKILL_MAINHAND),
-    printEnum(CR_WEAPON_SKILL_OFFHAND),
-    printEnum(CR_WEAPON_SKILL_RANGED),
-    printEnum(CR_EXPERTISE),
-    printEnum(CR_ARMOR_PENETRATION),
-    printEnum(CR_MASTERY)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H

@@ -823,30 +823,29 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             }
 
             result += QString(", value = %1").arg(effectInfo->EffectBasePoints);
-            result += QString(", misc = %1 (").arg(effectInfo->EffectMiscValue);
+            result += QString(", misc = %1").arg(effectInfo->EffectMiscValue);
 
             switch (effectInfo->EffectAura)
             {
             case SPELL_AURA_MOD_STAT:
                 result += UnitModsStr[effectInfo->EffectMiscValue];
                 break;
-            case SPELL_AURA_MOD_RATING:
-                result += CombatRatingStr[effectInfo->EffectMiscValue];
-                break;
             case SPELL_AURA_ADD_FLAT_MODIFIER:
             case SPELL_AURA_ADD_PCT_MODIFIER:
             {
                 const auto& itr = QSpellWorkJson::SpellModOps.find(effectInfo->EffectMiscValue);
-                result += itr != QSpellWorkJson::SpellModOps.end() ? itr->second : "unknown";
+                if (itr != QSpellWorkJson::SpellModOps.end())
+                {
+                    result += " (" + itr->second + ")";
+                }
                 break;
             }
             // todo: more cases
             default:
-                result += QString::number(effectInfo->EffectMiscValue);
                 break;
             }
 
-            result += QString("), miscB = %1").arg(effectInfo->EffectMiscValueB);
+            result += QString(", miscB = %1").arg(effectInfo->EffectMiscValueB);
             result += QString(", periodic = %1<br>").arg(effectInfo->EffectAuraPeriod);
 
             switch (effectInfo->EffectAura)
@@ -856,7 +855,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                 OverrideSpellDataEntry const* spellOverride = GetDBCEntry(effectInfo->EffectMiscValue, sDBCStores->m_OverrideSpellDataEntries);
                 if (spellOverride == nullptr)
                 {
-                    result += QString("<b>Cannot find key %1 in OverrideSpellData.dbc</b><br>").arg(effectInfo->EffectMiscValue);
+                    result += QString("<b>Cannot find entry %1 in OverrideSpellData.dbc</b><br>").arg(effectInfo->EffectMiscValue);
                 }
                 else
                 {
@@ -890,7 +889,37 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                 result += "<span style=\"color:green\"> ScreenEffect: ";
                 const ScreenEffectEntry* screenEffect = GetDBCEntry(effectInfo->EffectMiscValue, sDBCStores->m_ScreenEffectEntries);
                 result += screenEffect != nullptr ? screenEffect->Name.c_str() : "unknown";
-                result += "</span>";
+                result += "</span><br>";
+                break;
+            }
+            case SPELL_AURA_MOD_RATING:
+            {
+                QString ratingsStr;
+                for (uint8_t ratingId = 0; ratingId < MAX_COMBAT_RATING; ++ratingId)
+                {
+                    if ((effectInfo->EffectMiscValue & (1 << ratingId)) == 0)
+                    {
+                        continue;
+                    }
+
+                    const auto& itr = QSpellWorkJson::CombatRatingNames.find(ratingId);
+                    if (itr == QSpellWorkJson::CombatRatingNames.end())
+                    {
+                        continue;
+                    }
+
+                    if (!ratingsStr.isEmpty())
+                    {
+                        ratingsStr += ", ";
+                    }
+
+                    ratingsStr += itr->second;
+                }
+
+                if (!ratingsStr.isEmpty())
+                {
+                    result += "Effected combat ratings: <span style=\"color:orange\">" + ratingsStr + "</span><br>";
+                }
                 break;
             }
             default:
