@@ -2,11 +2,14 @@
 
 #include <QString>
 #include <QJsonDocument>
+#include <QLoggingCategory>
 #include "Enums/SpellEnums.hpp"
 #include <array>
 #include <unordered_map>
 
-namespace QSpellWorkJson{
+namespace QSpellWorkJson
+{
+    Q_DECLARE_LOGGING_CATEGORY(JSON)
 
 // Data load - must be called once
     extern bool LoadJsonData();

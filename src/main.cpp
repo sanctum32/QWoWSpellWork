@@ -1,20 +1,19 @@
 // Qt
-#include "mainwindow.hpp"
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
 #include <QStyleHints>
-#include <QDebug>
-#include <qjsondocument.h>
-#include <qjsonobject.h>
-#include <qstatusbar.h>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QStatusBar>
 #include <QJsonArray>
-#include <QSql>
+#include <QDebug>
 
 // App
+#include "mainwindow.hpp"
 #include "DBC/DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
-#include "appSettings.hpp"
+#include "Globals/appSettings.hpp"
 
 constexpr std::string_view StatusBarSeparator = "  <span style=\"color: yellow\">|</span>  ";
 

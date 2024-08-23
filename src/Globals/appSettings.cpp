@@ -2,8 +2,6 @@
 #include "JsonData/JsonData.hpp"
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QSqlDatabase>
-#include <QSqlError>
 
 namespace QSpellWork
 {
@@ -33,16 +31,6 @@ namespace QSpellWork
                 settings.sql.Username = sqlJson.value("Username").toString();
                 settings.sql.Username = sqlJson.value("Password").toString();
                 settings.sql.WorldDB = sqlJson.value("WorldDB").toString();
-
-                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-                db.setHostName(settings.sql.Hostname);
-                db.setPort(settings.sql.Port.toInt());
-                db.setUserName(settings.sql.Username);
-                db.setPassword(settings.sql.Password);
-                db.setDatabaseName(settings.sql.WorldDB);
-
-                qDebug() << (db.open() ? "sql success" : "sql fail") << db.lastError().text();
-                db.close();
             }
 
             return true;

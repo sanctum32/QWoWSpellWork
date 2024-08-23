@@ -1,4 +1,5 @@
 #pragma once
+#include <QLoggingCategory>
 #include <QString>
 
 namespace QSpellWork
