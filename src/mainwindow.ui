@@ -471,7 +471,11 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_3">
             <item row="1" column="1">
-             <widget class="QTextEdit" name="spellEffectInfo"/>
+             <widget class="QTextEdit" name="spellEffectInfo">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QTextEdit" name="spellInfoText">
@@ -530,7 +534,7 @@
      <x>0</x>
      <y>0</y>
      <width>1115</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -565,7 +569,7 @@
     <iconset theme="preferences-desktop"/>
    </property>
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings</string>
    </property>
   </action>
   <action name="menuExit">
@@ -573,7 +577,7 @@
     <iconset theme="application-exit"/>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Exit</string>
    </property>
   </action>
  </widget>
