@@ -893,6 +893,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                 break;
             }
             case SPELL_AURA_MOD_RATING:
+            case SPELL_AURA_MOD_RATING_FROM_STAT:
             {
                 QString ratingsStr;
                 for (uint8_t ratingId = 0; ratingId < MAX_COMBAT_RATING; ++ratingId)
