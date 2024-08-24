@@ -763,30 +763,16 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 
         // Print targets
         {
-            result += "Targets: <br>";
-            const auto& targetA = QSpellWorkJson::SpellTargetNames.find(effectInfo->EffectImplicitTargetA);
-            if (targetA != QSpellWorkJson::SpellTargetNames.end())
-            {
-                result += "TargetA: " + QString::number(targetA->first) + ", " + targetA->second;
-            }
-            else
-            {
-                result += "TargetA: " + QString::number(effectInfo->EffectImplicitTargetA);
-            }
+            const auto& targetAItr = QSpellWorkJson::SpellTargetNames.find(effectInfo->EffectImplicitTargetA);
+            const auto& targetBItr = QSpellWorkJson::SpellTargetNames.find(effectInfo->EffectImplicitTargetB);
+            const QString TargetAStr = targetAItr != QSpellWorkJson::SpellTargetNames.end() ? targetAItr->second : "unknown";
+            const QString TargetBStr = targetBItr != QSpellWorkJson::SpellTargetNames.end() ? targetBItr->second : "unknown";
 
-            result += "<br>";
-
-            const auto& targetB = QSpellWorkJson::SpellTargetNames.find(effectInfo->EffectImplicitTargetB);
-            if (targetB != QSpellWorkJson::SpellTargetNames.end())
-            {
-                result += "TargetB: " + QString::number(targetB->first) + ", " + targetB->second;
-            }
-            else
-            {
-                result += "TargetB: " + QString::number(effectInfo->EffectImplicitTargetB);
-            }
-
-            result += "<br><br>";
+            result += QString("Targets: (%1, %2) (%3, %4)<br><br>")
+                          .arg(effectInfo->EffectImplicitTargetA)
+                          .arg(effectInfo->EffectImplicitTargetB)
+                          .arg(TargetAStr)
+                          .arg(TargetBStr);
         }
 
         if (effectInfo->EffectAura == 0)
@@ -1075,9 +1061,9 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
     {
         spellText += Description.c_str();
         spellText += "<br>";
+        spellText += line;
     }
 
-    spellText += line;
     spellText += QString("ToolTip: %1<br>").arg(ToolTip.c_str());
     spellText += line;
     spellText += QString("Category = %1, SpellIconID = %2, activeIconID = %3, SpellVisual = (%4, %5)<br>")

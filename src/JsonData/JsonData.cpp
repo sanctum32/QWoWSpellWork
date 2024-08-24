@@ -45,18 +45,18 @@ namespace QSpellWorkJson
 {
     Q_LOGGING_CATEGORY(JSON, "spellwork.json")
 
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellSchools;
-    std::unordered_map<uint32_t /*hex*/, QString /*name*/> SpellSchoolMasks;
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellModOps;
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellInterruptFlags;
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> AuraInterruptFlags;
-    std::unordered_map<uint16_t /*id*/, QString /*name*/> SpellAuraTypes;
-    std::unordered_map<uint32_t /*flag*/, QString /*description*/> SpellProcInfo;
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellFamilyInfo;
-    std::array<std::unordered_map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellEffectNames;
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
-    std::unordered_map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
+    std::map<uint32_t /*id*/, QString /*name*/> SpellSchools;
+    std::map<uint32_t /*hex*/, QString /*name*/> SpellSchoolMasks;
+    std::map<uint32_t /*id*/, QString /*name*/> SpellModOps;
+    std::map<uint32_t /*id*/, QString /*name*/> SpellInterruptFlags;
+    std::map<uint32_t /*id*/, QString /*name*/> AuraInterruptFlags;
+    std::map<uint16_t /*id*/, QString /*name*/> SpellAuraTypes;
+    std::map<uint32_t /*flag*/, QString /*description*/> SpellProcInfo;
+    std::map<uint32_t /*id*/, QString /*name*/> SpellFamilyInfo;
+    std::array<std::map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;
+    std::map<uint32_t /*id*/, QString /*name*/> SpellEffectNames;
+    std::map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
+    std::map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
 
     // Reads json file
     // returns 1 on failure
