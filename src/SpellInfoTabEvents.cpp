@@ -93,13 +93,13 @@ void MainWindow::PerformSpellSearch()
     // Spell family filter
     if (ui->SpellFamilyFilter->currentIndex() != 0)
     {
-        const auto& spellFamilyItr = std::find_if(QSpellWorkJson::SpellFamilyInfo.begin(), QSpellWorkJson::SpellFamilyInfo.end(),
+        const auto& spellFamilyItr = std::find_if(sSpellWorkJson->SpellFamilyInfo.begin(), sSpellWorkJson->SpellFamilyInfo.end(),
             [familyStr = ui->SpellFamilyFilter->currentText()](const auto& spellFamily)
         {
             return spellFamily.second == familyStr;
         });
 
-        if (spellFamilyItr != QSpellWorkJson::SpellFamilyInfo.end())
+        if (spellFamilyItr != sSpellWorkJson->SpellFamilyInfo.end())
         {
             spellFamilyId = spellFamilyItr->first;
         }
@@ -108,13 +108,13 @@ void MainWindow::PerformSpellSearch()
     // Spell aura type filter
     if (ui->SpellAuraTypeFilter->currentIndex() != 0)
     {
-        const auto& spellAuraTypeItr = std::find_if(QSpellWorkJson::SpellAuraTypes.begin(), QSpellWorkJson::SpellAuraTypes.end(),
+        const auto& spellAuraTypeItr = std::find_if(sSpellWorkJson->SpellAuraTypes.begin(), sSpellWorkJson->SpellAuraTypes.end(),
             [auraTypeStr = ui->SpellAuraTypeFilter->currentText()](const auto& spellAuraType)
         {
             return spellAuraType.second == auraTypeStr;
         });
 
-        if (spellAuraTypeItr != QSpellWorkJson::SpellAuraTypes.end())
+        if (spellAuraTypeItr != sSpellWorkJson->SpellAuraTypes.end())
         {
             auraTypeId = spellAuraTypeItr->first;
         }
@@ -123,13 +123,13 @@ void MainWindow::PerformSpellSearch()
     // Spell effect filter
     if (ui->SpellEffectFilter->currentIndex() != 0)
     {
-        const auto& effectNameItr = std::find_if(QSpellWorkJson::SpellEffectNames.begin(), QSpellWorkJson::SpellEffectNames.end(),
+        const auto& effectNameItr = std::find_if(sSpellWorkJson->SpellEffectNames.begin(), sSpellWorkJson->SpellEffectNames.end(),
             [selectedEffect = ui->SpellEffectFilter->currentText()](const auto& data)
         {
             return data.second == selectedEffect;
         });
 
-        if (effectNameItr != QSpellWorkJson::SpellEffectNames.end())
+        if (effectNameItr != sSpellWorkJson->SpellEffectNames.end())
         {
             spellEffectId = effectNameItr->first;
         }
@@ -138,13 +138,13 @@ void MainWindow::PerformSpellSearch()
     // TargetA filter
     if (ui->SpellTargetFilterA->currentIndex() != 0)
     {
-        const auto& targetNameItr = std::find_if(QSpellWorkJson::SpellTargetNames.begin(), QSpellWorkJson::SpellTargetNames.end(),
+        const auto& targetNameItr = std::find_if(sSpellWorkJson->SpellTargetNames.begin(), sSpellWorkJson->SpellTargetNames.end(),
             [selectedTarget = ui->SpellTargetFilterA->currentText()](const auto& spellTarget)
         {
             return spellTarget.second == selectedTarget;
         });
 
-        if (targetNameItr != QSpellWorkJson::SpellTargetNames.end())
+        if (targetNameItr != sSpellWorkJson->SpellTargetNames.end())
         {
             spellTargetA = targetNameItr->first;
         }
@@ -153,13 +153,13 @@ void MainWindow::PerformSpellSearch()
     // TargetB filter
     if (ui->SpellTargetFilterB->currentIndex() != 0)
     {
-        const auto& targetNameItr = std::find_if(QSpellWorkJson::SpellTargetNames.begin(), QSpellWorkJson::SpellTargetNames.end(),
+        const auto& targetNameItr = std::find_if(sSpellWorkJson->SpellTargetNames.begin(), sSpellWorkJson->SpellTargetNames.end(),
             [selectedTarget = ui->SpellTargetFilterA->currentText()](const auto& spellTarget)
         {
             return spellTarget.second == selectedTarget;
         });
 
-        if (targetNameItr != QSpellWorkJson::SpellTargetNames.end())
+        if (targetNameItr != sSpellWorkJson->SpellTargetNames.end())
         {
             spellTargetB = targetNameItr->first;
         }
@@ -243,7 +243,7 @@ void MainWindow::PerformSpellSearch()
 
     resultList->setRowCount(static_cast<int>(foundEntries.size()));
     int rowId = 0;
-    for (auto const& [spellId, spellname] : foundEntries)
+    for (const auto& [spellId, spellname] : foundEntries)
     {
         // Set id
         {

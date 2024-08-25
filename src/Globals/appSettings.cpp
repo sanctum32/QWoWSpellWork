@@ -9,7 +9,7 @@ namespace QSpellWork
 
     void ReadSettings()
     {
-        QSpellWorkJson::OpenJson("./json/appSettings.json", [&](const QJsonDocument& json)
+        SpellWorkJson::OpenJson("./json/appSettings.json", [&](const QJsonDocument& json)
         {
             if (!json.isObject())
             {

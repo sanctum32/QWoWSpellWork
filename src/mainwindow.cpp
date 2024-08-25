@@ -17,44 +17,44 @@ MainWindow::MainWindow(QWidget *parent)
     ui->statusBar->setStyleSheet("padding: 5px;");
 
     // SpellFamilyFilter
-    ui->SpellFamilyFilter->setEditable(true);
-    ui->SpellFamilyFilter->setMaxVisibleItems(10);
-    for (const auto& spellFamily : QSpellWorkJson::SpellFamilyInfo)
+    for (const auto& spellFamily : sSpellWorkJson->SpellFamilyInfo)
     {
         ui->SpellFamilyFilter->addItem(spellFamily.second);
     }
+    ui->SpellFamilyFilter->setEditable(true);
+    ui->SpellFamilyFilter->setMaxVisibleItems(10);
 
     // SpellAuraTypeFilter
-    ui->SpellAuraTypeFilter->setEditable(true);
-    ui->SpellAuraTypeFilter->setMaxVisibleItems(10);
-    for (const auto& spellAuraTypes : QSpellWorkJson::SpellAuraTypes)
+    for (const auto& spellAuraTypes : sSpellWorkJson->SpellAuraTypes)
     {
         ui->SpellAuraTypeFilter->addItem(spellAuraTypes.second);
     }
+    ui->SpellAuraTypeFilter->setEditable(true);
+    ui->SpellAuraTypeFilter->setMaxVisibleItems(10);
 
     // SpellEffectFilter
-    ui->SpellEffectFilter->setEditable(true);
-    ui->SpellEffectFilter->setMaxVisibleItems(10);
-    for (const auto& spellEffect : QSpellWorkJson::SpellEffectNames)
+    for (const auto& spellEffect : sSpellWorkJson->SpellEffectNames)
     {
         ui->SpellEffectFilter->addItem(spellEffect.second);
     }
+    ui->SpellEffectFilter->setEditable(true);
+    ui->SpellEffectFilter->setMaxVisibleItems(10);
 
     // SpellTargetFilterA
-    ui->SpellTargetFilterA->setEditable(true);
-    ui->SpellTargetFilterA->setMaxVisibleItems(10);
-    for (const auto& targetName : QSpellWorkJson::SpellTargetNames)
+    for (const auto& targetName : sSpellWorkJson->SpellTargetNames)
     {
         ui->SpellTargetFilterA->addItem(targetName.second);
     }
+    ui->SpellTargetFilterA->setEditable(true);
+    ui->SpellTargetFilterA->setMaxVisibleItems(10);
 
     // SpellTargetFilterB
-    ui->SpellTargetFilterB->setEditable(true);
-    ui->SpellTargetFilterB->setMaxVisibleItems(10);
-    for (const auto& targetName : QSpellWorkJson::SpellTargetNames)
+    for (const auto& targetName : sSpellWorkJson->SpellTargetNames)
     {
         ui->SpellTargetFilterB->addItem(targetName.second);
     }
+    ui->SpellTargetFilterB->setEditable(true);
+    ui->SpellTargetFilterB->setMaxVisibleItems(10);
 
     // Signal connections
     QObject::connect(ui->searchBtn,        &QPushButton::clicked,     this, &MainWindow::onSearchBtnClicked);

@@ -26,6 +26,8 @@ enum
     MAX_SPELL_EFFECT_ID                 = 183,
     MAX_SPELL_TARGET_TYPES              = 128,
     MAX_COMBAT_RATING                   = 26,
+    MAX_SPELL_PROC_FLAGS                = 33,
+    MAX_SPELL_INTERRUPT_FLAGS           = 33,
 };
 
 enum SpellEffects
@@ -1668,6 +1670,41 @@ enum SpellAttr10 : uint32_t
     SPELL_ATTR10_MOUNT_NOT_AT_ACCOUNT_LEVEL       = 0x20000000, // 29 This Mount is NOT at the account level
     SPELL_ATTR10_PREVENT_CLIENT_CAST_CANCEL       = 0x40000000, // 30 Prevent Client Cast Cancel
     SPELL_ATTR10_ENFORCE_FACTING_ON_PRIMARY_TARGET = 0x80000000  // 31 Enforce Facing on Primary Target Only
+};
+
+enum SpellSchools : uint8_t
+{
+    SPELL_SCHOOL_NORMAL                 = 0,
+    SPELL_SCHOOL_HOLY                   = 1,
+    SPELL_SCHOOL_FIRE                   = 2,
+    SPELL_SCHOOL_NATURE                 = 3,
+    SPELL_SCHOOL_FROST                  = 4,
+    SPELL_SCHOOL_SHADOW                 = 5,
+    SPELL_SCHOOL_ARCANE                 = 6,
+    MAX_SPELL_SCHOOL                    = 7
+};
+
+enum SpellFamilyNames : uint8_t
+{
+    SPELLFAMILY_GENERIC     = 0,
+    SPELLFAMILY_UNK1        = 1,                            // events, holidays
+    // 2 - unused
+    SPELLFAMILY_MAGE        = 3,
+    SPELLFAMILY_WARRIOR     = 4,
+    SPELLFAMILY_WARLOCK     = 5,
+    SPELLFAMILY_PRIEST      = 6,
+    SPELLFAMILY_DRUID       = 7,
+    SPELLFAMILY_ROGUE       = 8,
+    SPELLFAMILY_HUNTER      = 9,
+    SPELLFAMILY_PALADIN     = 10,
+    SPELLFAMILY_SHAMAN      = 11,
+    SPELLFAMILY_UNK2        = 12,                           // 2 spells (silence resistance)
+    SPELLFAMILY_POTION      = 13,
+    // 14 - unused
+    SPELLFAMILY_DEATHKNIGHT = 15,
+    // 16 - unused
+    SPELLFAMILY_PET         = 17,
+    SPELLFAMILY_UNK3        = 50,
 };
 
 #endif // SPELLENUMS_H

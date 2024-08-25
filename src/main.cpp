@@ -40,7 +40,9 @@ int main(int argc, char *argv[])
     }
 
     const bool dbcLoaded = sDBCStores->LoadDBCDatas();
-    const bool jsonLoaded = QSpellWorkJson::LoadJsonData();
+
+    QLoggingCategory::setFilterRules("spellwork.json.debug=true");
+    const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
     MainWindow w;
     QLabel statusLabel;
 
