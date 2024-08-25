@@ -36,44 +36,6 @@ constexpr std::array<char const*, MAX_CREATURE_TYPE> CreatureTypeStr={
     printEnum(CREATURE_TYPE_GAS_CLOUD)
 };
 
-//ShapeshiftForm
-
-constexpr std::array<char const*, MAX_SHAPESHIFT_FORMS> ShapeshiftFormStr={
-    printEnum(FORM_CAT),
-    printEnum(FORM_TREE),
-    printEnum(FORM_TRAVEL),
-    printEnum(FORM_AQUA),
-    printEnum(FORM_BEAR),
-    printEnum(FORM_AMBIENT),
-    printEnum(FORM_GHOUL),
-    printEnum(FORM_DIREBEAR),
-    printEnum(FORM_STEVES_GHOUL),
-    printEnum(FORM_THARONJA_SKELETON),
-    printEnum(FORM_TEST_OF_STRENGTH),
-    printEnum(FORM_BLB_PLAYER),
-    printEnum(FORM_SHADOW_DANCE),
-    printEnum(FORM_CREATUREBEAR),
-    printEnum(FORM_CREATURECAT),
-    printEnum(FORM_GHOSTWOLF),
-    printEnum(FORM_BATTLESTANCE),
-    printEnum(FORM_DEFENSIVESTANCE),
-    printEnum(FORM_BERSERKERSTANCE),
-    printEnum(FORM_TEST),
-    printEnum(FORM_ZOMBIE),
-    printEnum(FORM_METAMORPHOSIS),
-    printEnum(FORM_UNK1),
-    printEnum(FORM_UNK2),
-    printEnum(FORM_UNDEAD),
-    printEnum(FORM_MASTER_ANGLER),
-    printEnum(FORM_FLIGHT_EPIC),
-    printEnum(FORM_SHADOW),
-    printEnum(FORM_FLIGHT),
-    printEnum(FORM_STEALTH),
-    printEnum(FORM_MOONKIN),
-    printEnum(FORM_SPIRITOFREDEMPTION),
-    printEnum(FORM_GLADIATOR_STANCE),
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H

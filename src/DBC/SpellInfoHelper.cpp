@@ -51,7 +51,8 @@ inline QString GetStancesNames(uint32_t stancesNames)
                 formNames += ", ";
             }
 
-            formNames += ShapeshiftFormStr[i];
+            const auto& itr = QSpellWorkJson::ShapeshiftForms.find(i);
+            formNames += (itr != QSpellWorkJson::ShapeshiftForms.end() ? itr->second : QString("FORM_UNK%1").arg(i));
         }
     }
 
