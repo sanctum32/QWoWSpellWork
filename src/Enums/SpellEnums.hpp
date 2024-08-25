@@ -2,35 +2,16 @@
 #define SPELLENUMS_H
 #include <cstdint>
 
-enum
+enum : uint8_t
 {
     MAX_SPELL_ATTRIBUTES                = 11,   // Max spell attributes
-    MAX_SPELL_ATTRIBUTES_ID             = 32,   // Max number of each attribute
-    MAX_SPELL_DAMAGE_CLASS              = 4,
-    MAX_SPELL_PREVENTION_TYPE           = 5,
-    MAX_SPELL_CAST_TARGET_FLAGS         = 22,
-    MAX_CREATURE_TYPE                   = 14,
-    MAX_SHAPESHIFT_FORMS                = 33,
     MAX_SPELL_REAGENTS                  = 8,
-    MAX_ITEM_CLASS                      = 17,
-    MAX_ITEM_SUBCLASS_WEAPON_TYPE       = 21,
-    MAX_ITEM_SUBCLASS_ARMOR_TYPE        = 12,
-    MAX_ITEM_SUBCLASS_JUNK_TYPE         = 7,
-    MAX_INVENTORY_TYPE                  = 29,
-    MAX_DISPEL_TYPE                     = 12,
-    MAX_MECHANIC_TYPE                   = 33,
-    MAX_POWER_TYPES                     = 14,
-    MAX_AURA_STATE_TYPES                = 24,
     MAX_GROUP_AREA_IDS                  = 6,
     MAX_SPELL_EFFECTS                   = 3,    // Total effects of spell
-    MAX_SPELL_EFFECT_ID                 = 183,
-    MAX_SPELL_TARGET_TYPES              = 128,
-    MAX_COMBAT_RATING                   = 26,
-    MAX_SPELL_PROC_FLAGS                = 33,
-    MAX_SPELL_INTERRUPT_FLAGS           = 33,
+    MAX_UINT32_BITMASK_INDEX            = 32,
 };
 
-enum SpellEffects
+enum SpellEffects : uint32_t
 {
     SPELL_EFFECT_NONE                               = 0,
     SPELL_EFFECT_INSTAKILL                          = 1,
@@ -218,7 +199,7 @@ enum SpellEffects
 };
 
 // Spell aura states
-enum AuraStateType
+enum AuraStateType : uint32_t
 {   // (C) used in caster aura state     (T) used in target aura state
     // (c) used in caster aura state-not (t) used in target aura state-not
     AURA_STATE_NONE                         = 0,            // C   |
@@ -248,7 +229,7 @@ enum AuraStateType
 };
 
 // Spell mechanics
-enum Mechanics
+enum Mechanics : uint32_t
 {
     MECHANIC_NONE             = 0,
     MECHANIC_CHARM            = 1,
@@ -286,7 +267,7 @@ enum Mechanics
 };
 
 // Spell dispel type
-enum DispelType
+enum DispelType : uint32_t
 {
     DISPEL_NONE         = 0,
     DISPEL_MAGIC        = 1,
@@ -302,7 +283,7 @@ enum DispelType
     DESPEL_OLD_UNUSED   = 11
 };
 
-enum Targets
+enum Targets : uint32_t
 {
     TARGET_NONE                                 = 0,
     TARGET_UNIT_CASTER                          = 1,
@@ -434,7 +415,7 @@ enum Targets
     TARGET_UNK_127                              = 127,
 };
 
-enum SpellDmgClass
+enum SpellDmgClass : uint32_t
 {
     SPELL_DAMAGE_CLASS_NONE     = 0,
     SPELL_DAMAGE_CLASS_MAGIC    = 1,
@@ -442,7 +423,7 @@ enum SpellDmgClass
     SPELL_DAMAGE_CLASS_RANGED   = 3,
 };
 
-enum SkillType
+enum SkillType : uint32_t
 {
     SKILL_NONE                     = 0,
 
@@ -622,7 +603,7 @@ enum SkillType
     SKILL_PET_HYDRA                = 824
 };
 
-enum SpellPreventionType
+enum SpellPreventionType : uint32_t
 {
     SPELL_PREVENTION_TYPE_NONE      = 0,
     SPELL_PREVENTION_TYPE_SILENCE   = 1,
@@ -631,7 +612,7 @@ enum SpellPreventionType
     SPELL_PREVENTION_TYPE_NO_ACTIONS= 4
 };
 
-enum SpellCastTargetFlags
+enum SpellCastTargetFlags : uint32_t
 {
     TARGET_FLAG_NONE            = 0x00000000,               // 0
     TARGET_FLAG_UNUSED_1        = 0x00000001,               // 1 not used
@@ -657,7 +638,7 @@ enum SpellCastTargetFlags
     TARGET_FLAG_UNIT_PASSENGER  = 0x00100000,               // 21 guessed, used to validate target (if vehicle passenger)
 };
 
-enum CreatureType
+enum CreatureType : uint32_t
 {
     CREATURE_TYPE_BEAST            = 1,
     CREATURE_TYPE_DRAGONKIN        = 2,
@@ -674,7 +655,7 @@ enum CreatureType
     CREATURE_TYPE_GAS_CLOUD        = 13
 };
 
-enum ShapeshiftForm
+enum ShapeshiftForm : uint32_t
 {
     FORM_CAT                = 0x01,     // 1
     FORM_TREE               = 0x02,     // 2
@@ -711,7 +692,7 @@ enum ShapeshiftForm
     FORM_GLADIATOR_STANCE   = 0x21      // 33
 };
 
-enum ItemClass
+enum ItemClass : uint32_t
 {
     ITEM_CLASS_CONSUMABLE                       = 0,
     ITEM_CLASS_CONTAINER                        = 1,
@@ -732,7 +713,7 @@ enum ItemClass
     ITEM_CLASS_GLYPH                            = 16
 };
 
-enum ItemSubclassWeapon
+enum ItemSubclassWeapon : uint32_t
 {
     ITEM_SUBCLASS_WEAPON_AXE                    = 0,  // One-Handed Axes
     ITEM_SUBCLASS_WEAPON_AXE2                   = 1,  // Two-Handed Axes
@@ -757,7 +738,7 @@ enum ItemSubclassWeapon
     ITEM_SUBCLASS_WEAPON_FISHING_POLE           = 20
 };
 
-enum ItemSubclassArmor
+enum ItemSubclassArmor : uint32_t
 {
     ITEM_SUBCLASS_ARMOR_MISCELLANEOUS           = 0,
     ITEM_SUBCLASS_ARMOR_CLOTH                   = 1,
@@ -773,7 +754,7 @@ enum ItemSubclassArmor
     ITEM_SUBCLASS_ARMOR_RELIC                   = 11,
 };
 
-enum ItemSubclassJunk
+enum ItemSubclassJunk : uint32_t
 {
     ITEM_SUBCLASS_JUNK                          = 0,
     ITEM_SUBCLASS_JUNK_REAGENT                  = 1,
@@ -784,7 +765,7 @@ enum ItemSubclassJunk
     ITEM_SUBCLASS_JUNK_UNK12                    = 12, // 1 item (37677)
 };
 
-enum InventoryType
+enum InventoryType : uint32_t
 {
     INVTYPE_NON_EQUIP                           = 0,
     INVTYPE_HEAD                                = 1,
@@ -834,7 +815,7 @@ enum Powers : int8_t
     POWER_HEALTH                        = -2            // (-2 as signed value)
 };
 
-enum AuraType
+enum AuraType : uint32_t
 {
     SPELL_AURA_NONE                                         = 0,
     SPELL_AURA_BIND_SIGHT                                   = 1,
@@ -1209,7 +1190,7 @@ enum AuraType
     SPELL_AURA_SET_FAIR_FAR_CLIP                            = 370,  // Overrides client's View Distance setting to max("Fair", current_setting)
 };
 
-enum UnitMods
+enum UnitMods : uint32_t
 {
     UNIT_MOD_STAT_STRENGTH                                  = 0,    // UNIT_MOD_STAT_STRENGTH..UNIT_MOD_STAT_SPIRIT must be in existed order, it's accessed by index values of Stats enum.
     UNIT_MOD_STAT_AGILITY                                   = 1,
@@ -1246,7 +1227,7 @@ enum UnitMods
     UNIT_MOD_DAMAGE_RANGED                                  = 32,
 };
 
-enum CombatRating
+enum CombatRating : uint32_t
 {
     CR_WEAPON_SKILL                     = 0,
     CR_DEFENSE_SKILL                    = 1, // Removed in 4.0.1

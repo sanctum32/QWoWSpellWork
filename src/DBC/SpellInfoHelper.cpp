@@ -24,7 +24,7 @@ inline QString GetFirstSchoolMaskNameStr(uint32_t mask)
 inline QString GetStancesNames(uint32_t stancesNames)
 {
     QString formNames;
-    for (uint8_t i = 0; i < MAX_SHAPESHIFT_FORMS; ++i)
+    for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
     {
         if (((1 << i) & stancesNames) != 0)
         {
@@ -111,7 +111,7 @@ inline void PrintAttributes(QString& result, const SpellEntry* spell)
             if (spell->Attributes[attribute] != 0)
             {
                 QString attributeStr;
-                for (uint8_t id = 0; id <= MAX_SPELL_ATTRIBUTES_ID; ++id)
+                for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
                 {
                     const uint32_t mask = 1 << id;
                     if ((mask & attributeMask) != 0)
@@ -143,7 +143,7 @@ inline void PrintTargetRestrictions(QString& result, uint32_t SpellTargetRestric
             result += QString("Targets Mask = [0] 0x%1").arg(spellRestrictionsEntry->Targets, 8, 16, QLatin1Char('0')) + "(";
 
             QString targets;
-            for (uint8_t i = 0; i < MAX_SPELL_CAST_TARGET_FLAGS; ++i)
+            for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
             {
                 const uint32_t flag = 1 << i;
                 if ((flag & spellRestrictionsEntry->Targets) != 0)
@@ -279,7 +279,7 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             case ITEM_CLASS_WEAPON:
             {
                 QString subclassNames;
-                for (uint32_t i = 0; i < MAX_ITEM_SUBCLASS_WEAPON_TYPE; ++i)
+                for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
                 {
                     if ((spellEquipedItems->EquippedItemClass & (1 << i)) != 0)
                     {
@@ -301,7 +301,7 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             case ITEM_CLASS_ARMOR:
             {
                 QString subclassNames;
-                for (uint32_t i = 0; i < MAX_ITEM_SUBCLASS_ARMOR_TYPE; ++i)
+                for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
                 {
                     if ((spellEquipedItems->EquippedItemSubClassMask & (1 << i)) != 0)
                     {
@@ -323,7 +323,7 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             case ITEM_CLASS_MISCELLANEOUS:
             {
                 QString subclassNames;
-                for (uint32_t i = 0; i < MAX_ITEM_SUBCLASS_JUNK_TYPE; ++i)
+                for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
                 {
                     if ((spellEquipedItems->EquippedItemSubClassMask & (1 << i)) != 0)
                     {
@@ -348,7 +348,7 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
         if (spellEquipedItems->EquippedItemInventoryTypeMask != 0)
         {
             QString inventoryNames;
-            for (uint32_t i = 0; i < MAX_INVENTORY_TYPE; ++i)
+            for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
             {
                 if ((spellEquipedItems->EquippedItemInventoryTypeMask & (1 << i)) != 0)
                 {
@@ -403,7 +403,7 @@ inline void PrintSpellAuraOptions(QString& result, uint32_t SpellAuraOptionsId)
 
             QString procNames;
 
-            for (uint8_t i = 0; i < MAX_SPELL_PROC_FLAGS; ++i)
+            for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
             {
                 const uint32_t mask = 1 << i;
                 if ((spellAuraOptionEntry->procFlags & mask) != 0)
@@ -505,7 +505,7 @@ inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
     }
 
     QString interruptFlagsStr;
-    for (uint8_t i = 0; i < MAX_SPELL_INTERRUPT_FLAGS; ++i)
+    for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
     {
         const uint32_t flag = 1 << i;
         if ((interruptFlags & flag) != 0)
@@ -520,7 +520,7 @@ inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
     }
 
     QString auraFlagsStr;
-    for (uint8_t i = 0; i < MAX_SPELL_INTERRUPT_FLAGS; ++i)
+    for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
     {
         const uint32_t flag = 1 << i;
         if ((auraInterruptFlags & flag) != 0)
@@ -535,7 +535,7 @@ inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
     }
 
     QString channelFlagsStr;
-    for (uint8_t i = 0; i < MAX_SPELL_INTERRUPT_FLAGS; ++i)
+    for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
     {
         const uint32_t flag = 1 << i;
         if ((channelInterruptFlags & flag) != 0)
@@ -862,7 +862,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             case SPELL_AURA_MOD_RATING_FROM_STAT:
             {
                 QString ratingsStr;
-                for (uint8_t ratingId = 0; ratingId < MAX_COMBAT_RATING; ++ratingId)
+                for (uint8_t ratingId = 0; ratingId < MAX_UINT32_BITMASK_INDEX; ++ratingId)
                 {
                     const uint32_t mask = 1 << ratingId;
                     if ((effectInfo->EffectMiscValue & mask) != 0)
@@ -985,7 +985,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                     result += QString("Charges - %1<br>").arg(triggerAuraOptions->procCharges);
                     result += line;
 
-                    for (uint8_t i = 0; i < MAX_SPELL_PROC_FLAGS; ++i)
+                    for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
                     {
                         const uint32_t mask = 1 << i;
                         if ((triggerAuraOptions->procFlags & mask) != 0)
