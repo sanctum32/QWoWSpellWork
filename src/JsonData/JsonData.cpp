@@ -66,11 +66,16 @@ namespace QSpellWorkJson
     std::map<uint32_t /*id*/, QString /*name*/> SpellMechanicNames;
     std::map<uint32_t /*id*/, QString /*name*/> DispelNames;
     std::map<uint32_t /*id*/, QString /*name*/> ItemInventoryNames;
+    std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassWeapon;
+    std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassJunk;
+    std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassArmor;
 
     // Reads json file
     // returns 1 on failure
     bool OpenJson(const QString& fileName, std::function<bool(const QJsonDocument& json)> handle)
     {
+        qCDebug(JSON) << "JSON: Loading: " << fileName;
+
         QFile jsonFile(fileName);
         if (jsonFile.open(QIODevice::ReadOnly))
         {
@@ -317,6 +322,92 @@ namespace QSpellWorkJson
 
             return true;
           }))
+        {
+            return false;
+        }
+
+        if (!OpenJson("./json/ItemSubclass.json", [&](const QJsonDocument& json)
+        {
+            if (!json.isObject())
+            {
+                qCDebug(JSON) << "JSON: Json file \"ItemSubclass.json\" is not Object type";
+                return false;
+            }
+
+            const auto& jsonObj = json.object();
+            // ItemSubclassWeapon
+            {
+                const auto& attrArray = jsonObj.value("ItemSubclassWeapon").toArray();
+                for (const auto& attrData : std::as_const(attrArray))
+                {
+                    const auto& attrObj = attrData.toObject();
+                    const uint32_t _keyId = attrObj.value("Id").toInt();
+
+                    if (ItemSubclassWeapon.contains(_keyId))
+                    {
+                        qCDebug(JSON) << "JSON: \"./json/ItemSubclass.json\" has duplicate ItemSubclassWeapon entry " << QString::number(_keyId) << ". Skipping";
+                        continue;
+                    }
+
+                    ItemSubclassWeapon[_keyId] = attrObj.value("Name").toString();
+                }
+
+                if (ItemSubclassWeapon.empty())
+                {
+                    qCDebug(JSON) << "JSON: Failed to load ItemSubclassWeapon entries from Itemsubclass.json";
+                    return false;
+                }
+            }
+
+            // ItemSubclassArmor
+            {
+                const auto& attrArray = jsonObj.value("ItemSubclassArmor").toArray();
+                for (const auto& attrData : std::as_const(attrArray))
+                {
+                    const auto& attrObj = attrData.toObject();
+                    const uint32_t _keyId = attrObj.value("Id").toInt();
+
+                    if (ItemSubclassArmor.contains(_keyId))
+                    {
+                        qCDebug(JSON) << "JSON: \"./json/ItemSubclass.json\" has duplicate ItemSubclassArmor entry " << QString::number(_keyId) << ". Skipping";
+                        continue;
+                    }
+
+                    ItemSubclassArmor[_keyId] = attrObj.value("Name").toString();
+                }
+
+                if (ItemSubclassArmor.empty())
+                {
+                    qCDebug(JSON) << "JSON: Failed to load ItemSubclassArmor entries from Itemsubclass.json";
+                    return false;
+                }
+            }
+
+            // ItemSubclassJunk
+            {
+                const auto& attrArray = jsonObj.value("ItemSubclassJunk").toArray();
+                for (const auto& attrData : std::as_const(attrArray))
+                {
+                    const auto& attrObj = attrData.toObject();
+                    const uint32_t _keyId = attrObj.value("Id").toInt();
+
+                    if (ItemSubclassArmor.contains(_keyId))
+                    {
+                        qCDebug(JSON) << "JSON: \"./json/ItemSubclass.json\" has duplicate ItemSubclassJunk entry " << QString::number(_keyId) << ". Skipping";
+                        continue;
+                    }
+
+                    ItemSubclassArmor[_keyId] = attrObj.value("Name").toString();
+                }
+
+                if (ItemSubclassArmor.empty())
+                {
+                    qCDebug(JSON) << "JSON: Failed to load ItemSubclassJunk entries from Itemsubclass.json";
+                    return false;
+                }
+            }
+            return true;
+        }))
         {
             return false;
         }

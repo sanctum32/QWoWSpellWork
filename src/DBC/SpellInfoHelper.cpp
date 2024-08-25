@@ -320,7 +320,8 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
                             subclassNames += ", ";
                         }
 
-                        subclassNames += ItemSubclassWeaponStr[i];
+                        const auto& itr = QSpellWorkJson::ItemSubclassWeapon.find(i);
+                        subclassNames += (itr != QSpellWorkJson::ItemSubclassWeapon.end() ? itr->second : QString("ITEM_SUBCLASS_WEAPON_%1").arg(i));
                     }
                 }
 
@@ -342,7 +343,8 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
                             subclassNames += ", ";
                         }
 
-                        subclassNames += ItemSubclassArmorStr[i];
+                        const auto& itr = QSpellWorkJson::ItemSubclassArmor.find(i);
+                        subclassNames += (itr != QSpellWorkJson::ItemSubclassArmor.end() ? itr->second : QString("ITEM_SUBCLASS_ARMOR_%1").arg(i));
                     }
                 }
 
@@ -364,7 +366,8 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
                             subclassNames += ", ";
                         }
 
-                        subclassNames += ItemSubclassJunkStr[i == ITEM_SUBCLASS_JUNK_UNK12 ? 6 : i];
+                        const auto& itr = QSpellWorkJson::ItemSubclassJunk.find(i);
+                        subclassNames += (itr != QSpellWorkJson::ItemSubclassJunk.end() ? itr->second : QString("ITEM_SUBCLASS_JUNK_%1").arg(i));
                     }
                 }
 
@@ -384,12 +387,12 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             {
                 if ((spellEquipedItems->EquippedItemInventoryTypeMask & (1 << i)) != 0)
                 {
-                    const auto& itr = QSpellWorkJson::ItemInventoryNames.find(i);
                     if (!inventoryNames.isEmpty())
                     {
                         inventoryNames += ", ";
                     }
 
+                    const auto& itr = QSpellWorkJson::ItemInventoryNames.find(i);
                     inventoryNames += itr != QSpellWorkJson::ItemInventoryNames.end() ? itr->second : QString("INVTYPE_UNK%1").arg(i);
                 }
             }

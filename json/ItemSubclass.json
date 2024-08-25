@@ -1,0 +1,51 @@
+{
+    "ItemSubclassWeapon":
+    [
+        {"Id" : 0, "Name": "ITEM_SUBCLASS_WEAPON_AXE"},
+        {"Id" : 1, "Name": "ITEM_SUBCLASS_WEAPON_AXE2"},
+        {"Id" : 2, "Name": "ITEM_SUBCLASS_WEAPON_BOW"},
+        {"Id" : 3, "Name": "ITEM_SUBCLASS_WEAPON_GUN"},
+        {"Id" : 4, "Name": "ITEM_SUBCLASS_WEAPON_MACE"},
+        {"Id" : 5, "Name": "ITEM_SUBCLASS_WEAPON_MACE2"},
+        {"Id" : 6, "Name": "ITEM_SUBCLASS_WEAPON_POLEARM"},
+        {"Id" : 7, "Name": "ITEM_SUBCLASS_WEAPON_SWORD"},
+        {"Id" : 8, "Name": "ITEM_SUBCLASS_WEAPON_SWORD2"},
+        {"Id" : 9, "Name": "ITEM_SUBCLASS_WEAPON_Obsolete"},
+        {"Id" : 10, "Name": "ITEM_SUBCLASS_WEAPON_STAFF"},
+        {"Id" : 11, "Name": "ITEM_SUBCLASS_WEAPON_EXOTIC"},
+        {"Id" : 12, "Name": "ITEM_SUBCLASS_WEAPON_EXOTIC2"},
+        {"Id" : 13, "Name": "ITEM_SUBCLASS_WEAPON_FIST_WEAPON"},
+        {"Id" : 14, "Name": "ITEM_SUBCLASS_WEAPON_MISCELLANEOUS"},
+        {"Id" : 15, "Name": "ITEM_SUBCLASS_WEAPON_DAGGER"},
+        {"Id" : 16, "Name": "ITEM_SUBCLASS_WEAPON_THROWN"},
+        {"Id" : 17, "Name": "ITEM_SUBCLASS_WEAPON_SPEAR"},
+        {"Id" : 18, "Name": "ITEM_SUBCLASS_WEAPON_CROSSBOW"},
+        {"Id" : 19, "Name": "ITEM_SUBCLASS_WEAPON_WAND"},
+        {"Id" : 20, "Name": "ITEM_SUBCLASS_WEAPON_FISHING_POLE"}
+    ],
+    "ItemSubclassArmor":
+    [
+        { "Id": 0, "Name": "ITEM_SUBCLASS_ARMOR_MISCELLANEOUS"},
+        { "Id": 1, "Name": "ITEM_SUBCLASS_ARMOR_CLOTH"},
+        { "Id": 2, "Name": "ITEM_SUBCLASS_ARMOR_LEATHER"},
+        { "Id": 3, "Name": "ITEM_SUBCLASS_ARMOR_MAIL"},
+        { "Id": 4, "Name": "ITEM_SUBCLASS_ARMOR_PLATE"},
+        { "Id": 5, "Name": "ITEM_SUBCLASS_ARMOR_BUCKLER"},
+        { "Id": 6, "Name": "ITEM_SUBCLASS_ARMOR_SHIELD"},
+        { "Id": 7, "Name": "ITEM_SUBCLASS_ARMOR_LIBRAM"},
+        { "Id": 8, "Name": "ITEM_SUBCLASS_ARMOR_IDOL"},
+        { "Id": 9, "Name": "ITEM_SUBCLASS_ARMOR_TOTEM"},
+        { "Id": 10, "Name": "ITEM_SUBCLASS_ARMOR_SIGIL"},
+        { "Id": 11, "Name": "ITEM_SUBCLASS_ARMOR_RELIC"}
+    ],
+    "ItemSubclassJunk":
+    [
+        { "Id" : 0, "Name": "ITEM_SUBCLASS_JUNK"},
+        { "Id" : 1, "Name": "ITEM_SUBCLASS_JUNK_REAGENT"},
+        { "Id" : 2, "Name": "ITEM_SUBCLASS_JUNK_PET"},
+        { "Id" : 3, "Name": "ITEM_SUBCLASS_JUNK_HOLIDAY"},
+        { "Id" : 4, "Name": "ITEM_SUBCLASS_JUNK_OTHER"},
+        { "Id" : 5, "Name": "ITEM_SUBCLASS_JUNK_MOUNT"},
+        { "Id" : 6, "Name": "ITEM_SUBCLASS_JUNK_UNK12"}
+    ]
+}

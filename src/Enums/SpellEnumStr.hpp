@@ -94,56 +94,6 @@ constexpr std::array<char const*, MAX_ITEM_CLASS> ItemClassStr={
     printEnum(ITEM_CLASS_GLYPH)
 };
 
-
-constexpr std::array<char const*, MAX_ITEM_SUBCLASS_WEAPON_TYPE> ItemSubclassWeaponStr={
-    printEnum(ITEM_SUBCLASS_WEAPON_AXE),
-    printEnum(ITEM_SUBCLASS_WEAPON_AXE2),
-    printEnum(ITEM_SUBCLASS_WEAPON_BOW),
-    printEnum(ITEM_SUBCLASS_WEAPON_GUN),
-    printEnum(ITEM_SUBCLASS_WEAPON_MACE),
-    printEnum(ITEM_SUBCLASS_WEAPON_MACE2),
-    printEnum(ITEM_SUBCLASS_WEAPON_POLEARM),
-    printEnum(ITEM_SUBCLASS_WEAPON_SWORD),
-    printEnum(ITEM_SUBCLASS_WEAPON_SWORD2),
-    printEnum(ITEM_SUBCLASS_WEAPON_Obsolete),
-    printEnum(ITEM_SUBCLASS_WEAPON_STAFF),
-    printEnum(ITEM_SUBCLASS_WEAPON_EXOTIC),
-    printEnum(ITEM_SUBCLASS_WEAPON_EXOTIC2),
-    printEnum(ITEM_SUBCLASS_WEAPON_FIST_WEAPON),
-    printEnum(ITEM_SUBCLASS_WEAPON_MISCELLANEOUS),
-    printEnum(ITEM_SUBCLASS_WEAPON_DAGGER),
-    printEnum(ITEM_SUBCLASS_WEAPON_THROWN),
-    printEnum(ITEM_SUBCLASS_WEAPON_SPEAR),
-    printEnum(ITEM_SUBCLASS_WEAPON_CROSSBOW),
-    printEnum(ITEM_SUBCLASS_WEAPON_WAND),
-    printEnum(ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-};
-
-constexpr std::array<char const*, MAX_ITEM_SUBCLASS_ARMOR_TYPE> ItemSubclassArmorStr={
-    printEnum(ITEM_SUBCLASS_ARMOR_MISCELLANEOUS),
-    printEnum(ITEM_SUBCLASS_ARMOR_CLOTH),
-    printEnum(ITEM_SUBCLASS_ARMOR_LEATHER),
-    printEnum(ITEM_SUBCLASS_ARMOR_MAIL),
-    printEnum(ITEM_SUBCLASS_ARMOR_PLATE),
-    printEnum(ITEM_SUBCLASS_ARMOR_BUCKLER),
-    printEnum(ITEM_SUBCLASS_ARMOR_SHIELD),
-    printEnum(ITEM_SUBCLASS_ARMOR_LIBRAM),
-    printEnum(ITEM_SUBCLASS_ARMOR_IDOL),
-    printEnum(ITEM_SUBCLASS_ARMOR_TOTEM),
-    printEnum(ITEM_SUBCLASS_ARMOR_SIGIL),
-    printEnum(ITEM_SUBCLASS_ARMOR_RELIC)
-};
-
-constexpr std::array<char const*, MAX_ITEM_SUBCLASS_JUNK_TYPE> ItemSubclassJunkStr={
-    printEnum(ITEM_SUBCLASS_JUNK),
-    printEnum(ITEM_SUBCLASS_JUNK_REAGENT),
-    printEnum(ITEM_SUBCLASS_JUNK_PET),
-    printEnum(ITEM_SUBCLASS_JUNK_HOLIDAY),
-    printEnum(ITEM_SUBCLASS_JUNK_OTHER),
-    printEnum(ITEM_SUBCLASS_JUNK_MOUNT),
-    printEnum(ITEM_SUBCLASS_JUNK_UNK12)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H
