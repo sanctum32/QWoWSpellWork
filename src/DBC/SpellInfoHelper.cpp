@@ -118,10 +118,14 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
         {
             result += QString(" (%1)").arg(spellCategoryInfo->Name.c_str());
         }
-        result += "<br";
+        result += "<br>";
 
         result += QString("DispelType = %1 (%2)<br>").arg(spellCategory->DispelType).arg(DispelTypeStr[spellCategory->DispelType]);
-        result += QString("Mechanic = %1 (%2)<br>").arg(spellCategory->Mechanic).arg(MechanicsStr[spellCategory->Mechanic]);
+
+        const auto& mechanicItr = QSpellWorkJson::SpellMechanicNames.find(spellCategory->Mechanic);
+        result += QString("Mechanic = %1 (%2)<br>")
+                      .arg(spellCategory->Mechanic)
+                      .arg(mechanicItr != QSpellWorkJson::SpellMechanicNames.end() ? mechanicItr->second : "unknown");
     }
     else
     {
@@ -129,7 +133,10 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
         result += QString("PreventionType = 0 (%1)<br>").arg(SpellPreventionTypeStr.at(SPELL_PREVENTION_TYPE_NONE));
         result += QString("Category id = %1<br>").arg(category_id);
         result += QString("DispelType = 0 (%1)<br>").arg(DispelTypeStr[DISPEL_NONE]);
-        result += QString("Mechanic = 0 (%1)<br>").arg(MechanicsStr[MECHANIC_NONE]);
+
+        const auto& mechanicItr = QSpellWorkJson::SpellMechanicNames.find(MECHANIC_NONE);
+        result += QString("Mechanic = 0 (%1)<br>")
+                      .arg(mechanicItr != QSpellWorkJson::SpellMechanicNames.end() ? mechanicItr->second : "unknown");
     }
 }
 
@@ -476,7 +483,6 @@ inline void PrintSpellPowerInfo(QString& result, uint32_t SpellPowerId, int8_t p
     auto const* spellPowerEntry = GetDBCEntry(SpellPowerId, sDBCStores->m_SpellPowerEntries);
     if (spellPowerEntry != nullptr && (spellPowerEntry->manaCost != 0 ||
                                        spellPowerEntry->ManaCostPercentage != 0 ||
-                                       powerType != 0 ||
                                        spellPowerEntry->manaCostPerlevel != 0 ||
                                        spellPowerEntry->manaPerSecondPerLevel != 0))
     {
@@ -495,10 +501,7 @@ inline void PrintSpellPowerInfo(QString& result, uint32_t SpellPowerId, int8_t p
             uint32_t powerCost = spellPowerEntry->manaCost;
             if (powerType == POWER_RAGE)
             {
-                if (spellPowerEntry->manaCost != 0)
-                {
-                    powerCost /= 10;
-                }
+                powerCost /= 10;
             }
 
             result += QString::number(powerCost);
@@ -1061,7 +1064,10 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 
         if (effectInfo->EffectMechanic != MECHANIC_NONE)
         {
-            result += QString("Effect Mechanic = %1 (%2)<br>").arg(effectInfo->EffectMechanic).arg(MechanicsStr[effectInfo->EffectMechanic]);
+            const auto& mechanicItr = QSpellWorkJson::SpellMechanicNames.find(effectInfo->EffectMechanic);
+            result += QString("Effect Mechanic = %1 (%2)<br>")
+                          .arg(effectInfo->EffectMechanic)
+                          .arg(mechanicItr != QSpellWorkJson::SpellMechanicNames.end() ? mechanicItr->second : "unknown");
         }
 
         result += "<br>";

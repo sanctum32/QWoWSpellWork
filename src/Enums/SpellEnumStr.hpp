@@ -216,42 +216,6 @@ constexpr std::array<char const*, MAX_DISPEL_TYPE> DispelTypeStr={
     printEnum(DESPEL_OLD_UNUSED)
 };
 
-constexpr std::array<char const*, MAX_MECHANIC_TYPE> MechanicsStr={
-    printEnum(MECHANIC_NONE),
-    printEnum(MECHANIC_CHARM),
-    printEnum(MECHANIC_DISORIENTED),
-    printEnum(MECHANIC_DISARM),
-    printEnum(MECHANIC_DISTRACT),
-    printEnum(MECHANIC_FEAR),
-    printEnum(MECHANIC_GRIP),
-    printEnum(MECHANIC_ROOT),
-    printEnum(MECHANIC_SLOW_ATTACK),
-    printEnum(MECHANIC_SILENCE),
-    printEnum(MECHANIC_SLEEP),
-    printEnum(MECHANIC_SNARE),
-    printEnum(MECHANIC_STUN),
-    printEnum(MECHANIC_FREEZE),
-    printEnum(MECHANIC_KNOCKOUT),
-    printEnum(MECHANIC_BLEED),
-    printEnum(MECHANIC_BANDAGE),
-    printEnum(MECHANIC_POLYMORPH),
-    printEnum(MECHANIC_BANISH),
-    printEnum(MECHANIC_SHIELD),
-    printEnum(MECHANIC_SHACKLE),
-    printEnum(MECHANIC_MOUNT),
-    printEnum(MECHANIC_INFECTED),
-    printEnum(MECHANIC_TURN),
-    printEnum(MECHANIC_HORROR),
-    printEnum(MECHANIC_INVULNERABILITY),
-    printEnum(MECHANIC_INTERRUPT),
-    printEnum(MECHANIC_DAZE),
-    printEnum(MECHANIC_DISCOVERY),
-    printEnum(MECHANIC_IMMUNE_SHIELD),
-    printEnum(MECHANIC_SAPPED),
-    printEnum(MECHANIC_ENRAGED),
-    printEnum(MECHANIC_WOUNDED)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H

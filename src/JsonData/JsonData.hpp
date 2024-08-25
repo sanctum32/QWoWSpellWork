@@ -31,4 +31,5 @@ namespace QSpellWorkJson
     extern std::map<uint32_t /*id*/, QString /*name*/> UnitModsNames;
     extern std::map<uint32_t /*id*/, QString /*name*/> SpellAuraStatesNames;
     extern std::map<int32_t /*id*/, QString /*name*/> PowerTypeNames;
+    extern std::map<uint32_t /*id*/, QString /*name*/> SpellMechanicNames;
 }
