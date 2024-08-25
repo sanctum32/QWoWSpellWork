@@ -685,13 +685,21 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
     QString result;
     for (uint32_t effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
     {
+        result += line;
+
         const auto* effectInfo = m_spellEffects[effIndex];
         if (effectInfo == nullptr)
         {
+            const auto& effectnameItr = QSpellWorkJson::SpellEffectNames.find(SPELL_EFFECT_NONE);
+            result += QString("<b>Effect %1: Id %2 (%3)</b><br>")
+                          .arg(effIndex)
+                          .arg(SPELL_EFFECT_NONE)
+                          .arg(effectnameItr != QSpellWorkJson::SpellEffectNames.end() ? effectnameItr->second : "SPELL_EFFECT_NONE");
+
+
+
             continue;
         }
-
-        result += line;
 
         {
             const auto& effectnameItr = QSpellWorkJson::SpellEffectNames.find(effectInfo->Effect);
