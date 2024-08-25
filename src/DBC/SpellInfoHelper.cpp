@@ -581,46 +581,66 @@ inline void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestri
 
     if (spellRestrictions->CasterAuraState != 0)
     {
-        result += QString("CasterAuraState = %1 (%2)<br>").arg(spellRestrictions->CasterAuraState).arg(AuraStateTypeStr[spellRestrictions->CasterAuraState]);
-    }
-
-    if (spellRestrictions->TargetAuraState != 0)
-    {
-        result += QString("TargetAuraState = %1 (%2)<br>").arg(spellRestrictions->TargetAuraState).arg(AuraStateTypeStr[spellRestrictions->TargetAuraState]);
+        const auto& itr = QSpellWorkJson::SpellAuraStatesNames.find(spellRestrictions->CasterAuraState);
+        result += QString("CasterAuraState = %1 (%2)<br>")
+                      .arg(spellRestrictions->CasterAuraState)
+                      .arg(itr != QSpellWorkJson::SpellAuraStatesNames.end() ? itr->second : "unknown");
     }
 
     if (spellRestrictions->CasterAuraStateNot != 0)
     {
-        result += QString("CasterAuraStateNot = %1 (%2)<br>").arg(spellRestrictions->CasterAuraStateNot).arg(AuraStateTypeStr[spellRestrictions->CasterAuraStateNot]);
+        const auto& itr = QSpellWorkJson::SpellAuraStatesNames.find(spellRestrictions->CasterAuraStateNot);
+        result += QString("CasterAuraStateNot = %1 (%2)<br>")
+                      .arg(spellRestrictions->CasterAuraStateNot)
+                      .arg(itr != QSpellWorkJson::SpellAuraStatesNames.end() ? itr->second : "unknown");
+    }
+
+    if (spellRestrictions->TargetAuraState != 0)
+    {
+        const auto& itr = QSpellWorkJson::SpellAuraStatesNames.find(spellRestrictions->TargetAuraState);
+        result += QString("TargetAuraState = %1 (%2)<br>")
+                      .arg(spellRestrictions->TargetAuraState)
+                      .arg(itr != QSpellWorkJson::SpellAuraStatesNames.end() ? itr->second : "unknown");
     }
 
     if (spellRestrictions->TargetAuraStateNot != 0)
     {
-        result += QString("TargetAuraStateNot = %1 (%2)<br>").arg(spellRestrictions->TargetAuraStateNot).arg(AuraStateTypeStr[spellRestrictions->TargetAuraStateNot]);
+        const auto& itr = QSpellWorkJson::SpellAuraStatesNames.find(spellRestrictions->TargetAuraStateNot);
+        result += QString("TargetAuraStateNot = %1 (%2)<br>")
+                      .arg(spellRestrictions->TargetAuraStateNot)
+                      .arg(itr != QSpellWorkJson::SpellAuraStatesNames.end() ? itr->second : "unknown");
     }
 
     if (spellRestrictions->casterAuraSpell != 0)
     {
         const auto* auraSpell = GetDBCEntry(spellRestrictions->casterAuraSpell, sDBCStores->m_spellEntries);
-        result += QString("  Caster Aura Spell (%1) %2<br>").arg(spellRestrictions->casterAuraSpell).arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+        result += QString("  Caster Aura Spell (%1) %2<br>")
+                      .arg(spellRestrictions->casterAuraSpell)
+                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
     }
 
     if (spellRestrictions->targetAuraSpell != 0)
     {
         const auto* auraSpell = GetDBCEntry(spellRestrictions->targetAuraSpell, sDBCStores->m_spellEntries);
-        result += QString("  Target Aura Spell (%1) %2<br>").arg(spellRestrictions->targetAuraSpell).arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+        result += QString("  Target Aura Spell (%1) %2<br>")
+                      .arg(spellRestrictions->targetAuraSpell)
+                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
     }
 
     if (spellRestrictions->excludeCasterAuraSpell != 0)
     {
         const auto* auraSpell = GetDBCEntry(spellRestrictions->excludeCasterAuraSpell, sDBCStores->m_spellEntries);
-        result += QString("  Ex Caster Aura Spell (%1) %2<br>").arg(spellRestrictions->excludeCasterAuraSpell).arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+        result += QString("  Ex Caster Aura Spell (%1) %2<br>")
+                      .arg(spellRestrictions->excludeCasterAuraSpell)
+                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
     }
 
     if (spellRestrictions->excludeTargetAuraSpell != 0)
     {
         const auto* auraSpell = GetDBCEntry(spellRestrictions->excludeTargetAuraSpell, sDBCStores->m_spellEntries);
-        result += QString("  Ex Target Aura Spell (%1) %2<br>").arg(spellRestrictions->excludeTargetAuraSpell).arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+        result += QString("  Ex Target Aura Spell (%1) %2<br>")
+                      .arg(spellRestrictions->excludeTargetAuraSpell)
+                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
     }
 }
 

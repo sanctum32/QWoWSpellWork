@@ -5,7 +5,7 @@
 #include <QLoggingCategory>
 #include "Enums/SpellEnums.hpp"
 #include <array>
-#include <unordered_map>
+#include <map>
 
 namespace QSpellWorkJson
 {
@@ -29,4 +29,5 @@ namespace QSpellWorkJson
     extern std::map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
     extern std::map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
     extern std::map<uint32_t /*id*/, QString /*name*/> UnitModsNames;
+    extern std::map<uint32_t /*id*/, QString /*name*/> SpellAuraStatesNames;
 }

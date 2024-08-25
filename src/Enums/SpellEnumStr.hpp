@@ -269,34 +269,6 @@ constexpr std::array<char const*, MAX_POWER_TYPES> PowersStr={
     printEnum(POWER_HEALTH)
 };
 
-// Spell aura states MAX_AURA_STATE_TYPES
-constexpr std::array<char const*, MAX_AURA_STATE_TYPES> AuraStateTypeStr={
-    printEnum(AURA_STATE_NONE),
-    printEnum(AURA_STATE_DEFENSE),
-    printEnum(AURA_STATE_HEALTHLESS_20_PERCENT),
-    printEnum(AURA_STATE_BERSERKING),
-    printEnum(AURA_STATE_FROZEN),
-    printEnum(AURA_STATE_JUDGEMENT),
-    printEnum(AURA_STATE_UNKNOWN6),
-    printEnum(AURA_STATE_HUNTER_PARRY),
-    printEnum(AURA_STATE_UNKNOWN8),
-    printEnum(AURA_STATE_UNKNOWN9),
-    printEnum(AURA_STATE_WARRIOR_VICTORY_RUSH),
-    printEnum(AURA_STATE_UNKNOWN11),
-    printEnum(AURA_STATE_FAERIE_FIRE),
-    printEnum(AURA_STATE_HEALTHLESS_35_PERCENT),
-    printEnum(AURA_STATE_CONFLAGRATE),
-    printEnum(AURA_STATE_SWIFTMEND),
-    printEnum(AURA_STATE_DEADLY_POISON),
-    printEnum(AURA_STATE_ENRAGE),
-    printEnum(AURA_STATE_BLEEDING),
-    printEnum(AURA_STATE_UNKNOWN19),
-    printEnum(AURA_STATE_UNKNOWN20),
-    printEnum(AURA_STATE_UNKNOWN21),
-    printEnum(AURA_STATE_UNKNOWN22),
-    printEnum(AURA_STATE_HEALTH_ABOVE_75_PERCENT)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H
