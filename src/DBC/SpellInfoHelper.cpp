@@ -113,24 +113,21 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
             result += QString("PreventionType = %1 (unknown)<br>").arg(spellCategory->PreventionType);
         }
 
+        result += QString("Category id = %1").arg(category_id);
         if (const auto* spellCategoryInfo = GetDBCEntry(spellCategory->Id, sDBCStores->m_SpellCategoryEntries))
         {
-            result += QString("Category id = %1 (\"%2\")<br>").arg(spellCategory->Id).arg(spellCategoryInfo->Name.c_str());
+            result += QString(" (%1)").arg(spellCategoryInfo->Name.c_str());
         }
-        else
-        {
-            result += QString("Category id = %1<br>").arg(spellCategory->Id);
-        }
+        result += "<br";
 
         result += QString("DispelType = %1 (%2)<br>").arg(spellCategory->DispelType).arg(DispelTypeStr[spellCategory->DispelType]);
         result += QString("Mechanic = %1 (%2)<br>").arg(spellCategory->Mechanic).arg(MechanicsStr[spellCategory->Mechanic]);
     }
     else
     {
-        result += QString("DamageClass = 0 (%1)<br>").arg(SpellDmgClassStr.at(SPELL_DAMAGE_CLASS_NONE));
+        result += QString("DamageClass = %1 (%2)<br>").arg(category_id).arg(SpellDmgClassStr.at(SPELL_DAMAGE_CLASS_NONE));
         result += QString("PreventionType = 0 (%1)<br>").arg(SpellPreventionTypeStr.at(SPELL_PREVENTION_TYPE_NONE));
-
-        result += QString("Category = 0<br>");
+        result += QString("Category id = %1<br>").arg(category_id);
         result += QString("DispelType = 0 (%1)<br>").arg(DispelTypeStr[DISPEL_NONE]);
         result += QString("Mechanic = 0 (%1)<br>").arg(MechanicsStr[MECHANIC_NONE]);
     }
@@ -661,7 +658,6 @@ inline void PrintSpellCastRequirements(QString& result, uint32_t SpellCastingReq
 QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 {
     QString result;
-    bool linePrinted = false;
     for (uint32_t effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
     {
         const auto* effectInfo = m_spellEffects[effIndex];
@@ -670,11 +666,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             continue;
         }
 
-        if (!linePrinted)
-        {
-            result += line;
-            linePrinted = true;
-        }
+        result += line;
 
         {
             const auto& effectnameItr = QSpellWorkJson::SpellEffectNames.find(effectInfo->Effect);
@@ -759,7 +751,6 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
         }
 
         result += "<br>";
-        result += line;
 
         // Print targets
         {
@@ -768,12 +759,14 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             const QString TargetAStr = targetAItr != QSpellWorkJson::SpellTargetNames.end() ? targetAItr->second : "unknown";
             const QString TargetBStr = targetBItr != QSpellWorkJson::SpellTargetNames.end() ? targetBItr->second : "unknown";
 
-            result += QString("Targets: (%1, %2) (%3, %4)<br><br>")
+            result += QString("Targets: (%1, %2) (%3, %4)<br>")
                           .arg(effectInfo->EffectImplicitTargetA)
                           .arg(effectInfo->EffectImplicitTargetB)
                           .arg(TargetAStr)
                           .arg(TargetBStr);
         }
+
+        result += line;
 
         if (effectInfo->EffectAura == 0)
         {
