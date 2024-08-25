@@ -1194,40 +1194,39 @@ enum AuraType
 
 enum UnitMods
 {
-    UNIT_MOD_STAT_STRENGTH,                                 // UNIT_MOD_STAT_STRENGTH..UNIT_MOD_STAT_SPIRIT must be in existed order, it's accessed by index values of Stats enum.
-    UNIT_MOD_STAT_AGILITY,
-    UNIT_MOD_STAT_STAMINA,
-    UNIT_MOD_STAT_INTELLECT,
-    UNIT_MOD_STAT_SPIRIT,
-    UNIT_MOD_HEALTH,
-    UNIT_MOD_MANA,                                          // UNIT_MOD_MANA..UNIT_MOD_RUNIC_POWER must be in existed order, it's accessed by index values of Powers enum.
-    UNIT_MOD_RAGE,
-    UNIT_MOD_FOCUS,
-    UNIT_MOD_ENERGY,
-    UNIT_MOD_UNUSED,                                        // Old UNIT_MOD_HAPPINESS
-    UNIT_MOD_RUNE,
-    UNIT_MOD_RUNIC_POWER,
-    UNIT_MOD_SOUL_SHARDS,
-    UNIT_MOD_ECLIPSE,
-    UNIT_MOD_HOLY_POWER,
-    UNIT_MOD_ALTERNATE_POWER,                               // Atramedes etc.
-    UNIT_MOD_ARMOR,                                         // UNIT_MOD_ARMOR..UNIT_MOD_RESISTANCE_ARCANE must be in existed order, it's accessed by index values of SpellSchools enum.
-    UNIT_MOD_RESISTANCE_HOLY,
-    UNIT_MOD_RESISTANCE_FIRE,
-    UNIT_MOD_RESISTANCE_NATURE,
-    UNIT_MOD_RESISTANCE_FROST,
-    UNIT_MOD_RESISTANCE_SHADOW,
-    UNIT_MOD_RESISTANCE_ARCANE,
-    UNIT_MOD_ATTACK_POWER,
-    UNIT_MOD_ATTACK_POWER_POS,
-    UNIT_MOD_ATTACK_POWER_NEG,
-    UNIT_MOD_ATTACK_POWER_RANGED,
-    UNIT_MOD_ATTACK_POWER_RANGED_POS,
-    UNIT_MOD_ATTACK_POWER_RANGED_NEG,
-    UNIT_MOD_DAMAGE_MAINHAND,
-    UNIT_MOD_DAMAGE_OFFHAND,
-    UNIT_MOD_DAMAGE_RANGED,
-    UNIT_MOD_END,
+    UNIT_MOD_STAT_STRENGTH                                  = 0,    // UNIT_MOD_STAT_STRENGTH..UNIT_MOD_STAT_SPIRIT must be in existed order, it's accessed by index values of Stats enum.
+    UNIT_MOD_STAT_AGILITY                                   = 1,
+    UNIT_MOD_STAT_STAMINA                                   = 2,
+    UNIT_MOD_STAT_INTELLECT                                 = 3,
+    UNIT_MOD_STAT_SPIRIT                                    = 4,
+    UNIT_MOD_HEALTH                                         = 5,
+    UNIT_MOD_MANA                                           = 6,    // UNIT_MOD_MANA..UNIT_MOD_RUNIC_POWER must be in existed order, it's accessed by index values of Powers enum.
+    UNIT_MOD_RAGE                                           = 7,
+    UNIT_MOD_FOCUS                                          = 8,
+    UNIT_MOD_ENERGY                                         = 9,
+    UNIT_MOD_UNUSED                                         = 10,   // Old UNIT_MOD_HAPPINESS
+    UNIT_MOD_RUNE                                           = 11,
+    UNIT_MOD_RUNIC_POWER                                    = 12,
+    UNIT_MOD_SOUL_SHARDS                                    = 13,
+    UNIT_MOD_ECLIPSE                                        = 16,
+    UNIT_MOD_HOLY_POWER                                     = 15,
+    UNIT_MOD_ALTERNATE_POWER                                = 16,   // Atramedes etc.
+    UNIT_MOD_ARMOR                                          = 17,   // UNIT_MOD_ARMOR..UNIT_MOD_RESISTANCE_ARCANE must be in existed order, it's accessed by index values of SpellSchools enum.
+    UNIT_MOD_RESISTANCE_HOLY                                = 18,
+    UNIT_MOD_RESISTANCE_FIRE                                = 19,
+    UNIT_MOD_RESISTANCE_NATURE                              = 20,
+    UNIT_MOD_RESISTANCE_FROST                               = 21,
+    UNIT_MOD_RESISTANCE_SHADOW                              = 22,
+    UNIT_MOD_RESISTANCE_ARCANE                              = 23,
+    UNIT_MOD_ATTACK_POWER                                   = 24,
+    UNIT_MOD_ATTACK_POWER_POS                               = 25,
+    UNIT_MOD_ATTACK_POWER_NEG                               = 26,
+    UNIT_MOD_ATTACK_POWER_RANGED                            = 27,
+    UNIT_MOD_ATTACK_POWER_RANGED_POS                        = 28,
+    UNIT_MOD_ATTACK_POWER_RANGED_NEG                        = 29,
+    UNIT_MOD_DAMAGE_MAINHAND                                = 30,
+    UNIT_MOD_DAMAGE_OFFHAND                                 = 31,
+    UNIT_MOD_DAMAGE_RANGED                                  = 32,
 };
 
 enum CombatRating
