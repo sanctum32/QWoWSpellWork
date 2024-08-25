@@ -1,0 +1,14 @@
+[
+    { "Id" : 0, "Name" : "DISPEL_NONE" },
+    { "Id" : 1, "Name" : "DISPEL_MAGIC" },
+    { "Id" : 2, "Name" : "DISPEL_CURSE" },
+    { "Id" : 3, "Name" : "DISPEL_DISEASE" },
+    { "Id" : 4, "Name" : "DISPEL_POISON" },
+    { "Id" : 5, "Name" : "DISPEL_STEALTH" },
+    { "Id" : 6, "Name" : "DISPEL_INVISIBILITY" },
+    { "Id" : 7, "Name" : "DISPEL_ALL" },
+    { "Id" : 8, "Name" : "DISPEL_SPE_NPC_ONLY" },
+    { "Id" : 9, "Name" : "DISPEL_ENRAGE" },
+    { "Id" : 10, "Name" : "DISPEL_ZG_TICKET" },
+    { "Id" : 11, "Name" : "DESPEL_OLD_UNUSED" }
+]

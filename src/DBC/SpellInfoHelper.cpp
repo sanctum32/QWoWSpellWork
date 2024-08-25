@@ -120,23 +120,35 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
         }
         result += "<br>";
 
-        result += QString("DispelType = %1 (%2)<br>").arg(spellCategory->DispelType).arg(DispelTypeStr[spellCategory->DispelType]);
+        {
+            const auto& itr = QSpellWorkJson::DispelNames.find(spellCategory->DispelType);
+            result += QString("DispelType = %1 (%2)<br>")
+                          .arg(spellCategory->DispelType)
+                          .arg(itr != QSpellWorkJson::DispelNames.end() ? itr->second : "unknown");
+        }
 
-        const auto& mechanicItr = QSpellWorkJson::SpellMechanicNames.find(spellCategory->Mechanic);
-        result += QString("Mechanic = %1 (%2)<br>")
-                      .arg(spellCategory->Mechanic)
-                      .arg(mechanicItr != QSpellWorkJson::SpellMechanicNames.end() ? mechanicItr->second : "unknown");
+        {
+            const auto& mechanicItr = QSpellWorkJson::SpellMechanicNames.find(spellCategory->Mechanic);
+            result += QString("Mechanic = %1 (%2)<br>")
+                          .arg(spellCategory->Mechanic)
+                          .arg(mechanicItr != QSpellWorkJson::SpellMechanicNames.end() ? mechanicItr->second : "unknown");
+        }
     }
     else
     {
         result += QString("DamageClass = %1 (%2)<br>").arg(category_id).arg(SpellDmgClassStr.at(SPELL_DAMAGE_CLASS_NONE));
         result += QString("PreventionType = 0 (%1)<br>").arg(SpellPreventionTypeStr.at(SPELL_PREVENTION_TYPE_NONE));
         result += QString("Category id = %1<br>").arg(category_id);
-        result += QString("DispelType = 0 (%1)<br>").arg(DispelTypeStr[DISPEL_NONE]);
 
-        const auto& mechanicItr = QSpellWorkJson::SpellMechanicNames.find(MECHANIC_NONE);
-        result += QString("Mechanic = 0 (%1)<br>")
-                      .arg(mechanicItr != QSpellWorkJson::SpellMechanicNames.end() ? mechanicItr->second : "unknown");
+        {
+            const auto& itr = QSpellWorkJson::DispelNames.find(DISPEL_NONE);
+            result += QString("DispelType = 0 (%1)<br>").arg(itr != QSpellWorkJson::DispelNames.end() ? itr->second : "unknown");
+        }
+
+        {
+            const auto& mechanicItr = QSpellWorkJson::SpellMechanicNames.find(MECHANIC_NONE);
+            result += QString("Mechanic = 0 (%1)<br>").arg(mechanicItr != QSpellWorkJson::SpellMechanicNames.end() ? mechanicItr->second : "unknown");
+        }
     }
 }
 

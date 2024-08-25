@@ -176,21 +176,6 @@ constexpr std::array<char const*, MAX_INVENTORY_TYPE> InventoryTypeStr={
     printEnum(INVTYPE_RELIC),
 };
 
-constexpr std::array<char const*, MAX_DISPEL_TYPE> DispelTypeStr={
-    printEnum(DISPEL_NONE),
-    printEnum(DISPEL_MAGIC),
-    printEnum(DISPEL_CURSE),
-    printEnum(DISPEL_DISEASE),
-    printEnum(DISPEL_POISON),
-    printEnum(DISPEL_STEALTH),
-    printEnum(DISPEL_INVISIBILITY),
-    printEnum(DISPEL_ALL),
-    printEnum(DISPEL_SPE_NPC_ONLY),
-    printEnum(DISPEL_ENRAGE),
-    printEnum(DISPEL_ZG_TICKET),
-    printEnum(DESPEL_OLD_UNUSED)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H
