@@ -19,7 +19,9 @@ inline bool ReadBasicArray(const QString& fileName, T& container, const QString&
         for (const auto& jsonArrayItem : std::as_const(jsonArray))
         {
             const auto& arrayObj = jsonArrayItem.toObject();
-            const uint32_t _keyId = static_cast<uint32_t>(arrayObj.value(keyName).toDouble());
+
+            using keyType = T::key_type;
+            const keyType _keyId = static_cast<keyType>(arrayObj.value(keyName).toDouble());
             const QString _nameStr = arrayObj.value(nameValName).toString();
 
             if (container.contains(_keyId))
