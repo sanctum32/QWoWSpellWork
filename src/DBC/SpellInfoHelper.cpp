@@ -814,8 +814,14 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             switch (effectInfo->EffectAura)
             {
             case SPELL_AURA_MOD_STAT:
-                result += UnitModsStr[effectInfo->EffectMiscValue];
+            {
+                const auto& itr = QSpellWorkJson::UnitModsNames.find(effectInfo->EffectMiscValue);
+                if (itr != QSpellWorkJson::UnitModsNames.end())
+                {
+                    result += " (" + itr->second + ")";
+                }
                 break;
+            }
             case SPELL_AURA_ADD_FLAT_MODIFIER:
             case SPELL_AURA_ADD_PCT_MODIFIER:
             {

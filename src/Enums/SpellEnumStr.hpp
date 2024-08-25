@@ -297,42 +297,6 @@ constexpr std::array<char const*, MAX_AURA_STATE_TYPES> AuraStateTypeStr={
     printEnum(AURA_STATE_HEALTH_ABOVE_75_PERCENT)
 };
 
-constexpr std::array<char const*, UNIT_MOD_END> UnitModsStr={
-    printEnum(UNIT_MOD_STAT_STRENGTH),
-    printEnum(UNIT_MOD_STAT_AGILITY),
-    printEnum(UNIT_MOD_STAT_STAMINA),
-    printEnum(UNIT_MOD_STAT_INTELLECT),
-    printEnum(UNIT_MOD_STAT_SPIRIT),
-    printEnum(UNIT_MOD_HEALTH),
-    printEnum(UNIT_MOD_MANA),
-    printEnum(UNIT_MOD_RAGE),
-    printEnum(UNIT_MOD_FOCUS),
-    printEnum(UNIT_MOD_ENERGY),
-    printEnum(UNIT_MOD_UNUSED),
-    printEnum(UNIT_MOD_RUNE),
-    printEnum(UNIT_MOD_RUNIC_POWER),
-    printEnum(UNIT_MOD_SOUL_SHARDS),
-    printEnum(UNIT_MOD_ECLIPSE),
-    printEnum(UNIT_MOD_HOLY_POWER),
-    printEnum(UNIT_MOD_ALTERNATE_POWER),
-    printEnum(UNIT_MOD_ARMOR),
-    printEnum(UNIT_MOD_RESISTANCE_HOLY),
-    printEnum(UNIT_MOD_RESISTANCE_FIRE),
-    printEnum(UNIT_MOD_RESISTANCE_NATURE),
-    printEnum(UNIT_MOD_RESISTANCE_FROST),
-    printEnum(UNIT_MOD_RESISTANCE_SHADOW),
-    printEnum(UNIT_MOD_RESISTANCE_ARCANE),
-    printEnum(UNIT_MOD_ATTACK_POWER),
-    printEnum(UNIT_MOD_ATTACK_POWER_POS),
-    printEnum(UNIT_MOD_ATTACK_POWER_NEG),
-    printEnum(UNIT_MOD_ATTACK_POWER_RANGED),
-    printEnum(UNIT_MOD_ATTACK_POWER_RANGED_POS),
-    printEnum(UNIT_MOD_ATTACK_POWER_RANGED_NEG),
-    printEnum(UNIT_MOD_DAMAGE_MAINHAND),
-    printEnum(UNIT_MOD_DAMAGE_OFFHAND),
-    printEnum(UNIT_MOD_DAMAGE_RANGED)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H
