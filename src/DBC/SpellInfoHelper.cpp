@@ -96,13 +96,12 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
 {
     if (const auto* spellCategory = GetDBCEntry(category_id, sDBCStores->m_SpellCategories))
     {
-        try
+
         {
-            result += QString("DamageClass = %1 (%2)<br>").arg(spellCategory->DefenseType).arg(SpellDmgClassStr.at(spellCategory->DefenseType));
-        }
-        catch (...)
-        {
-            result += QString("DamageClass = %1 (unknown)<br>").arg(spellCategory->DefenseType);
+            const auto& itr = QSpellWorkJson::SpellDamageTypeNames.find(spellCategory->DefenseType);
+            result += QString("DamageClass = %1 (%2)<br>")
+                          .arg(spellCategory->DefenseType)
+                          .arg(itr != QSpellWorkJson::SpellDamageTypeNames.end() ? itr->second : QString("SPELL_DAMAGE_CLASS_UNK%1").arg(spellCategory->DefenseType));
         }
 
         try
@@ -137,7 +136,8 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
     }
     else
     {
-        result += QString("DamageClass = %1 (%2)<br>").arg(category_id).arg(SpellDmgClassStr.at(SPELL_DAMAGE_CLASS_NONE));
+        const auto& itr = QSpellWorkJson::SpellDamageTypeNames.find(SPELL_DAMAGE_CLASS_NONE);
+        result += QString("DamageClass = %1 (%2)<br>").arg(category_id).arg(itr != QSpellWorkJson::SpellDamageTypeNames.end() ? itr->second : QString("SPELL_DAMAGE_CLASS_NONE"));
         result += QString("PreventionType = 0 (%1)<br>").arg(SpellPreventionTypeStr.at(SPELL_PREVENTION_TYPE_NONE));
         result += QString("Category id = %1<br>").arg(category_id);
 
