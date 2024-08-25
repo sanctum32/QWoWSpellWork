@@ -480,28 +480,28 @@ inline void PrintSpellPowerInfo(QString& result, uint32_t SpellPowerId, int8_t p
                                        spellPowerEntry->manaCostPerlevel != 0 ||
                                        spellPowerEntry->manaPerSecondPerLevel != 0))
     {
-        QString powerStr;
-        switch (powerType)
-        {
-        case POWER_ALL:
-            powerStr = PowersStr[12];
-            break;
-        case POWER_HEALTH:
-            powerStr = PowersStr[13];
-            break;
-        default:
-            powerStr = PowersStr[powerType];
-            break;
-        }
+        const auto& itr = QSpellWorkJson::PowerTypeNames.find(powerType);
 
-        result += QString("Power %1, Cost ").arg(powerStr);
+        result += QString("Power type: %1 (%2), Cost: ")
+                      .arg(powerType)
+                      .arg(itr != QSpellWorkJson::PowerTypeNames.end() ? itr->second : "unknown");
+
         if (spellPowerEntry->manaCost == 0)
         {
             result += QString("%1 %").arg(spellPowerEntry->ManaCostPercentage);
         }
         else
         {
-            result += QString::number(powerType == POWER_RAGE ? spellPowerEntry->manaCost / 10 : spellPowerEntry->manaCost);
+            uint32_t powerCost = spellPowerEntry->manaCost;
+            if (powerType == POWER_RAGE)
+            {
+                if (spellPowerEntry->manaCost != 0)
+                {
+                    powerCost /= 10;
+                }
+            }
+
+            result += QString::number(powerCost);
         }
 
         result += "<br>";

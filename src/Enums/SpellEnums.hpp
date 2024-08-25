@@ -812,7 +812,6 @@ enum Powers : int8_t
     POWER_ECLIPSE                       = 8,
     POWER_HOLY_POWER                    = 9,
     POWER_ALTERNATE_POWER               = 10,           // Used in some quests
-    MAX_POWERS                          = 11,
     POWER_ALL                           = 127,          // default for class?
     POWER_HEALTH                        = -2            // (-2 as signed value)
 };

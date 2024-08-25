@@ -252,23 +252,6 @@ constexpr std::array<char const*, MAX_MECHANIC_TYPE> MechanicsStr={
     printEnum(MECHANIC_WOUNDED)
 };
 
-constexpr std::array<char const*, MAX_POWER_TYPES> PowersStr={
-    printEnum(POWER_MANA),
-    printEnum(POWER_RAGE),
-    printEnum(POWER_FOCUS),
-    printEnum(POWER_ENERGY),
-    printEnum(POWER_UNUSED),
-    printEnum(POWER_RUNES),
-    printEnum(POWER_RUNIC_POWER),
-    printEnum(POWER_SOUL_SHARDS),
-    printEnum(POWER_ECLIPSE),
-    printEnum(POWER_HOLY_POWER),
-    printEnum(POWER_ALTERNATE_POWER),
-    printEnum(MAX_POWERS),
-    printEnum(POWER_ALL),
-    printEnum(POWER_HEALTH)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H

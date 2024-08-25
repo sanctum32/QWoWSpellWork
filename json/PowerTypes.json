@@ -1,0 +1,15 @@
+[
+    { "Id": 0, "Name": "POWER_MANA"},
+    { "Id": 1, "Name": "POWER_RAGE"},
+    { "Id": 2, "Name": "POWER_FOCUS"},
+    { "Id": 3, "Name": "POWER_ENERGY"},
+    { "Id": 4, "Name": "POWER_UNUSED"},
+    { "Id": 5, "Name": "POWER_RUNE"},
+    { "Id": 6, "Name": "POWER_RUNIC_POWER"},
+    { "Id": 7, "Name": "POWER_SOUL_SHARDS"},
+    { "Id": 8, "Name": "POWER_ECLIPSE"},
+    { "Id": 9, "Name": "POWER_HOLY_POWER"},
+    { "Id": 10, "Name": "POWER_ALTERNATE_POWER"},
+    { "Id": 127, "Name": "POWER_ALL"},
+    { "Id": -2, "Name": "POWER_HEALTH"}
+]

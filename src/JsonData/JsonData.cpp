@@ -61,6 +61,7 @@ namespace QSpellWorkJson
     std::map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
     std::map<uint32_t /*id*/, QString /*name*/> UnitModsNames;
     std::map<uint32_t /*id*/, QString /*name*/> SpellAuraStatesNames;
+    std::map<int32_t /*id*/, QString /*name*/> PowerTypeNames;
 
     // Reads json file
     // returns 1 on failure
@@ -261,8 +262,8 @@ namespace QSpellWorkJson
             !ReadBasicArray("./json/SpellTargets.json", SpellTargetNames) ||
             !ReadBasicArray("./json/CombatRating.json", CombatRatingNames) ||
             !ReadBasicArray("./json/UnitMods.json", UnitModsNames) ||
-            !ReadBasicArray("./json/SpellAuraStates.json", SpellAuraStatesNames)
-
+            !ReadBasicArray("./json/SpellAuraStates.json", SpellAuraStatesNames) ||
+            !ReadBasicArray("./json/PowerTypes.json", PowerTypeNames)
         )
         {
             return false;
