@@ -1,0 +1,16 @@
+[
+    {"Id": 0, "Name": "CREATURE_TYPE_NONE" },
+    {"Id": 1, "Name": "CREATURE_TYPE_BEAST" },
+    {"Id": 2, "Name": "CREATURE_TYPE_DRAGONKIN" },
+    {"Id": 3, "Name": "CREATURE_TYPE_DEMON" },
+    {"Id": 4, "Name": "CREATURE_TYPE_ELEMENTAL" },
+    {"Id": 5, "Name": "CREATURE_TYPE_GIANT" },
+    {"Id": 6, "Name": "CREATURE_TYPE_UNDEAD" },
+    {"Id": 7, "Name": "CREATURE_TYPE_HUMANOID" },
+    {"Id": 8, "Name": "CREATURE_TYPE_CRITTER" },
+    {"Id": 9, "Name": "CREATURE_TYPE_MECHANICAL" },
+    {"Id": 10, "Name": "CREATURE_TYPE_NOT_SPECIFIED" },
+    {"Id": 11, "Name": "CREATURE_TYPE_TOTEM" },
+    {"Id": 12, "Name": "CREATURE_TYPE_NON_COMBAT_PET" },
+    {"Id": 13, "Name": "CREATURE_TYPE_GAS_CLOUD" }
+]

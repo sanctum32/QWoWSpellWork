@@ -71,6 +71,7 @@ namespace QSpellWorkJson
     std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassArmor;
     std::map<uint32_t /*id*/, QString /*name*/> ItemClassNames;
     std::map<uint32_t /*id*/, QString /*name*/> ShapeshiftForms;
+    std::map<uint32_t /*id*/, QString /*name*/> CreatureTypeNames;
 
     // Reads json file
     // returns 1 on failure
@@ -427,7 +428,8 @@ namespace QSpellWorkJson
             !ReadBasicArray("./json/SpellDispelTypes.json", DispelNames) ||
             !ReadBasicArray("./json/ItemInventoryTypes.json", ItemInventoryNames) ||
             !ReadBasicArray("./json/ItemClass.json", ItemClassNames) ||
-            !ReadBasicArray("./json/ShapeShiftForms.json", ShapeshiftForms)
+            !ReadBasicArray("./json/ShapeShiftForms.json", ShapeshiftForms) ||
+            !ReadBasicArray("./json/CreatureTypes.json", CreatureTypeNames)
         )
         {
             return false;

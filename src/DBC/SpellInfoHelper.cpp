@@ -195,9 +195,10 @@ inline void PrintTargetRestrictions(QString& result, uint32_t SpellTargetRestric
 
         if (spellRestrictionsEntry->TargetCreatureType != 0)
         {
+            const auto& itr = QSpellWorkJson::CreatureTypeNames.find(spellRestrictionsEntry->TargetCreatureType);
             result += QString("Creature Type Mask = [0] 0x%1 ({2})")
                           .arg(spellRestrictionsEntry->TargetCreatureType, 8, 16, QLatin1Char('0'))
-                          .arg(CreatureTypeStr[spellRestrictionsEntry->TargetCreatureType]);
+                          .arg(itr != QSpellWorkJson::CreatureTypeNames.end() ? itr->second : QString("CREATURE_TYPE_UNK%1").arg(spellRestrictionsEntry->TargetCreatureType));
         }
 
         uint32_t targetCount = spellRestrictionsEntry->MaxAffectedTargets;
