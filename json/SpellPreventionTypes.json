@@ -1,0 +1,7 @@
+[
+    {"Id": 0, "Name": "SPELL_PREVENTION_TYPE_NONE"},
+    {"Id": 1, "Name": "SPELL_PREVENTION_TYPE_SILENCE"},
+    {"Id": 2, "Name": "SPELL_PREVENTION_TYPE_PACIFY"},
+    {"Id": 3, "Name": "SPELL_PREVENTION_TYPE_UNK"},
+    {"Id": 4, "Name": "SPELL_PREVENTION_TYPE_NO_ACTIONS"}
+]

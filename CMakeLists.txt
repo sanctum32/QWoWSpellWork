@@ -30,7 +30,6 @@ set(PROJECT_SOURCES
     src/DBC/SpellInfoHelper.cpp
     src/SpellInfoTabEvents.cpp
     src/Enums/SpellEnums.hpp
-    src/Enums/SpellEnumStr.hpp
     src/JsonData/JsonData.hpp
     src/JsonData/JsonData.cpp
     src/Globals/appSettings.hpp
