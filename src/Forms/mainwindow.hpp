@@ -4,7 +4,9 @@
 #include <memory>
 #include <QMainWindow>
 #include <QLabel>
-#include <QTableWidgetItem>
+
+// Forward declarations
+class QTableWidgetItem;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

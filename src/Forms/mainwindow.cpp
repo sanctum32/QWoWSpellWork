@@ -1,5 +1,5 @@
 #include "mainwindow.hpp"
-#include "./ui_mainwindow.h"
+#include "ui/ui_mainwindow.h"
 #include "JsonData/JsonData.hpp"
 
 // Base implementation

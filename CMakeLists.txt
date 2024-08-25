@@ -13,12 +13,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-include_directories(
-    src
-    src/DBC
+set(TS_FILES
+    src/Translations/QSpellWork_en_GB.ts
 )
 
-set(TS_FILES QSpellWork_en_GB.ts)
+set(UI_FILES
+    src/Forms/mainwindow.ui
+    src/Forms/mainwindow.hpp
+    src/Forms/mainwindow.cpp
+)
 
 set(PROJECT_SOURCES
     src/DBC/DBCStructures.hpp
@@ -35,19 +38,21 @@ set(PROJECT_SOURCES
     src/Globals/appSettings.hpp
     src/Globals/appSettings.cpp
     src/main.cpp
-    src/mainwindow.cpp
-    src/mainwindow.hpp
-    src/mainwindow.ui
-    src/${TS_FILES}
+    ${UI_FILES}
+    ${TS_FILES}
+)
+
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+    "${CMAKE_SOURCE_DIR}/src/Forms"
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QSpellWork
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
-
     )
+
+
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QSpellWork APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -87,3 +92,13 @@ install(TARGETS QSpellWork
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(QSpellWork)
 endif()
+
+target_include_directories(QSpellWork PUBLIC
+    src
+    src/DBC
+    src/Enums
+    src/Globals
+    src/JsonData
+    src/Translations
+    src/Forms
+)

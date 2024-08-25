@@ -4,7 +4,7 @@
 
 // project
 #include "mainwindow.hpp"
-#include "./ui_mainwindow.h"
+#include "ui/ui_mainwindow.h"
 #include "DBC/DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
 #include <cassert>
