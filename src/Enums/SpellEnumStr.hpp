@@ -74,26 +74,6 @@ constexpr std::array<char const*, MAX_SHAPESHIFT_FORMS> ShapeshiftFormStr={
     printEnum(FORM_GLADIATOR_STANCE),
 };
 
-constexpr std::array<char const*, MAX_ITEM_CLASS> ItemClassStr={
-    printEnum(ITEM_CLASS_CONSUMABLE),
-    printEnum(ITEM_CLASS_CONTAINER),
-    printEnum(ITEM_CLASS_WEAPON),
-    printEnum(ITEM_CLASS_GEM),
-    printEnum(ITEM_CLASS_ARMOR),
-    printEnum(ITEM_CLASS_REAGENT),
-    printEnum(ITEM_CLASS_PROJECTILE),
-    printEnum(ITEM_CLASS_TRADE_GOODS),
-    printEnum(ITEM_CLASS_GENERIC),
-    printEnum(ITEM_CLASS_RECIPE),
-    printEnum(ITEM_CLASS_MONEY),
-    printEnum(ITEM_CLASS_QUIVER),
-    printEnum(ITEM_CLASS_QUEST),
-    printEnum(ITEM_CLASS_KEY),
-    printEnum(ITEM_CLASS_PERMANENT),
-    printEnum(ITEM_CLASS_MISCELLANEOUS),
-    printEnum(ITEM_CLASS_GLYPH)
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H

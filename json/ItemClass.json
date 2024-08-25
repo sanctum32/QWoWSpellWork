@@ -1,0 +1,19 @@
+[
+    {"Id": 0, "Name": "ITEM_CLASS_CONSUMABLE"},
+    {"Id": 1, "Name": "ITEM_CLASS_CONTAINER"},
+    {"Id": 2, "Name": "ITEM_CLASS_WEAPON"},
+    {"Id": 3, "Name": "ITEM_CLASS_GEM"},
+    {"Id": 4, "Name": "ITEM_CLASS_ARMOR"},
+    {"Id": 5, "Name": "ITEM_CLASS_REAGENT"},
+    {"Id": 6, "Name": "ITEM_CLASS_PROJECTILE"},
+    {"Id": 7, "Name": "ITEM_CLASS_TRADE_GOODS"},
+    {"Id": 8, "Name": "ITEM_CLASS_GENERIC"},
+    {"Id": 9, "Name": "ITEM_CLASS_RECIPE"},
+    {"Id": 10, "Name": "ITEM_CLASS_MONEY"},
+    {"Id": 11, "Name": "ITEM_CLASS_QUIVER"},
+    {"Id": 12, "Name": "ITEM_CLASS_QUEST"},
+    {"Id": 13, "Name": "ITEM_CLASS_KEY"},
+    {"Id": 14, "Name": "ITEM_CLASS_PERMANENT"},
+    {"Id": 15, "Name": "ITEM_CLASS_MISCELLANEOUS"},
+    {"Id": 16, "Name": "ITEM_CLASS_GLYPH"}
+]

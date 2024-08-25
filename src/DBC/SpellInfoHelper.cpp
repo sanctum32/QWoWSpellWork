@@ -180,7 +180,6 @@ inline void PrintTargetRestrictions(QString& result, uint32_t SpellTargetRestric
             QString targets;
             for (uint8_t i = 0; i < MAX_SPELL_CAST_TARGET_FLAGS; ++i)
             {
-                uint8_t flag = 1 << i;
                 if (((1 << i) & spellRestrictionsEntry->Targets) != 0)
                 {
                     const auto& itr = QSpellWorkJson::SpellTargetFlags.find(1 << i);
@@ -302,7 +301,12 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
 {
     if (auto const* spellEquipedItems = GetDBCEntry(SpellEquippedItemsId, sDBCStores->m_SpellEquippedItemsEntries))
     {
-        result += QString("EquippedItemClass = %1 (%2)<br>").arg(spellEquipedItems->EquippedItemClass).arg(ItemClassStr[spellEquipedItems->EquippedItemClass]);
+        {
+            const auto& itr = QSpellWorkJson::ItemClassNames.find(spellEquipedItems->EquippedItemClass);
+            result += QString("EquippedItemClass = %1 (%2)<br>")
+                          .arg(spellEquipedItems->EquippedItemClass)
+                          .arg(itr != QSpellWorkJson::ItemClassNames.end() ? itr->second : QString("ITEM_CLASS_UNK%1").arg(spellEquipedItems->EquippedItemClass));
+        }
 
         if (spellEquipedItems->EquippedItemSubClassMask != 0)
         {

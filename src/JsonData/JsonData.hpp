@@ -41,4 +41,5 @@ namespace QSpellWorkJson
     extern std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassWeapon;
     extern std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassJunk;
     extern std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassArmor;
+    extern std::map<uint32_t /*id*/, QString /*name*/> ItemClassNames;
 }
