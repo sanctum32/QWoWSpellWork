@@ -384,12 +384,13 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             {
                 if ((spellEquipedItems->EquippedItemInventoryTypeMask & (1 << i)) != 0)
                 {
+                    const auto& itr = QSpellWorkJson::ItemInventoryNames.find(i);
                     if (!inventoryNames.isEmpty())
                     {
                         inventoryNames += ", ";
                     }
 
-                    inventoryNames += InventoryTypeStr[i];
+                    inventoryNames += itr != QSpellWorkJson::ItemInventoryNames.end() ? itr->second : QString("INVTYPE_UNK%1").arg(i);
                 }
             }
 

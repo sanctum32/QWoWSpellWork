@@ -144,38 +144,6 @@ constexpr std::array<char const*, MAX_ITEM_SUBCLASS_JUNK_TYPE> ItemSubclassJunkS
     printEnum(ITEM_SUBCLASS_JUNK_UNK12)
 };
 
-constexpr std::array<char const*, MAX_INVENTORY_TYPE> InventoryTypeStr={
-    printEnum(INVTYPE_NON_EQUIP),
-    printEnum(INVTYPE_HEAD),
-    printEnum(INVTYPE_NECK),
-    printEnum(INVTYPE_SHOULDERS),
-    printEnum(INVTYPE_BODY),
-    printEnum(INVTYPE_CHEST),
-    printEnum(INVTYPE_WAIST),
-    printEnum(INVTYPE_LEGS),
-    printEnum(INVTYPE_FEET),
-    printEnum(INVTYPE_WRISTS),
-    printEnum(INVTYPE_HANDS),
-    printEnum(INVTYPE_FINGER),
-    printEnum(INVTYPE_TRINKET),
-    printEnum(INVTYPE_WEAPON),
-    printEnum(INVTYPE_SHIELD),
-    printEnum(INVTYPE_RANGED),
-    printEnum(INVTYPE_CLOAK),
-    printEnum(INVTYPE_2HWEAPON),
-    printEnum(INVTYPE_BAG),
-    printEnum(INVTYPE_TABARD),
-    printEnum(INVTYPE_ROBE),
-    printEnum(INVTYPE_WEAPONMAINHAND),
-    printEnum(INVTYPE_WEAPONOFFHAND),
-    printEnum(INVTYPE_HOLDABLE),
-    printEnum(INVTYPE_AMMO),
-    printEnum(INVTYPE_THROWN),
-    printEnum(INVTYPE_RANGEDRIGHT),
-    printEnum(INVTYPE_QUIVER),
-    printEnum(INVTYPE_RELIC),
-};
-
 #undef printEnum
 
 #endif // SPELLENUMSTR_H
