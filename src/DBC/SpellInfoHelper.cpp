@@ -111,7 +111,7 @@ inline void PrintAttributes(QString& result, const SpellEntry* spell)
             if (spell->Attributes[attribute] != 0)
             {
                 QString attributeStr;
-                for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+                for (uint8_t id = 0; id < MAX_UINT32_BITMASK_INDEX; ++id)
                 {
                     const uint32_t mask = 1 << id;
                     if ((mask & attributeMask) != 0)
