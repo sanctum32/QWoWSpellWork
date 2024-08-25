@@ -58,6 +58,7 @@ namespace QSpellWorkJson
     std::array<std::map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;
     std::map<uint32_t /*id*/, QString /*name*/> SpellEffectNames;
     std::map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
+    std::map<uint32_t /*flag*/, QString /*name*/> SpellTargetFlags;
     std::map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
     std::map<uint32_t /*id*/, QString /*name*/> UnitModsNames;
     std::map<uint32_t /*id*/, QString /*name*/> SpellAuraStatesNames;
@@ -219,7 +220,7 @@ namespace QSpellWorkJson
         {
             if (!json.isObject())
             {
-                qCDebug(JSON) << "JSON: Json file \"SpellAttributes.json\" is not Array type";
+                qCDebug(JSON) << "JSON: Json file \"SpellAttributes.json\" is not Object type";
                 return false;
             }
 
@@ -255,12 +256,74 @@ namespace QSpellWorkJson
             return false;
         }
 
+        if (!OpenJson("./json/SpellTargets.json", [&](const QJsonDocument& json)
+        {
+            if (!json.isObject())
+            {
+                qCDebug(JSON) << "JSON: Json file \"Spelltargets.json\" is not Object type";
+                return false;
+            }
+
+            const auto& jsonObj = json.object();
+            // SpellTargetNames
+            {
+                const auto& attrArray = jsonObj.value("SpellTargetNames").toArray();
+                for (const auto& attrData : std::as_const(attrArray))
+                {
+                    const auto& attrObj = attrData.toObject();
+                    const uint32_t _keyId = attrObj.value("Flag").toInt();
+
+                    if (SpellTargetNames.contains(_keyId))
+                    {
+                        qCDebug(JSON) << "JSON: \"./json/SpellTargets.json\" has duplicate SpellTargetNames entry " << QString::number(_keyId) << ". Skipping";
+                        continue;
+                    }
+
+                    SpellTargetNames[_keyId] = attrObj.value("Name").toString();
+                }
+
+                if (SpellTargetNames.empty())
+                {
+                    qCDebug(JSON) << "JSON: Failed to load SpellTargetNames from SpellTargets.json";
+                    return false;
+                }
+            }
+
+            // SpellCastTargetFlags
+            {
+                const auto& attrArray = jsonObj.value("SpellCastTargetFlags").toArray();
+                for (const auto& attrData : std::as_const(attrArray))
+                {
+                    const auto& attrObj = attrData.toObject();
+                    const uint32_t _keyId = attrObj.value("Flag").toInt();
+
+                    if (SpellTargetFlags.contains(_keyId))
+                    {
+                        qCDebug(JSON) << "JSON: \"./json/SpellTargets.json\" has duplicate SpellCastTargetFlags entry " << QString::number(_keyId) << ". Skipping";
+                        continue;
+                    }
+
+                    SpellTargetFlags[_keyId] = attrObj.value("Name").toString();
+                }
+
+                if (SpellTargetFlags.empty())
+                {
+                    qCDebug(JSON) << "JSON: Failed to load SpellTargetFlags from SpellTargets.json";
+                    return false;
+                }
+            }
+
+            return true;
+          }))
+        {
+            return false;
+        }
+
         if (!ReadBasicArray("./json/SpellMod.json", SpellModOps) ||
             !ReadBasicArray("./json/SpellAuraTypes.json", SpellAuraTypes) ||
             !ReadBasicArray("./json/SpellProc.json", SpellProcInfo, "Flag") ||
             !ReadBasicArray("./json/SpellFamily.json", SpellFamilyInfo) ||
             !ReadBasicArray("./json/SpellEffects.json", SpellEffectNames) ||
-            !ReadBasicArray("./json/SpellTargets.json", SpellTargetNames) ||
             !ReadBasicArray("./json/CombatRating.json", CombatRatingNames) ||
             !ReadBasicArray("./json/UnitMods.json", UnitModsNames) ||
             !ReadBasicArray("./json/SpellAuraStates.json", SpellAuraStatesNames) ||

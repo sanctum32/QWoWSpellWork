@@ -20,31 +20,6 @@ constexpr std::array<char const*, MAX_SPELL_PREVENTION_TYPE> SpellPreventionType
     printEnum(SPELL_PREVENTION_TYPE_NO_ACTIONS)
 };
 
-constexpr std::array<char const*, MAX_SPELL_CAST_TARGET_FLAGS> SpellCastTargetFlagsStr={
-    printEnum(TARGET_FLAG_NONE),
-    printEnum(TARGET_FLAG_UNUSED_1),
-    printEnum(TARGET_FLAG_UNIT),
-    printEnum(TARGET_FLAG_UNIT_RAID),
-    printEnum(TARGET_FLAG_UNIT_PARTY),
-    printEnum(TARGET_FLAG_ITEM),
-    printEnum(TARGET_FLAG_SOURCE_LOCATION),
-    printEnum(TARGET_FLAG_DEST_LOCATION),
-    printEnum(TARGET_FLAG_UNIT_ENEMY),
-    printEnum(TARGET_FLAG_UNIT_ALLY),
-    printEnum(TARGET_FLAG_CORPSE_ENEMY),
-    printEnum(TARGET_FLAG_UNIT_DEAD),
-    printEnum(TARGET_FLAG_GAMEOBJECT),
-    printEnum(TARGET_FLAG_TRADE_ITEM),
-    printEnum(TARGET_FLAG_STRING),
-    printEnum(TARGET_FLAG_GAMEOBJECT_ITEM),
-    printEnum(TARGET_FLAG_CORPSE_ALLY),
-    printEnum(TARGET_FLAG_UNIT_MINIPET),
-    printEnum(TARGET_FLAG_GLYPH_SLOT),
-    printEnum(TARGET_FLAG_DEST_TARGET),
-    printEnum(TARGET_FLAG_EXTRA_TARGETS),
-    printEnum(TARGET_FLAG_UNIT_PASSENGER),
-};
-
 constexpr std::array<char const*, MAX_CREATURE_TYPE> CreatureTypeStr={
     printEnum(CREATURE_TYPE_BEAST),
     printEnum(CREATURE_TYPE_DRAGONKIN),

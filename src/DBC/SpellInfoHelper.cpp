@@ -168,12 +168,14 @@ inline void PrintTargetRestrictions(QString& result, uint32_t SpellTargetRestric
             QString targets;
             for (uint8_t i = 0; i < MAX_SPELL_CAST_TARGET_FLAGS; ++i)
             {
+                uint8_t flag = 1 << i;
                 if (((1 << i) & spellRestrictionsEntry->Targets) != 0)
                 {
+                    const auto& itr = QSpellWorkJson::SpellTargetFlags.find(1 << i);
                     if (!targets.isEmpty())
                         targets += ", ";
 
-                    targets += SpellCastTargetFlagsStr[i + 1];
+                    targets += itr != QSpellWorkJson::SpellTargetFlags.end() ? itr->second : QString("TARGET_FLAG_UNK%1").arg(i);
                 }
             }
             result += targets + ")";

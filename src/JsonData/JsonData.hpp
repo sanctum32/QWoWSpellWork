@@ -9,10 +9,13 @@
 
 namespace QSpellWorkJson
 {
+// Logging
     Q_DECLARE_LOGGING_CATEGORY(JSON)
 
 // Data load - must be called once
     extern bool LoadJsonData();
+
+// Helper functions
     extern bool OpenJson(const QString& fileName, std::function<bool(const QJsonDocument& json)> handle);
 
 // Storage
@@ -27,6 +30,7 @@ namespace QSpellWorkJson
     extern std::array<std::map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;
     extern std::map<uint32_t /*id*/, QString /*name*/> SpellEffectNames;
     extern std::map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
+    extern std::map<uint32_t /*flag*/, QString /*name*/> SpellTargetFlags;
     extern std::map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
     extern std::map<uint32_t /*id*/, QString /*name*/> UnitModsNames;
     extern std::map<uint32_t /*id*/, QString /*name*/> SpellAuraStatesNames;
