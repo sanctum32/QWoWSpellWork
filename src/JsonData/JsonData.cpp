@@ -540,14 +540,13 @@ QStringView SpellWorkJson::GetSpellFamilyName(uint32_t id)
 
 QStringView SpellWorkJson::GetSpellAttributeName(uint32_t attributeId, uint32_t attributeFlag)
 {
-    const auto nullResult = QString("SPELL_ATTR%1_UNK_%2").arg(attributeId).arg(attributeFlag);
     if (attributeId >= MAX_SPELL_ATTRIBUTES)
     {
-        return nullResult;
+        return QString("SPELL_ATTR%1_UNK_%2").arg(attributeId).arg(attributeFlag);
     }
 
     const auto& itr = SpellAttributes[attributeId].find(attributeFlag);
-    return itr != SpellFamilyInfo.end() ? itr->second : nullResult;
+    return itr != SpellFamilyInfo.end() ? itr->second : QString("SPELL_ATTR%1_UNK_%2").arg(attributeId).arg(attributeFlag);
 }
 
 QStringView SpellWorkJson::GetSpellEffectName(uint32_t id)

@@ -502,14 +502,14 @@ struct OverrideSpellDataEntry
     OverrideSpellDataEntry() = default;
     explicit OverrideSpellDataEntry(DBCFileLoader::Record const& record);
 
-    uint32_t      Id;                           // 0
-    uint32_t      spellId[MAX_OVERRIDE_SPELL];  // 1-10
-    uint32_t      unk0;                         // 11
-    std::string   SpellBarName;                 // 12
+    uint32_t      Id{0};                           // 0
+    std::array<int32_t, MAX_OVERRIDE_SPELL> spellId{0};  // 1-10
+    //uint32_t      unk0;                         // 11
+    //std::string   SpellBarName;                 // 12
 
     static char const* GetDBCFormat()
     {
-        return "iiiiiiiiiiis";
+        return "iiiiiiiiiixx";
     }
 };
 

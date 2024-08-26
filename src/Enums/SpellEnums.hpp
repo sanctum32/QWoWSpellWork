@@ -8,7 +8,7 @@ enum : uint8_t
     MAX_SPELL_REAGENTS                  = 8,
     MAX_GROUP_AREA_IDS                  = 6,
     MAX_SPELL_EFFECTS                   = 3,    // Total effects of spell
-    MAX_UINT32_BITMASK_INDEX            = 32,
+    MAX_UINT32_BITMASK_INDEX            = 31,
 };
 
 enum SpellEffects : uint32_t

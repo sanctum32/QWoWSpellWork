@@ -808,86 +808,14 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             result += QString(", miscB = %1").arg(effectInfo->EffectMiscValueB);
             result += QString(", periodic = %1<br>").arg(effectInfo->EffectAuraPeriod);
 
-            switch (effectInfo->EffectAura)
+            const auto& itr = sSpellWorkJson->_spellAuraTypes.find(effectInfo->EffectAura);
+            if (itr != sSpellWorkJson->_spellAuraTypes.end())
             {
-            case SPELL_AURA_OVERRIDE_SPELLS:
-            {
-                OverrideSpellDataEntry const* spellOverride = GetDBCEntry(effectInfo->EffectMiscValue, sDBCStores->m_OverrideSpellDataEntries);
-                if (spellOverride == nullptr)
+                if (const auto genDetail = effectInfo->GenerateExtraDetails(itr->second.effectDetail))
                 {
-                    result += QString("<b>Cannot find entry %1 in OverrideSpellData.dbc</b><br>").arg(effectInfo->EffectMiscValue);
-                }
-                else
-                {
-                    result += "<br>";
-                    result += "<span style=\"color:red\"><b>Overriding Spells";
-                    if (!spellOverride->SpellBarName.empty())
-                    {
-                        result += " ";
-                        result += spellOverride->SpellBarName.c_str();
-                    }
-                    result += ":</b></span><br>";
-
-                    for (uint8_t i = 0; i < MAX_OVERRIDE_SPELL; ++i)
-                    {
-                        if (spellOverride->spellId[i] != 0)
-                        {
-                            result += "<span style=\"color: blue\">\t - ";
-                            result += QString::number(spellOverride->spellId[i]);
-
-                            const SpellEntry* overrideSpell = GetDBCEntry(spellOverride->spellId[i], sDBCStores->m_spellEntries);
-                            result += overrideSpell != nullptr ? overrideSpell->SpellName.c_str() : "unknown";
-                            result += "</span><br>";
-                        }
-                    }
+                    result += *genDetail;
                     result += "<br>";
                 }
-                break;
-            }
-            case SPELL_AURA_SCREEN_EFFECT:
-            {
-                result += "<span style=\"color:green\"> ScreenEffect: ";
-                const ScreenEffectEntry* screenEffect = GetDBCEntry(effectInfo->EffectMiscValue, sDBCStores->m_ScreenEffectEntries);
-                result += screenEffect != nullptr ? screenEffect->Name.c_str() : "unknown";
-                result += "</span><br>";
-                break;
-            }
-            case SPELL_AURA_MOD_RATING:
-            case SPELL_AURA_MOD_RATING_FROM_STAT:
-            {
-                QString ratingsStr;
-                for (uint8_t ratingId = 0; ratingId < MAX_UINT32_BITMASK_INDEX; ++ratingId)
-                {
-                    const uint32_t mask = 1 << ratingId;
-                    if ((effectInfo->EffectMiscValue & mask) != 0)
-                    {
-                        if (!ratingsStr.isEmpty())
-                        {
-                            ratingsStr += ", ";
-                        }
-
-                        ratingsStr += sSpellWorkJson->GetCombatRatingName(ratingId);
-                    }
-                }
-
-                if (!ratingsStr.isEmpty())
-                {
-                    result += "Effected combat ratings: <span style=\"color:orange\">" + ratingsStr + "</span><br>";
-                }
-                break;
-            }
-            case SPELL_AURA_MOD_FACTION:
-            {
-                result += "Effected faction: " + QString::number(effectInfo->EffectMiscValue);
-                if (const auto* factionEntry = GetDBCEntry(effectInfo->EffectMiscValue, sDBCStores->m_FactionEntries))
-                {
-                    result += QString("\"%1\"").arg(factionEntry->Name.c_str());
-                }
-                result += "<br>";
-                break;
-            }
-            default:
-                break;
             }
         }
 
@@ -1071,12 +999,6 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
 
 std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& format) const
 {
-    //const auto& itr = sSpellWorkJson->_spellEffectInfo.find(Effect);
-    //if (itr == sSpellWorkJson->_spellEffectInfo.end() || itr->second.EffectDetail.isEmpty())
-    //{
-    //    return nullptr;
-    //}
-
     if (format.isEmpty())
     {
         return nullptr;
@@ -1084,20 +1006,111 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
 
     auto formattedStr = std::make_shared<QString>(format);
 
-    using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;      // Signed
+    //using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;      // Signed
     using strRepFormatDataU = std::pair<QString /*strToRep*/, uint32_t /*val*/>;    // Unsigned
 
-    std::array<const strRepFormatDataU, 2> miscValues = {{ {":MiscValue:", EffectMiscValue }, { ":MiscValueB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatDataU, 2> miscValues = {{ {":MiscValue:", EffectMiscValue }, { ":MiscValueB:", EffectMiscValueB } }};
     for (const auto& [strToRep, value] : miscValues)
     {
         formattedStr->replace(strToRep, QString::number(value));
     }
 
-    std::array<const strRepFormatDataU, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", EffectMiscValue }, { ":AreaEntryNameMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatDataU, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", EffectMiscValue }, { ":AreaEntryNameMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : areaEntryNames)
     {
         const auto* areaInfo = GetDBCEntry(value, sDBCStores->m_AreaTableEntries);
         formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->area_name.c_str() : "Unknown");
+    }
+
+    const std::array<const strRepFormatDataU, 2> modStat = {{ {":ModStatNameMiscVal:", EffectMiscValue }, { ":ModStatNameMiscValB:", EffectMiscValueB } }};
+    for (auto const& [strToRep, value] : modStat)
+    {
+        const auto& statName = sSpellWorkJson->GetUnitModName(value);
+        formattedStr->replace(strToRep, statName.toString());
+    }
+
+    const std::array<const strRepFormatDataU, 2> factionName = {{ {":FactionNameMiscVal:", EffectMiscValue }, { ":FactionNameMiscValB:", EffectMiscValueB } }};
+    for (auto const& [strToRep, value] : factionName)
+    {
+        if (const auto* factionEntry = GetDBCEntry(value, sDBCStores->m_FactionEntries))
+        {
+            formattedStr->replace(strToRep, factionEntry->Name.c_str());
+        }
+        else
+        {
+            formattedStr->replace(strToRep, QString("<b>Cannot find entry %1 in Faction.dbc</b><br>").arg(value));
+        }
+    }
+
+    const std::array<const strRepFormatDataU, 2> combatRating = {{ {":CBRatingListMiscVal:", EffectMiscValue }, { ":CBRatingListMiscValB:", EffectMiscValueB } }};
+    for (auto const& [strToRep, value] : combatRating)
+    {
+        if (const auto* factionEntry = GetDBCEntry(value, sDBCStores->m_FactionEntries))
+        {
+            QString ratingsStr;
+            for (uint8_t ratingId = 0; ratingId < MAX_UINT32_BITMASK_INDEX; ++ratingId)
+            {
+                const uint32_t mask = 1 << ratingId;
+                if ((value & mask) != 0)
+                {
+                    if (!ratingsStr.isEmpty())
+                    {
+                        ratingsStr += ", ";
+                    }
+
+                    ratingsStr += sSpellWorkJson->GetCombatRatingName(ratingId);
+                }
+            }
+
+            if (ratingsStr.isEmpty())
+            {
+                ratingsStr = "Unknown";
+            }
+            formattedStr->replace(strToRep, ratingsStr);
+        }
+        else
+        {
+            formattedStr->replace(strToRep, QString("<b>Cannot find entry %1 in Faction.dbc</b><br>").arg(value));
+        }
+    }
+
+    const std::array<const strRepFormatDataU, 2> screenEffect = {{ {":ScreenEffectMiscVal:", EffectMiscValue }, { ":ScreenEffectMiscValB:", EffectMiscValueB } }};
+    for (auto const& [strToRep, value] : screenEffect)
+    {
+        const auto* screenEffect = GetDBCEntry(value, sDBCStores->m_ScreenEffectEntries);
+        formattedStr->replace(strToRep, screenEffect != nullptr ? screenEffect->Name.c_str() : "unknown");
+    }
+
+    const std::array<const strRepFormatDataU, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", EffectMiscValue }, { ":OverrideSpellListMiscValB:", EffectMiscValueB } }};
+    for (auto const& [strToRep, value] : overrideSpellList)
+    {
+        const auto* spellOverride = GetDBCEntry(value, sDBCStores->m_OverrideSpellDataEntries);
+        if (spellOverride == nullptr)
+        {
+            formattedStr->replace(strToRep, QString("<b>Cannot find entry %1 in OverrideSpellData.dbc</b><br>").arg(value));
+        }
+        else
+        {
+            bool first = false;
+            QString result;
+            for (auto pSpellId : spellOverride->spellId)
+            {
+                if (pSpellId == 0)
+                {
+                    continue;
+                }
+
+                if (!first)
+                {
+                    first = true;
+                    result = "<b>Overriding Spells:</b><br>";
+                }
+                const auto* spell = GetDBCEntry(std::abs(pSpellId), sDBCStores->m_spellEntries);
+                result += QString("<span style=\"color: orange\">- %1</span> %2<br>").arg(pSpellId).arg(spell != nullptr ? spell->SpellName.c_str() : "unknown");
+            }
+
+            formattedStr->replace(strToRep, result);
+        }
     }
 
     return formattedStr;

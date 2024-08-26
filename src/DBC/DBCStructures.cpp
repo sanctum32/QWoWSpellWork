@@ -1,4 +1,5 @@
 #include "DBCStructures.hpp"
+#include <iostream>
 
 SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
 {
@@ -317,15 +318,15 @@ GtSpellScalingEntry::GtSpellScalingEntry(DBCFileLoader::Record const& record)
 
 OverrideSpellDataEntry::OverrideSpellDataEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t i = 0;
-    Id = record.getUInt(i++);
-    for (uint32_t& _spellId : spellId)
+    uint8_t colId = 0;
+    Id = record.getUInt(colId++);
+    for (int32_t& _spellId : spellId)
     {
-        record.getUInt(i++);
+        _spellId = record.getInt(colId++);
     }
 
-    unk0 = record.getUInt(i++);
-    SpellBarName = record.getString(i++);
+    //unk0 = record.getUInt(colId++);
+    //SpellBarName = record.getString(colId++);
 }
 
 ScreenEffectEntry::ScreenEffectEntry(DBCFileLoader::Record const& record)
