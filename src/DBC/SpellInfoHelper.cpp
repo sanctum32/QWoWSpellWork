@@ -515,17 +515,18 @@ inline void PrintSpellPowerInfo(QString& result, uint32_t SpellPowerId, int8_t p
     }
 }
 
+// TODO: add secondary channel interrupt and aura interrupt flags output
 inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
 {
     result += "<br>";
     uint32_t interruptFlags = 0;
-    uint32_t auraInterruptFlags = 0;
+    uint32_t auraInterruptFlags = 0;;
     uint32_t channelInterruptFlags = 0;
     if (const auto* spellInterruptEntry = GetDBCEntry(SpellInterruptsId, sDBCStores->m_SpellInterruptsEntries))
     {
         interruptFlags = spellInterruptEntry->InterruptFlags;
-        auraInterruptFlags = spellInterruptEntry->AuraInterruptFlags;
-        channelInterruptFlags = spellInterruptEntry->ChannelInterruptFlags;
+        auraInterruptFlags = spellInterruptEntry->AuraInterruptFlags[0];
+        channelInterruptFlags = spellInterruptEntry->ChannelInterruptFlags[0];
     }
 
     QString interruptFlagsStr;
@@ -651,7 +652,7 @@ inline void PrintSpellCastRequirements(QString& result, uint32_t SpellCastingReq
 {
     if (const auto* spellCastReqEntry = GetDBCEntry(SpellCastingRequirementsId, sDBCStores->m_SpellCastingRequirementsEntries))
     {
-        if (const auto* groupEntry = GetDBCEntry(spellCastReqEntry->AreaGroupId, sDBCStores->m_AreaGroupEntries))
+        if (const auto* groupEntry = GetDBCEntry(spellCastReqEntry->RequiredAreasID, sDBCStores->m_AreaGroupEntries))
         {
             result += "<br>";
             result += "<b>Allowed areas:</b><br>";
@@ -663,7 +664,7 @@ inline void PrintSpellCastRequirements(QString& result, uint32_t SpellCastingReq
                 {
                     if (const auto* areaEntry = GetDBCEntry(areaId, sDBCStores->m_AreaTableEntries))
                     {
-                        result += QString("%1 - %2(MapId: %3)<br>").arg(areaId).arg(areaEntry->area_name.c_str()).arg(areaEntry->mapid);
+                        result += QString("%1 - %2(MapId: %3)<br>").arg(areaId).arg(areaEntry->AreaName.c_str()).arg(areaEntry->ContinentID);
                     }
                 }
 
@@ -703,11 +704,11 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                       .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->Effect));
 
         const auto* scalingInfo = GetDBCEntry(SpellScalingId, sDBCStores->m_SpellScalingEntries);
-        if (scalingInfo != nullptr && scalingInfo->Coefficient[effIndex] != 0.0f &&  scalingInfo->ScalingClass != 0)
+        if (scalingInfo != nullptr && scalingInfo->Coefficient[effIndex] != 0.0f &&  scalingInfo->Class != 0)
         {
             uint32_t const selectedLevel = scalingLevel;
 
-            uint32_t gtEntryId = static_cast<uint32_t>((scalingInfo->ScalingClass != -1 ? scalingInfo->ScalingClass - 1 : 11) * 100) + selectedLevel - 1;
+            uint32_t gtEntryId = static_cast<uint32_t>((scalingInfo->Class != -1 ? scalingInfo->Class - 1 : 11) * 100) + selectedLevel - 1;
             const auto* gtEntry = GetDBCEntry(gtEntryId, sDBCStores->m_GtSpellScalingEntries);
             float gtMultiplier = gtEntry != nullptr ? gtEntry->value : 0.0f;
 
@@ -716,13 +717,13 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                 gtMultiplier *= static_cast<float>(scalingInfo->CastTimeMin + (selectedLevel - 1) * (scalingInfo->CastTimeMax - scalingInfo->CastTimeMin) / (scalingInfo->CastTimeMaxLevel - 1)) / static_cast<float>(scalingInfo->CastTimeMax);
             }
 
-            if (scalingInfo->CoefLevelBase > selectedLevel)
-                gtMultiplier *= (1.0f -  scalingInfo->CoefBase) * (float)(selectedLevel - 1) / (float)(scalingInfo->CoefLevelBase - 1) + scalingInfo->CoefBase;
+            if (scalingInfo->NerfMaxLevel > selectedLevel)
+                gtMultiplier *= (1.0f -  scalingInfo->NerfFactor) * (float)(selectedLevel - 1) / (float)(scalingInfo->NerfMaxLevel - 1) + scalingInfo->NerfFactor;
 
-            if (scalingInfo->RandomMultiplier[effIndex] != 0.0f)
+            if (scalingInfo->Variance[effIndex] != 0.0f)
             {
                 float avg = scalingInfo->Coefficient[effIndex] * gtMultiplier;
-                float delta = scalingInfo->RandomMultiplier[effIndex] * scalingInfo->Coefficient[effIndex] * gtMultiplier * 0.5;
+                float delta = scalingInfo->Variance[effIndex] * scalingInfo->Coefficient[effIndex] * gtMultiplier * 0.5;
                 result += QString("BasePoints = %1 to %2").arg(avg - delta).arg(avg + delta);
             }
             else
@@ -730,9 +731,9 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                 result += QString("AveragePoints = %1<br>").arg(scalingInfo->Coefficient[effIndex] * gtMultiplier);
             }
 
-            if (scalingInfo->OtherMultiplier[effIndex] != 0.0f)
+            if (scalingInfo->ComboPointsCoefficient[effIndex] != 0.0f)
             {
-                result += QString(" + combo *  %1").arg(scalingInfo->OtherMultiplier[effIndex] * gtMultiplier);
+                result += QString(" + combo *  %1").arg(scalingInfo->ComboPointsCoefficient[effIndex] * gtMultiplier);
             }
             else
             {
@@ -986,9 +987,9 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
     spellText += QString("Category = %1, SpellIconID = %2, activeIconID = %3, SpellVisual = (%4, %5)<br>")
                      .arg(SpellCategoriesId)
                      .arg(SpellIconID)
-                     .arg(activeIconID)
-                     .arg(SpellVisual1)
-                     .arg(SpellVisual2);
+                     .arg(ActiveIconID)
+                     .arg(SpellVisual[0])
+                     .arg(SpellVisual[1]);
     spellText += QString("SpellSchoolMask = %1 (%2)<br>")
                      .arg(SchoolMask)
                      .arg(GetFirstSchoolMaskNameStr(SchoolMask));
@@ -1037,7 +1038,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     for (auto const& [strToRep, value] : areaEntryNames)
     {
         const auto* areaInfo = GetDBCEntry(value, sDBCStores->m_AreaTableEntries);
-        formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->area_name.c_str() : "Unknown");
+        formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->AreaName.c_str() : "Unknown");
     }
 
     const std::array<const strRepFormatData, 2> modStat = {{ {":ModStatNameMiscVal:", EffectMiscValue }, { ":ModStatNameMiscValB:", EffectMiscValueB } }};
@@ -1104,7 +1105,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         {
             bool first = false;
             QString result;
-            for (auto pSpellId : spellOverride->spellId)
+            for (auto pSpellId : spellOverride->Spells)
             {
                 if (pSpellId == 0)
                 {

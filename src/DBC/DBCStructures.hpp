@@ -95,11 +95,11 @@ struct SpellClassOptionsEntry
     uint32_t    modalNextSpell{};                             // 1       m_modalNextSpell not used
     std::array<uint32_t, 3> SpellFamilyFlags{};               // 2-4
     uint32_t    SpellFamilyName{};                            // 5       m_spellClassSet
-    std::string     Description;                               // 6       4.0.0
+    //std::string     Description;                            // 6       4.0.0
 
     static char const* GetDBCFormat()
     {
-        return "iiiiis";
+        return "iiiiix";
     }
 };
 
@@ -148,20 +148,20 @@ struct SkillLineAbilityEntry
     uint32_t    id{};                                           // 0        m_ID
     uint32_t    skillId{};                                      // 1        m_skillLine
     uint32_t    spellId{};                                      // 2        m_spell
-    uint32_t    racemask{};                                     // 3        m_raceMask
-    uint32_t    classmask{};                                    // 4        m_classMask
-    uint32_t    racemaskNot{};                                  // 5        m_excludeRace
-    uint32_t    classmaskNot{};                                 // 6        m_excludeClass
+    //uint32_t    racemask{};                                     // 3        m_raceMask
+    //uint32_t    classmask{};                                    // 4        m_classMask
+    //uint32_t    racemaskNot{};                                  // 5        m_excludeRace
+    //uint32_t    classmaskNot{};                                 // 6        m_excludeClass
     uint32_t    req_skill_value{};                              // 7        m_minSkillLineRank
     uint32_t    forward_spellid{};                              // 8        m_supercededBySpell
-    uint32_t    learnOnGetSkill{};                              // 9        m_acquireMethod
+    //uint32_t    learnOnGetSkill{};                              // 9        m_acquireMethod
     uint32_t    max_value{};                                    // 10       m_trivialSkillLineRankHigh
     uint32_t    min_value{};                                    // 11       m_trivialSkillLineRankLow
     std::array<uint32_t, 2> character_points{};                 // 12-13    m_characterPoints
 
     static char const* GetDBCFormat()
     {
-        return "iiiiiiiiiiiiii";
+        return "iiixxxxiixiiii";
     }
 };
 
@@ -172,16 +172,16 @@ struct SkillLineEntry
     explicit SkillLineEntry(DBCFileLoader::Record const& record);
 
     uint32_t    id{};                                           // 0        m_ID
-    int32_t     categoryId{};                                   // 1        m_categoryID
+    //int32_t     categoryId{};                                   // 1        m_categoryID
     std::string name;                                           // 3        m_displayName_lang
-    std::string description;                                    // 4        m_description_lang
-    uint32_t    spellIcon{};                                    // 5        m_spellIconID
-    std::string alternateVerb;                                  // 6        m_alternateVerb_lang
-    uint32_t    canLink{};                                      // 7        m_canLink (prof. with recipes)
+    //std::string description;                                    // 4        m_description_lang
+    //uint32_t    spellIcon{};                                    // 5        m_spellIconID
+    //std::string alternateVerb;                                  // 6        m_alternateVerb_lang
+    //uint32_t    canLink{};                                      // 7        m_canLink (prof. with recipes)
 
     static char const* GetDBCFormat()
     {
-        return "iissisi";
+        return "ixsxxxx";
     }
 };
 
@@ -246,13 +246,13 @@ struct SpellRangeEntry
     float     minRangeFriend{};
     float     maxRangeHostile{};
     float     maxRangeFriend{};                               //friend means unattackable unit here
-    uint32_t  type{};
+    //uint32_t  type{};
     std::string   Name;                                         // 6-21     m_displayName_lang
-    std::string   ShortName;                                    // 23-38    m_displayNameShort_lang
+    //std::string   ShortName;                                    // 23-38    m_displayNameShort_lang
 
     static char const* GetDBCFormat()
     {
-        return "iffffiss";
+        return "iffffxsx";
     }
 };
 
@@ -298,9 +298,9 @@ struct SpellCooldownsEntry
     explicit SpellCooldownsEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0        m_ID
-    uint32_t    CategoryRecoveryTime{};                         // 31       m_categoryRecoveryTime
-    uint32_t    RecoveryTime{};                                 // 30       m_recoveryTime
-    uint32_t    StartRecoveryTime{};                            // 146      m_startRecoveryTime
+    uint32_t    CategoryRecoveryTime{};                         // 1       m_categoryRecoveryTime
+    uint32_t    RecoveryTime{};                                 // 2       m_recoveryTime
+    uint32_t    StartRecoveryTime{};                            // 3      m_startRecoveryTime
 
     static char const* GetDBCFormat()
     {
@@ -314,8 +314,8 @@ struct SpellDurationEntry
     SpellDurationEntry() = default;
     explicit SpellDurationEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    ID{};
-    std::array<int32_t, 3> Duration{};
+    uint32_t    ID{};                   // 0
+    std::array<int32_t, 3> Duration{};  // 1 - 3
 
     static char const* GetDBCFormat()
     {
@@ -333,14 +333,14 @@ struct SpellPowerEntry
     uint32_t    manaCost{};                                     // 1       m_manaCost
     uint32_t    manaCostPerlevel{};                             // 2       m_manaCostPerLevel
     uint32_t    ManaCostPercentage{};                           // 3       m_manaCostPct
-    uint32_t    manaPerSecond{};                                // 4       m_manaPerSecond
+    //uint32_t    manaPerSecond{};                                // 4       m_manaPerSecond
     uint32_t    manaPerSecondPerLevel{};                        // 5       m_manaPerSecondPerLevel
-    uint32_t    PowerDisplayId{};                               // 6       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
-    float       ManaCostPercentageFloat{};                      // 7       4.3.0
+    //uint32_t    PowerDisplayId{};                               // 6       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
+    //float       ManaCostPercentageFloat{};                      // 7       4.3.0
 
     static char const* GetDBCFormat()
     {
-        return "iiiiiiif";
+        return "iiiixixx";
     }
 };
 
@@ -351,10 +351,8 @@ struct SpellInterruptsEntry
     explicit SpellInterruptsEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0        m_ID
-    uint32_t    AuraInterruptFlags{};                           // 1       m_auraInterruptFlags
-    uint32_t    unk3{};                                         // 2       4.0.0
-    uint32_t    ChannelInterruptFlags{};                        // 3       m_channelInterruptFlags
-    uint32_t    unk5{};                                         // 4       4.0.0
+    std::array<uint32_t, 2> AuraInterruptFlags{};               // 1 - 2       m_auraInterruptFlags
+    std::array<uint32_t, 2> ChannelInterruptFlags{};            // 3 - 4       m_channelInterruptFlags
     uint32_t    InterruptFlags{};                               // 5       m_interruptFlags
 
     static char const* GetDBCFormat()
@@ -407,33 +405,33 @@ struct AreaTableEntry
     AreaTableEntry() = default;
     explicit AreaTableEntry(DBCFileLoader::Record const& record);
 
-    uint32_t  ID{};                                             // 0
-    uint32_t  mapid{};                                          // 1
-    uint32_t  zone{};                                           // 2 if 0 then it's zone, else it's zone id of this area
-    uint32_t  exploreFlag{};                                    // 3, main index
-    uint32_t  flags{};                                          // 4,
-    uint32_t  unk5{};                                           // 5,
-    uint32_t  unk6{};                                           // 6,
-    uint32_t  unk7{};                                           // 7,
-    uint32_t  unk8{};                                           // 8,
-    uint32_t  unk9{};                                           // 9,
-    int32_t   area_level{};                                     // 10
-    std::string   area_name{};                                  // 11
-    uint32_t  team{};                                           // 12
-    std::array<uint32_t, 4> LiquidTypeOverride{};               // 13-16 liquid override by type
-    float   MaxDepth{};                                         // 17,
-    float   AmbientMultiplier{};                                // 18 client only?
-    uint32_t  LightId{};                                        // 19
-    uint32_t unk20{};                                           // 20 4.0.0 - Mounting related
-    uint32_t unk21{};                                           // 21 4.0.0
-    uint32_t unk22{};                                           // 22 4.0.0
-    uint32_t unk23{};                                           // 23 4.0.0
-    uint32_t unk24{};                                           // 24 - worldStateId
-    int32_t  unk25{};                                           // 25
+    uint32_t Id{};                                              // 0
+    uint32_t ContinentID{};                                     // 1
+    //uint32_t ParentAreaID{};                                    // 2 if 0 then it's zone, else it's zone id of this area
+    //uint32_t AreaBit{};                                         // 3
+    //uint32_t Flags{};                                           // 4
+    //uint32_t SoundProviderPref{};                               // 5
+    //uint32_t SoundProviderPrefUnderwater{};                     // 6
+    //uint32_t AmbienceID{};                                      // 7
+    //uint32_t ZoneMusic{};                                       // 8
+    //uint32_t IntroSound{};                                      // 9
+    //uint32_t ExplorationLevel{};                                // 10
+    std::string AreaName{};                                     // 11
+    //uint32_t FactionGroupMask{};                                // 12
+    //std::array<uint32_t, 4> LiquidTypeID{};                     // 13-16 liquid override by type
+    //float MinElevation{};                                       // 17
+    //float AmbientMultiplier{};                                  // 18 client only?
+    //uint32_t LightID{};                                         // 19
+    //uint32_t MountFlags{};                                      // 20
+    //uint32_t UwIntroSound{};                                    // 21 4.0.0
+    //uint32_t UwZoneMusic{};                                     // 22 4.0.0
+    //uint32_t UwAmbience{};                                      // 23 4.0.0
+    //uint32_t World_pvp_ID{};                                    // 24
+    //int32_t PvpCombatWorldStateID{};                            // 25- worldStateId
 
     static char const* GetDBCFormat()
     {
-        return "iiiiiiiiiisiiiiiffiiiiiii";
+        return "iixxxxxxxxxsxxxxxxxxxxxxxx";
     }
 };
 
@@ -443,17 +441,17 @@ struct SpellCastingRequirementsEntry
     SpellCastingRequirementsEntry() = default;
     explicit SpellCastingRequirementsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                         // 0        m_ID
-    uint32_t    FacingCasterFlags{};                          // 1       m_facingCasterFlags
-    uint32_t    MinFactionId{};                               // 2      m_minFactionID not used
-    uint32_t    MinReputation{};                              // 3      m_minReputation not used
-    int32_t     AreaGroupId{};                                // 4      m_requiredAreaGroupId
-    uint32_t    RequiredAuraVision{};                         // 5      m_requiredAuraVision not used
-    uint32_t    RequiresSpellFocus{};                         // 6       m_requiresSpellFocus
+    uint32_t Id{};                                             // 0
+    //uint32_t FacingCasterFlags{};                            // 1
+    //uint32_t MinFactionID{};                                 // 2
+    //uint32_t MinReputation{};                                // 3
+    int32_t  RequiredAreasID{};                                // 4
+    //uint32_t RequiredAuraVision{};                           // 5
+    uint32_t RequiresSpellFocus{};                             // 6
 
     static char const* GetDBCFormat()
     {
-        return "iiiiiii";
+        return "ixxxixi";
     }
 };
 
@@ -467,12 +465,12 @@ struct SpellScalingEntry
     int32_t     CastTimeMin{};                                  // 1
     int32_t     CastTimeMax{};                                  // 2
     int32_t     CastTimeMaxLevel{};                             // 3
-    int32_t     ScalingClass{};                                 // 4        (index * 100) + charLevel - 1 => gtSpellScaling.dbc
+    int32_t     Class{};                                        // 4        (index * 100) + charLevel - 1 => gtSpellScaling.dbc
     std::array<float, 3> Coefficient{};                         // 5-7
-    std::array<float, 3> RandomMultiplier{};                    // 8-10
-    std::array<float, 3> OtherMultiplier{};                     // 11-13
-    float       CoefBase{};                                     // 14        some coefficient, mostly 1.0f
-    int32_t     CoefLevelBase{};                                // 15        some level
+    std::array<float, 3> Variance{};                            // 8-10
+    std::array<float, 3> ComboPointsCoefficient{};              // 11-13
+    float       NerfFactor{};                                   // 14        some coefficient, mostly 1.0f
+    int32_t     NerfMaxLevel{};                                 // 15        some level
 
     static char const* GetDBCFormat()
     {
@@ -502,7 +500,7 @@ struct OverrideSpellDataEntry
     explicit OverrideSpellDataEntry(DBCFileLoader::Record const& record);
 
     uint32_t      Id{};                           // 0
-    std::array<int32_t, MAX_OVERRIDE_SPELL> spellId{};  // 1-10
+    std::array<int32_t, MAX_OVERRIDE_SPELL> Spells{};  // 1-10
     //uint32_t      unk0;                         // 11
     //std::string   SpellBarName;                 // 12
 
@@ -563,20 +561,19 @@ struct SpellEntry
     int32_t     powerType{};                                 // 14       m_powerType
     uint32_t    rangeIndex{};                                // 15       m_rangeIndex
     float       speed{};                                     // 16       m_speed
-    uint32_t    SpellVisual1{};                              // 17       m_spellVisualID
-    uint32_t    SpellVisual2{};                              // 18       m_spellVisualID
+    std::array<uint32_t, 2> SpellVisual{};                   // 17 - 18       m_spellVisualID
     uint32_t    SpellIconID{};                               // 19       m_spellIconID
-    uint32_t    activeIconID{};                              // 20       m_activeIconID
+    uint32_t    ActiveIconID{};                              // 20       m_activeIconID
     std::string SpellName;                                    // 21       m_name_lang
     std::string Rank;                                         // 22       m_nameSubtext_lang
     std::string Description;                                  // 23       m_description_lang not used
     std::string ToolTip;                                      // 24       m_auraDescription_lang not used
     uint32_t    SchoolMask{};                                // 25       m_schoolMask
-    uint32_t    runeCostID{};                                // 26       m_runeCostID
-    uint32_t  spellMissileID{};                              // 27       m_spellMissileID not used
-    uint32_t  spellDescriptionVariableID{};                  // 28       m_spellDescriptionVariableID, 3.2.0
-    uint32_t  SpellDifficultyId{};                           // 29       m_spellDifficultyID - id from SpellDifficulty.dbc
-    float   SpellCoef{};                                     // 30
+    //uint32_t    runeCostID{};                                // 26       m_runeCostID
+    //uint32_t  spellMissileID{};                              // 27       m_spellMissileID not used
+    //uint32_t  spellDescriptionVariableID{};                  // 28       m_spellDescriptionVariableID, 3.2.0
+    //uint32_t  SpellDifficultyId{};                           // 29       m_spellDifficultyID - id from SpellDifficulty.dbc
+    //float   SpellCoef{};                                     // 30
     uint32_t  SpellScalingId{};                              // 31       SpellScaling.dbc
     uint32_t  SpellAuraOptionsId{};                          // 32       SpellAuraOptions.dbc
     uint32_t  SpellAuraRestrictionsId{};                     // 33       SpellAuraRestrictions.dbc
@@ -584,7 +581,7 @@ struct SpellEntry
     uint32_t  SpellCategoriesId{};                           // 35       SpellCategories.dbc
     uint32_t  SpellClassOptionsId{};                         // 36       SpellClassOptions.dbc
     uint32_t  SpellCooldownsId{};                            // 37       SpellCooldowns.dbc
-    uint32_t  unkIndex7{};                                   // 38       all zeros...
+    //uint32_t  unkIndex7{};                                   // 38       all zeros...
     uint32_t  SpellEquippedItemsId{};                        // 39       SpellEquippedItems.dbc
     uint32_t  SpellInterruptsId{};                           // 40       SpellInterrupts.dbc
     uint32_t  SpellLevelsId{};                               // 41       SpellLevels.dbc
@@ -592,12 +589,12 @@ struct SpellEntry
     uint32_t  SpellReagentsId{};                             // 43       SpellReagents.dbc
     uint32_t  SpellShapeshiftId{};                           // 44       SpellShapeshift.dbc
     uint32_t  SpellTargetRestrictionsId{};                   // 45       SpellTargetRestrictions.dbc
-    uint32_t  SpellTotemsId{};                               // 46       SpellTotems.dbc
-    uint32_t  ResearchProject{};                             // 47       ResearchProject.dbc
+    //uint32_t  SpellTotemsId{};                               // 46       SpellTotems.dbc
+    //uint32_t  ResearchProject{};                             // 47       ResearchProject.dbc
 
     static char const* GetDBCFormat()
     {
-        return "iiiiiiiiiiiiiiifiiiissssiiiiifiiiiiiiiiiiiiiiii";
+        return "iiiiiiiiiiiiiiifiiiissssixxxxxiiiiiiixiiiiiiixx";
     }
 
     inline QString GetSpellNameRank() const
@@ -624,21 +621,21 @@ struct FactionEntry
     explicit FactionEntry(DBCFileLoader::Record const& record);
 
     uint32_t  Id{};                                          // 0
-    int32_t   ReputationIndex{};                             // 1
-    std::array<uint32_t, 4> ReputationRaceMask{};            // 2 - 5
-    std::array<uint32_t, 4> ReputationClassMask{};           // 6 - 9
-    std::array<int32_t, 4>  ReputationBase{};                // 10 - 13
-    std::array<uint32_t, 4> ReputationFlags{};               // 14 - 17
-    uint32_t  ParentFactionID{};                             // 18
-    std::array<float, 2> ParentFactionMod{};                 // 19 - 20 Faction gains incoming rep * spilloverRateIn and  Faction outputs rep * spilloverRateOut as spillover reputation
-    std::array<uint32_t, 2> ParentFactionCap{};                         // 21 - 22 The highest rank the faction will profit from incoming spillover and It does not seem to be the max standing at which a faction outputs spillover ...so no idea
+    //int32_t   ReputationIndex{};                             // 1
+    //std::array<uint32_t, 4> ReputationRaceMask{};            // 2 - 5
+    //std::array<uint32_t, 4> ReputationClassMask{};           // 6 - 9
+    //std::array<int32_t, 4>  ReputationBase{};                // 10 - 13
+    //std::array<uint32_t, 4> ReputationFlags{};               // 14 - 17
+    //uint32_t  ParentFactionID{};                             // 18
+    //std::array<float, 2> ParentFactionMod{};                 // 19 - 20 Faction gains incoming rep * spilloverRateIn and  Faction outputs rep * spilloverRateOut as spillover reputation
+    //std::array<uint32_t, 2> ParentFactionCap{};                         // 21 - 22 The highest rank the faction will profit from incoming spillover and It does not seem to be the max standing at which a faction outputs spillover ...so no idea
     std::string   Name;                                       // 23
-    std::string   Description;                                // 24
-    uint32_t  Expansion{};                                   // 25
+    //std::string   Description;                                // 24
+    //uint32_t  Expansion{};                                   // 25
 
     static char const* GetDBCFormat()
     {
-        return "iiiiiiiiiiiiiiiiiiiffiissi";
+        return "ixxxxxxxxxxxxxxxxxxxxxxsxx";
     }
 };
 

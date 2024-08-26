@@ -63,7 +63,7 @@ SpellClassOptionsEntry::SpellClassOptionsEntry(DBCFileLoader::Record const& reco
     SpellFamilyFlags[1] = record.getUInt(3);
     SpellFamilyFlags[2] = record.getUInt(4);
     SpellFamilyName     = record.getUInt(5);
-    Description         = record.getString(6);
+    //Description         = record.getString(6);
 }
 
 SpellTargetRestrictionsEntry::SpellTargetRestrictionsEntry(DBCFileLoader::Record const& record)
@@ -97,13 +97,13 @@ SkillLineAbilityEntry::SkillLineAbilityEntry(DBCFileLoader::Record const& record
     id                  = record.getUInt(0);
     skillId             = record.getUInt(1);
     spellId             = record.getUInt(2);
-    racemask            = record.getUInt(3);
-    classmask           = record.getUInt(4);
-    racemaskNot         = record.getUInt(5);
-    classmaskNot        = record.getUInt(6);
+    //racemask            = record.getUInt(3);
+    //classmask           = record.getUInt(4);
+    //racemaskNot         = record.getUInt(5);
+    //classmaskNot        = record.getUInt(6);
     req_skill_value     = record.getUInt(7);
     forward_spellid     = record.getUInt(8);
-    learnOnGetSkill     = record.getUInt(9);
+    //learnOnGetSkill     = record.getUInt(9);
     max_value           = record.getUInt(10);
     min_value           = record.getUInt(11);
     character_points[0] = record.getUInt(12);
@@ -113,12 +113,12 @@ SkillLineAbilityEntry::SkillLineAbilityEntry(DBCFileLoader::Record const& record
 SkillLineEntry::SkillLineEntry(DBCFileLoader::Record const& record)
 {
     id                  = record.getUInt(0);
-    categoryId          = record.getInt(1);
+    //categoryId          = record.getInt(1);
     name                = record.getString(2);
-    description         = record.getString(3);
-    spellIcon           = record.getUInt(4);
-    alternateVerb       = record.getString(5);
-    canLink             = record.getUInt(6);
+    //description         = record.getString(3);
+    //spellIcon           = record.getUInt(4);
+    //alternateVerb       = record.getString(5);
+    //canLink             = record.getUInt(6);
 }
 
 SpellReagentsEntry::SpellReagentsEntry(DBCFileLoader::Record const& record)
@@ -159,9 +159,9 @@ SpellRangeEntry::SpellRangeEntry(DBCFileLoader::Record const& record)
     minRangeFriend      = record.getFloat(2);
     maxRangeHostile     = record.getFloat(3);
     maxRangeFriend      = record.getFloat(4);
-    type                = record.getUInt(5);
+    //type                = record.getUInt(5);
     Name                = record.getString(6);
-    ShortName           = record.getString(7);
+    //ShortName           = record.getString(7);
 }
 
 SpellAuraOptionsEntry::SpellAuraOptionsEntry(DBCFileLoader::Record const& record)
@@ -203,19 +203,19 @@ SpellPowerEntry::SpellPowerEntry(DBCFileLoader::Record const& record)
     manaCost                        = record.getUInt(1);
     manaCostPerlevel                = record.getUInt(2);
     ManaCostPercentage              = record.getUInt(3);
-    manaPerSecond                   = record.getUInt(4);
+    //manaPerSecond                   = record.getUInt(4);
     manaPerSecondPerLevel           = record.getUInt(5);
-    PowerDisplayId                  = record.getUInt(6);
-    ManaCostPercentageFloat         = record.getFloat(7);
+    //PowerDisplayId                  = record.getUInt(6);
+    //ManaCostPercentageFloat         = record.getFloat(7);
 }
 
 SpellInterruptsEntry::SpellInterruptsEntry(DBCFileLoader::Record const& record)
 {
     Id                              = record.getUInt(0);
-    AuraInterruptFlags              = record.getUInt(1);
-    unk3                            = record.getUInt(2);
-    ChannelInterruptFlags           = record.getUInt(3);
-    unk5                            = record.getUInt(4);
+    AuraInterruptFlags[0]           = record.getUInt(1);
+    AuraInterruptFlags[1]           = record.getUInt(2);
+    ChannelInterruptFlags[0]        = record.getUInt(3);
+    ChannelInterruptFlags[1]        = record.getUInt(4);
     InterruptFlags                  = record.getUInt(5);
 }
 
@@ -246,45 +246,43 @@ AreaGroupEntry::AreaGroupEntry(DBCFileLoader::Record const& record)
 
 AreaTableEntry::AreaTableEntry(DBCFileLoader::Record const& record)
 {
-    ID = record.getUInt(0);
-    mapid = record.getUInt(1);
-    zone = record.getUInt(2);
-    exploreFlag = record.getUInt(3);
-    flags = record.getUInt(4);
-    unk5 = record.getUInt(5);
-    unk6 = record.getUInt(6);
-    unk7 = record.getUInt(7);
-    unk8 = record.getUInt(8);
-    unk9 = record.getUInt(9);
-    area_level = record.getInt(10);
-    area_name = record.getString(11);
-    team = record.getUInt(12);
-
-    LiquidTypeOverride[0] = record.getUInt(13);
-    LiquidTypeOverride[1] = record.getUInt(14);
-    LiquidTypeOverride[2] = record.getUInt(15);
-    LiquidTypeOverride[3] = record.getUInt(16);
-
-    MaxDepth = record.getFloat(17);
-    AmbientMultiplier = record.getFloat(18);
-    LightId = record.getUInt(19);
-    unk20 = record.getUInt(20);
-    unk21 = record.getUInt(21);
-    unk22 = record.getUInt(22);
-    unk23 = record.getUInt(23);
-    unk24 = record.getUInt(24);
-    unk25 = record.getUInt(25);
+    Id                  = record.getUInt(0);
+    ContinentID         = record.getUInt(1);
+    //ParentAreaID        = record.getUInt(2);
+    //AreaBit             = record.getUInt(3);
+    //Flags               = record.getUInt(4);
+    //SoundProviderPref   = record.getUInt(5);
+    //SoundProviderPrefUnderwater = record.getUInt(6);
+    //AmbienceID          = record.getUInt(7);
+    //ZoneMusic           = record.getUInt(8);
+    //IntroSound          = record.getUInt(9);
+    //ExplorationLevel    = record.getUInt(10);
+    AreaName            = record.getString(11);
+    //FactionGroupMask    = record.getUInt(12);
+    //LiquidTypeID[0]     = record.getUInt(13);
+    //LiquidTypeID[0]     = record.getUInt(14);
+    //LiquidTypeID[0]     = record.getUInt(15);
+    //LiquidTypeID[0]     = record.getUInt(16);
+    //MinElevation        = record.getFloat(17);
+    //AmbientMultiplier   = record.getFloat(18);
+    //LightID             = record.getUInt(19);
+    //MountFlags          = record.getUInt(20);
+    //UwIntroSound        = record.getUInt(21);
+    //UwZoneMusic         = record.getUInt(22);
+    //UwAmbience          = record.getUInt(23);
+    //World_pvp_ID        = record.getUInt(24);
+    //PvpCombatWorldStateID = record.getInt(25);
 }
 
 SpellCastingRequirementsEntry::SpellCastingRequirementsEntry(DBCFileLoader::Record const& record)
 {
-    Id                      = record.getUInt(0);
-    FacingCasterFlags       = record.getUInt(1);
-    MinFactionId            = record.getUInt(2);
-    MinReputation           = record.getUInt(3);
-    AreaGroupId             = record.getInt(4);
-    RequiredAuraVision      = record.getUInt(5);
-    RequiresSpellFocus      = record.getUInt(6);
+    Id                  = record.getUInt(0);
+    //FacingCasterFlags   = record.getUInt(1);
+    //MinFactionID        = record.getUInt(2);
+    //MinReputation       = record.getUInt(3);
+    RequiredAreasID     = record.getInt(4);
+    //RequiredAuraVision  = record.getUInt(5);
+    RequiresSpellFocus  = record.getUInt(6);
 }
 
 SpellScalingEntry::SpellScalingEntry(DBCFileLoader::Record const& record)
@@ -294,25 +292,25 @@ SpellScalingEntry::SpellScalingEntry(DBCFileLoader::Record const& record)
     CastTimeMin             = record.getInt(id++);
     CastTimeMax             = record.getInt(id++);
     CastTimeMaxLevel        = record.getInt(id++);
-    ScalingClass            = record.getInt(id++);
+    Class                   = record.getInt(id++);
 
     for (float& multiplier : Coefficient)
     {
         multiplier = record.getFloat(id++);
     }
 
-    for (float& multiplier : RandomMultiplier)
+    for (float& multiplier : Variance)
     {
         multiplier = record.getFloat(id++);
     }
 
-    for (float& multiplier : OtherMultiplier)
+    for (float& multiplier : ComboPointsCoefficient)
     {
         multiplier = record.getFloat(id++);
     }
 
-    CoefBase                = record.getFloat(id++);
-    CoefLevelBase           = record.getInt(id++);
+    NerfFactor                = record.getFloat(id++);
+    NerfMaxLevel              = record.getInt(id++);
 }
 
 GtSpellScalingEntry::GtSpellScalingEntry(DBCFileLoader::Record const& record)
@@ -325,7 +323,7 @@ OverrideSpellDataEntry::OverrideSpellDataEntry(DBCFileLoader::Record const& reco
 {
     uint8_t colId = 0;
     Id = record.getUInt(colId++);
-    for (int32_t& _spellId : spellId)
+    for (int32_t& _spellId : Spells)
     {
         _spellId = record.getInt(colId++);
     }
@@ -361,98 +359,110 @@ SpellRadiusEntry::SpellRadiusEntry(DBCFileLoader::Record const& record)
 
 SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t id = 0;
-    Id                          = record.getUInt(id++);
+    Id                          = record.getUInt(0);
 
-    for (uint32_t& attribute : Attributes)
-        attribute = record.getUInt(id++);
+    // 1 - 11
+    for (uint8_t i = 0; i < 11; ++i)
+    {
+        Attributes[i] = record.getUInt(1 + i);
+    }
 
-    CastingTimeIndex            = record.getUInt(id++);
-    DurationIndex               = record.getUInt(id++);
-    powerType                   = record.getUInt(id++);
-    rangeIndex                  = record.getUInt(id++);
-    speed                       = record.getFloat(id++);
-    SpellVisual1                = record.getUInt(id++);
-    SpellVisual2                = record.getUInt(id++);
-    SpellIconID                 = record.getUInt(id++);
-    activeIconID                = record.getUInt(id++);
+    CastingTimeIndex            = record.getUInt(12);
+    DurationIndex               = record.getUInt(13);
+    powerType                   = record.getUInt(14);
+    rangeIndex                  = record.getUInt(15);
+    speed                       = record.getFloat(16);
 
-    SpellName                   = record.getString(id++);
-    _spellName = QString(SpellName.c_str()).toUpper();
+    // 17 - 18
+    for (uint8_t i = 0; i < 2; ++i)
+    {
+        SpellVisual[i] = record.getUInt(17 + i);
+    }
 
-    Rank                        = record.getString(id++);
-    Description                 = record.getString(id++);
+    SpellIconID                 = record.getUInt(19);
+    ActiveIconID                = record.getUInt(20);
+    SpellName                   = record.getString(21);
+    Rank                        = record.getString(22);
+    Description                 = record.getString(23);
+    ToolTip                     = record.getString(24);
+    SchoolMask                  = record.getUInt(25);
+    //runeCostID                  = record.getUInt(26);
+    //spellMissileID              = record.getUInt(27);
+    //spellDescriptionVariableID  = record.getUInt(28);
+    //SpellDifficultyId           = record.getUInt(29);
+    //SpellCoef                   = record.getFloat(30);
+    SpellScalingId              = record.getUInt(31);
+    SpellAuraOptionsId          = record.getUInt(32);
+    SpellAuraRestrictionsId     = record.getUInt(33);
+    SpellCastingRequirementsId  = record.getUInt(34);
+    SpellCategoriesId           = record.getUInt(35);
+    SpellClassOptionsId         = record.getUInt(36);
+    SpellCooldownsId            = record.getUInt(37);
+    //unkIndex7                   = record.getUInt(38);
+    SpellEquippedItemsId        = record.getUInt(39);
+    SpellInterruptsId           = record.getUInt(40);
+    SpellLevelsId               = record.getUInt(41);
+    SpellPowerId                = record.getUInt(42);
+    SpellReagentsId             = record.getUInt(43);
+    SpellShapeshiftId           = record.getUInt(44);
+    SpellTargetRestrictionsId   = record.getUInt(45);
+    //SpellTotemsId               = record.getUInt(46);
+    //ResearchProject             = record.getUInt(47);
 
     if (Description.empty() || Description.size() <= 1)
     {
         Description = "-- No description --";
     }
 
-    ToolTip                     = record.getString(id++);
-    SchoolMask                  = record.getUInt(id++);
-    runeCostID                  = record.getUInt(id++);
-    spellMissileID              = record.getUInt(id++);
-    spellDescriptionVariableID  = record.getUInt(id++);
-    SpellDifficultyId           = record.getUInt(id++);
-    SpellCoef                   = record.getFloat(id++);
-    SpellScalingId              = record.getUInt(id++);
-    SpellAuraOptionsId          = record.getUInt(id++);
-    SpellAuraRestrictionsId     = record.getUInt(id++);
-    SpellCastingRequirementsId  = record.getUInt(id++);
-    SpellCategoriesId           = record.getUInt(id++);
-    SpellClassOptionsId         = record.getUInt(id++);
-    SpellCooldownsId            = record.getUInt(id++);
-    unkIndex7                   = record.getUInt(id++);
-    SpellEquippedItemsId        = record.getUInt(id++);
-    SpellInterruptsId           = record.getUInt(id++);
-    SpellLevelsId               = record.getUInt(id++);
-    SpellPowerId                = record.getUInt(id++);
-    SpellReagentsId             = record.getUInt(id++);
-    SpellShapeshiftId           = record.getUInt(id++);
-    SpellTargetRestrictionsId   = record.getUInt(id++);
-    SpellTotemsId               = record.getUInt(id++);
-    ResearchProject             = record.getUInt(id++);
+    _spellName = QString(SpellName.c_str()).toUpper();
 }
 
 FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t i = 0;
-    Id                  = record.getUInt(i++);
-    ReputationIndex     = record.getInt(i++);
 
-    for (auto& val : ReputationRaceMask)
-    {
-        val = record.getUInt(i++);
-    }
+    Id                  = record.getUInt(0);
+    //ReputationIndex     = record.getInt(1);
 
-    for (auto& val : ReputationClassMask)
-    {
-        val = record.getUInt(i++);
-    }
+    //2 - 5
+    //for (uint8_t i = 0; i < 4; ++i)
+    //{
+    //    ReputationRaceMask[2 + i] = record.getUInt(2 + i);
+    //    ++i;
+    //}
 
-    for (auto& val : ReputationBase)
-    {
-        val = record.getInt(i++);
-    }
+    // 6 - 9
+    //for (uint8_t i = 0; i < 4; ++i)
+    //{
+    //    ReputationClassMask[i] = record.getUInt(6 + i);
+    //}
 
-    for (auto& val : ReputationFlags)
-    {
-        val = record.getUInt(i++);
-    }
+    // 10 - 13
+    //for (uint8_t i = 0; i < 4; ++i)
+    //{
+    //    ReputationBase[i] = record.getInt(10 + i);
+    //}
 
-    ParentFactionID = record.getUInt(i++);
+    // 14 - 17
+    //for (uint8_t i = 0; i < 4; ++i)
+    //{
+    //    ReputationFlags[i] = record.getUInt(14 + i);
+    //}
 
-    for (auto& val : ParentFactionMod)
-    {
-        val = record.getFloat(i++);
-    }
+    //ParentFactionID = record.getUInt(18);
 
-    for (auto& val : ParentFactionCap)
-    {
-        val = record.getUInt(i++);
-    }
+    // 19 - 20
+    //for (uint8_t i = 0; i < 2; ++i)
+    //{
+    //    ParentFactionMod[i] = record.getFloat(19 + i);
+    //}
 
-    Name = record.getString(i++);
-    Description = record.getString(i++);
-    Expansion = record.getUInt(i++);
+    // 21 - 22
+    //for (uint8_t i = 0; i < 2; ++i)
+    //{
+    //    ParentFactionCap[i] = record.getUInt(21 + i);
+    //}
+
+    Name = record.getString(23);
+    //Description = record.getString(24);
+    //Expansion = record.getUInt(25);
 }
