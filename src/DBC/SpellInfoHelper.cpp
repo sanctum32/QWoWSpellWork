@@ -1006,30 +1006,29 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
 
     auto formattedStr = std::make_shared<QString>(format);
 
-    //using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;      // Signed
-    using strRepFormatDataU = std::pair<QString /*strToRep*/, uint32_t /*val*/>;    // Unsigned
+    using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;
 
-    const std::array<const strRepFormatDataU, 2> miscValues = {{ {":MiscValue:", EffectMiscValue }, { ":MiscValueB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", EffectMiscValue }, { ":MiscValueB:", EffectMiscValueB } }};
     for (const auto& [strToRep, value] : miscValues)
     {
         formattedStr->replace(strToRep, QString::number(value));
     }
 
-    const std::array<const strRepFormatDataU, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", EffectMiscValue }, { ":AreaEntryNameMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", EffectMiscValue }, { ":AreaEntryNameMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : areaEntryNames)
     {
         const auto* areaInfo = GetDBCEntry(value, sDBCStores->m_AreaTableEntries);
         formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->area_name.c_str() : "Unknown");
     }
 
-    const std::array<const strRepFormatDataU, 2> modStat = {{ {":ModStatNameMiscVal:", EffectMiscValue }, { ":ModStatNameMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> modStat = {{ {":ModStatNameMiscVal:", EffectMiscValue }, { ":ModStatNameMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : modStat)
     {
         const auto& statName = sSpellWorkJson->GetUnitModName(value);
         formattedStr->replace(strToRep, statName.toString());
     }
 
-    const std::array<const strRepFormatDataU, 2> factionName = {{ {":FactionNameMiscVal:", EffectMiscValue }, { ":FactionNameMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", EffectMiscValue }, { ":FactionNameMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : factionName)
     {
         if (const auto* factionEntry = GetDBCEntry(value, sDBCStores->m_FactionEntries))
@@ -1042,46 +1041,39 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         }
     }
 
-    const std::array<const strRepFormatDataU, 2> combatRating = {{ {":CBRatingListMiscVal:", EffectMiscValue }, { ":CBRatingListMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", EffectMiscValue }, { ":CBRatingListMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : combatRating)
     {
-        if (const auto* factionEntry = GetDBCEntry(value, sDBCStores->m_FactionEntries))
+        QString ratingsStr;
+        for (uint8_t ratingId = 0; ratingId < MAX_UINT32_BITMASK_INDEX; ++ratingId)
         {
-            QString ratingsStr;
-            for (uint8_t ratingId = 0; ratingId < MAX_UINT32_BITMASK_INDEX; ++ratingId)
+            const uint32_t mask = 1 << ratingId;
+            if ((value & mask) != 0)
             {
-                const uint32_t mask = 1 << ratingId;
-                if ((value & mask) != 0)
+                if (!ratingsStr.isEmpty())
                 {
-                    if (!ratingsStr.isEmpty())
-                    {
-                        ratingsStr += ", ";
-                    }
-
-                    ratingsStr += sSpellWorkJson->GetCombatRatingName(ratingId);
+                    ratingsStr += ", ";
                 }
-            }
 
-            if (ratingsStr.isEmpty())
-            {
-                ratingsStr = "Unknown";
+                ratingsStr += sSpellWorkJson->GetCombatRatingName(ratingId);
             }
-            formattedStr->replace(strToRep, ratingsStr);
         }
-        else
+
+        if (ratingsStr.isEmpty())
         {
-            formattedStr->replace(strToRep, QString("<b>Cannot find entry %1 in Faction.dbc</b><br>").arg(value));
+            ratingsStr = "Unknown";
         }
+        formattedStr->replace(strToRep, ratingsStr);
     }
 
-    const std::array<const strRepFormatDataU, 2> screenEffect = {{ {":ScreenEffectMiscVal:", EffectMiscValue }, { ":ScreenEffectMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", EffectMiscValue }, { ":ScreenEffectMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : screenEffect)
     {
         const auto* screenEffect = GetDBCEntry(value, sDBCStores->m_ScreenEffectEntries);
         formattedStr->replace(strToRep, screenEffect != nullptr ? screenEffect->Name.c_str() : "unknown");
     }
 
-    const std::array<const strRepFormatDataU, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", EffectMiscValue }, { ":OverrideSpellListMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", EffectMiscValue }, { ":OverrideSpellListMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : overrideSpellList)
     {
         const auto* spellOverride = GetDBCEntry(value, sDBCStores->m_OverrideSpellDataEntries);
