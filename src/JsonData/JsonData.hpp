@@ -11,10 +11,17 @@ Q_DECLARE_LOGGING_CATEGORY(JSON)
 
 class SpellWorkJson
 {
-    friend class MainWindow;
-    SpellWorkJson() = default;
+public:
+    struct SpellEffectInfo
+    {
+        // Effect name
+        QString name;
 
-// Storage
+        // If set, it will add extra formatted details
+        QString EffectDetail;
+    };
+
+    // Storage
     std::map<uint32_t /*id*/, QString /*name*/> SpellSchools;
     std::map<uint32_t /*hex*/, QString /*name*/> SpellSchoolMasks;
     std::map<uint32_t /*id*/, QString /*name*/> SpellModOps;
@@ -24,7 +31,7 @@ class SpellWorkJson
     std::map<uint32_t /*flag*/, QString /*description*/> SpellProcInfo;
     std::map<uint32_t /*id*/, QString /*name*/> SpellFamilyInfo;
     std::array<std::map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellEffectNames;
+    std::map<uint32_t /*id*/, SpellEffectInfo /*info*/> _spellEffectInfo;
     std::map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
     std::map<uint32_t /*flag*/, QString /*name*/> SpellTargetFlags;
     std::map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
@@ -43,7 +50,7 @@ class SpellWorkJson
     std::map<uint32_t /*id*/, QString /*name*/> SpellDamageTypeNames;
     std::map<uint32_t /*id*/, QString /*name*/> SpellPreventionTypeNames;
 
-public:
+    SpellWorkJson() = default;
     // Prevent copies
     SpellWorkJson(SpellWorkJson const&) = delete;
     SpellWorkJson(SpellWorkJson&&) = delete;

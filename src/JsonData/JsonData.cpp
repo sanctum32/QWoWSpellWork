@@ -387,11 +387,50 @@ bool SpellWorkJson::LoadJsonData()
         return false;
     }
 
+    if (!OpenJson("./json/SpellEffects.json", [&](const QJsonDocument& json)
+    {
+        if (!json.isArray())
+        {
+            qCDebug(JSON) << "JSON: Json file \"SpellEffects.json\" is not Array type";
+            return false;
+        }
+
+        const auto& jsonArray = json.array();
+        for (const auto& attrData : std::as_const(jsonArray))
+        {
+            const auto& arrayData = attrData.toObject();
+            const uint32_t _keyId = arrayData.value("Id").toInt();
+
+            if (_spellEffectInfo.contains(_keyId))
+            {
+                qCDebug(JSON) << "JSON: \"./json/SpellEffects.json\" has duplicate entry " << QString::number(_keyId) << ". Skipping";
+                continue;
+            }
+
+            auto& effectInfo = _spellEffectInfo[_keyId];
+            effectInfo.name                 = arrayData.value("Name").toString();
+            if (!arrayData.value("EffectDetail").isNull())
+            {
+                effectInfo.EffectDetail         = arrayData.value("EffectDetail").toString();
+            }
+        }
+
+        if (_spellEffectInfo.empty())
+        {
+            qCDebug(JSON) << "JSON: Failed to load entries from SpellEffects.json";
+            return false;
+        }
+
+        return true;
+    }))
+    {
+        return false;
+    }
+
     if (!ReadBasicArrayFromFile("./json/SpellMod.json", SpellModOps) ||
         !ReadBasicArrayFromFile("./json/SpellAuraTypes.json", SpellAuraTypes) ||
         !ReadBasicArrayFromFile("./json/SpellProc.json", SpellProcInfo, "Flag") ||
         !ReadBasicArrayFromFile("./json/SpellFamily.json", SpellFamilyInfo) ||
-        !ReadBasicArrayFromFile("./json/SpellEffects.json", SpellEffectNames) ||
         !ReadBasicArrayFromFile("./json/CombatRating.json", CombatRatingNames) ||
         !ReadBasicArrayFromFile("./json/UnitMods.json", UnitModsNames) ||
         !ReadBasicArrayFromFile("./json/SpellAuraStates.json", SpellAuraStatesNames) ||
@@ -474,8 +513,8 @@ QStringView SpellWorkJson::GetSpellAttributeName(uint32_t attributeId, uint32_t 
 
 QStringView SpellWorkJson::GetSpellEffectName(uint32_t id)
 {
-    const auto& itr = SpellEffectNames.find(id);
-    return itr != SpellEffectNames.end() ? itr->second : QString("SPELL_EFFECT_UNK_%1").arg(id);
+    const auto& itr = _spellEffectInfo.find(id);
+    return itr != _spellEffectInfo.end() ? itr->second.name : QString("SPELL_EFFECT_UNK_%1").arg(id);
 }
 
 QStringView SpellWorkJson::GetSpellTargetName(uint32_t id)

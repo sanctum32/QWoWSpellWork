@@ -769,20 +769,14 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                           .arg(effectInfo->EffectMiscValueB)
                           .arg(effectInfo->EffectAmplitude);
 
-            switch(effectInfo->Effect)
+            const auto& itr = sSpellWorkJson->_spellEffectInfo.find(effectInfo->Effect);
+            if (itr != sSpellWorkJson->_spellEffectInfo.end())
             {
-            case SPELL_EFFECT_SUMMON:
-            {
-                break;
-            }
-            case SPELL_EFFECT_BIND:
-            {
-                const auto* areaInfo = GetDBCEntry(static_cast<uint32_t>(effectInfo->EffectMiscValue), sDBCStores->m_AreaTableEntries);
-                result += QString("<span style=\"color:green\">Bind zone: %1</span><br>").arg(areaInfo != nullptr ? areaInfo->area_name.c_str() : "unknown");
-                break;
-            }
-            default:
-                break;
+                if (const auto genDetail = effectInfo->GenerateExtraDetails(itr->second.EffectDetail))
+                {
+                    result += *genDetail;
+                    result += "<br>";
+                }
             }
         }
         else
@@ -1073,4 +1067,38 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
     PrintSpellRestrictionsInfo(spellText, SpellAuraRestrictionsId);
     PrintSpellCastRequirements(spellText, SpellCastingRequirementsId);
     return spellText;
+}
+
+std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& format) const
+{
+    //const auto& itr = sSpellWorkJson->_spellEffectInfo.find(Effect);
+    //if (itr == sSpellWorkJson->_spellEffectInfo.end() || itr->second.EffectDetail.isEmpty())
+    //{
+    //    return nullptr;
+    //}
+
+    if (format.isEmpty())
+    {
+        return nullptr;
+    }
+
+    auto formattedStr = std::make_shared<QString>(format);
+
+    using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;      // Signed
+    using strRepFormatDataU = std::pair<QString /*strToRep*/, uint32_t /*val*/>;    // Unsigned
+
+    std::array<const strRepFormatDataU, 2> miscValues = {{ {":MiscValue:", EffectMiscValue }, { ":MiscValueB:", EffectMiscValueB } }};
+    for (const auto& [strToRep, value] : miscValues)
+    {
+        formattedStr->replace(strToRep, QString::number(value));
+    }
+
+    std::array<const strRepFormatDataU, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", EffectMiscValue }, { ":AreaEntryNameMiscValB:", EffectMiscValueB } }};
+    for (auto const& [strToRep, value] : areaEntryNames)
+    {
+        const auto* areaInfo = GetDBCEntry(value, sDBCStores->m_AreaTableEntries);
+        formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->area_name.c_str() : "Unknown");
+    }
+
+    return formattedStr;
 }

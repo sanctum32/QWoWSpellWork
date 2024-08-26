@@ -42,6 +42,9 @@ struct SpellEffectEntry
     {
         return "iifiiiffiiiiiifiifiiiiiiiii";
     }
+
+    // Generates extra effect details by given format
+    std::shared_ptr<QString> GenerateExtraDetails(const QString& format) const;
 };
 
 // SpellCategory.dbc

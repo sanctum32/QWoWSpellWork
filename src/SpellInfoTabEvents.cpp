@@ -123,13 +123,13 @@ void MainWindow::PerformSpellSearch()
     // Spell effect filter
     if (ui->SpellEffectFilter->currentIndex() != 0)
     {
-        const auto& effectNameItr = std::find_if(sSpellWorkJson->SpellEffectNames.begin(), sSpellWorkJson->SpellEffectNames.end(),
+        const auto& effectNameItr = std::find_if(sSpellWorkJson->_spellEffectInfo.begin(), sSpellWorkJson->_spellEffectInfo.end(),
             [selectedEffect = ui->SpellEffectFilter->currentText()](const auto& data)
         {
-            return data.second == selectedEffect;
+            return data.second.name == selectedEffect;
         });
 
-        if (effectNameItr != sSpellWorkJson->SpellEffectNames.end())
+        if (effectNameItr != sSpellWorkJson->_spellEffectInfo.end())
         {
             spellEffectId = effectNameItr->first;
         }

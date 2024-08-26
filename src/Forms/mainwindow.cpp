@@ -33,9 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->SpellAuraTypeFilter->setMaxVisibleItems(10);
 
     // SpellEffectFilter
-    for (const auto& spellEffect : sSpellWorkJson->SpellEffectNames)
+    for (const auto& spellEffect : sSpellWorkJson->_spellEffectInfo)
     {
-        ui->SpellEffectFilter->addItem(spellEffect.second);
+        ui->SpellEffectFilter->addItem(spellEffect.second.name);
     }
     ui->SpellEffectFilter->setEditable(true);
     ui->SpellEffectFilter->setMaxVisibleItems(10);
