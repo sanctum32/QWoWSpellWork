@@ -520,13 +520,13 @@ inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
 {
     result += "<br>";
     uint32_t interruptFlags = 0;
-    uint32_t auraInterruptFlags = 0;;
-    uint32_t channelInterruptFlags = 0;
+    std::array<uint32_t, 2> auraInterruptFlags{};
+    std::array<uint32_t, 2> channelInterruptFlags{};
     if (const auto* spellInterruptEntry = GetDBCEntry(SpellInterruptsId, sDBCStores->m_SpellInterruptsEntries))
     {
         interruptFlags = spellInterruptEntry->InterruptFlags;
-        auraInterruptFlags = spellInterruptEntry->AuraInterruptFlags[0];
-        channelInterruptFlags = spellInterruptEntry->ChannelInterruptFlags[0];
+        auraInterruptFlags = spellInterruptEntry->AuraInterruptFlags;
+        channelInterruptFlags = spellInterruptEntry->ChannelInterruptFlags;
     }
 
     QString interruptFlagsStr;
@@ -544,39 +544,68 @@ inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
         }
     }
 
-    QString auraFlagsStr;
-    for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+    if (interruptFlagsStr.isEmpty())
     {
-        const uint32_t flag = 1U << i;
-        if ((auraInterruptFlags & flag) != 0)
-        {
-            if (!auraFlagsStr.isEmpty())
-            {
-                auraFlagsStr += ", ";
-            }
+        interruptFlagsStr = sSpellWorkJson->GetSpellInterruptFlagName(0);
+    }
 
-            auraFlagsStr += sSpellWorkJson->GetAuraInterruptFlagName(flag);
+    std::array<QString, 2> auraFlagsStr;
+    for (uint8_t flagId = 0; flagId < 2; ++flagId)
+    {
+        for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+        {
+            const uint32_t flag = 1U << i;
+            if ((auraInterruptFlags[flagId] & flag) != 0)
+            {
+                if (!auraFlagsStr[flagId].isEmpty())
+                {
+                    auraFlagsStr[flagId] += ", ";
+                }
+
+                auraFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+            }
         }
     }
 
-    QString channelFlagsStr;
-    for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+    for (uint8_t i = 0; i < 2; ++i)
     {
-        const uint32_t flag = 1U << i;
-        if ((channelInterruptFlags & flag) != 0)
+        if (auraFlagsStr[i].isEmpty())
         {
-            if (!channelFlagsStr.isEmpty())
-            {
-                channelFlagsStr += ", ";
-            }
+            auraFlagsStr[i] += sSpellWorkJson->GetAuraInterruptFlagName(0, i);
+        }
+    }
 
-            channelFlagsStr += sSpellWorkJson->GetAuraInterruptFlagName(flag);
+    std::array<QString, 2> channelFlagsStr;
+    for (uint8_t flagId = 0; flagId < 2; ++flagId)
+    {
+        for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+        {
+            const uint32_t flag = 1U << i;
+            if ((channelInterruptFlags[flagId] & flag) != 0)
+            {
+                if (!channelFlagsStr[flagId].isEmpty())
+                {
+                    channelFlagsStr[flagId] += ", ";
+                }
+
+                channelFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+            }
+        }
+    }
+
+    for (uint8_t i = 0; i < 2; ++i)
+    {
+        if (channelFlagsStr[i].isEmpty())
+        {
+            channelFlagsStr[i] += sSpellWorkJson->GetAuraInterruptFlagName(0, i);
         }
     }
 
     result += QString("Spell interrupt flags: 0x%1 (%2)<br>").arg(interruptFlags, 8, 16, QLatin1Char('0')).arg(interruptFlagsStr);
-    result += QString("Aura interrupt flags: 0x%1 (%2)<br>").arg(auraInterruptFlags, 8, 16, QLatin1Char('0')).arg(auraFlagsStr);
-    result += QString("Channel interrupt flags 0x%1 (%2)<br>").arg(channelInterruptFlags, 8, 16, QLatin1Char('0')).arg(channelFlagsStr);
+    result += QString("Aura interrupt flags: 0x%1 (%2)<br>").arg(auraInterruptFlags[0], 8, 16, QLatin1Char('0')).arg(auraFlagsStr[0]);
+    result += QString("Aura interrupt flags2: 0x%1 (%2)<br>").arg(auraInterruptFlags[1], 8, 16, QLatin1Char('0')).arg(auraFlagsStr[1]);
+    result += QString("Channel interrupt flags: 0x%1 (%2)<br>").arg(channelInterruptFlags[0], 8, 16, QLatin1Char('0')).arg(channelFlagsStr[0]);
+    result += QString("Channel interrupt flags2: 0x%1 (%2)<br>").arg(channelInterruptFlags[1], 8, 16, QLatin1Char('0')).arg(channelFlagsStr[1]);
 }
 
 inline void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestrictionsId)

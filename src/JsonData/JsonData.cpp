@@ -170,24 +170,49 @@ bool SpellWorkJson::LoadJsonData()
         }
 
         {
+            auto& _AuraInterruptFlags = AuraInterruptFlags[0];
             const auto& jsonArray = document.value("AuraInterruptFlags").toArray();
             for (const auto& auraInterruptFlag : std::as_const(jsonArray))
             {
                 const auto& auraInterruptObj = auraInterruptFlag.toObject();
                 const uint32_t _keyId = static_cast<uint32_t>(auraInterruptObj.value("Flag").toDouble());
 
-                if (AuraInterruptFlags.contains(_keyId))
+                if (_AuraInterruptFlags.contains(_keyId))
                 {
                     qCDebug(JSON) << "JSON: \"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags Id " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
-                AuraInterruptFlags[_keyId] = auraInterruptObj.value("Name").toString();
+                _AuraInterruptFlags[_keyId] = auraInterruptObj.value("Name").toString();
             }
 
-            if (AuraInterruptFlags.empty())
+            if (_AuraInterruptFlags.empty())
             {
                 qCDebug(JSON) << "JSON: Failed to load AuraInterruptFlags data!";
+                return false;
+            }
+        }
+
+        {
+            auto& _AuraInterruptFlags = AuraInterruptFlags[1];
+            const auto& jsonArray = document.value("AuraInterruptFlags2").toArray();
+            for (const auto& auraInterruptFlag : std::as_const(jsonArray))
+            {
+                const auto& auraInterruptObj = auraInterruptFlag.toObject();
+                const uint32_t _keyId = static_cast<uint32_t>(auraInterruptObj.value("Flag").toDouble());
+
+                if (_AuraInterruptFlags.contains(_keyId))
+                {
+                    qCDebug(JSON) << "JSON: \"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags2 Id " << QString::number(_keyId) << ". Skipping";
+                    continue;
+                }
+
+                _AuraInterruptFlags[_keyId] = auraInterruptObj.value("Name").toString();
+            }
+
+            if (_AuraInterruptFlags.empty())
+            {
+                qCDebug(JSON) << "JSON: Failed to load AuraInterruptFlags2 data!";
                 return false;
             }
         }
@@ -514,10 +539,11 @@ const QString SpellWorkJson::GetSpellInterruptFlagName(uint32_t flag)
     return itr != SpellInterruptFlags.end() ? itr->second : QString("SPELL_INTERRUPT_FLAG_UNK_0x%1").arg(flag, 8, 16, QLatin1Char('0'));
 }
 
-const QString SpellWorkJson::GetAuraInterruptFlagName(uint32_t flag)
+const QString SpellWorkJson::GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId)
 {
-    const auto& itr = AuraInterruptFlags.find(flag);
-    return itr != AuraInterruptFlags.end() ? itr->second : QString("AURA_INTERRUPT_FLAG_UNK_%1").arg(flag, 8, 16, QLatin1Char('0'));
+    assert(flagsId < AuraInterruptFlags.size());
+    const auto& itr = AuraInterruptFlags[flagsId].find(flag);
+    return itr != AuraInterruptFlags[flagsId].end() ? itr->second : QString("AURA_INTERRUPT_FLAG%1_UNK_%2").arg(flagsId).arg(flag, 8, 16, QLatin1Char('0'));
 }
 
 const QString SpellWorkJson::GetSpellAuraTypeName(uint32_t id)

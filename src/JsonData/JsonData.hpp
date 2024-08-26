@@ -35,7 +35,7 @@ public:
     std::map<uint32_t /*hex*/, QString /*name*/> SpellSchoolMasks;
     std::map<uint32_t /*id*/, QString /*name*/> SpellModOps;
     std::map<uint32_t /*flag*/, QString /*name*/> SpellInterruptFlags;
-    std::map<uint32_t /*flag*/, QString /*name*/> AuraInterruptFlags;
+    std::array<std::map<uint32_t /*flag*/, QString /*name*/>, 2> AuraInterruptFlags;
     std::map<uint16_t /*id*/, SpellAuraTypeInfo /*info*/> _spellAuraTypes;
     std::map<uint32_t /*flag*/, QString /*description*/> SpellProcInfo;
     std::map<uint32_t /*id*/, QString /*name*/> SpellFamilyInfo;
@@ -83,7 +83,10 @@ public:
     const QString GetSpellSchoolMaskName(uint32_t flag);
     const QString GetSpellModName(uint32_t id);
     const QString GetSpellInterruptFlagName(uint32_t flag);
-    const QString GetAuraInterruptFlagName(uint32_t flag);
+
+    // flagsIds: 0 -> AuraInterruptFlags, 1 -> AuraInterruptFlags2
+    const QString GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId);
+
     const QString GetSpellAuraTypeName(uint32_t id);
     const QString GetSpellProcDescription(uint32_t id);
     const QString GetSpellFamilyName(uint32_t id);

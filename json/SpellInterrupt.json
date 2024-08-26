@@ -44,5 +44,17 @@
         { "Flag": 536870912, "Name":"Login",                "hex":"0x20000000"},
         { "Flag": 1073741824, "Name":"Summon",              "hex":"0x40000000"},
         { "Flag": 2147483648, "Name":"LeavingCombat",       "hex":"0x80000000"}
+    ],
+    "AuraInterruptFlags2":
+    [
+        { "Flag": 0, "Name": "None",            "hex": "0x00000000"},
+        { "Flag": 1, "Name": "Falling",         "hex": "0x00000001"},
+        { "Flag": 2, "Name": "Swimming",        "hex": "0x00000002"},
+        { "Flag": 4, "Name": "NotMoving",       "hex": "0x00000004"},
+        { "Flag": 8, "Name": "Ground",          "hex": "0x00000008"},
+        { "Flag": 16, "Name": "Transform",      "hex": "0x00000010"},
+        { "Flag": 32, "Name": "Jump",           "hex": "0x00000020"},
+        { "Flag": 64, "Name": "ChangeSpec",     "hex": "0x00000040"},
+        { "Flag": 128, "Name": "AbandonVehicle", "hex": "0x00000080"}
     ]
 }
