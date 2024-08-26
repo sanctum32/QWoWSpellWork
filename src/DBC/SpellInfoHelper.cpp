@@ -100,15 +100,16 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
     }
 }
 
-inline void PrintAttributes(QString& result, const SpellEntry* spell)
+template<class T>
+inline void PrintAttributes(QString& result, T const& attributes)
 {
-    if (spell != nullptr && std::any_of(spell->Attributes.begin(), spell->Attributes.end(), [](uint32_t attr){ return attr != 0; }))
+    if (!attributes.empty() && std::any_of(attributes.begin(), attributes.end(), [](uint32_t attr){ return attr != 0; }))
     {
         result += line;
-        for (uint8_t attribute = 0; attribute < MAX_SPELL_ATTRIBUTES; ++attribute)
+        for (uint8_t attribute = 0; attribute < attributes.size(); ++attribute)
         {
-            const auto& attributeMask = spell->Attributes[attribute];
-            if (spell->Attributes[attribute] != 0)
+            const auto& attributeMask = attributes[attribute];
+            if (attributeMask != 0)
             {
                 QString attributeStr;
                 for (uint8_t id = 0; id < MAX_UINT32_BITMASK_INDEX; ++id)
@@ -128,7 +129,6 @@ inline void PrintAttributes(QString& result, const SpellEntry* spell)
                               .arg(attribute)
                               .arg(attributeStr);
             }
-
         }
     }
 }
@@ -976,7 +976,7 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
 
     PrintSpellClassOptions(spellText, SpellClassOptionsId);
     PrintSpellCategory(spellText, SpellCategoriesId);
-    PrintAttributes(spellText, this);
+    PrintAttributes(spellText, Attributes);
     PrintTargetRestrictions(spellText, SpellTargetRestrictionsId, SpellLevelsId, (Attributes[5] & SPELL_ATTR5_LIMIT_N) != 0);
     PrintShapeShiftingInfo(spellText, SpellShapeshiftId);
     PrintSkillLinks(spellText, Id);
@@ -1079,7 +1079,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         const auto* spellOverride = GetDBCEntry(value, sDBCStores->m_OverrideSpellDataEntries);
         if (spellOverride == nullptr)
         {
-            formattedStr->replace(strToRep, QString("<b>Cannot find entry %1 in OverrideSpellData.dbc</b><br>").arg(value));
+            formattedStr->replace(strToRep, QString("entry %1 does not exist in OverrideSpellData.dbc").arg(value));
         }
         else
         {
