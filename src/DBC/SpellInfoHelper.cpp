@@ -772,7 +772,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             const auto& itr = sSpellWorkJson->_spellEffectInfo.find(effectInfo->Effect);
             if (itr != sSpellWorkJson->_spellEffectInfo.end())
             {
-                if (const auto genDetail = effectInfo->GenerateExtraDetails(itr->second.EffectDetail))
+                if (const auto genDetail = effectInfo->GenerateExtraDetails(itr->second.effectDetail))
                 {
                     result += *genDetail;
                     result += "<br>";

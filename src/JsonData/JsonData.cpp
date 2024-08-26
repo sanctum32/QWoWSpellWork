@@ -411,7 +411,7 @@ bool SpellWorkJson::LoadJsonData()
             effectInfo.name                 = arrayData.value("Name").toString();
             if (!arrayData.value("EffectDetail").isNull())
             {
-                effectInfo.EffectDetail         = arrayData.value("EffectDetail").toString();
+                effectInfo.effectDetail         = arrayData.value("EffectDetail").toString();
             }
         }
 
@@ -427,8 +427,47 @@ bool SpellWorkJson::LoadJsonData()
         return false;
     }
 
+    if (!OpenJson("./json/SpellAuraTypes.json", [&](const QJsonDocument& json)
+    {
+        if (!json.isArray())
+        {
+            qCDebug(JSON) << "JSON: Json file \"SpellAuraTypes.json\" is not Array type";
+            return false;
+        }
+
+        const auto& jsonArray = json.array();
+        for (const auto& attrData : std::as_const(jsonArray))
+        {
+            const auto& arrayData = attrData.toObject();
+            const uint32_t _keyId = arrayData.value("Id").toInt();
+
+            if (_spellAuraTypes.contains(_keyId))
+            {
+                qCDebug(JSON) << "JSON: \"./json/SpellAuraTypes.json\" has duplicate entry " << QString::number(_keyId) << ". Skipping";
+                continue;
+            }
+
+            auto& effectInfo    = _spellAuraTypes[_keyId];
+            effectInfo.name     = arrayData.value("Name").toString();
+            if (!arrayData.value("EffectDetail").isNull())
+            {
+                effectInfo.effectDetail         = arrayData.value("EffectDetail").toString();
+            }
+        }
+
+        if (_spellAuraTypes.empty())
+        {
+            qCDebug(JSON) << "JSON: Failed to load entries from SpellAuraTypes.json";
+            return false;
+        }
+
+        return true;
+    }))
+    {
+        return false;
+    }
+
     if (!ReadBasicArrayFromFile("./json/SpellMod.json", SpellModOps) ||
-        !ReadBasicArrayFromFile("./json/SpellAuraTypes.json", SpellAuraTypes) ||
         !ReadBasicArrayFromFile("./json/SpellProc.json", SpellProcInfo, "Flag") ||
         !ReadBasicArrayFromFile("./json/SpellFamily.json", SpellFamilyInfo) ||
         !ReadBasicArrayFromFile("./json/CombatRating.json", CombatRatingNames) ||
@@ -483,8 +522,8 @@ QStringView SpellWorkJson::GetAuraInterruptFlagName(uint32_t flag)
 
 QStringView SpellWorkJson::GetSpellAuraTypeName(uint32_t id)
 {
-    const auto& itr = SpellAuraTypes.find(id);
-    return itr != SpellAuraTypes.end() ? itr->second : QString("SPELL_AURA_UNK_%1").arg(id);
+    const auto& itr = _spellAuraTypes.find(id);
+    return itr != _spellAuraTypes.end() ? itr->second.name : QString("SPELL_AURA_UNK_%1").arg(id);
 }
 
 QStringView SpellWorkJson::GetSpellProcDescription(uint32_t id)

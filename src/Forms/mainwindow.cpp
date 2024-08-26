@@ -25,9 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->SpellFamilyFilter->setMaxVisibleItems(10);
 
     // SpellAuraTypeFilter
-    for (const auto& spellAuraTypes : sSpellWorkJson->SpellAuraTypes)
+    for (const auto& spellAuraTypes : sSpellWorkJson->_spellAuraTypes)
     {
-        ui->SpellAuraTypeFilter->addItem(spellAuraTypes.second);
+        ui->SpellAuraTypeFilter->addItem(spellAuraTypes.second.name);
     }
     ui->SpellAuraTypeFilter->setEditable(true);
     ui->SpellAuraTypeFilter->setMaxVisibleItems(10);

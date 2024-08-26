@@ -18,7 +18,16 @@ public:
         QString name;
 
         // If set, it will add extra formatted details
-        QString EffectDetail;
+        QString effectDetail;
+    };
+
+    struct SpellAuraTypeInfo
+    {
+        // Aura effect name
+        QString name;
+
+        // If set, it will add extra formatted details
+        QString effectDetail;
     };
 
     // Storage
@@ -27,7 +36,7 @@ public:
     std::map<uint32_t /*id*/, QString /*name*/> SpellModOps;
     std::map<uint32_t /*flag*/, QString /*name*/> SpellInterruptFlags;
     std::map<uint32_t /*flag*/, QString /*name*/> AuraInterruptFlags;
-    std::map<uint16_t /*id*/, QString /*name*/> SpellAuraTypes;
+    std::map<uint16_t /*id*/, SpellAuraTypeInfo /*info*/> _spellAuraTypes;
     std::map<uint32_t /*flag*/, QString /*description*/> SpellProcInfo;
     std::map<uint32_t /*id*/, QString /*name*/> SpellFamilyInfo;
     std::array<std::map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;

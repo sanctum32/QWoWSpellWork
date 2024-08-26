@@ -108,13 +108,13 @@ void MainWindow::PerformSpellSearch()
     // Spell aura type filter
     if (ui->SpellAuraTypeFilter->currentIndex() != 0)
     {
-        const auto& spellAuraTypeItr = std::find_if(sSpellWorkJson->SpellAuraTypes.begin(), sSpellWorkJson->SpellAuraTypes.end(),
+        const auto& spellAuraTypeItr = std::find_if(sSpellWorkJson->_spellAuraTypes.begin(), sSpellWorkJson->_spellAuraTypes.end(),
             [auraTypeStr = ui->SpellAuraTypeFilter->currentText()](const auto& spellAuraType)
         {
-            return spellAuraType.second == auraTypeStr;
+            return spellAuraType.second.name == auraTypeStr;
         });
 
-        if (spellAuraTypeItr != sSpellWorkJson->SpellAuraTypes.end())
+        if (spellAuraTypeItr != sSpellWorkJson->_spellAuraTypes.end())
         {
             auraTypeId = spellAuraTypeItr->first;
         }
