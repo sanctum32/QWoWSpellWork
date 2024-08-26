@@ -243,19 +243,19 @@ void MainWindow::PerformSpellSearch()
 
     resultList->setRowCount(static_cast<int>(foundEntries.size()));
     int rowId = 0;
-    for (const auto& [spellId, spellname] : foundEntries)
+    for (const auto& [_spellId, _spellname] : foundEntries)
     {
         // Set id
         {
-            auto* id = new QTableWidgetItem();
-            id->setData(Qt::EditRole, spellId);
-            resultList->setItem(rowId, 0, id);
+            auto* idWidget = new QTableWidgetItem();
+            idWidget->setData(Qt::EditRole, _spellId);
+            resultList->setItem(rowId, 0, idWidget);
         }
         // Set name
         {
-            auto* spellName = new QTableWidgetItem();
-            spellName->setData(Qt::EditRole, spellname);
-            resultList->setItem(rowId, 1, spellName);
+            auto* spellNameWidget = new QTableWidgetItem();
+            spellNameWidget->setData(Qt::EditRole, _spellname);
+            resultList->setItem(rowId, 1, spellNameWidget);
         }
 
         ++rowId;

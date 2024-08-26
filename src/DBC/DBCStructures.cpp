@@ -1,47 +1,46 @@
 #include "DBCStructures.hpp"
-#include <iostream>
 
 SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t id = 0;
+    uint8_t colId = 0;
 
-    Id                          = record.getUInt(id++);
-    Effect                      = record.getUInt(id++);
-    EffectAmplitude             = record.getFloat(id++);
-    EffectAura                  = record.getUInt(id++);
-    EffectAuraPeriod            = record.getUInt(id++);
-    EffectBasePoints            = record.getInt(id++);
-    EffectBonusCoefficient      = record.getFloat(id++);
-    EffectChainAmplitude        = record.getFloat(id++);
-    EffectChainTargets          = record.getUInt(id++);
-    EffectDieSides              = record.getInt(id++);
-    EffectItemType              = record.getUInt(id++);
-    EffectMechanic              = record.getUInt(id++);
-    EffectMiscValue             = record.getInt(id++);
-    EffectMiscValueB            = record.getInt(id++);
-    EffectPointsPerResource     = record.getFloat(id++);
-    EffectRadiusIndex           = record.getUInt(id++);
-    EffectRadiusMaxIndex        = record.getUInt(id++);
-    EffectRealPointsPerLevel    = record.getFloat(id++);
+    Id                          = record.getUInt(colId++);
+    Effect                      = record.getUInt(colId++);
+    EffectAmplitude             = record.getFloat(colId++);
+    EffectAura                  = record.getUInt(colId++);
+    EffectAuraPeriod            = record.getUInt(colId++);
+    EffectBasePoints            = record.getInt(colId++);
+    EffectBonusCoefficient      = record.getFloat(colId++);
+    EffectChainAmplitude        = record.getFloat(colId++);
+    EffectChainTargets          = record.getUInt(colId++);
+    EffectDieSides              = record.getInt(colId++);
+    EffectItemType              = record.getUInt(colId++);
+    EffectMechanic              = record.getUInt(colId++);
+    EffectMiscValue             = record.getInt(colId++);
+    EffectMiscValueB            = record.getInt(colId++);
+    EffectPointsPerResource     = record.getFloat(colId++);
+    EffectRadiusIndex           = record.getUInt(colId++);
+    EffectRadiusMaxIndex        = record.getUInt(colId++);
+    EffectRealPointsPerLevel    = record.getFloat(colId++);
 
-    for (uint32_t& classMask : EffectSpellClassMask)
+    for (auto& classMask : EffectSpellClassMask)
     {
-        classMask = record.getUInt(id++);
+        classMask = record.getUInt(colId++);
     }
 
-    EffectTriggerSpell          = record.getUInt(id++);
-    EffectImplicitTargetA       = record.getUInt(id++);
-    EffectImplicitTargetB       = record.getUInt(id++);
-    SpellID                     = record.getUInt(id++);
-    EffectIndex                 = record.getUInt(id++);
-    EffectAttributes            = record.getUInt(id++);
+    EffectTriggerSpell          = record.getUInt(colId++);
+    EffectImplicitTargetA       = record.getUInt(colId++);
+    EffectImplicitTargetB       = record.getUInt(colId++);
+    SpellID                     = record.getUInt(colId++);
+    EffectIndex                 = record.getUInt(colId++);
+    //EffectAttributes            = record.getUInt(id++);
 }
 
 SpellCategoryEntry::SpellCategoryEntry(DBCFileLoader::Record const& record)
 {
     Id = record.getUInt(0);
-    Flags = record.getUInt(1);
-    UsesPerWeek = record.getUInt(2);
+    //Flags = record.getUInt(1);
+    //UsesPerWeek = record.getUInt(2);
     Name = record.getString(3);
 }
 
@@ -53,7 +52,7 @@ SpellCategoriesEntry::SpellCategoriesEntry(DBCFileLoader::Record const& record)
     DispelType                  = record.getUInt(3);
     Mechanic                    = record.getUInt(4);
     PreventionType              = record.getUInt(5);
-    StartRecoveryCategory       = record.getUInt(6);
+    //StartRecoveryCategory       = record.getUInt(6);
 }
 
 SpellClassOptionsEntry::SpellClassOptionsEntry(DBCFileLoader::Record const& record)
@@ -79,12 +78,18 @@ SpellTargetRestrictionsEntry::SpellTargetRestrictionsEntry(DBCFileLoader::Record
 
 SpellShapeshiftEntry::SpellShapeshiftEntry(DBCFileLoader::Record const& record)
 {
-    Id                  = record.getUInt(0);
-    StancesNot          = record.getUInt(1);
-    unk_320_2           = record.getUInt(2);
-    Stances             = record.getUInt(3);
-    unk_320_3           = record.getUInt(4);
-    StanceBarOrder      = record.getUInt(5);
+    uint8_t colId = 0;
+    Id                  = record.getUInt(colId++);
+
+    for (auto& mask : ShapeshiftMask)
+    {
+        mask = record.getUInt(colId++);
+    }
+
+    for (auto& excludeMask : ShapeshiftExclude)
+    {
+        excludeMask = record.getUInt(colId++);
+    }
 }
 
 SkillLineAbilityEntry::SkillLineAbilityEntry(DBCFileLoader::Record const& record)
@@ -333,6 +338,7 @@ ScreenEffectEntry::ScreenEffectEntry(DBCFileLoader::Record const& record)
 {
     Id = record.getUInt(0);
     Name = record.getString(1);
+    /*
     Unk0 = record.getUInt(2);
     Unk1 = record.getFloat(3);
     Unk2 = record.getUInt(4);
@@ -342,6 +348,7 @@ ScreenEffectEntry::ScreenEffectEntry(DBCFileLoader::Record const& record)
     Unk6 = record.getUInt(8);
     Unk7 = record.getUInt(9);
     Unk8 = record.getInt(10);
+    */
 }
 
 SpellRadiusEntry::SpellRadiusEntry(DBCFileLoader::Record const& record)
