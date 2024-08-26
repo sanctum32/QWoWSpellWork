@@ -174,6 +174,10 @@ inline void PrintTargetRestrictions(QString& result, uint32_t SpellTargetRestric
 
         result += "<br>";
         result += QString("MaxAffectedTargets = %1<br>").arg(targetCount);
+        if (spellRestrictionsEntry->ConeAngle > 0.0f)
+        {
+            result += QString("Effected cone angle: %1<br>").arg(spellRestrictionsEntry->ConeAngle);
+        }
     }
 
     if (const auto* spellLevel = GetDBCEntry(SpellLevelsId, sDBCStores->m_SpellLevelsEntries))
