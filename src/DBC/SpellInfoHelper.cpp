@@ -1198,9 +1198,9 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         }
 
         QString result;
-        for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+        for (uint8_t id = 1; id <= MAX_UINT32_BITMASK_INDEX; ++id)
         {
-            const uint32_t flag = 1U << id;
+            const uint32_t flag = 1U << (id - 1);
             if ((value & flag) == 0)
             {
                 continue;
@@ -1211,7 +1211,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
                 result += ", ";
             }
 
-            result += sSpellWorkJson->GetSpellMechanicName(flag);
+            result += sSpellWorkJson->GetSpellMechanicName(id);
         }
 
         if (result.isEmpty())
