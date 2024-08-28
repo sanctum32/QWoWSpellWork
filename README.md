@@ -16,11 +16,12 @@ Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB cli
 *To run application, you must have extracted '4.3.4 (build 15595)" dbcs archive files (not provided in this project).*
 *json folder contains necessary definitions*
 
-## Requirements:
+### Requirements:
+* CMake 3.5 (or higher)
 * Qt5 or Qt6 framework libraries
 * C++ compiler with C++20 standart support
 
-Steps:
+### Final setup steps:
 1. Copy dbc files to dbc folder in the application executable folder ("appExecutableFolder"/dbc).
 2. Copy [json folder](json) to application executable folder ("appExecutableFolder"/json)
 3. The application should be ready to be started.
