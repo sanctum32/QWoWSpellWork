@@ -1,8 +1,8 @@
-Terms:
+# Terms:
 
-**Misc value**, **Misc valueB - Spell effect's misc value, this field could have bitmask values or direct entries leading to definitions, dbc entries
+Misc value, Misc valueB - Spell effect's misc values. These field could have bitmask values, direct entries leading to definitions, dbc entries or actual effect values
 
-Symbols:
+# Symbols:
 
 | Format symbol | Description | Extra |
 | --- | --- | --- |
