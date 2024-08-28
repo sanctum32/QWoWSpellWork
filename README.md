@@ -21,8 +21,8 @@ Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB cli
 * C++ compiler with C++20 standart support
 
 Steps:
-1. Copy dbc files to dbc folder in the application executable folder (<appExecutableFolder>/dbc).
-2. Copy [json folder](json) to application executable folder (<appExecutableFolder>/json)
+1. Copy dbc files to dbc folder in the application executable folder ("appExecutableFolder"/dbc).
+2. Copy [json folder](json) to application executable folder ("appExecutableFolder"/json)
 3. The application should be ready to be started.
 
 Notes: statusbar at the bottom will indicate the status if DBC and JSON information was loaded successfully
