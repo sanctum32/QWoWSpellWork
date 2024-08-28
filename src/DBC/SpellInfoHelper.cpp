@@ -1060,12 +1060,22 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", EffectMiscValue }, { ":MiscValueB:", EffectMiscValueB } }};
     for (const auto& [strToRep, value] : miscValues)
     {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
         formattedStr->replace(strToRep, QString::number(value));
     }
 
     const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", EffectMiscValue }, { ":AreaEntryNameMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : areaEntryNames)
     {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
         const auto* areaInfo = GetDBCEntry(value, sDBCStores->m_AreaTableEntries);
         formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->AreaName.c_str() : "Unknown");
     }
@@ -1073,6 +1083,11 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     const std::array<const strRepFormatData, 2> modStat = {{ {":ModStatNameMiscVal:", EffectMiscValue }, { ":ModStatNameMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : modStat)
     {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
         const auto& statName = sSpellWorkJson->GetUnitModName(value);
         formattedStr->replace(strToRep, statName);
     }
@@ -1080,6 +1095,11 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", EffectMiscValue }, { ":FactionNameMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : factionName)
     {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
         if (const auto* factionEntry = GetDBCEntry(value, sDBCStores->m_FactionEntries))
         {
             formattedStr->replace(strToRep, factionEntry->Name.c_str());
@@ -1093,6 +1113,11 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", EffectMiscValue }, { ":CBRatingListMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : combatRating)
     {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
         QString ratingsStr;
         for (uint8_t ratingId = 0; ratingId <= MAX_UINT32_BITMASK_INDEX; ++ratingId)
         {
@@ -1118,6 +1143,11 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", EffectMiscValue }, { ":ScreenEffectMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : screenEffect)
     {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
         const auto* _screenEffect = GetDBCEntry(value, sDBCStores->m_ScreenEffectEntries);
         formattedStr->replace(strToRep, _screenEffect != nullptr ? _screenEffect->Name.c_str() : "unknown");
     }
@@ -1125,6 +1155,11 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", EffectMiscValue }, { ":OverrideSpellListMiscValB:", EffectMiscValueB } }};
     for (auto const& [strToRep, value] : overrideSpellList)
     {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
         const auto* spellOverride = GetDBCEntry(value, sDBCStores->m_OverrideSpellDataEntries);
         if (spellOverride == nullptr)
         {
@@ -1152,6 +1187,39 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
 
             formattedStr->replace(strToRep, result);
         }
+    }
+
+    const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunitiesMiscVal:", EffectMiscValue }, { ":MechanicImmunitiesMiscValB:", EffectMiscValueB } }};
+    for (auto const& [strToRep, value] : mechanicImmunities)
+    {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
+        QString result;
+        for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+        {
+            const uint32_t flag = 1U << id;
+            if ((value & flag) == 0)
+            {
+                continue;
+            }
+
+            if (!result.isEmpty())
+            {
+                result += ", ";
+            }
+
+            result += sSpellWorkJson->GetSpellMechanicName(flag);
+        }
+
+        if (result.isEmpty())
+        {
+            result = sSpellWorkJson->GetSpellMechanicName(MECHANIC_NONE);
+        }
+
+        formattedStr->replace(strToRep, result);
     }
 
     return formattedStr;

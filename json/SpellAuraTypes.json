@@ -39,7 +39,7 @@
     { "Id":37, "Name":"SPELL_AURA_EFFECT_IMMUNITY", "EffectDetail": null },
     { "Id":38, "Name":"SPELL_AURA_STATE_IMMUNITY", "EffectDetail": null },
     { "Id":39, "Name":"SPELL_AURA_SCHOOL_IMMUNITY", "EffectDetail": null },
-    { "Id":40, "Name":"SPELL_AURA_DAMAGE_IMMUNITY", "EffectDetail": null },
+    { "Id":40, "Name":"SPELL_AURA_DAMAGE_IMMUNITY", "EffectDetail": "Effected mechanic immunities: :MechanicImmunitiesMiscVal:" },
     { "Id":41, "Name":"SPELL_AURA_DISPEL_IMMUNITY", "EffectDetail": null },
     { "Id":42, "Name":"SPELL_AURA_PROC_TRIGGER_SPELL", "EffectDetail": null },
     { "Id":43, "Name":"SPELL_AURA_PROC_TRIGGER_DAMAGE", "EffectDetail": null },
