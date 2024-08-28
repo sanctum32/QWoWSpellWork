@@ -5,7 +5,7 @@ Terms:
 Symbols:
 
 | Format symbol | Description | Extra |
-| --- | --- |
+| --- | --- | --- |
 | :MiscValue: | Prints effect's misc value | Misc value |
 | :MiscValueB: | Prints effect's misc value | Misc valueB |
 | :AreaEntryNameMiscVal: | Prints area entry name. | Area entry by Misc value |
