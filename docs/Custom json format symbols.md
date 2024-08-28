@@ -20,5 +20,5 @@ Symbols:
 | :ScreenEffectMiscValB: | Prints screen effect name | Screen entry by Misc value |
 | :OverrideSpellListMiscVal: | Prints spell override list | Override list entry by Misc value |
 | :OverrideSpellListMiscValB: | Prints spell override list | Override list entry by Misc valueB |
-| :MechanicImmunitiesMiscVal: | Prints mechanic immunity types list | Mechanic type names are extracted from Misc value bitmask |
-| :MechanicImmunitiesMiscValB: | Prints mechanic immunity types list | Mechanic type names are extracted from MiscB value bitmask |
+| :MechanicImmunitiesMiscVal: | Prints mechanic immunity type names list | Mechanic type names are extracted from Misc value bitmask |
+| :MechanicImmunitiesMiscValB: | Prints mechanic immunity type names list | Mechanic type names are extracted from MiscB value bitmask |
