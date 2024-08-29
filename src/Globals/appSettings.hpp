@@ -1,25 +1,50 @@
 #pragma once
+
 #include <QLoggingCategory>
 #include <QString>
 
-namespace QSpellWork
+struct SQLSettings
 {
-    struct AppSettings
-    {
-        struct{
-            QString Hostname;
-            QString Port;
-            QString Username;
-            QString Password;
-            QString WorldDB;
-            bool enable;
-        } sql;
+    QString Hostname;
+    unsigned int Port;
+    QString Username;
+    QString Password;
+    QString WorldDB;
+    bool enable;
+};
 
 #ifdef _WIN32
-        bool darkMode{false};      // Only windows
+struct AppSettings
+{
+    bool enableDarkMode;
+};
 #endif // _WIN32
-    };
 
-    extern AppSettings settings;
+class SpellWorkConfig
+{
+    SpellWorkConfig() = default;
+    SQLSettings m_sql;
+
+#ifdef _WIN32
+    AppSettings m_appSettings;
+#endif // _WIN32
+
+public:
+    SpellWorkConfig(const SpellWorkConfig&) = delete;
+    SpellWorkConfig& operator=(const SpellWorkConfig&) = delete;
+
+    static SpellWorkConfig* instance()
+    {
+        static SpellWorkConfig _instance;
+        return &_instance;
+    }
+
     void ReadSettings();
-}
+
+    const SQLSettings& GetSQLConfig() const { return m_sql; }
+#ifdef _WIN32
+    const AppSettings& GetAppConfig() const { return m_appSettings; }
+#endif // _WIN32
+};
+
+#define sSpellWorkConfig SpellWorkConfig::instance()

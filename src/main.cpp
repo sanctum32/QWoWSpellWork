@@ -20,14 +20,6 @@ constexpr std::string_view StatusBarSeparator = "  <span style=\"color: yellow\"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QSpellWork::ReadSettings();
-
-#ifdef _WIN32
-    if (QSpellWork::settings.darkMode)
-    {
-        a.setStyle("fusion");
-    }
-#endif
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -39,10 +31,20 @@ int main(int argc, char *argv[])
         }
     }
 
-    const bool dbcLoaded = sDBCStores->LoadDBCDatas();
-
     QLoggingCategory::setFilterRules("spellwork.json.debug=true");
+    sSpellWorkConfig->ReadSettings();
+
+    // Read settings
+#ifdef _WIN32
+    if (sSpellWorkConfig->GetAppConfig().enableDarkMode)
+    {
+        a.setStyle("fusion");
+    }
+#endif
+
+    const bool dbcLoaded = sDBCStores->LoadDBCDatas();
     const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
+
     MainWindow w;
     QLabel statusLabel;
 
