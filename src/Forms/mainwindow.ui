@@ -102,7 +102,7 @@
              <bool>true</bool>
             </property>
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -110,62 +110,73 @@
             <property name="maximumSize">
              <size>
               <width>309</width>
-              <height>103</height>
+              <height>16777215</height>
              </size>
             </property>
             <property name="title">
-             <string>Spell Search (Id or name)</string>
+             <string>Spell Search</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="1">
               <widget class="QPushButton" name="searchBtn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Search</string>
                </property>
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QLineEdit" name="spellIdNameInput"/>
+              <widget class="QLineEdit" name="spellIdNameInput">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="inputMethodHints">
+                <set>Qt::InputMethodHint::ImhNone</set>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>Id or name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="searchByIdCheckBox">
+               <property name="text">
+                <string>By id</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="seearchByNameCheckBox">
+               <property name="text">
+                <string>By name</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="searchOptions">
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QCheckBox" name="searchByIdCheckBox">
-              <property name="text">
-               <string>By id</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="seearchByNameCheckBox">
-              <property name="text">
-               <string>By name</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="serverSideCheckBox">
-              <property name="text">
-               <string>Server side</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
           <item>
            <widget class="QGroupBox" name="ResultsGroup">
@@ -234,6 +245,9 @@
             </property>
             <item>
              <widget class="QLabel" name="levelScalingText">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Scaling level: 1</string>
               </property>
@@ -241,6 +255,9 @@
             </item>
             <item>
              <widget class="QSlider" name="levelScalingSlider">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>
@@ -544,9 +561,7 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionSettings"/>
     <addaction name="separator"/>
-    <addaction name="menuExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -567,22 +582,6 @@
     <bool>false</bool>
    </property>
   </widget>
-  <action name="actionSettings">
-   <property name="icon">
-    <iconset theme="preferences-desktop"/>
-   </property>
-   <property name="text">
-    <string>&amp;Settings</string>
-   </property>
-  </action>
-  <action name="menuExit">
-   <property name="icon">
-    <iconset theme="application-exit"/>
-   </property>
-   <property name="text">
-    <string>&amp;Exit</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

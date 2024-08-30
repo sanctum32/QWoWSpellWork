@@ -64,7 +64,6 @@ void MainWindow::PerformSpellSearch()
 
     const bool searchById = ui.searchByIdCheckBox->isChecked();
     const bool searchByName = ui.seearchByNameCheckBox->isChecked();
-    const bool includeServerSide = ui.serverSideCheckBox->isChecked();
 
     if (!searchById && !searchByName)
     {
@@ -169,11 +168,6 @@ void MainWindow::PerformSpellSearch()
     std::map<uint32_t /*spell*/, QString /*name*/> foundEntries;
     for (const auto& [_id, _spellInfo] : sDBCStores->m_spellEntries)
     {
-        if (_spellInfo.m_IsServerSide && !includeServerSide)
-        {
-            continue;
-        }
-
         bool canInsert = spellNameOrId.isEmpty();
         if (!canInsert && searchById && spellId != 0 && _id == spellId)
         {
