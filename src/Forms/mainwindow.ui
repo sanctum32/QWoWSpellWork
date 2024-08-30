@@ -560,6 +560,9 @@
    <property name="layoutDirection">
     <enum>Qt::LayoutDirection::RightToLeft</enum>
    </property>
+   <property name="styleSheet">
+    <string notr="true">padding: 5px;</string>
+   </property>
    <property name="sizeGripEnabled">
     <bool>false</bool>
    </property>

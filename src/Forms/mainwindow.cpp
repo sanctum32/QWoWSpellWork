@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     ui.resultList->horizontalHeader()->resizeSection(0, 55);
 
     // statusBar
-    ui.statusBar->setStyleSheet("padding: 5px;");
 
     // SpellFamilyFilter
     for (const auto& spellFamily : sSpellWorkJson->SpellFamilyInfo)
