@@ -148,7 +148,7 @@ if (COPY_EXTRA_FILES)
     add_custom_command(
         TARGET QSpellWork POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/qtlogging.ini"
-            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/qtlogging.ini"
+            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/qtlogging.ini.const"
+            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/qtlogging.ini.const"
     )
 endif()

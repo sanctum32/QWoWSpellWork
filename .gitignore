@@ -76,3 +76,10 @@ build*
 *.dll
 *.exe
 
+# project related
+appSettings.json
+qtlogging.ini
+*.dbc
+*mysql.dll
+*mariadb.dll
+
