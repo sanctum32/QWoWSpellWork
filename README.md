@@ -6,7 +6,7 @@ Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB cli
 ## Features:
 * Cross platform. Runs in Windows and Linux system natively
 * Displays spell and spell effect information
-* Dark UI mode in Windows systems
+* Themes support
 * Native look in Linux systems (OS X is not tested)
 * JSON data support (mainly used to define definitions names and descriptions)
 * JSON formatting - It is possible to customize spell related descriptions without making application code changes

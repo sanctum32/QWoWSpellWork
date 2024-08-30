@@ -137,6 +137,13 @@ if (COPY_EXTRA_FILES)
             "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/json"
     )
 
+    add_custom_command(
+        TARGET QSpellWork POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/themes"
+            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/themes"
+    )
+
     # copy qtlogging.ini
     add_custom_command(
         TARGET QSpellWork POST_BUILD

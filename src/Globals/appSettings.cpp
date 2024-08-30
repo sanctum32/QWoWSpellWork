@@ -14,9 +14,7 @@ bool SpellWorkConfig::ReadSettings()
 
         const auto& document = json.object();
 
-#ifdef _WIN32
-        m_appSettings.enableDarkMode = document.value("WindowsDarkMode").toBool();
-#endif
+        m_appSettings.themeName = document.value("ThemeName").toString();
         m_appSettings.loadDBCSpells = document.value("LoadDBCSpells").toBool();
         m_appSettings.loadSQLSpells = document.value("LoadSQLSpells").toBool();
 

@@ -1,0 +1,21 @@
+QToolTip {
+    color: #ffffff;
+    background-color: #2a82da;
+    border: 1px solid white;
+}
+QWidget {
+    background-color: #353535;
+    color: #ffffff;
+}
+QPushButton {
+    background-color: #565656;
+    border: none;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: #757575;
+}
+QLineEdit {
+    background-color: #454545;
+    color: #ffffff;
+}

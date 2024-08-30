@@ -1,5 +1,5 @@
 {
-    "WindowsDarkMode" : true,
+    "ThemeName" : "materialDarkDefault",
     "LoadDBCSpells": true,
     "LoadSQLSpells": true,
     "Sql":

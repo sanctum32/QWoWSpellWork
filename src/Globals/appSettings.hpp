@@ -18,9 +18,7 @@ struct SQLSettings
 
 struct AppSettings
 {
-#ifdef _WIN32
-    bool enableDarkMode;
-#endif // _WIN32
+    QString themeName;
     bool loadDBCSpells;
     bool loadSQLSpells;
 };

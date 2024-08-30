@@ -1,0 +1,37 @@
+QToolTip {
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+}
+QWidget {
+    background-color: #222222;
+    color: #ffffff;
+}
+QPushButton {
+    background-color: #37474F;  // Blue Gray
+    border: 1px solid #546E7A;  // Darker Blue Gray
+    padding: 8px;
+    color: #ffffff;
+}
+QPushButton:hover {
+    background-color: #455A64;  // Hover Blue Gray
+}
+QLineEdit {
+    background-color: #303030;
+    color: #ffffff;
+}
+QCheckBox {
+    spacing: 5px;
+}
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+}
+QCheckBox::indicator:checked {
+    background-color: #FF9800;  // Amber
+    border: 1px solid #757575;
+}
+QCheckBox::indicator:unchecked {
+    background-color: #37474F;  // Blue Gray
+    border: 1px solid #757575;
+}
