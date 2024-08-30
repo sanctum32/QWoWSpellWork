@@ -6,9 +6,6 @@
 
 Q_DECLARE_LOGGING_CATEGORY(SQL)
 
-// Forwarded defs
-struct SQLSettings;
-
 class SpellWorkSQL
 {
     std::thread m_pingThread;

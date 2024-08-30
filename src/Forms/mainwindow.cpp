@@ -1,5 +1,4 @@
 #include "mainwindow.hpp"
-#include "SQL/sqlConnection.hpp"
 #include "ui/ui_mainwindow.h"
 #include "JsonData/JsonData.hpp"
 #include <QCloseEvent>
