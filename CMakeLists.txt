@@ -13,6 +13,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
+include(CMake/FindMySQL.cmake)
+
 set(TS_FILES
     src/Translations/QSpellWork_en_GB.ts
 )
@@ -37,6 +39,8 @@ set(PROJECT_SOURCES
     src/JsonData/JsonData.cpp
     src/Globals/appSettings.hpp
     src/Globals/appSettings.cpp
+    src/SQL/sqlConnection.hpp
+    src/SQL/sqlConnection.cpp
     src/main.cpp
     ${UI_FILES}
     ${TS_FILES}
@@ -75,7 +79,10 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(QSpellWork PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(QSpellWork PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    ${MySQL_LIBRARIES}
+)
 
 set_target_properties(QSpellWork PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -93,7 +100,7 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(QSpellWork)
 endif()
 
-target_include_directories(QSpellWork PUBLIC
+target_include_directories(QSpellWork PRIVATE
     src
     src/DBC
     src/Enums
@@ -101,4 +108,9 @@ target_include_directories(QSpellWork PUBLIC
     src/JsonData
     src/Translations
     src/Forms
+    ${MySQL_INCLUDE_DIRS}
+)
+
+target_link_directories(QSpellWork PRIVATE
+    ${MySQL_INCLUDE_DIRS}
 )

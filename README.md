@@ -4,15 +4,15 @@ The tool is written in C++ and uses Qt UI framework.
 Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB client)
 
 ## Features:
-* Cross platform - can run in Windows and Linux system natively
-* Displays spell information
-* Has dark UI mode in Windows systems
-* Has native look in Linux systems (OS X is not tested)
-* Has JSON data support (mainly used to define definitions names and descriptions)
-* Has custom JSON formatting - It is possible to customize spell related descriptions without making application code changes
+* Cross platform. Runs in Windows and Linux system natively
+* Displays spell and spell effect information
+* Dark UI mode in Windows systems
+* Native look in Linux systems (OS X is not tested)
+* JSON data support (mainly used to define definitions names and descriptions)
+* JSON formatting - It is possible to customize spell related descriptions without making application code changes
+* MariaDB/MySQL connection support. Currently supports only "Cataclysm preservation project's" trinitycore database structure
 
 ## Setup:
-
 *To run application, you must have extracted '4.3.4 (build 15595)" dbcs archive files (not provided in this project).*
 *json folder contains necessary definitions*
 

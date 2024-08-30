@@ -1,7 +1,6 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
-#include <memory>
+#include "ui/ui_mainwindow.h"
 #include <QMainWindow>
 #include <QLabel>
 
@@ -20,6 +19,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void UpdateSqlStatus(bool success);
+    void UpdateDBCStatus(bool success);
+    void UpdateJsonStatus(bool success);
+
 private slots:
     void onSearchBtnClicked();
     void onSpellIdNameInputReturnPressed();
@@ -27,9 +30,13 @@ private slots:
     void onLevelScalingSliderValueChange();
 
 private:
-    std::unique_ptr<Ui::MainWindow> ui;
+    Ui::MainWindow ui;
+    QLabel m_dbcStatus;
+    QLabel m_jsonStatus;
+    QLabel m_sqlStatus;
 
-    // Generic functions
+// Generic functions
     void PerformSpellSearch();
 };
-#endif // MAINWINDOW_H
+
+extern MainWindow* _mainWindow;

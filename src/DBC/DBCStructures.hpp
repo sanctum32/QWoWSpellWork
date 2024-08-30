@@ -1,5 +1,4 @@
-#ifndef DBC_STRUCTURES_H
-#define DBC_STRUCTURES_H
+#pragma once
 
 #include "DBCFileLoader.hpp"
 #include "../Enums/SpellEnums.hpp"
@@ -553,6 +552,8 @@ struct SpellEntry
 {
     SpellEntry() = default;
     explicit SpellEntry(DBCFileLoader::Record const& record);
+    SpellEntry(const SpellEntry&) = default;
+    SpellEntry& operator=(const SpellEntry&) = default;
 
     uint32_t    Id{};                                        // 0        m_ID
     std::array<uint32_t, MAX_SPELL_ATTRIBUTES> Attributes{};  // 1 - 11   m_attribute
@@ -610,9 +611,10 @@ struct SpellEntry
     QString const PrintBaseInfo(uint32_t scalingLevel) const;
     QString const PrintSpellEffectInfo(uint32_t scalingLevel) const;
 
-    QString _spellName;
-
+    // Other data
+    QString m_spellNameUpper;   // Used only for search
     std::array<const SpellEffectEntry*, MAX_SPELL_EFFECTS> m_spellEffects{};
+    bool m_IsServerSide{false};
 };
 
 struct FactionEntry
@@ -638,5 +640,3 @@ struct FactionEntry
         return "ixxxxxxxxxxxxxxxxxxxxxxsxx";
     }
 };
-
-#endif // DBC_H

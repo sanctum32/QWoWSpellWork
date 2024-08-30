@@ -1,5 +1,4 @@
-#ifndef SPELLENUMS_H
-#define SPELLENUMS_H
+#pragma once
 #include <cstdint>
 
 enum : uint8_t
@@ -1687,5 +1686,3 @@ enum SpellFamilyNames : uint8_t
     SPELLFAMILY_PET         = 17,
     SPELLFAMILY_UNK3        = 50,
 };
-
-#endif // SPELLENUMS_H

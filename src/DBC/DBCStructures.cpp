@@ -414,7 +414,7 @@ SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
         Description = "-- No description --";
     }
 
-    _spellName = QString(SpellName.c_str()).toUpper();
+    m_spellNameUpper = QString(SpellName.c_str()).toUpper();
 }
 
 FactionEntry::FactionEntry(DBCFileLoader::Record const& record)

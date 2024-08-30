@@ -95,7 +95,7 @@
          <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="LeftSide">
           <item>
            <widget class="QGroupBox" name="SearchGroup">
             <property name="enabled">
@@ -117,43 +117,6 @@
              <string>Spell Search (Id or name)</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="1" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <item>
-                <widget class="QCheckBox" name="searchByIdCheckBox">
-                 <property name="text">
-                  <string>By id</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="seearchByNameCheckBox">
-                 <property name="text">
-                  <string>By name</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Orientation::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
              <item row="0" column="1">
               <widget class="QPushButton" name="searchBtn">
                <property name="text">
@@ -166,6 +129,43 @@
              </item>
             </layout>
            </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="searchOptions">
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="searchByIdCheckBox">
+              <property name="text">
+               <string>By id</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="seearchByNameCheckBox">
+              <property name="text">
+               <string>By name</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="serverSideCheckBox">
+              <property name="text">
+               <string>Server side</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QGroupBox" name="ResultsGroup">
@@ -226,7 +226,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
+         <layout class="QVBoxLayout" name="RightSide">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <property name="sizeConstraint">

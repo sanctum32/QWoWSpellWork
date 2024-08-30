@@ -5,29 +5,31 @@
 
 struct SQLSettings
 {
-    QString Hostname;
-    unsigned int Port;
-    QString Username;
-    QString Password;
-    QString WorldDB;
+    QString hostname;
+    unsigned int port;
+    QString username;
+    QString password;
+    QString worldDB;
+    unsigned int pingDelayInMS;
     bool enable;
+    bool canReconnect;
 };
 
-#ifdef _WIN32
+
 struct AppSettings
 {
+#ifdef _WIN32
     bool enableDarkMode;
-};
 #endif // _WIN32
+    bool loadDBCSpells;
+    bool loadSQLSpells;
+};
 
 class SpellWorkConfig
 {
     SpellWorkConfig() = default;
     SQLSettings m_sql;
-
-#ifdef _WIN32
     AppSettings m_appSettings;
-#endif // _WIN32
 
 public:
     SpellWorkConfig(const SpellWorkConfig&) = delete;
@@ -39,12 +41,10 @@ public:
         return &_instance;
     }
 
-    void ReadSettings();
+    bool ReadSettings();
 
     const SQLSettings& GetSQLConfig() const { return m_sql; }
-#ifdef _WIN32
     const AppSettings& GetAppConfig() const { return m_appSettings; }
-#endif // _WIN32
 };
 
 #define sSpellWorkConfig SpellWorkConfig::instance()

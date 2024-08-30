@@ -3,9 +3,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-void SpellWorkConfig::ReadSettings()
+bool SpellWorkConfig::ReadSettings()
 {
-    SpellWorkJson::OpenJson("./json/appSettings.json", [&](const QJsonDocument& json)
+    return SpellWorkJson::OpenJson("./json/appSettings.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())
         {
@@ -17,16 +17,20 @@ void SpellWorkConfig::ReadSettings()
 #ifdef _WIN32
         m_appSettings.enableDarkMode = document.value("WindowsDarkMode").toBool();
 #endif
+        m_appSettings.loadDBCSpells = document.value("LoadDBCSpells").toBool();
+        m_appSettings.loadSQLSpells = document.value("LoadSQLSpells").toBool();
 
         if (document.value("Sql").isObject())
         {
             const auto& sqlJson = document.value("Sql").toObject();
             m_sql.enable    = sqlJson.value("Enable").toBool();
-            m_sql.Hostname  = sqlJson.value("Hostname").toString();
-            m_sql.Port      = sqlJson.value("Port").toInt();
-            m_sql.Username  = sqlJson.value("Username").toString();
-            m_sql.Username  = sqlJson.value("Password").toString();
-            m_sql.WorldDB   = sqlJson.value("WorldDB").toString();
+            m_sql.hostname  = sqlJson.value("Hostname").toString();
+            m_sql.port      = sqlJson.value("Port").toInt();
+            m_sql.username  = sqlJson.value("Username").toString();
+            m_sql.password  = sqlJson.value("Password").toString();
+            m_sql.worldDB   = sqlJson.value("WorldDB").toString();
+            m_sql.pingDelayInMS = sqlJson.value("PingDelayInMS").toInt();
+            m_sql.canReconnect = sqlJson.value("CanReconnect").toBool();
         }
 
         return true;

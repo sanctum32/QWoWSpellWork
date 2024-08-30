@@ -1,8 +1,10 @@
-#ifndef DBCSTORES_H
-#define DBCSTORES_H
+#pragma once
 
+#include <QLoggingCategory>
 #include <map>
 #include "DBCStructures.hpp"
+
+Q_DECLARE_LOGGING_CATEGORY(DBCStores)
 
 class DBCStore
 {
@@ -13,7 +15,9 @@ public:
         return &dbc;
     }
 
+    bool LoadData();
     bool LoadDBCDatas();
+    bool LoadSqlDBCData();
 
     // Stores
     std::map<uint32_t, SpellEntry>                   m_spellEntries;                             // Spell.dbc
@@ -60,5 +64,3 @@ T const* GetDBCEntry(uint32_t id, std::map<uint32_t, T> const& storage)
     auto const& itr = storage.find(id);
     return itr != storage.end() ? &(itr->second) : nullptr;
 }
-
-#endif // DBCSTORES_H

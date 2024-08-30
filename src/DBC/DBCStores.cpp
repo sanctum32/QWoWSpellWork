@@ -1,4 +1,8 @@
 #include "DBCStores.hpp"
+#include "SQL/sqlConnection.hpp"
+#include "appSettings.hpp"
+
+Q_LOGGING_CATEGORY(DBCStores, "spellwork.dbcstores");
 
 template<class T>
 void ReadDBCRows(DBCFileLoader& dbcFile, std::map<uint32_t, T>& storage)
@@ -9,10 +13,36 @@ void ReadDBCRows(DBCFileLoader& dbcFile, std::map<uint32_t, T>& storage)
     }
 }
 
+bool DBCStore::LoadData()
+{
+    if (!LoadDBCDatas())
+    {
+        return false;
+    }
+
+    if (!LoadSqlDBCData())
+    {
+        return false;
+    }
+
+    // link spell related pointers
+    for (const auto& spellEffectItr : m_SpellEffectEntries)
+    {
+        auto const& effectEntry = spellEffectItr.second;
+        assert(effectEntry.EffectIndex < MAX_SPELL_EFFECTS);
+
+        auto spellEntryItr = m_spellEntries.find(effectEntry.SpellID);
+        if (spellEntryItr != m_spellEntries.end())
+        {
+            spellEntryItr->second.m_spellEffects[effectEntry.EffectIndex] = &effectEntry;
+        }
+    }
+
+    return true;
+}
+
 bool DBCStore::LoadDBCDatas()
 {
-    DBCFileLoader spellDBC("dbc/Spell.dbc", SpellEntry::GetDBCFormat());
-    DBCFileLoader spellEffectDBC("dbc/SpellEffect.dbc", SpellEffectEntry::GetDBCFormat());
     DBCFileLoader spellScalingDBC("dbc/SpellScaling.dbc", SpellEffectEntry::GetDBCFormat());
     DBCFileLoader spellCategoryDBC("dbc/SpellCategory.dbc", SpellCategoryEntry::GetDBCFormat());
     DBCFileLoader spellCategoriesDBC("dbc/SpellCategories.dbc", SpellCategoriesEntry::GetDBCFormat());
@@ -41,9 +71,7 @@ bool DBCStore::LoadDBCDatas()
     DBCFileLoader spellRadiusDBC("dbc/SpellRadius.dbc", SpellRadiusEntry::GetDBCFormat());
     DBCFileLoader factionDBC("dbc/Faction.dbc", FactionEntry::GetDBCFormat());
 
-    if (!spellDBC.IsLoaded() ||
-        !spellEffectDBC.IsLoaded() ||
-        !spellCategoryDBC.IsLoaded() ||
+    if (!spellCategoryDBC.IsLoaded() ||
         !spellCategoriesDBC.IsLoaded() ||
         !spellScalingDBC.IsLoaded() ||
         !spellClassOptionsDBC.IsLoaded() ||
@@ -74,8 +102,20 @@ bool DBCStore::LoadDBCDatas()
         return false;
     }
 
-    ReadDBCRows(spellDBC, m_spellEntries);
-    ReadDBCRows(spellEffectDBC, m_SpellEffectEntries);
+    if (sSpellWorkConfig->GetAppConfig().loadDBCSpells)
+    {
+        DBCFileLoader spellDBC("dbc/Spell.dbc", SpellEntry::GetDBCFormat());
+        DBCFileLoader spellEffectDBC("dbc/SpellEffect.dbc", SpellEffectEntry::GetDBCFormat());
+
+        if (!spellDBC.IsLoaded() || !spellEffectDBC.IsLoaded())
+        {
+            return false;
+        }
+
+        ReadDBCRows(spellDBC, m_spellEntries);
+        ReadDBCRows(spellEffectDBC, m_SpellEffectEntries);
+    }
+
     ReadDBCRows(spellCategoryDBC, m_SpellCategoryEntries);
     ReadDBCRows(spellCategoriesDBC, m_SpellCategories);
     ReadDBCRows(spellClassOptionsDBC, m_SpellClassOptions);
@@ -103,18 +143,207 @@ bool DBCStore::LoadDBCDatas()
     ReadDBCRows(spellRadiusDBC, m_SpellRadiusEntries);
     ReadDBCRows(factionDBC, m_FactionEntries);
 
-    // link spell related pointers
-    for (const auto& spellEffectItr : m_SpellEffectEntries)
-    {
-        auto const& effectEntry = spellEffectItr.second;
-        assert(effectEntry.EffectIndex < MAX_SPELL_EFFECTS);
+    return true;
+}
 
-        auto spellEntryItr = m_spellEntries.find(effectEntry.SpellID);
-        if (spellEntryItr != m_spellEntries.end())
-        {
-            spellEntryItr->second.m_spellEffects[effectEntry.EffectIndex] = &effectEntry;
-        }
+bool DBCStore::LoadSqlDBCData()
+{
+    if (!sSpellWorkConfig->GetSQLConfig().enable || !sSpellWorkConfig->GetAppConfig().loadSQLSpells)
+    {
+        return true;
     }
 
+    auto* connection = sSpellWorkSQL->GetConnection();
+    if (connection == nullptr)
+    {
+        return false;
+    }
+
+    // Load spell_dbc
+    {
+        std::stringstream query;
+        query << "SELECT ";
+        query << "`Id`,";                           // 0
+        query << "`Attributes`,";                   // 1
+        query << "`AttributesEx`,";                 // 2
+        query << "`AttributesEx2`,";                // 3
+        query << "`AttributesEx3`,";                // 4
+        query << "`AttributesEx4`,";                // 5
+        query << "`AttributesEx5`,";                // 6
+        query << "`AttributesEx6`,";                // 7
+        query << "`AttributesEx7`,";                // 8
+        query << "`AttributesEx8`,";                // 9
+        query << "`AttributesEx9`,";                // 10
+        query << "`AttributesEx10`,";               // 11
+        query << "`CastingTimeIndex`,";             // 12
+        query << "`DurationIndex`,";                // 13
+        query << "`RangeIndex`,";                   // 14
+        query << "`SchoolMask`,";                   // 15
+        query << "`SpellAuraOptionsId`,";           // 16
+        query << "`SpellCastingRequirementsId`,";   // 17
+        query << "`SpellCategoriesId`,";            // 18
+        query << "`SpellClassOptionsId`,";          // 19
+        query << "`SpellEquippedItemsId`,";         // 20
+        query << "`SpellInterruptsId`,";            // 21
+        query << "`SpellLevelsId`,";                // 22
+        query << "`SpellTargetRestrictionsId`,";    // 23
+        query << "`SpellName`";                     // 24
+        query << " FROM `spell_dbc`";
+
+        if (mysql_query(connection, query.str().c_str()) != 0)
+        {
+            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to execute spell_dbc query. Error: " << mysql_error(connection);
+            return false;
+        }
+
+        auto* result = mysql_store_result(connection);
+        if (result == nullptr)
+        {
+            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
+            return false;
+        }
+
+        uint32_t count = 0;
+        while (auto row = mysql_fetch_row(result))
+        {
+            const uint32_t entry = static_cast<uint32_t>(std::stoul(row[0]));
+            if (entry == 0)
+            {
+                continue;
+            }
+
+            if (m_SpellEffectEntries.contains(entry))
+            {
+                qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: tried to load spell_dbc entry" << QString::number(entry) << ", but entry already exists in storage. Skipped!";
+                continue;
+            }
+
+            SpellEntry spell;
+            spell.m_IsServerSide = true;
+            spell.Id = entry;
+
+            // 1 - 11
+            for (uint8_t i = 0; i < MAX_SPELL_ATTRIBUTES; ++i)
+            {
+                spell.Attributes[0] = static_cast<uint32_t>(atoi(row[1 + i]));
+            }
+
+            spell.CastingTimeIndex      = static_cast<uint32_t>(std::stoul(row[12]));
+            spell.DurationIndex         = static_cast<uint32_t>(std::stoul(row[13]));
+            spell.rangeIndex            = static_cast<uint32_t>(std::stoul(row[14]));
+            spell.SchoolMask            = static_cast<uint32_t>(std::stoul(row[15]));
+            spell.SpellAuraOptionsId    = static_cast<uint32_t>(std::stoul(row[16]));
+            spell.SpellCastingRequirementsId = static_cast<uint32_t>(std::stoul(row[17]));
+            spell.SpellCategoriesId     = static_cast<uint32_t>(std::stoul(row[18]));
+            spell.SpellClassOptionsId   = static_cast<uint32_t>(std::stoul(row[19]));
+            spell.SpellEquippedItemsId  = static_cast<uint32_t>(std::stoul(row[20]));
+            spell.SpellInterruptsId     = static_cast<uint32_t>(std::stoul(row[21]));
+            spell.SpellLevelsId         = static_cast<uint32_t>(std::stoul(row[22]));
+            spell.SpellTargetRestrictionsId = static_cast<uint32_t>(std::stoul(row[23]));
+            spell.SpellName             = row[24];
+            spell.SpellName += " - Server Side";
+            spell.m_spellNameUpper = QString(spell.SpellName.c_str()).toUpper();
+
+
+            m_spellEntries.emplace(entry, spell);
+            ++count;
+        }
+
+        mysql_free_result(result);
+
+        qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spell_dbc";
+    }
+
+    // Load spelleffect_dbc
+    {
+        std::stringstream query;
+        query << "SELECT ";
+        query << "`Id`,";                       // 0
+        query << "`Effect`,";                   // 1
+        query << "`EffectAmplitude`,";          // 2
+        query << "`EffectAura`,";               // 3
+        query << "`EffectAuraPeriod`,";         // 4
+        query << "`EffectBasePoints`,";         // 5
+        query << "`EffectBonusCoefficient`,";   // 6
+        query << "`EffectChainAmplitude`,";     // 7
+        query << "`EffectChainTargets`,";       // 8
+        query << "`EffectDieSides`,";           // 9
+        query << "`EffectItemType`,";           // 10
+        query << "`EffectMechanic`,";           // 11
+        query << "`EffectMiscValue`,";          // 12
+        query << "`EffectMiscValueB`,";         // 13
+        query << "`EffectPointsPerResource`,";  // 14
+        query << "`EffectRadiusIndex`,";        // 15
+        query << "`EffectRadiusMaxIndex`,";     // 16
+        query << "`EffectRealPointsPerLevel`,"; // 17
+        query << "`EffectSpellClassMaskA`,";    // 18
+        query << "`EffectSpellClassMaskB`,";    // 19
+        query << "`EffectSpellClassMaskC`,";    // 20
+        query << "`EffectTriggerSpell`,";       // 21
+        query << "`EffectImplicitTargetA`,";    // 22
+        query << "`EffectImplicitTargetB`,";    // 23
+        query << "`SpellID`,";                  // 24
+        query << "`EffectIndex`";               // 25
+        query << " FROM `spelleffect_dbc`";
+
+        if (mysql_query(connection, query.str().c_str()) != 0)
+        {
+            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to execute spelleffect_dbc query. Error: " << mysql_error(connection);
+            return false;
+        }
+
+        auto* result = mysql_store_result(connection);
+        if (result == nullptr)
+        {
+            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
+            return false;
+        }
+
+        uint32_t count = 0;
+        while (auto row = mysql_fetch_row(result))
+        {
+            const uint32_t entry = static_cast<uint32_t>(std::stoul(row[0]));
+            if (entry == 0)
+            {
+                continue;
+            }
+
+            if (m_SpellEffectEntries.contains(entry))
+            {
+                qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: tried to load spelleffect_dbc entry" << QString::number(entry) << ", but entry already exists in storage. Skipped!";
+                continue;
+            }
+
+            SpellEffectEntry effect;
+            effect.Id                       = entry;
+            effect.Effect                   = static_cast<uint32_t>(std::stoul(row[1]));
+            effect.EffectAmplitude          = std::stof(row[2]);
+            effect.EffectAura               = static_cast<uint32_t>(std::stoul(row[3]));
+            effect.EffectAuraPeriod         = static_cast<uint32_t>(std::stoul(row[4]));
+            effect.EffectBasePoints         = static_cast<uint32_t>(std::stoul(row[5]));
+            effect.EffectBonusCoefficient   = std::stof(row[6]);
+            effect.EffectChainAmplitude     = std::stof(row[7]);
+            effect.EffectChainTargets       = static_cast<uint32_t>(std::stoul(row[8]));
+            effect.EffectDieSides           = static_cast<uint32_t>(std::stoul(row[9]));
+            effect.EffectItemType           = static_cast<uint32_t>(std::stoul(row[10]));
+            effect.EffectMechanic           = static_cast<uint32_t>(std::stoul(row[11]));
+            effect.EffectMiscValue          = static_cast<uint32_t>(std::stoul(row[12]));
+            effect.EffectMiscValueB         = static_cast<uint32_t>(std::stoul(row[13]));
+            effect.EffectPointsPerResource  = std::stof(row[14]);;
+            effect.EffectRadiusIndex        = static_cast<uint32_t>(std::stoul(row[15]));
+            effect.EffectRadiusMaxIndex     = static_cast<uint32_t>(std::stoul(row[16]));
+            effect.EffectRealPointsPerLevel = std::stof(row[17]);
+            effect.EffectSpellClassMask[0]  = static_cast<uint32_t>(std::stoul(row[18]));
+            effect.EffectSpellClassMask[1]  = static_cast<uint32_t>(std::stoul(row[19]));
+            effect.EffectSpellClassMask[2]  = static_cast<uint32_t>(std::stoul(row[20]));
+            effect.EffectTriggerSpell       = static_cast<uint32_t>(std::stoul(row[21]));
+            effect.EffectImplicitTargetA    = static_cast<uint32_t>(std::stoul(row[22]));
+            effect.EffectImplicitTargetB    = static_cast<uint32_t>(std::stoul(row[23]));
+            effect.SpellID                  = static_cast<uint32_t>(std::stoul(row[24]));
+            effect.EffectIndex              = static_cast<uint32_t>(std::stoul(row[25]));
+            m_SpellEffectEntries.emplace(entry, effect);
+        }
+        mysql_free_result(result);
+    }
     return true;
 }

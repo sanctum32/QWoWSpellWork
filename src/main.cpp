@@ -10,6 +10,7 @@
 #include <QDebug>
 
 // App
+#include "SQL/sqlConnection.hpp"
 #include "mainwindow.hpp"
 #include "DBC/DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
@@ -32,7 +33,8 @@ int main(int argc, char *argv[])
     }
 
     QLoggingCategory::setFilterRules("spellwork.json.debug=true");
-    sSpellWorkConfig->ReadSettings();
+    QLoggingCategory::setFilterRules("spellwork.sql.debug=true");
+    QLoggingCategory::setFilterRules("spellwork.dbcstores.debug=true");
 
     // Read settings
 #ifdef _WIN32
@@ -42,34 +44,15 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    const bool dbcLoaded = sDBCStores->LoadDBCDatas();
-    const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
+    sSpellWorkConfig->ReadSettings();
 
-    MainWindow w;
-    QLabel statusLabel;
+    MainWindow mainWindow;
+    mainWindow.UpdateSqlStatus(sSpellWorkSQL->Init());
+    mainWindow.UpdateDBCStatus(sDBCStores->LoadData());
+    mainWindow.UpdateJsonStatus(sSpellWorkJson->LoadJsonData());
 
-    if (dbcLoaded)
-    {
-        statusLabel.setText(statusLabel.text() + "DBC: <span style=\"color:green\">loaded</span>");
-    }
-    else
-    {
-        statusLabel.setText(statusLabel.text() + "DBC: <span style=\"color:red\">not loaded</span>");
-    }
+    _mainWindow = &mainWindow;
+    mainWindow.show();
 
-    statusLabel.setText(statusLabel.text() + StatusBarSeparator.data());
-
-    if (jsonLoaded)
-    {
-        statusLabel.setText(statusLabel.text() + "JSON: <span style=\"color:green\">loaded</span>");
-    }
-    else
-    {
-        statusLabel.setText(statusLabel.text() + "JSON: <span style=\"color:red\">not loaded</span>");
-    }
-
-    w.statusBar()->addPermanentWidget(&statusLabel);
-
-    w.show();
     return a.exec();
 }

@@ -22,7 +22,7 @@ void MainWindow::onSpellIdNameInputReturnPressed()
 
 void MainWindow::onResultListClick(QTableWidgetItem *item)
 {
-    QTableWidgetItem const* spellRowItem = item->column() != 0 ? ui->resultList->item(ui->resultList->row(item), 0) : item;
+    QTableWidgetItem const* spellRowItem = item->column() != 0 ? ui.resultList->item(ui.resultList->row(item), 0) : item;
     if (spellRowItem == nullptr)
     {
         return;
@@ -39,8 +39,8 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
 
     if (const auto* spell = GetDBCEntry(spellId, sDBCStores->m_spellEntries))
     {
-        ui->spellInfoText->setText(spell->PrintBaseInfo(ui->levelScalingSlider->value()));
-        ui->spellEffectInfo->setText(spell->PrintSpellEffectInfo(ui->levelScalingSlider->value()));
+        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()));
+        ui.spellEffectInfo->setText(spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }
 }
 
@@ -49,25 +49,26 @@ void MainWindow::PerformSpellSearch()
 {
     const auto startMS = QDateTime::currentMSecsSinceEpoch();
 
-    auto* resultList = ui->resultList;
+    auto* resultList = ui.resultList;
     resultList->setRowCount(0);
 
     if (sDBCStores->m_spellEntries.empty())
     {
-        ui->ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+        ui.ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
-    const QString spellNameOrId = ui->spellIdNameInput->text().toUpper();
+    const QString spellNameOrId = ui.spellIdNameInput->text().toUpper();
 
     uint32_t spellId = 0;
 
-    bool const searchById = ui->searchByIdCheckBox->isChecked();
-    bool const searchByName = ui->seearchByNameCheckBox->isChecked();
+    const bool searchById = ui.searchByIdCheckBox->isChecked();
+    const bool searchByName = ui.seearchByNameCheckBox->isChecked();
+    const bool includeServerSide = ui.serverSideCheckBox->isChecked();
 
     if (!searchById && !searchByName)
     {
-        ui->ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+        ui.ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
@@ -91,10 +92,10 @@ void MainWindow::PerformSpellSearch()
     std::optional<uint32_t> spellTargetB;
 
     // Spell family filter
-    if (ui->SpellFamilyFilter->currentIndex() != 0)
+    if (ui.SpellFamilyFilter->currentIndex() != 0)
     {
         const auto& spellFamilyItr = std::find_if(sSpellWorkJson->SpellFamilyInfo.begin(), sSpellWorkJson->SpellFamilyInfo.end(),
-            [familyStr = ui->SpellFamilyFilter->currentText()](const auto& spellFamily)
+            [familyStr = ui.SpellFamilyFilter->currentText()](const auto& spellFamily)
         {
             return spellFamily.second == familyStr;
         });
@@ -106,10 +107,10 @@ void MainWindow::PerformSpellSearch()
     }
 
     // Spell aura type filter
-    if (ui->SpellAuraTypeFilter->currentIndex() != 0)
+    if (ui.SpellAuraTypeFilter->currentIndex() != 0)
     {
         const auto& spellAuraTypeItr = std::find_if(sSpellWorkJson->_spellAuraTypes.begin(), sSpellWorkJson->_spellAuraTypes.end(),
-            [auraTypeStr = ui->SpellAuraTypeFilter->currentText()](const auto& spellAuraType)
+            [auraTypeStr = ui.SpellAuraTypeFilter->currentText()](const auto& spellAuraType)
         {
             return spellAuraType.second.name == auraTypeStr;
         });
@@ -121,10 +122,10 @@ void MainWindow::PerformSpellSearch()
     }
 
     // Spell effect filter
-    if (ui->SpellEffectFilter->currentIndex() != 0)
+    if (ui.SpellEffectFilter->currentIndex() != 0)
     {
         const auto& effectNameItr = std::find_if(sSpellWorkJson->_spellEffectInfo.begin(), sSpellWorkJson->_spellEffectInfo.end(),
-            [selectedEffect = ui->SpellEffectFilter->currentText()](const auto& data)
+            [selectedEffect = ui.SpellEffectFilter->currentText()](const auto& data)
         {
             return data.second.name == selectedEffect;
         });
@@ -136,10 +137,10 @@ void MainWindow::PerformSpellSearch()
     }
 
     // TargetA filter
-    if (ui->SpellTargetFilterA->currentIndex() != 0)
+    if (ui.SpellTargetFilterA->currentIndex() != 0)
     {
         const auto& targetNameItr = std::find_if(sSpellWorkJson->SpellTargetNames.begin(), sSpellWorkJson->SpellTargetNames.end(),
-            [selectedTarget = ui->SpellTargetFilterA->currentText()](const auto& spellTarget)
+            [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
         {
             return spellTarget.second == selectedTarget;
         });
@@ -151,10 +152,10 @@ void MainWindow::PerformSpellSearch()
     }
 
     // TargetB filter
-    if (ui->SpellTargetFilterB->currentIndex() != 0)
+    if (ui.SpellTargetFilterB->currentIndex() != 0)
     {
         const auto& targetNameItr = std::find_if(sSpellWorkJson->SpellTargetNames.begin(), sSpellWorkJson->SpellTargetNames.end(),
-            [selectedTarget = ui->SpellTargetFilterA->currentText()](const auto& spellTarget)
+            [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
         {
             return spellTarget.second == selectedTarget;
         });
@@ -168,6 +169,11 @@ void MainWindow::PerformSpellSearch()
     std::map<uint32_t /*spell*/, QString /*name*/> foundEntries;
     for (const auto& [_id, _spellInfo] : sDBCStores->m_spellEntries)
     {
+        if (_spellInfo.m_IsServerSide && !includeServerSide)
+        {
+            continue;
+        }
+
         bool canInsert = spellNameOrId.isEmpty();
         if (!canInsert && searchById && spellId != 0 && _id == spellId)
         {
@@ -175,7 +181,7 @@ void MainWindow::PerformSpellSearch()
         }
 
         // Find by name
-        if (!canInsert && searchByName && _spellInfo._spellName.contains(spellNameOrId))
+        if (!canInsert && searchByName && _spellInfo.m_spellNameUpper.contains(spellNameOrId))
         {
             canInsert = true;
         }
@@ -235,11 +241,11 @@ void MainWindow::PerformSpellSearch()
 
     if (foundEntries.empty())
     {
-        ui->ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+        ui.ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
-    ui->ResultsGroup->setTitle(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+    ui.ResultsGroup->setTitle(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
 
     resultList->setRowCount(static_cast<int>(foundEntries.size()));
     int rowId = 0;
@@ -264,14 +270,14 @@ void MainWindow::PerformSpellSearch()
 
 void MainWindow::onLevelScalingSliderValueChange()
 {
-    ui->levelScalingText->setText(QString("Selected Level %1").arg(ui->levelScalingSlider->value()));
-    const auto* item = ui->resultList->currentItem();
+    ui.levelScalingText->setText(QString("Selected Level %1").arg(ui.levelScalingSlider->value()));
+    const auto* item = ui.resultList->currentItem();
     if (item == nullptr)
     {
         return;
     }
 
-    QTableWidgetItem const* spellRowItem = item->column() != 0 ? ui->resultList->item(ui->resultList->row(item), 0) : item;
+    QTableWidgetItem const* spellRowItem = item->column() != 0 ? ui.resultList->item(ui.resultList->row(item), 0) : item;
     if (spellRowItem == nullptr)
     {
         return;
@@ -288,7 +294,7 @@ void MainWindow::onLevelScalingSliderValueChange()
 
     if (const auto* spell = GetDBCEntry(spellId, sDBCStores->m_spellEntries))
     {
-        ui->spellInfoText->setText(spell->PrintBaseInfo(ui->levelScalingSlider->value()));
-        ui->spellEffectInfo->setText(spell->PrintSpellEffectInfo(ui->levelScalingSlider->value()));
+        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()));
+        ui.spellEffectInfo->setText(spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }
 }

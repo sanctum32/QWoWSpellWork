@@ -1,5 +1,4 @@
-#ifndef DBC_FILE_LOADER_H
-#define DBC_FILE_LOADER_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -92,4 +91,3 @@ private:
     DBCFileLoader(DBCFileLoader const& right) = delete;
     DBCFileLoader& operator=(DBCFileLoader const& right) = delete;
 };
-#endif
