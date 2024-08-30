@@ -12,9 +12,5 @@
         "WorldDB": "world_db_name",
         "PingDelayInMS": 10000,
         "CanReconnect": true
-    },
-    "Logs":
-    {
-        "Json" : false
     }
 }

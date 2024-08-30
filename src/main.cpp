@@ -35,10 +35,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    QLoggingCategory::setFilterRules("spellwork.json.debug=true");
-    QLoggingCategory::setFilterRules("spellwork.sql.debug=true");
-    QLoggingCategory::setFilterRules("spellwork.dbcstores.debug=true");
-
     // Read settings
 #ifdef _WIN32
     if (sSpellWorkConfig->GetAppConfig().enableDarkMode)
