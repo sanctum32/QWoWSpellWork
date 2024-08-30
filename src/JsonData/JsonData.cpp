@@ -573,7 +573,7 @@ const QString SpellWorkJson::GetSpellAttributeName(uint32_t attributeId, uint32_
     }
 
     const auto& itr = SpellAttributes[attributeId].find(attributeFlag);
-    return itr != SpellFamilyInfo.end() ? itr->second : nullResult;
+    return itr != SpellAttributes[attributeId].end() ? itr->second : nullResult;
 }
 
 const QString SpellWorkJson::GetSpellEffectName(uint32_t id)

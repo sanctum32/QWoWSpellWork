@@ -222,12 +222,6 @@ bool DBCStore::LoadSqlDBCData()
                 continue;
             }
 
-            if (m_SpellEffectEntries.contains(entry))
-            {
-                qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: tried to load spell_dbc entry" << QString::number(entry) << ", but entry already exists in storage. Skipped!";
-                continue;
-            }
-
             SpellEntry spell;
             spell.m_IsServerSide = true;
             spell.Id = entry;
@@ -254,8 +248,7 @@ bool DBCStore::LoadSqlDBCData()
             spell.SpellName += " - Server Side";
             spell.m_spellNameUpper = QString(spell.SpellName.c_str()).toUpper();
 
-
-            m_spellEntries.emplace(entry, spell);
+            m_spellEntries.try_emplace(entry, spell);
             ++count;
         }
 
@@ -318,12 +311,6 @@ bool DBCStore::LoadSqlDBCData()
                 continue;
             }
 
-            if (m_SpellEffectEntries.contains(entry))
-            {
-                qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: tried to load spelleffect_dbc entry" << QString::number(entry) << ", but entry already exists in storage. Skipped!";
-                continue;
-            }
-
             SpellEffectEntry effect;
             effect.Id                       = entry;
             effect.Effect                   = static_cast<uint32_t>(std::stoul(row[1]));
@@ -351,9 +338,12 @@ bool DBCStore::LoadSqlDBCData()
             effect.EffectImplicitTargetB    = static_cast<uint32_t>(std::stoul(row[23]));
             effect.SpellID                  = static_cast<uint32_t>(std::stoul(row[24]));
             effect.EffectIndex              = static_cast<uint32_t>(std::stoul(row[25]));
-            m_SpellEffectEntries.emplace(entry, effect);
+            m_SpellEffectEntries.try_emplace(entry, effect);
+            ++count;
         }
         mysql_free_result(result);
+
+        qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spelleffect_dbc";
     }
     return true;
 }

@@ -1,7 +1,6 @@
 #include "DBC/DBCStructures.hpp"
 #include "DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
-#include <QDebug>
 
 constexpr char const* line = "==============================================<br>";
 
@@ -79,6 +78,8 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
         {
             result += QString(" (%1)").arg(spellCategoryInfo->Name.c_str());
         }
+
+        result += "<br>";
 
         // Dispel info
         result += QString("DispelType = %1 (%2)<br>")
@@ -741,13 +742,15 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             const auto* gtEntry = GetDBCEntry(gtEntryId, sDBCStores->m_GtSpellScalingEntries);
             float gtMultiplier = gtEntry != nullptr ? gtEntry->value : 0.0f;
 
-            if (scalingInfo->CastTimeMax > 0 && scalingInfo->CastTimeMaxLevel > selectedLevel)
+            if (scalingInfo->CastTimeMax > 0 && static_cast<uint32_t>(scalingInfo->CastTimeMaxLevel) > selectedLevel)
             {
                 gtMultiplier *= static_cast<float>(scalingInfo->CastTimeMin + (selectedLevel - 1) * (scalingInfo->CastTimeMax - scalingInfo->CastTimeMin) / (scalingInfo->CastTimeMaxLevel - 1)) / static_cast<float>(scalingInfo->CastTimeMax);
             }
 
-            if (scalingInfo->NerfMaxLevel > selectedLevel)
+            if (scalingInfo->NerfMaxLevel > static_cast<int32_t>(selectedLevel))
+            {
                 gtMultiplier *= (1.0f -  scalingInfo->NerfFactor) * (float)(selectedLevel - 1) / (float)(scalingInfo->NerfMaxLevel - 1) + scalingInfo->NerfFactor;
+            }
 
             if (scalingInfo->Variance[effIndex] != 0.0f)
             {
