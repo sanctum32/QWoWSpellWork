@@ -13,7 +13,7 @@ inline bool ReadBasicArrayFromFile(const QString fileName, T& container, const Q
     {
         if (!json.isArray())
         {
-            qCDebug(JSON) << "JSON: Json file \"" << fileName << "\" is not array type";
+            qCDebug(JSON) << "Json file \"" << fileName << "\" is not array type";
             return false;
         }
 
@@ -28,7 +28,7 @@ inline bool ReadBasicArrayFromFile(const QString fileName, T& container, const Q
 
             if (container.contains(_keyId))
             {
-                qCDebug(JSON) << "JSON: \"" << fileName << "\" has duplicate Id " << QString::number(_keyId) << ". Skipping";
+                qCDebug(JSON) << fileName << "\" has duplicate Id " << QString::number(_keyId) << ". Skipping";
                 continue;
             }
 
@@ -37,7 +37,7 @@ inline bool ReadBasicArrayFromFile(const QString fileName, T& container, const Q
 
         if (container.empty())
         {
-            qCDebug(JSON) << "JSON: Failed to load data from " << fileName << " data. Related container is empty!";
+            qCDebug(JSON) << "Failed to load data from " << fileName << " data. Related container is empty!";
             return false;
         }
 
@@ -49,7 +49,7 @@ inline bool ReadBasicArrayFromFile(const QString fileName, T& container, const Q
 // returns 1 on failure
 bool SpellWorkJson::OpenJson(QString fileName, std::function<bool(const QJsonDocument& json)> handle)
 {
-    qCDebug(JSON) << "JSON: Loading: " << fileName;
+    qCDebug(JSON) << "Loading: " << fileName;
 
     QFile jsonFile(fileName);
     if (jsonFile.open(QIODevice::ReadOnly))
@@ -61,18 +61,18 @@ bool SpellWorkJson::OpenJson(QString fileName, std::function<bool(const QJsonDoc
         auto json = QJsonDocument::fromJson(jsonStrData, &jsonParseStatus);
         if (jsonParseStatus.error != QJsonParseError::NoError)
         {
-            qCDebug(JSON) << "JSON: Failed to parse json, error: " << jsonParseStatus.errorString();
+            qCDebug(JSON) << "Failed to parse json, error: " << jsonParseStatus.errorString();
             return false;
         }
 
         if (handle(json))
         {
-            qCDebug(JSON) << "JSON: Successfully loaded data from " << fileName << ".";
+            qCDebug(JSON) << "Successfully loaded data from " << fileName << ".";
             return true;
         }
     }
 
-    qCDebug(JSON) << "JSON: Failed to loaded data from " << fileName << ".";
+    qCDebug(JSON) << "Failed to loaded data from " << fileName << ".";
     return false;
 }
 
@@ -84,7 +84,7 @@ bool SpellWorkJson::LoadJsonData()
     {
         if (!json.isObject())
         {
-            qCDebug(JSON) << "JSON: Json file \"SpellSchools.json\" is not object type";
+            qCDebug(JSON) << "Json file \"SpellSchools.json\" is not object type";
             return false;
         }
 
@@ -97,7 +97,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (SpellSchools.contains(_keyId))
             {
-                qCDebug(JSON) << "JSON: \"./json/SpellSchools.json\" has duplicate SpellSchool Id " << QString::number(_keyId) << ". Skipping";
+                qCDebug(JSON) << "\"./json/SpellSchools.json\" has duplicate SpellSchool Id " << QString::number(_keyId) << ". Skipping";
                 continue;
             }
 
@@ -106,7 +106,7 @@ bool SpellWorkJson::LoadJsonData()
 
         if (SpellSchools.empty())
         {
-            qCDebug(JSON) << "JSON: Failed to load SpellSchools data!";
+            qCDebug(JSON) << "Failed to load SpellSchools data!";
             return false;
         }
 
@@ -118,7 +118,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (SpellSchoolMasks.contains(_keyId))
             {
-                qCDebug(JSON) << "JSON: \"./json/SpellSchools.json\" has duplicate SpellSchoolMask Id " << QString::number(_keyId) << ". Skipping";
+                qCDebug(JSON) << "\"./json/SpellSchools.json\" has duplicate SpellSchoolMask Id " << QString::number(_keyId) << ". Skipping";
                 continue;
             }
 
@@ -127,7 +127,7 @@ bool SpellWorkJson::LoadJsonData()
 
         if (SpellSchoolMasks.empty())
         {
-            qCDebug(JSON) << "JSON: Failed to load SpellSchools mask data!";
+            qCDebug(JSON) << "Failed to load SpellSchools mask data!";
             return false;
         }
 
@@ -141,7 +141,7 @@ bool SpellWorkJson::LoadJsonData()
     {
         if (!json.isObject())
         {
-            qCDebug(JSON) << "JSON: Json file \"SpellInterrupt.json\" is not Object type";
+            qCDebug(JSON) << "Json file \"SpellInterrupt.json\" is not Object type";
             return false;
         }
 
@@ -155,7 +155,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (SpellInterruptFlags.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/SpellInterrupt.json\" has duplicate SpellInterruptFlags Id " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/SpellInterrupt.json\" has duplicate SpellInterruptFlags Id " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -164,7 +164,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (SpellInterruptFlags.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load SpellInterruptFlags data!";
+                qCDebug(JSON) << "Failed to load SpellInterruptFlags data!";
                 return false;
             }
         }
@@ -179,7 +179,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (_AuraInterruptFlags.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags Id " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags Id " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -188,7 +188,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (_AuraInterruptFlags.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load AuraInterruptFlags data!";
+                qCDebug(JSON) << "Failed to load AuraInterruptFlags data!";
                 return false;
             }
         }
@@ -203,7 +203,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (_AuraInterruptFlags.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags2 Id " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags2 Id " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -212,7 +212,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (_AuraInterruptFlags.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load AuraInterruptFlags2 data!";
+                qCDebug(JSON) << "Failed to load AuraInterruptFlags2 data!";
                 return false;
             }
         }
@@ -227,7 +227,7 @@ bool SpellWorkJson::LoadJsonData()
     {
         if (!json.isObject())
         {
-            qCDebug(JSON) << "JSON: Json file \"SpellAttributes.json\" is not Object type";
+            qCDebug(JSON) << "Json file \"SpellAttributes.json\" is not Object type";
             return false;
         }
 
@@ -243,7 +243,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (SpellAttributes[i].contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/SpellAttributes.json\" has duplicate " << attributeName << " Flag " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/SpellAttributes.json\" has duplicate " << attributeName << " Flag " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -252,7 +252,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (SpellAttributes[i].empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load " << attributeName << " from SpellAttributes";
+                qCDebug(JSON) << "Failed to load " << attributeName << " from SpellAttributes";
                 return false;
             }
         }
@@ -267,7 +267,7 @@ bool SpellWorkJson::LoadJsonData()
     {
         if (!json.isObject())
         {
-            qCDebug(JSON) << "JSON: Json file \"Spelltargets.json\" is not Object type";
+            qCDebug(JSON) << "Json file \"Spelltargets.json\" is not Object type";
             return false;
         }
 
@@ -282,7 +282,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (SpellTargetNames.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/SpellTargets.json\" has duplicate SpellTargetNames entry " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/SpellTargets.json\" has duplicate SpellTargetNames entry " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -291,7 +291,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (SpellTargetNames.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load SpellTargetNames from SpellTargets.json";
+                qCDebug(JSON) << "Failed to load SpellTargetNames from SpellTargets.json";
                 return false;
             }
         }
@@ -306,7 +306,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (SpellTargetFlags.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/SpellTargets.json\" has duplicate SpellCastTargetFlags entry " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/SpellTargets.json\" has duplicate SpellCastTargetFlags entry " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -315,7 +315,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (SpellTargetFlags.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load SpellTargetFlags from SpellTargets.json";
+                qCDebug(JSON) << "Failed to load SpellTargetFlags from SpellTargets.json";
                 return false;
             }
         }
@@ -330,7 +330,7 @@ bool SpellWorkJson::LoadJsonData()
     {
         if (!json.isObject())
         {
-            qCDebug(JSON) << "JSON: Json file \"ItemSubclass.json\" is not Object type";
+            qCDebug(JSON) << "Json file \"ItemSubclass.json\" is not Object type";
             return false;
         }
 
@@ -345,7 +345,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (ItemSubclassWeapon.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/ItemSubclass.json\" has duplicate ItemSubclassWeapon entry " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/ItemSubclass.json\" has duplicate ItemSubclassWeapon entry " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -354,7 +354,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (ItemSubclassWeapon.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load ItemSubclassWeapon entries from Itemsubclass.json";
+                qCDebug(JSON) << "Failed to load ItemSubclassWeapon entries from Itemsubclass.json";
                 return false;
             }
         }
@@ -369,7 +369,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (ItemSubclassArmor.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/ItemSubclass.json\" has duplicate ItemSubclassArmor entry " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/ItemSubclass.json\" has duplicate ItemSubclassArmor entry " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -378,7 +378,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (ItemSubclassArmor.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load ItemSubclassArmor entries from Itemsubclass.json";
+                qCDebug(JSON) << "Failed to load ItemSubclassArmor entries from Itemsubclass.json";
                 return false;
             }
         }
@@ -393,7 +393,7 @@ bool SpellWorkJson::LoadJsonData()
 
                 if (ItemSubclassJunk.contains(_keyId))
                 {
-                    qCDebug(JSON) << "JSON: \"./json/ItemSubclass.json\" has duplicate ItemSubclassJunk entry " << QString::number(_keyId) << ". Skipping";
+                    qCDebug(JSON) << "\"./json/ItemSubclass.json\" has duplicate ItemSubclassJunk entry " << QString::number(_keyId) << ". Skipping";
                     continue;
                 }
 
@@ -402,7 +402,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (ItemSubclassJunk.empty())
             {
-                qCDebug(JSON) << "JSON: Failed to load ItemSubclassJunk entries from Itemsubclass.json";
+                qCDebug(JSON) << "Failed to load ItemSubclassJunk entries from Itemsubclass.json";
                 return false;
             }
         }
@@ -416,7 +416,7 @@ bool SpellWorkJson::LoadJsonData()
     {
         if (!json.isArray())
         {
-            qCDebug(JSON) << "JSON: Json file \"SpellEffects.json\" is not Array type";
+            qCDebug(JSON) << "Json file \"SpellEffects.json\" is not Array type";
             return false;
         }
 
@@ -428,7 +428,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (_spellEffectInfo.contains(_keyId))
             {
-                qCDebug(JSON) << "JSON: \"./json/SpellEffects.json\" has duplicate entry " << QString::number(_keyId) << ". Skipping";
+                qCDebug(JSON) << "\"./json/SpellEffects.json\" has duplicate entry " << QString::number(_keyId) << ". Skipping";
                 continue;
             }
 
@@ -442,7 +442,7 @@ bool SpellWorkJson::LoadJsonData()
 
         if (_spellEffectInfo.empty())
         {
-            qCDebug(JSON) << "JSON: Failed to load entries from SpellEffects.json";
+            qCDebug(JSON) << "Failed to load entries from SpellEffects.json";
             return false;
         }
 
@@ -456,7 +456,7 @@ bool SpellWorkJson::LoadJsonData()
     {
         if (!json.isArray())
         {
-            qCDebug(JSON) << "JSON: Json file \"SpellAuraTypes.json\" is not Array type";
+            qCDebug(JSON) << "Json file \"SpellAuraTypes.json\" is not Array type";
             return false;
         }
 
@@ -468,7 +468,7 @@ bool SpellWorkJson::LoadJsonData()
 
             if (_spellAuraTypes.contains(_keyId))
             {
-                qCDebug(JSON) << "JSON: \"./json/SpellAuraTypes.json\" has duplicate entry " << QString::number(_keyId) << ". Skipping";
+                qCDebug(JSON) << "\"./json/SpellAuraTypes.json\" has duplicate entry " << QString::number(_keyId) << ". Skipping";
                 continue;
             }
 
@@ -482,7 +482,7 @@ bool SpellWorkJson::LoadJsonData()
 
         if (_spellAuraTypes.empty())
         {
-            qCDebug(JSON) << "JSON: Failed to load entries from SpellAuraTypes.json";
+            qCDebug(JSON) << "Failed to load entries from SpellAuraTypes.json";
             return false;
         }
 

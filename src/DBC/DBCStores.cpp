@@ -47,6 +47,11 @@ bool DBCStore::LoadData()
 
 bool DBCStore::LoadDBCDatas()
 {
+    if (!sSpellWorkConfig->GetAppConfig().loadDBCSpells && !sSpellWorkConfig->GetAppConfig().loadSQLSpells)
+    {
+        return false;
+    }
+
     DBCFileLoader spellScalingDBC("dbc/SpellScaling.dbc", SpellEffectEntry::GetDBCFormat());
     DBCFileLoader spellCategoryDBC("dbc/SpellCategory.dbc", SpellCategoryEntry::GetDBCFormat());
     DBCFileLoader spellCategoriesDBC("dbc/SpellCategories.dbc", SpellCategoriesEntry::GetDBCFormat());
