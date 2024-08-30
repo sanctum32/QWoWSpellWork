@@ -1,4 +1,5 @@
 #pragma once
+#ifdef SPELLWORK_BUILD_SQL
 #include <QLoggingCategory>
 #include <mysql/mysql.h>
 #include <thread>
@@ -37,3 +38,4 @@ public:
 };
 
 #define sSpellWorkSQL SpellWorkSQL::instance()
+#endif //BUILD_SQL

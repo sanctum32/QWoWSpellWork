@@ -13,7 +13,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-include(CMake/FindMySQL.cmake)
+option(WITH_SQL_SUPPORT "Compile with additional SQL features" ON)
+
+if (WITH_SQL_SUPPORT)
+    include(CMake/FindMySQL.cmake)
+endif()
 
 set(TS_FILES
     src/Translations/QSpellWork_en_GB.ts
@@ -39,12 +43,16 @@ set(PROJECT_SOURCES
     src/JsonData/JsonData.cpp
     src/Globals/appSettings.hpp
     src/Globals/appSettings.cpp
-    src/SQL/sqlConnection.hpp
-    src/SQL/sqlConnection.cpp
     src/main.cpp
     ${UI_FILES}
     ${TS_FILES}
 )
+
+if (WITH_SQL_SUPPORT AND MySQL_FOUND)
+    list(APPEND PROJECT_SOURCES
+        src/SQL/sqlConnection.hpp
+        src/SQL/sqlConnection.cpp)
+endif()
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS
     "${CMAKE_SOURCE_DIR}/src/Forms"
@@ -114,3 +122,7 @@ target_include_directories(QSpellWork PRIVATE
 target_link_directories(QSpellWork PRIVATE
     ${MySQL_INCLUDE_DIRS}
 )
+
+if (WITH_SQL_SUPPORT AND MySQL_FOUND)
+    target_compile_definitions(QSpellWork PRIVATE SPELLWORK_BUILD_SQL)
+endif()

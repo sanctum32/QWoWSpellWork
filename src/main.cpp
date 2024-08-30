@@ -10,11 +10,14 @@
 #include <QDebug>
 
 // App
-#include "SQL/sqlConnection.hpp"
+
 #include "mainwindow.hpp"
 #include "DBC/DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
 #include "Globals/appSettings.hpp"
+#ifdef SPELLWORK_BUILD_SQL
+#include "SQL/sqlConnection.hpp"
+#endif // SPELLWORK_BUILD_SQL
 
 constexpr std::string_view StatusBarSeparator = "  <span style=\"color: yellow\">|</span>  ";
 
@@ -47,7 +50,12 @@ int main(int argc, char *argv[])
     sSpellWorkConfig->ReadSettings();
 
     MainWindow mainWindow;
+#ifdef SPELLWORK_BUILD_SQL
     mainWindow.UpdateSqlStatus(sSpellWorkSQL->Init());
+#else
+    mainWindow.UpdateSqlStatus(false);
+#endif // SPELLWORK_BUILD_SQL
+
     mainWindow.UpdateDBCStatus(sDBCStores->LoadData());
     mainWindow.UpdateJsonStatus(sSpellWorkJson->LoadJsonData());
 

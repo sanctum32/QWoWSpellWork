@@ -1,3 +1,4 @@
+#ifdef SPELLWORK_BUILD_SQL
 #include "sqlConnection.hpp"
 #include "appSettings.hpp"
 #include "mainwindow.hpp"
@@ -23,6 +24,7 @@ void PingSQL(MYSQL* connection, unsigned int delay)
         }
     }
 }
+
 
 SpellWorkSQL::~SpellWorkSQL()
 {
@@ -73,3 +75,5 @@ void SpellWorkSQL::ShutdownThreads()
     if (m_pingThread.joinable())
         m_pingThread.join();
 }
+
+#endif

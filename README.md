@@ -20,6 +20,7 @@ Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB cli
 * CMake 3.5 (or higher)
 * Qt5 or Qt6 framework libraries
 * C++ compiler with C++20 standart support
+* MySQL 8+/MariaDB 10.3+ for sql
 
 ### Final setup steps:
 1. Copy dbc files to dbc folder in the application executable folder ("appExecutableFolder"/dbc).

@@ -1,5 +1,7 @@
 #include "DBCStores.hpp"
+#ifdef SPELLWORK_BUILD_SQL
 #include "SQL/sqlConnection.hpp"
+#endif // SPELLWORK_BUILD_SQL
 #include "appSettings.hpp"
 
 Q_LOGGING_CATEGORY(DBCStores, "spellwork.dbcstores");
@@ -20,10 +22,12 @@ bool DBCStore::LoadData()
         return false;
     }
 
+#ifdef SPELLWORK_BUILD_SQL
     if (!LoadSqlDBCData())
     {
         return false;
     }
+#endif
 
     // link spell related pointers
     for (const auto& spellEffectItr : m_SpellEffectEntries)
@@ -146,6 +150,7 @@ bool DBCStore::LoadDBCDatas()
     return true;
 }
 
+#ifdef SPELLWORK_BUILD_SQL
 bool DBCStore::LoadSqlDBCData()
 {
     if (!sSpellWorkConfig->GetSQLConfig().enable || !sSpellWorkConfig->GetAppConfig().loadSQLSpells)
@@ -347,3 +352,5 @@ bool DBCStore::LoadSqlDBCData()
     }
     return true;
 }
+
+#endif // SPELLWORK_BUILD_SQL
