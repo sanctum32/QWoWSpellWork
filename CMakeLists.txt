@@ -18,6 +18,10 @@ option(COPY_EXTRA_FILES "Copies json and qtlogging.ini file into compiled binary
 
 if (WITH_SQL_SUPPORT)
     include(CMake/FindMySQL.cmake)
+
+    if (NOT MYSQL_FOUND)
+        message(FATAL_ERROR "MYSQL was not found!")
+    endif()
 endif()
 
 set(TS_FILES
@@ -49,7 +53,7 @@ set(PROJECT_SOURCES
     ${TS_FILES}
 )
 
-if (WITH_SQL_SUPPORT AND MySQL_FOUND)
+if (WITH_SQL_SUPPORT)
     list(APPEND PROJECT_SOURCES
         src/SQL/sqlConnection.hpp
         src/SQL/sqlConnection.cpp)
@@ -60,7 +64,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(QSpellWork
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
@@ -74,13 +78,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
     if(ANDROID)
-        add_library(QSpellWork SHARED
+        add_library(${PROJECT_NAME} SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(QSpellWork
+        add_executable(${PROJECT_NAME}
             ${PROJECT_SOURCES}
         )
     endif()
@@ -88,12 +92,12 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(QSpellWork PRIVATE
+target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     ${MySQL_LIBRARIES}
 )
 
-set_target_properties(QSpellWork PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -101,15 +105,15 @@ set_target_properties(QSpellWork PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS QSpellWork
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(QSpellWork)
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
 
-target_include_directories(QSpellWork PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     src
     src/DBC
     src/Enums
@@ -120,25 +124,29 @@ target_include_directories(QSpellWork PRIVATE
     ${MySQL_INCLUDE_DIRS}
 )
 
-target_link_directories(QSpellWork PRIVATE
+target_link_directories(${PROJECT_NAME} PRIVATE
     ${MySQL_INCLUDE_DIRS}
 )
 
-if (WITH_SQL_SUPPORT AND MySQL_FOUND)
-    target_compile_definitions(QSpellWork PRIVATE SPELLWORK_BUILD_SQL)
+if (WITH_SQL_SUPPORT)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE SPELLWORK_BUILD_SQL)
+endif()
+
+if (MSVC)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 
 if (COPY_EXTRA_FILES)
     # copy json
     add_custom_command(
-        TARGET QSpellWork POST_BUILD
+        TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/json"
             "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/json"
     )
 
     add_custom_command(
-        TARGET QSpellWork POST_BUILD
+        TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/themes"
             "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/themes"
@@ -146,9 +154,11 @@ if (COPY_EXTRA_FILES)
 
     # copy qtlogging.ini
     add_custom_command(
-        TARGET QSpellWork POST_BUILD
+        TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/qtlogging.ini.const"
             "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/qtlogging.ini.const"
     )
 endif()
+
+
