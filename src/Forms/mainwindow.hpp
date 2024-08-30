@@ -22,6 +22,7 @@ public:
     void UpdateSqlStatus(bool success);
     void UpdateDBCStatus(bool success);
     void UpdateJsonStatus(bool success);
+    void UpdateComboBoxItems();
 
 private slots:
     void onSearchBtnClicked();

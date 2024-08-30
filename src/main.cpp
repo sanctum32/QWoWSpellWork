@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 
     mainWindow.UpdateDBCStatus(sDBCStores->LoadData());
     mainWindow.UpdateJsonStatus(sSpellWorkJson->LoadJsonData());
+    mainWindow.UpdateComboBoxItems();
 
     _mainWindow = &mainWindow;
     mainWindow.show();
