@@ -14,6 +14,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 option(WITH_SQL_SUPPORT "Compile with additional SQL features" ON)
+option(COPY_EXTRA_FILES "Copies json and qtlogging.ini file into compiled binary folder" ON)
 
 if (WITH_SQL_SUPPORT)
     include(CMake/FindMySQL.cmake)
@@ -125,4 +126,22 @@ target_link_directories(QSpellWork PRIVATE
 
 if (WITH_SQL_SUPPORT AND MySQL_FOUND)
     target_compile_definitions(QSpellWork PRIVATE SPELLWORK_BUILD_SQL)
+endif()
+
+if (COPY_EXTRA_FILES)
+    # copy json
+    add_custom_command(
+        TARGET QSpellWork POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/json"
+            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/json"
+    )
+
+    # copy qtlogging.ini
+    add_custom_command(
+        TARGET QSpellWork POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/qtlogging.ini"
+            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/qtlogging.ini"
+    )
 endif()
