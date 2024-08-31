@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     // Load the CSS file
     if (!sSpellWorkConfig->GetAppConfig().themeName.isEmpty())
     {
-        QFile file("./" + sSpellWorkConfig->GetAppConfig().themeName + ".css");
+        QFile file("./themes/" + sSpellWorkConfig->GetAppConfig().themeName + ".css");
         if (file.open(QFile::ReadOnly))
         {
             QString styleSheet = QLatin1String(file.readAll());
