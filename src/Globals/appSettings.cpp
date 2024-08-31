@@ -15,20 +15,20 @@ bool SpellWorkConfig::ReadSettings()
         const auto& document = json.object();
 
         m_appSettings.themeName = document.value("ThemeName").toString();
-        m_appSettings.loadDBCSpells = document.value("LoadDBCSpells").toBool();
-        m_appSettings.loadSQLSpells = document.value("LoadSQLSpells").toBool();
+        m_appSettings.loadDBCSpells = document.value("LoadDBCSpells").toBool(true);
+        m_appSettings.loadSQLSpells = document.value("LoadSQLSpells").toBool(true);
 
         if (document.value("Sql").isObject())
         {
             const auto& sqlJson = document.value("Sql").toObject();
-            m_sql.enable    = sqlJson.value("Enable").toBool();
+            m_sql.enable    = sqlJson.value("Enable").toBool(false);
             m_sql.hostname  = sqlJson.value("Hostname").toString();
-            m_sql.port      = sqlJson.value("Port").toInt();
+            m_sql.port      = sqlJson.value("Port").toInt(3306);
             m_sql.username  = sqlJson.value("Username").toString();
             m_sql.password  = sqlJson.value("Password").toString();
             m_sql.worldDB   = sqlJson.value("WorldDB").toString();
-            m_sql.pingDelayInMS = sqlJson.value("PingDelayInMS").toInt();
-            m_sql.canReconnect = sqlJson.value("CanReconnect").toBool();
+            m_sql.pingDelayInMS = sqlJson.value("PingDelayInMS").toInt(10000);
+            m_sql.canReconnect = sqlJson.value("CanReconnect").toBool(true);
         }
 
         return true;
