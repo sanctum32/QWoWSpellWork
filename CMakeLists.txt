@@ -62,34 +62,25 @@ if (WITH_SQL_SUPPORT)
         src/SQL/sqlConnection.cpp)
 endif()
 
-set(CMAKE_AUTOUIC_SEARCH_PATHS
-    "${CMAKE_SOURCE_DIR}/src/Forms"
-)
+set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_SOURCE_DIR}/src/Forms")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME}
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
+    qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
 
 
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET QSpellWork APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
     if(ANDROID)
-        add_library(${PROJECT_NAME} SHARED
-            ${PROJECT_SOURCES}
-        )
+        add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCES})
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(${PROJECT_NAME}
-            ${PROJECT_SOURCES}
-        )
+        add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
@@ -144,23 +135,23 @@ if (COPY_EXTRA_FILES)
     add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/json"
-            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/json"
+            "$<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/json"
+            "$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/json"
     )
 
     add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/themes"
-            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/themes"
+            "$<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/themes"
+            "$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/themes"
     )
 
     # copy qtlogging.ini
     add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "$<TARGET_PROPERTY:QSpellWork,SOURCE_DIR>/qtlogging.ini.const"
-            "$<TARGET_PROPERTY:QSpellWork,BINARY_DIR>/qtlogging.ini.const"
+            "$<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/qtlogging.ini.const"
+            "$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/qtlogging.ini.const"
     )
 endif()
 

@@ -7,7 +7,6 @@
 #include <QJsonObject>
 #include <QStatusBar>
 #include <QJsonArray>
-#include <QDebug>
 #include <QFile>
 
 // App
@@ -15,6 +14,7 @@
 #include "DBC/DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
 #include "Globals/appSettings.hpp"
+
 #ifdef SPELLWORK_BUILD_SQL
 #include "SQL/sqlConnection.hpp"
 #endif // SPELLWORK_BUILD_SQL

@@ -33,7 +33,7 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
     uint32_t spellId = spellRowItem->text().toUInt(&ok);
     if (!ok || spellId == 0)
     {
-        qDebug() << "spell id was 0";
+        qCDebug(SPELLINFO_TAB) << "spell id was 0";
         return;
     }
 
@@ -281,7 +281,7 @@ void MainWindow::onLevelScalingSliderValueChange()
     uint32_t spellId = spellRowItem->text().toUInt(&ok);
     if (!ok || spellId == 0)
     {
-        qDebug() << "spell id was 0";
+        qCDebug(SPELLINFO_TAB) << "spell id was 0";
         return;
     }
 

@@ -3,6 +3,7 @@
 #include "JsonData/JsonData.hpp"
 #include <QCloseEvent>
 
+Q_LOGGING_CATEGORY(SPELLINFO_TAB, "spellwork.json");
 MainWindow* _mainWindow = nullptr;
 
 // Base implementation

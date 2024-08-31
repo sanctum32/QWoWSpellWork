@@ -1,9 +1,10 @@
 #pragma once
+#include <QString>
+#include <array>
+#include <cstdint>
 
 #include "DBCFileLoader.hpp"
 #include "../Enums/SpellEnums.hpp"
-#include <QString>
-#include <qdebug.h>
 
 // SpellEffect.dbc
 struct SpellEffectEntry

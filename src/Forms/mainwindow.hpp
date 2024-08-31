@@ -3,6 +3,9 @@
 #include "ui/ui_mainwindow.h"
 #include <QMainWindow>
 #include <QLabel>
+#include <QLoggingCategory>
+
+Q_DECLARE_LOGGING_CATEGORY(SPELLINFO_TAB)
 
 // Forward declarations
 class QTableWidgetItem;

@@ -2,3 +2,4 @@
 spellwork.json.debug=true
 spellwork.sql.debug=true
 spellwork.dbcstores.debug=true
+spellwork.json.debug=true
