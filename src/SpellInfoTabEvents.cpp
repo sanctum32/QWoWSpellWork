@@ -39,8 +39,7 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
 
     if (const auto* spell = GetDBCEntry(spellId, sDBCStores->m_spellEntries))
     {
-        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()));
-        ui.spellEffectInfo->setText(spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
+        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }
 }
 
@@ -54,7 +53,7 @@ void MainWindow::PerformSpellSearch()
 
     if (sDBCStores->m_spellEntries.empty())
     {
-        ui.ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+        ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
@@ -67,7 +66,7 @@ void MainWindow::PerformSpellSearch()
 
     if (!searchById && !searchByName)
     {
-        ui.ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+        ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
@@ -235,11 +234,11 @@ void MainWindow::PerformSpellSearch()
 
     if (foundEntries.empty())
     {
-        ui.ResultsGroup->setTitle(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+        ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
-    ui.ResultsGroup->setTitle(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+    ui.resultCountLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
 
     resultList->setRowCount(static_cast<int>(foundEntries.size()));
     int rowId = 0;
@@ -288,7 +287,6 @@ void MainWindow::onLevelScalingSliderValueChange()
 
     if (const auto* spell = GetDBCEntry(spellId, sDBCStores->m_spellEntries))
     {
-        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()));
-        ui.spellEffectInfo->setText(spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
+        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }
 }
