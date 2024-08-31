@@ -43,12 +43,14 @@ set(PROJECT_SOURCES
     src/DBC/DBCStores.cpp
     src/Spell/SpellInfo.cpp
     src/Spell/SpellInfoTabEvents.cpp
-    src/Enums/SpellEnums.hpp
     src/JsonData/JsonData.hpp
     src/JsonData/JsonData.cpp
     src/Globals/appSettings.hpp
     src/Globals/appSettings.cpp
-    src/Enums/ConditionsFilter.hpp
+    src/Globals/SharedDefines.hpp
+    src/Enums/SpellEnums.hpp
+    src/Enums/UnitDefines.hpp
+    src/Enums/CreatureDefines.hpp
     src/main.cpp
     ${UI_FILES}
     ${TS_FILES}

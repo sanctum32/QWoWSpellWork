@@ -1,6 +1,8 @@
 #include "DBC/DBCStructures.hpp"
 #include "DBCStores.hpp"
+#include "ItemDefines.hpp"
 #include "JsonData/JsonData.hpp"
+#include "SharedDefines.hpp"
 
 constexpr char const* line = "==============================================<br>";
 
@@ -8,7 +10,7 @@ constexpr char const* line = "==============================================<br>
 inline QString GetFirstSchoolMaskNameStr(uint32_t mask)
 {
     QString result;
-    for (uint8_t i = 0; i < MAX_SPELL_SCHOOL; ++i)
+    for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
     {
         const uint32_t schoolMask = (1U << i);
         if ((mask & schoolMask) != 0)

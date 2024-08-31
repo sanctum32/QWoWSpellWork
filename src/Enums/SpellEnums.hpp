@@ -1,16 +1,15 @@
 #pragma once
 #include <cstdint>
 
-enum : uint8_t
+enum
 {
     MAX_SPELL_ATTRIBUTES                = 11,   // Max spell attributes
     MAX_SPELL_REAGENTS                  = 8,
     MAX_GROUP_AREA_IDS                  = 6,
     MAX_SPELL_EFFECTS                   = 3,    // Total effects of spell
-    MAX_UINT32_BITMASK_INDEX            = 31,
 };
 
-enum SpellEffects : uint32_t
+enum SpellEffects
 {
     SPELL_EFFECT_NONE                               = 0,
     SPELL_EFFECT_INSTAKILL                          = 1,
@@ -198,7 +197,7 @@ enum SpellEffects : uint32_t
 };
 
 // Spell aura states
-enum AuraStateType : uint32_t
+enum AuraStateType
 {   // (C) used in caster aura state     (T) used in target aura state
     // (c) used in caster aura state-not (t) used in target aura state-not
     AURA_STATE_NONE                         = 0,            // C   |
@@ -228,7 +227,7 @@ enum AuraStateType : uint32_t
 };
 
 // Spell mechanics
-enum Mechanics : uint32_t
+enum Mechanics
 {
     MECHANIC_NONE             = 0,
     MECHANIC_CHARM            = 1,
@@ -266,7 +265,7 @@ enum Mechanics : uint32_t
 };
 
 // Spell dispel type
-enum DispelType : uint32_t
+enum DispelType
 {
     DISPEL_NONE         = 0,
     DISPEL_MAGIC        = 1,
@@ -282,7 +281,7 @@ enum DispelType : uint32_t
     DESPEL_OLD_UNUSED   = 11
 };
 
-enum Targets : uint32_t
+enum Targets
 {
     TARGET_NONE                                 = 0,
     TARGET_UNIT_CASTER                          = 1,
@@ -414,7 +413,7 @@ enum Targets : uint32_t
     TARGET_UNK_127                              = 127,
 };
 
-enum SpellDmgClass : uint32_t
+enum SpellDmgClass
 {
     SPELL_DAMAGE_CLASS_NONE     = 0,
     SPELL_DAMAGE_CLASS_MAGIC    = 1,
@@ -422,7 +421,7 @@ enum SpellDmgClass : uint32_t
     SPELL_DAMAGE_CLASS_RANGED   = 3,
 };
 
-enum SkillType : uint32_t
+enum SkillType
 {
     SKILL_NONE                     = 0,
 
@@ -602,7 +601,7 @@ enum SkillType : uint32_t
     SKILL_PET_HYDRA                = 824
 };
 
-enum SpellPreventionType : uint32_t
+enum SpellPreventionType
 {
     SPELL_PREVENTION_TYPE_NONE      = 0,
     SPELL_PREVENTION_TYPE_SILENCE   = 1,
@@ -611,7 +610,7 @@ enum SpellPreventionType : uint32_t
     SPELL_PREVENTION_TYPE_NO_ACTIONS= 4
 };
 
-enum SpellCastTargetFlags : uint32_t
+enum SpellCastTargetFlags
 {
     TARGET_FLAG_NONE            = 0x00000000,               // 0
     TARGET_FLAG_UNUSED_1        = 0x00000001,               // 1 not used
@@ -637,24 +636,7 @@ enum SpellCastTargetFlags : uint32_t
     TARGET_FLAG_UNIT_PASSENGER  = 0x00100000,               // 21 guessed, used to validate target (if vehicle passenger)
 };
 
-enum CreatureType : uint32_t
-{
-    CREATURE_TYPE_BEAST            = 1,
-    CREATURE_TYPE_DRAGONKIN        = 2,
-    CREATURE_TYPE_DEMON            = 3,
-    CREATURE_TYPE_ELEMENTAL        = 4,
-    CREATURE_TYPE_GIANT            = 5,
-    CREATURE_TYPE_UNDEAD           = 6,
-    CREATURE_TYPE_HUMANOID         = 7,
-    CREATURE_TYPE_CRITTER          = 8,
-    CREATURE_TYPE_MECHANICAL       = 9,
-    CREATURE_TYPE_NOT_SPECIFIED    = 10,
-    CREATURE_TYPE_TOTEM            = 11,
-    CREATURE_TYPE_NON_COMBAT_PET   = 12,
-    CREATURE_TYPE_GAS_CLOUD        = 13
-};
-
-enum ShapeshiftForm : uint32_t
+enum ShapeshiftForm
 {
     FORM_CAT                = 0x01,     // 1
     FORM_TREE               = 0x02,     // 2
@@ -691,113 +673,7 @@ enum ShapeshiftForm : uint32_t
     FORM_GLADIATOR_STANCE   = 0x21      // 33
 };
 
-enum ItemClass : uint32_t
-{
-    ITEM_CLASS_CONSUMABLE                       = 0,
-    ITEM_CLASS_CONTAINER                        = 1,
-    ITEM_CLASS_WEAPON                           = 2,
-    ITEM_CLASS_GEM                              = 3,
-    ITEM_CLASS_ARMOR                            = 4,
-    ITEM_CLASS_REAGENT                          = 5,
-    ITEM_CLASS_PROJECTILE                       = 6,
-    ITEM_CLASS_TRADE_GOODS                      = 7,
-    ITEM_CLASS_GENERIC                          = 8,  // OBSOLETE
-    ITEM_CLASS_RECIPE                           = 9,
-    ITEM_CLASS_MONEY                            = 10, // OBSOLETE
-    ITEM_CLASS_QUIVER                           = 11,
-    ITEM_CLASS_QUEST                            = 12,
-    ITEM_CLASS_KEY                              = 13,
-    ITEM_CLASS_PERMANENT                        = 14, // OBSOLETE
-    ITEM_CLASS_MISCELLANEOUS                    = 15,
-    ITEM_CLASS_GLYPH                            = 16
-};
-
-enum ItemSubclassWeapon : uint32_t
-{
-    ITEM_SUBCLASS_WEAPON_AXE                    = 0,  // One-Handed Axes
-    ITEM_SUBCLASS_WEAPON_AXE2                   = 1,  // Two-Handed Axes
-    ITEM_SUBCLASS_WEAPON_BOW                    = 2,
-    ITEM_SUBCLASS_WEAPON_GUN                    = 3,
-    ITEM_SUBCLASS_WEAPON_MACE                   = 4,  // One-Handed Maces
-    ITEM_SUBCLASS_WEAPON_MACE2                  = 5,  // Two-Handed Maces
-    ITEM_SUBCLASS_WEAPON_POLEARM                = 6,
-    ITEM_SUBCLASS_WEAPON_SWORD                  = 7,  // One-Handed Swords
-    ITEM_SUBCLASS_WEAPON_SWORD2                 = 8,  // Two-Handed Swords
-    ITEM_SUBCLASS_WEAPON_Obsolete               = 9,
-    ITEM_SUBCLASS_WEAPON_STAFF                  = 10,
-    ITEM_SUBCLASS_WEAPON_EXOTIC                 = 11, // One-Handed Exotics
-    ITEM_SUBCLASS_WEAPON_EXOTIC2                = 12, // Two-Handed Exotics
-    ITEM_SUBCLASS_WEAPON_FIST_WEAPON            = 13,
-    ITEM_SUBCLASS_WEAPON_MISCELLANEOUS          = 14,
-    ITEM_SUBCLASS_WEAPON_DAGGER                 = 15,
-    ITEM_SUBCLASS_WEAPON_THROWN                 = 16,
-    ITEM_SUBCLASS_WEAPON_SPEAR                  = 17,
-    ITEM_SUBCLASS_WEAPON_CROSSBOW               = 18,
-    ITEM_SUBCLASS_WEAPON_WAND                   = 19,
-    ITEM_SUBCLASS_WEAPON_FISHING_POLE           = 20
-};
-
-enum ItemSubclassArmor : uint32_t
-{
-    ITEM_SUBCLASS_ARMOR_MISCELLANEOUS           = 0,
-    ITEM_SUBCLASS_ARMOR_CLOTH                   = 1,
-    ITEM_SUBCLASS_ARMOR_LEATHER                 = 2,
-    ITEM_SUBCLASS_ARMOR_MAIL                    = 3,
-    ITEM_SUBCLASS_ARMOR_PLATE                   = 4,
-    ITEM_SUBCLASS_ARMOR_BUCKLER                 = 5, // OBSOLETE
-    ITEM_SUBCLASS_ARMOR_SHIELD                  = 6,
-    ITEM_SUBCLASS_ARMOR_LIBRAM                  = 7,
-    ITEM_SUBCLASS_ARMOR_IDOL                    = 8,
-    ITEM_SUBCLASS_ARMOR_TOTEM                   = 9,
-    ITEM_SUBCLASS_ARMOR_SIGIL                   = 10,
-    ITEM_SUBCLASS_ARMOR_RELIC                   = 11,
-};
-
-enum ItemSubclassJunk : uint32_t
-{
-    ITEM_SUBCLASS_JUNK                          = 0,
-    ITEM_SUBCLASS_JUNK_REAGENT                  = 1,
-    ITEM_SUBCLASS_JUNK_PET                      = 2,
-    ITEM_SUBCLASS_JUNK_HOLIDAY                  = 3,
-    ITEM_SUBCLASS_JUNK_OTHER                    = 4,
-    ITEM_SUBCLASS_JUNK_MOUNT                    = 5,
-    ITEM_SUBCLASS_JUNK_UNK12                    = 12, // 1 item (37677)
-};
-
-enum InventoryType : uint32_t
-{
-    INVTYPE_NON_EQUIP                           = 0,
-    INVTYPE_HEAD                                = 1,
-    INVTYPE_NECK                                = 2,
-    INVTYPE_SHOULDERS                           = 3,
-    INVTYPE_BODY                                = 4,
-    INVTYPE_CHEST                               = 5,
-    INVTYPE_WAIST                               = 6,
-    INVTYPE_LEGS                                = 7,
-    INVTYPE_FEET                                = 8,
-    INVTYPE_WRISTS                              = 9,
-    INVTYPE_HANDS                               = 10,
-    INVTYPE_FINGER                              = 11,
-    INVTYPE_TRINKET                             = 12,
-    INVTYPE_WEAPON                              = 13,
-    INVTYPE_SHIELD                              = 14,
-    INVTYPE_RANGED                              = 15,
-    INVTYPE_CLOAK                               = 16,
-    INVTYPE_2HWEAPON                            = 17,
-    INVTYPE_BAG                                 = 18,
-    INVTYPE_TABARD                              = 19,
-    INVTYPE_ROBE                                = 20,
-    INVTYPE_WEAPONMAINHAND                      = 21,
-    INVTYPE_WEAPONOFFHAND                       = 22,
-    INVTYPE_HOLDABLE                            = 23,
-    INVTYPE_AMMO                                = 24,
-    INVTYPE_THROWN                              = 25,
-    INVTYPE_RANGEDRIGHT                         = 26,
-    INVTYPE_QUIVER                              = 27,
-    INVTYPE_RELIC                               = 28
-};
-
-enum Powers : int8_t
+enum Powers
 {
     POWER_MANA                          = 0,
     POWER_RAGE                          = 1,
@@ -814,7 +690,7 @@ enum Powers : int8_t
     POWER_HEALTH                        = -2            // (-2 as signed value)
 };
 
-enum AuraType : uint32_t
+enum AuraType
 {
     SPELL_AURA_NONE                                         = 0,
     SPELL_AURA_BIND_SIGHT                                   = 1,
@@ -1187,73 +1063,6 @@ enum AuraType : uint32_t
     SPELL_AURA_368                                          = 368,  // Not used in 4.3.4
     SPELL_AURA_ENABLE_POWER_BAR_TIMER                       = 369,
     SPELL_AURA_SET_FAIR_FAR_CLIP                            = 370,  // Overrides client's View Distance setting to max("Fair", current_setting)
-};
-
-enum UnitMods : uint32_t
-{
-    UNIT_MOD_STAT_STRENGTH                                  = 0,    // UNIT_MOD_STAT_STRENGTH..UNIT_MOD_STAT_SPIRIT must be in existed order, it's accessed by index values of Stats enum.
-    UNIT_MOD_STAT_AGILITY                                   = 1,
-    UNIT_MOD_STAT_STAMINA                                   = 2,
-    UNIT_MOD_STAT_INTELLECT                                 = 3,
-    UNIT_MOD_STAT_SPIRIT                                    = 4,
-    UNIT_MOD_HEALTH                                         = 5,
-    UNIT_MOD_MANA                                           = 6,    // UNIT_MOD_MANA..UNIT_MOD_RUNIC_POWER must be in existed order, it's accessed by index values of Powers enum.
-    UNIT_MOD_RAGE                                           = 7,
-    UNIT_MOD_FOCUS                                          = 8,
-    UNIT_MOD_ENERGY                                         = 9,
-    UNIT_MOD_UNUSED                                         = 10,   // Old UNIT_MOD_HAPPINESS
-    UNIT_MOD_RUNE                                           = 11,
-    UNIT_MOD_RUNIC_POWER                                    = 12,
-    UNIT_MOD_SOUL_SHARDS                                    = 13,
-    UNIT_MOD_ECLIPSE                                        = 16,
-    UNIT_MOD_HOLY_POWER                                     = 15,
-    UNIT_MOD_ALTERNATE_POWER                                = 16,   // Atramedes etc.
-    UNIT_MOD_ARMOR                                          = 17,   // UNIT_MOD_ARMOR..UNIT_MOD_RESISTANCE_ARCANE must be in existed order, it's accessed by index values of SpellSchools enum.
-    UNIT_MOD_RESISTANCE_HOLY                                = 18,
-    UNIT_MOD_RESISTANCE_FIRE                                = 19,
-    UNIT_MOD_RESISTANCE_NATURE                              = 20,
-    UNIT_MOD_RESISTANCE_FROST                               = 21,
-    UNIT_MOD_RESISTANCE_SHADOW                              = 22,
-    UNIT_MOD_RESISTANCE_ARCANE                              = 23,
-    UNIT_MOD_ATTACK_POWER                                   = 24,
-    UNIT_MOD_ATTACK_POWER_POS                               = 25,
-    UNIT_MOD_ATTACK_POWER_NEG                               = 26,
-    UNIT_MOD_ATTACK_POWER_RANGED                            = 27,
-    UNIT_MOD_ATTACK_POWER_RANGED_POS                        = 28,
-    UNIT_MOD_ATTACK_POWER_RANGED_NEG                        = 29,
-    UNIT_MOD_DAMAGE_MAINHAND                                = 30,
-    UNIT_MOD_DAMAGE_OFFHAND                                 = 31,
-    UNIT_MOD_DAMAGE_RANGED                                  = 32,
-};
-
-enum CombatRating : uint32_t
-{
-    CR_WEAPON_SKILL                     = 0,
-    CR_DEFENSE_SKILL                    = 1, // Removed in 4.0.1
-    CR_DODGE                            = 2,
-    CR_PARRY                            = 3,
-    CR_BLOCK                            = 4,
-    CR_HIT_MELEE                        = 5,
-    CR_HIT_RANGED                       = 6,
-    CR_HIT_SPELL                        = 7,
-    CR_CRIT_MELEE                       = 8,
-    CR_CRIT_RANGED                      = 9,
-    CR_CRIT_SPELL                       = 10,
-    CR_HIT_TAKEN_MELEE                  = 11, // Deprecated since Cataclysm
-    CR_HIT_TAKEN_RANGED                 = 12, // Deprecated since Cataclysm
-    CR_HIT_TAKEN_SPELL                  = 13, // Deprecated since Cataclysm
-    CR_RESILIENCE_CRIT_TAKEN            = 14,
-    CR_RESILIENCE_PLAYER_DAMAGE_TAKEN   = 15,
-    CR_CRIT_TAKEN_SPELL                 = 16, // Deprecated since Cataclysm
-    CR_HASTE_MELEE                      = 17,
-    CR_HASTE_RANGED                     = 18,
-    CR_HASTE_SPELL                      = 19,
-    CR_WEAPON_SKILL_MAINHAND            = 20,
-    CR_WEAPON_SKILL_OFFHAND             = 21,
-    CR_WEAPON_SKILL_RANGED              = 22,
-    CR_EXPERTISE                        = 23,
-    CR_ARMOR_PENETRATION                = 24,
-    CR_MASTERY                          = 25,
 };
 
 enum SpellAttr0 : uint32_t
@@ -1661,7 +1470,6 @@ enum SpellSchools : uint8_t
     SPELL_SCHOOL_FROST                  = 4,
     SPELL_SCHOOL_SHADOW                 = 5,
     SPELL_SCHOOL_ARCANE                 = 6,
-    MAX_SPELL_SCHOOL                    = 7
 };
 
 enum SpellFamilyNames : uint8_t
