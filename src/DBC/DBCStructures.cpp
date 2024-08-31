@@ -94,20 +94,20 @@ SpellShapeshiftEntry::SpellShapeshiftEntry(DBCFileLoader::Record const& record)
 
 SkillLineAbilityEntry::SkillLineAbilityEntry(DBCFileLoader::Record const& record)
 {
-    id                  = record.getUInt(0);
-    skillId             = record.getUInt(1);
-    spellId             = record.getUInt(2);
-    //racemask            = record.getUInt(3);
-    //classmask           = record.getUInt(4);
-    //racemaskNot         = record.getUInt(5);
-    //classmaskNot        = record.getUInt(6);
-    req_skill_value     = record.getUInt(7);
-    forward_spellid     = record.getUInt(8);
-    //learnOnGetSkill     = record.getUInt(9);
-    max_value           = record.getUInt(10);
-    min_value           = record.getUInt(11);
-    character_points[0] = record.getUInt(12);
-    character_points[1] = record.getUInt(13);
+    id                          = record.getUInt(0);
+    SkillLine                   = record.getUInt(1);
+    Spell                       = record.getUInt(2);
+    //RaceMask                   = record.getUInt(3);
+    //ClassMask                  = record.getUInt(4);
+    //ExcludeRace                = record.getUInt(5);
+    //ExcludeClass               = record.getUInt(6);
+    MinSkillLineRank            = record.getUInt(7);
+    SupercededBySpell           = record.getUInt(8);
+    //AcquireMethod            = record.getUInt(9);
+    TrivialSkillLineRankHigh    = record.getUInt(10);
+    TrivialSkillLineRankLow     = record.getUInt(11);
+    NumSkillUps                 = record.getUInt(12);
+    //UniqueBit                   = record.getUInt(13);
 }
 
 SkillLineEntry::SkillLineEntry(DBCFileLoader::Record const& record)

@@ -218,6 +218,8 @@ inline void PrintShapeShiftingInfo(QString& result, uint32_t SpellShapeshiftId)
 
                 result += QString::number(stanceId);
             }
+
+            result += "<br>";
         }
     };
 
@@ -241,7 +243,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
         const auto& itr2 = std::find_if(sDBCStores->m_SkillLineAbilityEntries.begin(), sDBCStores->m_SkillLineAbilityEntries.end(), [_skillId, spellId](const auto _skillLineAbility)
         {
             auto const& abilityData = _skillLineAbility.second;
-            return _skillId == abilityData.skillId && abilityData.spellId == spellId;
+            return _skillId == abilityData.SkillLine && abilityData.Spell == spellId;
         });
 
         if (itr2 != sDBCStores->m_SkillLineAbilityEntries.end())
@@ -254,16 +256,16 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 
     if (skillLine != nullptr && skillLineAbility != nullptr)
     {
-        result += QString("Skill (Id %1) \"%2\"<br>").arg(skillLineAbility->skillId).arg(skillLine->name.c_str());
-        result += QString("    ReqSkillValue %1<br>").arg(skillLineAbility->req_skill_value);
-        result += QString(", Forward Spell = %1, MinMaxValue (%2, %3)<br>")
-                      .arg(skillLineAbility->forward_spellid)
-                      .arg(skillLineAbility->min_value)
-                      .arg(skillLineAbility->max_value);
+        result += QString("Skill (Id %1) \"%2\"<br>").arg(skillLineAbility->SkillLine).arg(skillLine->name.c_str());
+        result += QString("    MinSkillLineRank %1<br>").arg(skillLineAbility->MinSkillLineRank);
 
-        result += QString(", CharacterPoints (%1, %2)<br>")
-                      .arg(skillLineAbility->character_points[0])
-                      .arg(skillLineAbility->character_points[1]);
+        result += QString(", SupercedesSpell = %1, MinMaxValue (%2, %3)<br>")
+                      .arg(skillLineAbility->MinSkillLineRank)
+                      .arg(skillLineAbility->TrivialSkillLineRankLow)
+                      .arg(skillLineAbility->TrivialSkillLineRankHigh);
+
+        result += QString(", NumSkillups (%1)<br>")
+                      .arg(skillLineAbility->NumSkillUps);
 
         result += line;
     }
@@ -799,7 +801,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             }
         }
 
-        if (effectInfo->EffectBonusCoefficient != 1.0f)
+        if (effectInfo->EffectBonusCoefficient > 1.0f)
         {
             result += QString(" x %1").arg(effectInfo->EffectBonusCoefficient);
         }
@@ -912,7 +914,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 
                     const bool skillAbilityFound = std::any_of(sDBCStores->m_SkillLineAbilityEntries.begin(), sDBCStores->m_SkillLineAbilityEntries.end(), [entry](const auto& skillAbility)
                     {
-                        return skillAbility.second.spellId == entry;
+                        return skillAbility.second.Spell == entry;
                     });
 
                     result += (skillAbilityFound ? "<span style=\"color:green\">\t+" : "<span style=\"color:red\">\t-") + QString("%1 - %2</span><br>").arg(entry).arg(spellInfo.SpellName.c_str());

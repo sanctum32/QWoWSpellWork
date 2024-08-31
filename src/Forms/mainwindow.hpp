@@ -38,6 +38,8 @@ private:
 
 // Generic functions
     void PerformSpellSearch();
+
+protected:
 };
 
 extern MainWindow* _mainWindow;

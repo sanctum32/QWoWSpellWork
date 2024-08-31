@@ -145,22 +145,23 @@ struct SkillLineAbilityEntry
     explicit SkillLineAbilityEntry(DBCFileLoader::Record const& record);
 
     uint32_t    id{};                                           // 0        m_ID
-    uint32_t    skillId{};                                      // 1        m_skillLine
-    uint32_t    spellId{};                                      // 2        m_spell
-    //uint32_t    racemask{};                                     // 3        m_raceMask
-    //uint32_t    classmask{};                                    // 4        m_classMask
-    //uint32_t    racemaskNot{};                                  // 5        m_excludeRace
-    //uint32_t    classmaskNot{};                                 // 6        m_excludeClass
-    uint32_t    req_skill_value{};                              // 7        m_minSkillLineRank
-    uint32_t    forward_spellid{};                              // 8        m_supercededBySpell
-    //uint32_t    learnOnGetSkill{};                              // 9        m_acquireMethod
-    uint32_t    max_value{};                                    // 10       m_trivialSkillLineRankHigh
-    uint32_t    min_value{};                                    // 11       m_trivialSkillLineRankLow
-    std::array<uint32_t, 2> character_points{};                 // 12-13    m_characterPoints
+    uint32_t    SkillLine{};                                    // 1        m_skillLine
+    uint32_t    Spell{};                                        // 2        m_spell
+    //uint32_t    RaceMask{};                                   // 3        m_raceMask
+    //uint32_t    ClassMask{};                                  // 4        m_classMask
+    //uint32_t    ExcludeRace{};                                // 5        m_excludeRace
+    //uint32_t    ExcludeClass{};                               // 6        m_excludeClass
+    uint32_t    MinSkillLineRank{};                             // 7        m_minSkillLineRank
+    uint32_t    SupercededBySpell{};                            // 8        m_supercededBySpell
+    //uint32_t    AcquireMethod{};                              // 9        m_acquireMethod
+    uint32_t    TrivialSkillLineRankHigh{};                     // 10
+    uint32_t    TrivialSkillLineRankLow{};                      // 11
+    uint32_t    NumSkillUps;                                    // 12
+    //uint32_t    UniqueBit;                                      // 13
 
     static char const* GetDBCFormat()
     {
-        return "iiixxxxiixiiii";
+        return "iiixxxxiixiiix";
     }
 };
 
