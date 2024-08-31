@@ -42,7 +42,7 @@ set(PROJECT_SOURCES
     src/DBC/DBCStores.hpp
     src/DBC/DBCStores.cpp
     src/Spell/SpellInfo.cpp
-    src/SpellInfoTabEvents.cpp
+    src/Spell/SpellInfoTabEvents.cpp
     src/Enums/SpellEnums.hpp
     src/JsonData/JsonData.hpp
     src/JsonData/JsonData.cpp
