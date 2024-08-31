@@ -403,7 +403,7 @@ inline void PrintSpellRangeInfo(QString& result, uint32_t rangeIndex)
     result += "<br>";
     if (const auto* spellRange = GetDBCEntry(rangeIndex, sDBCStores->m_SpellRangeEntries))
     {
-        result += QString("SpellRange: (Id %1) \"%2\"<br>").arg(spellRange->ID).arg(spellRange->Name.c_str());
+        result += QString("SpellRange: (Id %1) \"%2\"<br>").arg(spellRange->Id).arg(spellRange->Name.c_str());
         result += QString("MinRangeNegative = %1, MinRangePositive %2<br>").arg(spellRange->minRangeHostile).arg(spellRange->minRangeFriend);
         result += QString("MaxRangeNegative = %1, MaxRangePositive = %2<br>").arg(spellRange->maxRangeHostile).arg(spellRange->maxRangeFriend);
     }
@@ -482,7 +482,7 @@ inline void PrintSpellDurationInfo(QString& result, uint32_t DurationIndex)
     if (const auto* spellDurationEntry = GetDBCEntry(DurationIndex, sDBCStores->m_SpellDurationEntries))
     {
         result += QString("Duration: ID (%1) %2 ms, %3 ms, %4 ms<br>")
-                      .arg(spellDurationEntry->ID)
+                      .arg(spellDurationEntry->Id)
                       .arg(spellDurationEntry->Duration[0])
                       .arg(spellDurationEntry->Duration[1])
                       .arg(spellDurationEntry->Duration[2]);

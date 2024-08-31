@@ -1,5 +1,4 @@
 #pragma once
-
 #include <cstdint>
 #include <string>
 
@@ -21,11 +20,11 @@ class DBCFileLoader
 {
 public:
     DBCFileLoader();
-    DBCFileLoader(const char *filename, const char *fmt);
+    DBCFileLoader(std::string_view filename, const char *fmt);
 
     ~DBCFileLoader();
 
-    bool Load(const char *filename, const char *fmt);
+    bool Load(std::string_view filename, const char *fmt);
 
     class Record
     {

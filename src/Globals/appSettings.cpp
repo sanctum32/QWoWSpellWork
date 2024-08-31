@@ -14,6 +14,12 @@ bool SpellWorkConfig::ReadSettings()
 
         const auto& document = json.object();
 
+        m_appSettings.dbcFilePath = document.value("dbcPath").toString().toStdString();
+        if (m_appSettings.dbcFilePath.empty())
+        {
+            m_appSettings.dbcFilePath = "./dbc";
+        }
+
         m_appSettings.themeName = document.value("ThemeName").toString();
         m_appSettings.loadDBCSpells = document.value("LoadDBCSpells").toBool(true);
         m_appSettings.loadSQLSpells = document.value("LoadSQLSpells").toBool(true);

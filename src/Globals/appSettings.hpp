@@ -6,10 +6,10 @@
 struct SQLSettings
 {
     QString hostname;
-    unsigned int port;
     QString username;
     QString password;
     QString worldDB;
+    unsigned int port;
     unsigned int pingDelayInMS;
     bool enable;
     bool canReconnect;
@@ -18,6 +18,7 @@ struct SQLSettings
 
 struct AppSettings
 {
+    std::string dbcFilePath;
     QString themeName;
     bool loadDBCSpells;
     bool loadSQLSpells;

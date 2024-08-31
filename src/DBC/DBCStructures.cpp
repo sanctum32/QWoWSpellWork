@@ -94,7 +94,7 @@ SpellShapeshiftEntry::SpellShapeshiftEntry(DBCFileLoader::Record const& record)
 
 SkillLineAbilityEntry::SkillLineAbilityEntry(DBCFileLoader::Record const& record)
 {
-    id                          = record.getUInt(0);
+    Id                          = record.getUInt(0);
     SkillLine                   = record.getUInt(1);
     Spell                       = record.getUInt(2);
     //RaceMask                   = record.getUInt(3);
@@ -112,7 +112,7 @@ SkillLineAbilityEntry::SkillLineAbilityEntry(DBCFileLoader::Record const& record
 
 SkillLineEntry::SkillLineEntry(DBCFileLoader::Record const& record)
 {
-    id                  = record.getUInt(0);
+    Id                  = record.getUInt(0);
     //categoryId          = record.getInt(1);
     name                = record.getString(2);
     //description         = record.getString(3);
@@ -154,7 +154,7 @@ SpellEquippedItemsEntry::SpellEquippedItemsEntry(DBCFileLoader::Record const& re
 
 SpellRangeEntry::SpellRangeEntry(DBCFileLoader::Record const& record)
 {
-    ID                  = record.getUInt(0);
+    Id                  = record.getUInt(0);
     minRangeHostile     = record.getFloat(1);
     minRangeFriend      = record.getFloat(2);
     maxRangeHostile     = record.getFloat(3);
@@ -175,7 +175,7 @@ SpellAuraOptionsEntry::SpellAuraOptionsEntry(DBCFileLoader::Record const& record
 
 SpellCastTimesEntry::SpellCastTimesEntry(DBCFileLoader::Record const& record)
 {
-    ID                  = record.getUInt(0);
+    Id                  = record.getUInt(0);
     CastTime            = record.getInt(1);
     CastTimePerLevel    = record.getFloat(2);
     MinCastTime         = record.getInt(3);
@@ -191,7 +191,7 @@ SpellCooldownsEntry::SpellCooldownsEntry(DBCFileLoader::Record const& record)
 
 SpellDurationEntry::SpellDurationEntry(DBCFileLoader::Record const& record)
 {
-    ID              = record.getUInt(0);
+    Id              = record.getUInt(0);
     Duration[0]     = record.getInt(1);
     Duration[1]     = record.getInt(2);
     Duration[2]     = record.getInt(3);
@@ -235,7 +235,7 @@ SpellAuraRestrictionsEntry::SpellAuraRestrictionsEntry(DBCFileLoader::Record con
 AreaGroupEntry::AreaGroupEntry(DBCFileLoader::Record const& record)
 {
     uint8_t i = 0;
-    AreaGroupId = record.getUInt(i++);
+    Id = record.getUInt(i++);
     for (uint32_t& areaId : AreaId)
     {
         areaId = record.getUInt(i++);

@@ -51,10 +51,9 @@ struct SpellEffectEntry
 // SpellCategory.dbc
 struct SpellCategoryEntry
 {
-    SpellCategoryEntry() = default;
     explicit SpellCategoryEntry(DBCFileLoader::Record const& record);
 
-    uint32_t Id{};                                              // 0
+    uint32_t    Id{};                                           // 0
     //uint32_t Flags{};                                           // 1
     //uint32_t UsesPerWeek{};                                     // 2
     std::string Name;                                           // 3
@@ -68,10 +67,9 @@ struct SpellCategoryEntry
 // SpellCategories.dbc
 struct SpellCategoriesEntry
 {
-    SpellCategoriesEntry() = default;
     explicit SpellCategoriesEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    Category{};                                     // 1        m_category
     uint32_t    DefenseType{};                                  // 2      m_defenseType
     uint32_t    DispelType{};                                   // 3        m_dispelType
@@ -88,10 +86,9 @@ struct SpellCategoriesEntry
 // SpellClassOptions.dbc
 struct SpellClassOptionsEntry
 {
-    SpellClassOptionsEntry() = default;
     explicit SpellClassOptionsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                         // 0       m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    modalNextSpell{};                             // 1       m_modalNextSpell not used
     std::array<uint32_t, 3> SpellFamilyFlags{};               // 2-4
     uint32_t    SpellFamilyName{};                            // 5       m_spellClassSet
@@ -106,10 +103,9 @@ struct SpellClassOptionsEntry
 // SpellTargetRestrictions.dbc
 struct SpellTargetRestrictionsEntry
 {
-    SpellTargetRestrictionsEntry() = default;
     explicit SpellTargetRestrictionsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     float       ConeAngle{};                                    // 1
     uint32_t    MaxAffectedTargets{};                           // 2        m_maxTargets
     uint32_t    MaxTargetLevel{};                               // 3        m_maxTargetLevel
@@ -125,10 +121,9 @@ struct SpellTargetRestrictionsEntry
 // SpellShapeshift.dbc
 struct SpellShapeshiftEntry
 {
-    SpellShapeshiftEntry() = default;
     explicit SpellShapeshiftEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0 - m_ID
+    uint32_t    Id{};                                           // 0
     std::array<uint32_t, 2> ShapeshiftExclude{};                // 1 - 2
     std::array<uint32_t, 2> ShapeshiftMask{};                   // 3 - 4
     //uint32_t    StanceBarOrder{};                               // 5 - m_stanceBarOrder not used
@@ -142,10 +137,9 @@ struct SpellShapeshiftEntry
 // SkillLineAbility.dbc
 struct SkillLineAbilityEntry
 {
-    SkillLineAbilityEntry() = default;
     explicit SkillLineAbilityEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    SkillLine{};                                    // 1        m_skillLine
     uint32_t    Spell{};                                        // 2        m_spell
     //uint32_t    RaceMask{};                                   // 3        m_raceMask
@@ -169,10 +163,9 @@ struct SkillLineAbilityEntry
 // SkillLine.dbc
 struct SkillLineEntry
 {
-    SkillLineEntry() = default;
     explicit SkillLineEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     //int32_t     categoryId{};                                   // 1        m_categoryID
     std::string name;                                           // 3        m_displayName_lang
     //std::string description;                                    // 4        m_description_lang
@@ -189,10 +182,9 @@ struct SkillLineEntry
 // SpellReagents.dbc
 struct SpellReagentsEntry
 {
-    SpellReagentsEntry() = default;
     explicit SpellReagentsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     std::array<int32_t, MAX_SPELL_REAGENTS> Reagent{};          // 54-61    m_reagent
     std::array<uint32_t, MAX_SPELL_REAGENTS> ReagentCount{};    // 62-69    m_reagentCount
 
@@ -205,10 +197,9 @@ struct SpellReagentsEntry
 // SpellLevels.dbc
 struct SpellLevelsEntry
 {
-    SpellLevelsEntry() = default;
     explicit SpellLevelsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    baseLevel{};                                    // 1       m_baseLevel
     uint32_t    maxLevel{};                                     // 2       m_maxLevel
     uint32_t    spellLevel{};                                   // 3       m_spellLevel
@@ -222,10 +213,9 @@ struct SpellLevelsEntry
 // SpellEquippedItems.dbc
 struct SpellEquippedItemsEntry
 {
-    SpellEquippedItemsEntry() = default;
     explicit SpellEquippedItemsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     int32_t     EquippedItemClass{};                            // 70       m_equippedItemClass (value)
     int32_t     EquippedItemInventoryTypeMask{};                // 72       m_equippedItemInvTypes (mask)
     int32_t     EquippedItemSubClassMask{};                     // 71       m_equippedItemSubclass (mask)
@@ -239,10 +229,9 @@ struct SpellEquippedItemsEntry
 // SpellRange.dbc
 struct SpellRangeEntry
 {
-    SpellRangeEntry() = default;
     explicit SpellRangeEntry(DBCFileLoader::Record const& record);
 
-    uint32_t  ID{};
+    uint32_t    Id{};                                           // 0
     float     minRangeHostile{};
     float     minRangeFriend{};
     float     maxRangeHostile{};
@@ -260,10 +249,9 @@ struct SpellRangeEntry
 // SpellAuraOptions.dbc
 struct SpellAuraOptionsEntry
 {
-    SpellAuraOptionsEntry() = default;
     explicit SpellAuraOptionsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0       m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    StackAmount{};                                  // 1       m_cumulativeAura
     uint32_t    procChance{};                                   // 2       m_procChance
     uint32_t    procCharges{};                                  // 3       m_procCharges
@@ -278,13 +266,12 @@ struct SpellAuraOptionsEntry
 // SpellCastTimes.dbc
 struct SpellCastTimesEntry
 {
-    SpellCastTimesEntry() = default;
     explicit SpellCastTimesEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    ID{};                                         // 0
-    int32_t     CastTime{};                                   // 1
-    float       CastTimePerLevel{};                           // 2 unsure / per skill?
-    int32_t     MinCastTime{};                                // 3 unsure
+    uint32_t    Id{};                                           // 0
+    int32_t     CastTime{};                                     // 1
+    float       CastTimePerLevel{};                             // 2 unsure / per skill?
+    int32_t     MinCastTime{};                                  // 3 unsure
 
     static char const* GetDBCFormat()
     {
@@ -295,10 +282,9 @@ struct SpellCastTimesEntry
 // SpellCooldowns.dbc
 struct SpellCooldownsEntry
 {
-    SpellCooldownsEntry() = default;
     explicit SpellCooldownsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    CategoryRecoveryTime{};                         // 1       m_categoryRecoveryTime
     uint32_t    RecoveryTime{};                                 // 2       m_recoveryTime
     uint32_t    StartRecoveryTime{};                            // 3      m_startRecoveryTime
@@ -312,10 +298,9 @@ struct SpellCooldownsEntry
 // SpellDuration.dbc
 struct SpellDurationEntry
 {
-    SpellDurationEntry() = default;
     explicit SpellDurationEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    ID{};                   // 0
+    uint32_t    Id{};                                           // 0
     std::array<int32_t, 3> Duration{};  // 1 - 3
 
     static char const* GetDBCFormat()
@@ -327,10 +312,9 @@ struct SpellDurationEntry
 // SpellPower.dbc
 struct SpellPowerEntry
 {
-    SpellPowerEntry() = default;
     explicit SpellPowerEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    manaCost{};                                     // 1       m_manaCost
     uint32_t    manaCostPerlevel{};                             // 2       m_manaCostPerLevel
     uint32_t    ManaCostPercentage{};                           // 3       m_manaCostPct
@@ -348,10 +332,9 @@ struct SpellPowerEntry
 // SpellInterrupts.dbc
 struct SpellInterruptsEntry
 {
-    SpellInterruptsEntry() = default;
     explicit SpellInterruptsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     std::array<uint32_t, 2> AuraInterruptFlags{};               // 1 - 2       m_auraInterruptFlags
     std::array<uint32_t, 2> ChannelInterruptFlags{};            // 3 - 4       m_channelInterruptFlags
     uint32_t    InterruptFlags{};                               // 5       m_interruptFlags
@@ -365,10 +348,9 @@ struct SpellInterruptsEntry
 // SpellAuraRestrictions.dbc
 struct SpellAuraRestrictionsEntry
 {
-    SpellAuraRestrictionsEntry() = default;
     explicit SpellAuraRestrictionsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     uint32_t    CasterAuraState{};                              // 1       m_casterAuraState
     uint32_t    TargetAuraState{};                              // 2       m_targetAuraState
     uint32_t    CasterAuraStateNot{};                           // 3       m_excludeCasterAuraState
@@ -387,10 +369,9 @@ struct SpellAuraRestrictionsEntry
 // AreaGroup.dbc
 struct AreaGroupEntry
 {
-    AreaGroupEntry() = default;
     explicit AreaGroupEntry(DBCFileLoader::Record const& record);
 
-    uint32_t  AreaGroupId{};                                    // 0
+    uint32_t    Id{};                                           // 0
     std::array<uint32_t, MAX_GROUP_AREA_IDS> AreaId{};          // 1-6
     uint32_t  nextGroup{};                                      // 7 index of next group
 
@@ -403,10 +384,9 @@ struct AreaGroupEntry
 // AreaTable.dbc
 struct AreaTableEntry
 {
-    AreaTableEntry() = default;
     explicit AreaTableEntry(DBCFileLoader::Record const& record);
 
-    uint32_t Id{};                                              // 0
+    uint32_t    Id{};                                           // 0
     uint32_t ContinentID{};                                     // 1
     //uint32_t ParentAreaID{};                                    // 2 if 0 then it's zone, else it's zone id of this area
     //uint32_t AreaBit{};                                         // 3
@@ -439,16 +419,15 @@ struct AreaTableEntry
 // SpellCastingRequirements.dbc
 struct SpellCastingRequirementsEntry
 {
-    SpellCastingRequirementsEntry() = default;
     explicit SpellCastingRequirementsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t Id{};                                             // 0
-    //uint32_t FacingCasterFlags{};                            // 1
-    //uint32_t MinFactionID{};                                 // 2
-    //uint32_t MinReputation{};                                // 3
-    int32_t  RequiredAreasID{};                                // 4
-    //uint32_t RequiredAuraVision{};                           // 5
-    uint32_t RequiresSpellFocus{};                             // 6
+    uint32_t    Id{};                                           // 0
+    //uint32_t FacingCasterFlags{};                              // 1
+    //uint32_t MinFactionID{};                                   // 2
+    //uint32_t MinReputation{};                                  // 3
+    int32_t  RequiredAreasID{};                                 // 4
+    //uint32_t RequiredAuraVision{};                             // 5
+    uint32_t RequiresSpellFocus{};                              // 6
 
     static char const* GetDBCFormat()
     {
@@ -459,10 +438,9 @@ struct SpellCastingRequirementsEntry
 // SpellScaling.dbc
 struct SpellScalingEntry
 {
-    SpellScalingEntry() = default;
     explicit SpellScalingEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0        m_ID
+    uint32_t    Id{};                                           // 0
     int32_t     CastTimeMin{};                                  // 1
     int32_t     CastTimeMax{};                                  // 2
     int32_t     CastTimeMaxLevel{};                             // 3
@@ -482,11 +460,10 @@ struct SpellScalingEntry
 // gtSpellScaling.dbc
 struct GtSpellScalingEntry
 {
-    GtSpellScalingEntry() = default;
     explicit GtSpellScalingEntry(DBCFileLoader::Record const& record);
 
-    uint32_t Id{};
-    float value{};
+    uint32_t    Id{};                                           // 0
+    float value{};                                              // 1
 
     static char const* GetDBCFormat()
     {
@@ -497,13 +474,12 @@ struct GtSpellScalingEntry
 constexpr uint8_t MAX_OVERRIDE_SPELL = 10;
 struct OverrideSpellDataEntry
 {
-    OverrideSpellDataEntry() = default;
     explicit OverrideSpellDataEntry(DBCFileLoader::Record const& record);
 
-    uint32_t      Id{};                           // 0
-    std::array<int32_t, MAX_OVERRIDE_SPELL> Spells{};  // 1-10
-    //uint32_t      unk0;                         // 11
-    //std::string   SpellBarName;                 // 12
+    uint32_t    Id{};                                           // 0
+    std::array<int32_t, MAX_OVERRIDE_SPELL> Spells{};           // 1-10
+    //uint32_t      unk0;                                        // 11
+    //std::string   SpellBarName;                                // 12
 
     static char const* GetDBCFormat()
     {
@@ -513,20 +489,19 @@ struct OverrideSpellDataEntry
 
 struct ScreenEffectEntry
 {
-    ScreenEffectEntry() = default;
     explicit ScreenEffectEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};           // 0
-    std::string Name;           // 1
-    //uint32_t    Unk0{};         // 2
-    //float       Unk1{};         // 3
-    //uint32_t    Unk2{};         // 4
-    //uint32_t    Unk3{};         // 5
-    //uint32_t    Unk4{};         // 6
-    //int32_t     Unk5{};         // 7
-    //uint32_t    Unk6{};         // 8
-    //uint32_t    Unk7{};         // 9
-    //int32_t     Unk8{};         // 11
+    uint32_t    Id{};                                           // 0
+    std::string Name;                                           // 1
+    //uint32_t    Unk0{};                                       // 2
+    //float       Unk1{};                                       // 3
+    //uint32_t    Unk2{};                                       // 4
+    //uint32_t    Unk3{};                                       // 5
+    //uint32_t    Unk4{};                                       // 6
+    //int32_t     Unk5{};                                       // 7
+    //uint32_t    Unk6{};                                       // 8
+    //uint32_t    Unk7{};                                       // 9
+    //int32_t     Unk8{};                                       // 11
 
     static char const* GetDBCFormat()
     {
@@ -536,13 +511,12 @@ struct ScreenEffectEntry
 
 struct SpellRadiusEntry
 {
-    SpellRadiusEntry() = default;
     explicit SpellRadiusEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};               // 0
-    float     RadiusMin{};          // 1
-    float     RadiusPerLevel{};     // 2
-    float     RadiusMax{};          // 3
+    uint32_t    Id{};                                           // 0
+    float     RadiusMin{};                                      // 1
+    float     RadiusPerLevel{};                                 // 2
+    float     RadiusMax{};                                      // 3
 
     static char const* GetDBCFormat()
     {
@@ -554,46 +528,44 @@ struct SpellEntry
 {
     SpellEntry() = default;
     explicit SpellEntry(DBCFileLoader::Record const& record);
-    SpellEntry(const SpellEntry&) = default;
-    SpellEntry& operator=(const SpellEntry&) = default;
 
-    uint32_t    Id{};                                        // 0        m_ID
-    std::array<uint32_t, MAX_SPELL_ATTRIBUTES> Attributes{};  // 1 - 11   m_attribute
-    uint32_t    CastingTimeIndex{};                          // 12       m_castingTimeIndex
-    uint32_t    DurationIndex{};                             // 13       m_durationIndex
-    int32_t     powerType{};                                 // 14       m_powerType
-    uint32_t    rangeIndex{};                                // 15       m_rangeIndex
-    float       speed{};                                     // 16       m_speed
-    std::array<uint32_t, 2> SpellVisual{};                   // 17 - 18       m_spellVisualID
-    uint32_t    SpellIconID{};                               // 19       m_spellIconID
-    uint32_t    ActiveIconID{};                              // 20       m_activeIconID
-    std::string SpellName;                                    // 21       m_name_lang
-    std::string Rank;                                         // 22       m_nameSubtext_lang
-    std::string Description;                                  // 23       m_description_lang not used
-    std::string ToolTip;                                      // 24       m_auraDescription_lang not used
-    uint32_t    SchoolMask{};                                // 25       m_schoolMask
-    //uint32_t    runeCostID{};                                // 26       m_runeCostID
-    //uint32_t  spellMissileID{};                              // 27       m_spellMissileID not used
-    //uint32_t  spellDescriptionVariableID{};                  // 28       m_spellDescriptionVariableID, 3.2.0
-    //uint32_t  SpellDifficultyId{};                           // 29       m_spellDifficultyID - id from SpellDifficulty.dbc
-    //float   SpellCoef{};                                     // 30
-    uint32_t  SpellScalingId{};                              // 31       SpellScaling.dbc
-    uint32_t  SpellAuraOptionsId{};                          // 32       SpellAuraOptions.dbc
-    uint32_t  SpellAuraRestrictionsId{};                     // 33       SpellAuraRestrictions.dbc
-    uint32_t  SpellCastingRequirementsId{};                  // 34       SpellCastingRequirements.dbc
-    uint32_t  SpellCategoriesId{};                           // 35       SpellCategories.dbc
-    uint32_t  SpellClassOptionsId{};                         // 36       SpellClassOptions.dbc
-    uint32_t  SpellCooldownsId{};                            // 37       SpellCooldowns.dbc
-    //uint32_t  unkIndex7{};                                   // 38       all zeros...
-    uint32_t  SpellEquippedItemsId{};                        // 39       SpellEquippedItems.dbc
-    uint32_t  SpellInterruptsId{};                           // 40       SpellInterrupts.dbc
-    uint32_t  SpellLevelsId{};                               // 41       SpellLevels.dbc
-    uint32_t  SpellPowerId{};                                // 42       SpellPower.dbc
-    uint32_t  SpellReagentsId{};                             // 43       SpellReagents.dbc
-    uint32_t  SpellShapeshiftId{};                           // 44       SpellShapeshift.dbc
-    uint32_t  SpellTargetRestrictionsId{};                   // 45       SpellTargetRestrictions.dbc
-    //uint32_t  SpellTotemsId{};                               // 46       SpellTotems.dbc
-    //uint32_t  ResearchProject{};                             // 47       ResearchProject.dbc
+    uint32_t    Id{};                                           // 0
+    std::array<uint32_t, MAX_SPELL_ATTRIBUTES> Attributes{};    // 1 - 11   m_attribute
+    uint32_t    CastingTimeIndex{};                             // 12       m_castingTimeIndex
+    uint32_t    DurationIndex{};                                // 13       m_durationIndex
+    int32_t     powerType{};                                    // 14       m_powerType
+    uint32_t    rangeIndex{};                                   // 15       m_rangeIndex
+    float       speed{};                                        // 16       m_speed
+    std::array<uint32_t, 2> SpellVisual{};                      // 17 - 18       m_spellVisualID
+    uint32_t    SpellIconID{};                                  // 19       m_spellIconID
+    uint32_t    ActiveIconID{};                                 // 20       m_activeIconID
+    std::string SpellName;                                      // 21       m_name_lang
+    std::string Rank;                                           // 22       m_nameSubtext_lang
+    std::string Description;                                    // 23       m_description_lang not used
+    std::string ToolTip;                                        // 24       m_auraDescription_lang not used
+    uint32_t    SchoolMask{};                                   // 25       m_schoolMask
+    //uint32_t    runeCostID{};                                  // 26       m_runeCostID
+    //uint32_t  spellMissileID{};                                // 27       m_spellMissileID not used
+    //uint32_t  spellDescriptionVariableID{};                    // 28       m_spellDescriptionVariableID, 3.2.0
+    //uint32_t  SpellDifficultyId{};                             // 29       m_spellDifficultyID - id from SpellDifficulty.dbc
+    //float   SpellCoef{};                                       // 30
+    uint32_t  SpellScalingId{};                                 // 31       SpellScaling.dbc
+    uint32_t  SpellAuraOptionsId{};                             // 32       SpellAuraOptions.dbc
+    uint32_t  SpellAuraRestrictionsId{};                        // 33       SpellAuraRestrictions.dbc
+    uint32_t  SpellCastingRequirementsId{};                     // 34       SpellCastingRequirements.dbc
+    uint32_t  SpellCategoriesId{};                              // 35       SpellCategories.dbc
+    uint32_t  SpellClassOptionsId{};                            // 36       SpellClassOptions.dbc
+    uint32_t  SpellCooldownsId{};                               // 37       SpellCooldowns.dbc
+    //uint32_t  unkIndex7{};                                    // 38       all zeros...
+    uint32_t  SpellEquippedItemsId{};                           // 39       SpellEquippedItems.dbc
+    uint32_t  SpellInterruptsId{};                              // 40       SpellInterrupts.dbc
+    uint32_t  SpellLevelsId{};                                  // 41       SpellLevels.dbc
+    uint32_t  SpellPowerId{};                                   // 42       SpellPower.dbc
+    uint32_t  SpellReagentsId{};                                // 43       SpellReagents.dbc
+    uint32_t  SpellShapeshiftId{};                              // 44       SpellShapeshift.dbc
+    uint32_t  SpellTargetRestrictionsId{};                      // 45       SpellTargetRestrictions.dbc
+    //uint32_t  SpellTotemsId{};                                 // 46       SpellTotems.dbc
+    //uint32_t  ResearchProject{};                               // 47       ResearchProject.dbc
 
     static char const* GetDBCFormat()
     {
@@ -621,21 +593,20 @@ struct SpellEntry
 
 struct FactionEntry
 {
-    FactionEntry() = default;
     explicit FactionEntry(DBCFileLoader::Record const& record);
 
-    uint32_t  Id{};                                          // 0
-    //int32_t   ReputationIndex{};                             // 1
-    //std::array<uint32_t, 4> ReputationRaceMask{};            // 2 - 5
-    //std::array<uint32_t, 4> ReputationClassMask{};           // 6 - 9
-    //std::array<int32_t, 4>  ReputationBase{};                // 10 - 13
-    //std::array<uint32_t, 4> ReputationFlags{};               // 14 - 17
-    //uint32_t  ParentFactionID{};                             // 18
-    //std::array<float, 2> ParentFactionMod{};                 // 19 - 20 Faction gains incoming rep * spilloverRateIn and  Faction outputs rep * spilloverRateOut as spillover reputation
-    //std::array<uint32_t, 2> ParentFactionCap{};                         // 21 - 22 The highest rank the faction will profit from incoming spillover and It does not seem to be the max standing at which a faction outputs spillover ...so no idea
-    std::string   Name;                                       // 23
+    uint32_t    Id{};                                           // 0
+    //int32_t   ReputationIndex{};                               // 1
+    //std::array<uint32_t, 4> ReputationRaceMask{};              // 2 - 5
+    //std::array<uint32_t, 4> ReputationClassMask{};             // 6 - 9
+    //std::array<int32_t, 4>  ReputationBase{};                  // 10 - 13
+    //std::array<uint32_t, 4> ReputationFlags{};                 // 14 - 17
+    //uint32_t  ParentFactionID{};                               // 18
+    //std::array<float, 2> ParentFactionMod{};                   // 19 - 20 Faction gains incoming rep * spilloverRateIn and  Faction outputs rep * spilloverRateOut as spillover reputation
+    //std::array<uint32_t, 2> ParentFactionCap{};                // 21 - 22 The highest rank the faction will profit from incoming spillover and It does not seem to be the max standing at which a faction outputs spillover ...so no idea
+    std::string   Name;                                        // 23
     //std::string   Description;                                // 24
-    //uint32_t  Expansion{};                                   // 25
+    //uint32_t  Expansion{};                                    // 25
 
     static char const* GetDBCFormat()
     {

@@ -5,7 +5,7 @@
 
 #include "DBCFileLoader.hpp"
 
-DBCFileLoader::DBCFileLoader(const char *filename, const char *fmt) :
+DBCFileLoader::DBCFileLoader(std::string_view filename, const char *fmt) :
     fieldsOffset(nullptr),
     data(nullptr),
     stringTable(nullptr)
@@ -20,7 +20,7 @@ DBCFileLoader::DBCFileLoader() :
 {
 }
 
-bool DBCFileLoader::Load(const char* filename, const char* fmt)
+bool DBCFileLoader::Load(std::string_view filename, const char* fmt)
 {
     if (data)
     {
@@ -28,7 +28,7 @@ bool DBCFileLoader::Load(const char* filename, const char* fmt)
         data = nullptr;
     }
 
-    FILE* f = fopen(filename, "rb");
+    FILE* f = fopen(filename.data(), "rb");
     if (f == nullptr)
         return false;
 

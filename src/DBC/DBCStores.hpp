@@ -17,9 +17,7 @@ public:
 
     bool LoadData();
     bool LoadDBCDatas();
-#ifdef SPELLWORK_BUILD_SQL
     bool LoadSqlDBCData();
-#endif // SPELLWORK_BUILD_SQL
 
     // Stores
     std::map<uint32_t, SpellEntry>                   m_spellEntries;                             // Spell.dbc
