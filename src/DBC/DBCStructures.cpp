@@ -408,19 +408,10 @@ SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
     //SpellTotemsId()               = record.getUInt(46);
     //ResearchProject()             = record.getUInt(47);
 
-    if (getDescription().empty() || getDescription().size() <= 1)
+    if (getDescription().isEmpty())
     {
         _getDescription() = "-- No description --";
     }
-
-    m_spellNameUpper = QString(getSpellName().c_str()).toUpper();
-
-    if (getDescription().empty() || getDescription().size() <= 1)
-    {
-        _fields[23] = "-- No description --";
-    }
-
-    m_spellNameUpper = QString(getSpellName().c_str()).toUpper();
 }
 
 SpellEntry::SpellEntry(const MYSQL_ROW& row)
@@ -461,8 +452,6 @@ SpellEntry::SpellEntry(const MYSQL_ROW& row)
     {
         _fields[1 + i] = static_cast<uint32_t>(atoi(row[1 + i]));
     }
-
-    m_spellNameUpper = QString(_getSpellName().textVal.c_str()).toUpper();
 }
 
 FactionEntry::FactionEntry(DBCFileLoader::Record const& record)

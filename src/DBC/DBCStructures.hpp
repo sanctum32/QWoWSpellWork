@@ -540,12 +540,12 @@ private:
         uint32_t uint32Val{};
         int32_t int32Val{};
         float floatVal{};
-        std::string textVal;
+        QString textVal;
 
         SpellEntryValues& operator=(uint32_t val) { uint32Val = val; return *this; }
         SpellEntryValues& operator=(int32_t val) { int32Val = val; return *this; }
         SpellEntryValues& operator=(float val) { floatVal = val; return *this; }
-        SpellEntryValues& operator=(std::string val) { textVal = std::move(val); return *this; }
+        SpellEntryValues& operator=(std::string val) { textVal = QString::fromStdString(val); return *this; }
     };
 
     auto& _getID() { return _fields[0]; }
@@ -667,10 +667,10 @@ public:
     uint32_t getSpellVisual2() { return _getSpellVisual2().uint32Val;; }       // 18
     uint32_t getSpellIconID() { return _getSpellIconID().uint32Val;; }        // 19
     uint32_t getActiveIconID() { return _getActiveIconID().uint32Val;; }       // 20
-    std::string& getSpellName() { return _getSpellName().textVal; }    // 21
-    std::string& getRank() { return _getRank().textVal; }         // 22
-    std::string& getDescription() { return _getDescription().textVal; }  // 23
-    std::string& getToolTip() { return _getToolTip().textVal; }      // 24
+    QString& getSpellName() { return _getSpellName().textVal; }    // 21
+    QString& getRank() { return _getRank().textVal; }         // 22
+    QString& getDescription() { return _getDescription().textVal; }  // 23
+    QString& getToolTip() { return _getToolTip().textVal; }      // 24
     uint32_t getSchoolMask() { return _getSchoolMask().uint32Val; }         // 25
     //uint32_t getRuneCostID() { return _getRuneCostID().uint32Val; }         // 26
     //uint32_t getSpellMissileID() { return _getSpellMissileID(.uint32Val; }     // 27
@@ -716,10 +716,10 @@ public:
     const uint32_t getSpellVisual2() const { return _getSpellVisual2().uint32Val;; }       // 18
     const uint32_t getSpellIconID() const { return _getSpellIconID().uint32Val;; }        // 19
     const uint32_t getActiveIconID() const { return _getActiveIconID().uint32Val;; }       // 20
-    const std::string& getSpellName() const { return _getSpellName().textVal; }    // 21
-    const std::string& getRank() const { return _getRank().textVal; }         // 22
-    const std::string& getDescription() const { return _getDescription().textVal; }  // 23
-    const std::string& getToolTip() const { return _getToolTip().textVal; }      // 24
+    QStringView getSpellName() const { return _getSpellName().textVal; }    // 21
+    QStringView getRank() const { return _getRank().textVal; }         // 22
+    QStringView getDescription() const { return _getDescription().textVal; }  // 23
+    QStringView getToolTip() const { return _getToolTip().textVal; }      // 24
     const uint32_t getSchoolMask() const { return _getSchoolMask().uint32Val; }         // 25
     //const uint32_t getRuneCostID() const { return _getRuneCostID().uint32Val; }         // 26
     //const uint32_t getSpellMissileID() const { return _getSpellMissileID(.uint32Val; }     // 27
@@ -749,21 +749,20 @@ public:
         return "iiiiiiiiiiiiiiifiiiissssixxxxxiiiiiiixiiiiiiixi";
     }
 
-    inline QString GetSpellNameRank() const
+    inline QStringView GetSpellNameRank() const
     {
         if (getRank().empty())
         {
-            return getSpellName().c_str();
+            return getSpellName();
         }
 
-        return QString("%1, Rank name: %2").arg(getSpellName().c_str()).arg(getRank().c_str());
+        return QString("%1, Rank name: %2").arg(getSpellName()).arg(getRank());
     }
 
     QString const PrintBaseInfo(uint32_t scalingLevel) const;
     QString const PrintSpellEffectInfo(uint32_t scalingLevel) const;
 
     // Other data
-    QString m_spellNameUpper;   // Used only for search
     std::array<const SpellEffectEntry*, MAX_SPELL_EFFECTS> m_spellEffects{};
     bool m_IsServerSide{false};
 

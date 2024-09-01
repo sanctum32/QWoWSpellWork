@@ -174,7 +174,7 @@ void MainWindow::PerformSpellSearch()
         }
 
         // Find by name
-        if (!canInsert && searchByName && _spellInfo.m_spellNameUpper.contains(spellNameOrId))
+        if (!canInsert && searchByName && _spellInfo.getSpellName().contains(spellNameOrId, Qt::CaseInsensitive))
         {
             canInsert = true;
         }
@@ -229,7 +229,7 @@ void MainWindow::PerformSpellSearch()
             }
         }
 
-        foundEntries[_id] = _spellInfo.getSpellName().c_str();
+        foundEntries[_id] = _spellInfo.getSpellName().toString();
     }
 
     if (foundEntries.empty())
