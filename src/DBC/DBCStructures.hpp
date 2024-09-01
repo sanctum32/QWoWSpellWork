@@ -529,7 +529,7 @@ struct SpellRadiusEntry
 struct SpellEntry
 {
     SpellEntry() = default;
-    explicit SpellEntry(DBCFileLoader::Record const& record);
+    explicit SpellEntry(const DBCFileLoader::Record& record);
     explicit SpellEntry(const MYSQL_ROW& sqlRow);
 
 private:
@@ -545,7 +545,7 @@ private:
         SpellEntryValues& operator=(uint32_t val) { uint32Val = val; return *this; }
         SpellEntryValues& operator=(int32_t val) { int32Val = val; return *this; }
         SpellEntryValues& operator=(float val) { floatVal = val; return *this; }
-        SpellEntryValues& operator=(std::string val) { textVal = val; return *this; }
+        SpellEntryValues& operator=(std::string val) { textVal = std::move(val); return *this; }
     };
 
     auto& _getID() { return _fields[0]; }

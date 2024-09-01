@@ -550,7 +550,7 @@ inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
 
     if (interruptFlagsStr.isEmpty())
     {
-        interruptFlagsStr = sSpellWorkJson->GetSpellInterruptFlagName(0);
+        interruptFlagsStr += sSpellWorkJson->GetSpellInterruptFlagName(0);
     }
 
     std::array<QString, 2> auraFlagsStr;
@@ -1101,8 +1101,8 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
             continue;
         }
 
-        const auto& statName = sSpellWorkJson->GetUnitModName(value);
-        formattedStr->replace(strToRep, statName);
+        const auto statName = sSpellWorkJson->GetUnitModName(value);
+        formattedStr->replace(strToRep, QString(statName.data()));
     }
 
     const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", EffectMiscValue }, { ":FactionNameMiscValB:", EffectMiscValueB } }};
@@ -1229,7 +1229,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
 
         if (result.isEmpty())
         {
-            result = sSpellWorkJson->GetSpellMechanicName(MECHANIC_NONE);
+            result += sSpellWorkJson->GetSpellMechanicName(MECHANIC_NONE);
         }
 
         formattedStr->replace(strToRep, result);
