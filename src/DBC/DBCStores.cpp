@@ -71,21 +71,21 @@ bool DBCStore::LoadDBCDatas()
         !OpenAndReadDBC(dbcFolderPath, "SpellLevels.dbc",               m_SpellLevelsEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellEquippedItems.dbc",        m_SpellEquippedItemsEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellRange.dbc",                m_SpellRangeEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "SpellAuraOptions.dbc",          m_SpellRangeEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "SpellAuraOptions.dbc",          m_SpellAuraOptionsEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellCastTimes.dbc",            m_SpellCastTimesEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellCooldowns.dbc",            m_SpellCooldownsEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellDuration.dbc",             m_SpellDurationEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellPower.dbc",                m_SpellPowerEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellInterrupts.dbc",           m_SpellInterruptsEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellAuraRestrictions.dbc",     m_SpellAuraRestrictionsEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "AreaGroup.dbc",     m_AreaGroupEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "AreaTable.dbc",     m_AreaTableEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "SpellCastingRequirements.dbc",     m_SpellCastingRequirementsEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "gtSpellScaling.dbc",     m_SpellCastingRequirementsEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "OverrideSpellData.dbc",     m_SpellCastingRequirementsEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "ScreenEffect.dbc",     m_SpellCastingRequirementsEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "SpellRadius.dbc",     m_SpellCastingRequirementsEntries) ||
-        !OpenAndReadDBC(dbcFolderPath, "Faction.dbc",     m_SpellCastingRequirementsEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "AreaGroup.dbc",                 m_AreaGroupEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "AreaTable.dbc",                 m_AreaTableEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "SpellCastingRequirements.dbc",  m_SpellCastingRequirementsEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "gtSpellScaling.dbc",            m_GtSpellScalingEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "OverrideSpellData.dbc",         m_OverrideSpellDataEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "ScreenEffect.dbc",              m_ScreenEffectEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "SpellRadius.dbc",               m_SpellRadiusEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "Faction.dbc",                   m_FactionEntries) ||
         (sSpellWorkConfig->GetAppConfig().loadDBCSpells && (!OpenAndReadDBC(dbcFolderPath, "Spell.dbc", m_spellEntries) || !OpenAndReadDBC(dbcFolderPath, "SpellEffect.dbc", m_SpellEffectEntries)))
     )
     {
