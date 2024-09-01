@@ -7,7 +7,7 @@
 Q_LOGGING_CATEGORY(DBCStores, "spellwork.dbcstores");
 
 template<typename T>
-bool OpenAndReadDBC(const std::string_view& path, const std::string_view& dbcFileName, std::map<uint32_t, T>& storage)
+bool OpenAndReadDBC(const std::string_view& path, const std::string_view& dbcFileName, std::unordered_map<uint32_t, T>& storage)
 {
     DBCFileLoader dbcFile(std::string(path) + "//" + std::string(dbcFileName), T::GetDBCFormat());
     if (!dbcFile.IsLoaded())

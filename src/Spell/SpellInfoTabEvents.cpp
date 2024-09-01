@@ -9,8 +9,6 @@
 #include "JsonData/JsonData.hpp"
 #include <cassert>
 #include <optional>
-#include <ranges>
-#include <thread>
 
 void MainWindow::onSearchBtnClicked()
 {
@@ -165,103 +163,73 @@ void MainWindow::PerformSpellSearch()
         }
     }
 
-    std::map<uint32_t /*spell*/, QString /*name*/> foundEntries;
-
-    auto filterSpells = [&](std::map<uint32_t, SpellEntry>::const_iterator itrStart, std::map<uint32_t, SpellEntry>::const_iterator itrEnd)
+    std::unordered_map<uint32_t /*spell*/, QString /*name*/> foundEntries;
+    for (const auto& [_id, _spellInfo] : sDBCStores->GetSpellEntries())
     {
-        for (std::map<uint32_t, SpellEntry>::const_iterator itr = itrStart; itr != itrEnd; ++itr)
+        bool canInsert = spellNameOrId.isEmpty();
+        if (!canInsert && spellId != 0 && _id == spellId)
         {
-            const uint32_t _id = itr->first;
-            const SpellEntry& _spellInfo = itr->second;
-            bool canInsert = spellNameOrId.isEmpty();
-            if (!canInsert && searchById && spellId != 0 && _id == spellId)
-            {
-                canInsert = true;
-            }
+            canInsert = true;
+        }
 
-            // Find by name
-            if (!canInsert && searchByName && _spellInfo.getSpellName().contains(spellNameOrId.toString(), Qt::CaseInsensitive))
-            {
-                canInsert = true;
-            }
+        // Find by name
+        if (!canInsert && searchByName && _spellInfo.getSpellName().contains(spellNameOrId.toString(), Qt::CaseInsensitive))
+        {
+            canInsert = true;
+        }
 
-            if (!canInsert)
+        if (!canInsert)
+        {
+            continue;
+        }
+
+        if (spellFamilyId.has_value())
+        {
+            const auto* spellClassOptions = sDBCStores->GetSpellClassOptionsEntry(_spellInfo.getSpellClassOptionsId());
+            if (spellClassOptions == nullptr || spellClassOptions->SpellFamilyName != *spellFamilyId)
             {
                 continue;
             }
-
-            if (spellFamilyId.has_value())
-            {
-                const auto* spellClassOptions = sDBCStores->GetSpellClassOptionsEntry(_spellInfo.getSpellClassOptionsId());
-                if (spellClassOptions == nullptr || spellClassOptions->SpellFamilyName != *spellFamilyId)
-                {
-                    continue;
-                }
-            }
-
-            if (auraTypeId.has_value() || spellEffectId.has_value() || spellTargetA.has_value() || spellTargetB.has_value())
-            {
-                if (!std::any_of(_spellInfo.m_spellEffects.begin(), _spellInfo.m_spellEffects.end(), [&](const auto* effectInfo)
-                {
-                    if (effectInfo == nullptr)
-                    {
-                        return false;
-                    }
-
-                    if (auraTypeId.has_value() && effectInfo->EffectAura != *auraTypeId)
-                    {
-                        return false;
-                    }
-
-                    if (spellEffectId.has_value() && effectInfo->Effect != *spellEffectId)
-                    {
-                        return false;
-                    }
-
-                    if (spellTargetA.has_value() && effectInfo->EffectImplicitTargetA != *spellTargetA)
-                    {
-                        return false;
-                    }
-
-                    if (spellTargetB.has_value() && effectInfo->EffectImplicitTargetB != *spellTargetB)
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }))
-                {
-                    continue;
-                }
-            }
-
-            foundEntries[_id] = _spellInfo.getSpellName().toString();
         }
-    };
 
-    const auto& spells = sDBCStores->GetSpellEntries();
-    // 0 - 25%
-    auto it1 = spells.begin();
-    std::advance(it1, spells.size() / 4);
-    
-    // 25 - 50%
-    auto it2 = it1;
-    std::advance(it2, spells.size() / 4);
-    
-    // 50 - 75%
-    auto it3 = it2;
-    std::advance(it3, spells.size() / 4);
-    
-    // 75 - 100 (it3 -> spells.end())
+        if (auraTypeId.has_value() || spellEffectId.has_value() || spellTargetA.has_value() || spellTargetB.has_value())
+        {
+            if (!std::any_of(_spellInfo.m_spellEffects.begin(), _spellInfo.m_spellEffects.end(), [&](const auto* effectInfo)
+            {
+                if (effectInfo == nullptr)
+                {
+                    return false;
+                }
 
-    std::thread searchThread1(filterSpells, spells.begin(), it1);
-    std::thread searchThread2(filterSpells, it1, it2);
-    std::thread searchThread3(filterSpells, it2, it3);
-    std::thread searchThread4(filterSpells, it3, spells.end());
-    searchThread1.join();
-    searchThread2.join();
-    searchThread3.join();
-    searchThread4.join();
+                if (auraTypeId.has_value() && effectInfo->EffectAura != *auraTypeId)
+                {
+                    return false;
+                }
+
+                if (spellEffectId.has_value() && effectInfo->Effect != *spellEffectId)
+                {
+                    return false;
+                }
+
+                if (spellTargetA.has_value() && effectInfo->EffectImplicitTargetA != *spellTargetA)
+                {
+                    return false;
+                }
+
+                if (spellTargetB.has_value() && effectInfo->EffectImplicitTargetB != *spellTargetB)
+                {
+                    return false;
+                }
+
+                return true;
+            }))
+            {
+                continue;
+            }
+        }
+
+        foundEntries[_id] = _spellInfo.getSpellName().toString();
+    }
 
     if (foundEntries.empty())
     {
