@@ -47,7 +47,7 @@ set(PROJECT_SOURCES
     src/JsonData/JsonData.cpp
     src/Globals/appSettings.hpp
     src/Globals/appSettings.cpp
-    src/Globals/Common.hpp
+    src/Globals/SharedDefines.hpp
     src/Globals/ValueComparition.hpp
     src/Enums/SpellEnums.hpp
     src/Enums/UnitDefines.hpp

@@ -103,8 +103,7 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
     }
 }
 
-template<class T>
-inline void PrintAttributes(QString& result, T const& attributes)
+inline void PrintAttributes(QString& result, const std::vector<uint32_t> attributes)
 {
     if (!attributes.empty() && std::any_of(attributes.begin(), attributes.end(), [](uint32_t attr){ return attr != 0; }))
     {
@@ -613,7 +612,7 @@ inline void PrintInterruptInfo(QString& result, uint32_t SpellInterruptsId)
     result += QString("Channel interrupt flags2: 0x%1 (%2)<br>").arg(channelInterruptFlags[1], 8, 16, QLatin1Char('0')).arg(channelFlagsStr[1]);
 }
 
-inline void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestrictionsId)
+static void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestrictionsId)
 {
     const auto* spellRestrictions = GetDBCEntry(SpellAuraRestrictionsId, sDBCStores->m_SpellAuraRestrictionsEntries);
     if (spellRestrictions == nullptr)
@@ -654,7 +653,7 @@ inline void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestri
         const auto* auraSpell = GetDBCEntry(spellRestrictions->casterAuraSpell, sDBCStores->m_spellEntries);
         result += QString("  Caster Aura Spell (%1) %2<br>")
                       .arg(spellRestrictions->casterAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+                      .arg(auraSpell != nullptr ? auraSpell->getSpellName().c_str() : "unknown");
     }
 
     if (spellRestrictions->targetAuraSpell != 0)
@@ -662,7 +661,7 @@ inline void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestri
         const auto* auraSpell = GetDBCEntry(spellRestrictions->targetAuraSpell, sDBCStores->m_spellEntries);
         result += QString("  Target Aura Spell (%1) %2<br>")
                       .arg(spellRestrictions->targetAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+                      .arg(auraSpell != nullptr ? auraSpell->getSpellName().c_str() : "unknown");
     }
 
     if (spellRestrictions->excludeCasterAuraSpell != 0)
@@ -670,7 +669,7 @@ inline void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestri
         const auto* auraSpell = GetDBCEntry(spellRestrictions->excludeCasterAuraSpell, sDBCStores->m_spellEntries);
         result += QString("  Ex Caster Aura Spell (%1) %2<br>")
                       .arg(spellRestrictions->excludeCasterAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+                      .arg(auraSpell != nullptr ? auraSpell->getSpellName().c_str() : "unknown");
     }
 
     if (spellRestrictions->excludeTargetAuraSpell != 0)
@@ -678,7 +677,7 @@ inline void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestri
         const auto* auraSpell = GetDBCEntry(spellRestrictions->excludeTargetAuraSpell, sDBCStores->m_spellEntries);
         result += QString("  Ex Target Aura Spell (%1) %2<br>")
                       .arg(spellRestrictions->excludeTargetAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->SpellName.c_str() : "unknown");
+                      .arg(auraSpell != nullptr ? auraSpell->getSpellName().c_str() : "unknown");
     }
 }
 
@@ -737,7 +736,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                       .arg(effectInfo->Effect)
                       .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->Effect));
 
-        const auto* scalingInfo = GetDBCEntry(SpellScalingId, sDBCStores->m_SpellScalingEntries);
+        const auto* scalingInfo = GetDBCEntry(getSpellScalingId(), sDBCStores->m_SpellScalingEntries);
         if (scalingInfo != nullptr && scalingInfo->Coefficient[effIndex] != 0.0f &&  scalingInfo->Class != 0)
         {
             uint32_t const selectedLevel = scalingLevel;
@@ -882,7 +881,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 
         if (effectInfo->HasSpellClassMask())
         {
-            if (const auto* thisEffClassOptions = GetDBCEntry(SpellClassOptionsId, sDBCStores->m_SpellClassOptions))
+            if (const auto* thisEffClassOptions = GetDBCEntry(getSpellClassOptionsId(), sDBCStores->m_SpellClassOptions))
             {
                 result += QString("SpellClassMask = 0x%1 0x%2 0x%3<br>")
                               .arg(effectInfo->EffectSpellClassMask[0], 8, 16, QLatin1Char('0'))
@@ -891,7 +890,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 
                 for (const auto& [entry, spellInfo] : sDBCStores->m_spellEntries)
                 {
-                    const auto* otherSpellClassOpts = GetDBCEntry(spellInfo.SpellClassOptionsId, sDBCStores->m_SpellClassOptions);
+                    const auto* otherSpellClassOpts = GetDBCEntry(spellInfo.getSpellClassOptionsId(), sDBCStores->m_SpellClassOptions);
                     if (otherSpellClassOpts == nullptr || otherSpellClassOpts->SpellFamilyName != thisEffClassOptions->SpellFamilyName)
                     {
                         continue;
@@ -919,7 +918,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                         return skillAbility.second.Spell == entry;
                     });
 
-                    result += (skillAbilityFound ? "<span style=\"color:green\">\t+" : "<span style=\"color:red\">\t-") + QString("%1 - %2</span><br>").arg(entry).arg(spellInfo.SpellName.c_str());
+                    result += (skillAbilityFound ? "<span style=\"color:green\">\t+" : "<span style=\"color:red\">\t-") + QString("%1 - %2</span><br>").arg(entry).arg(spellInfo.getSpellName().c_str());
                     result += "</span>";
                 }
             }
@@ -933,7 +932,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             }
         }
 
-        const auto* spellAuraOptionEntry = GetDBCEntry(SpellAuraOptionsId, sDBCStores->m_SpellAuraOptionsEntries);
+        const auto* spellAuraOptionEntry = GetDBCEntry(getSpellAuraOptionsId(), sDBCStores->m_SpellAuraOptionsEntries);
 
         // append trigger spell
         if (effectInfo->EffectTriggerSpell != 0)
@@ -942,23 +941,23 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             {
                 result += "<span style=\"color:green; font-weight: bold\">";
                 result += QString("   Trigger spell (%1) %2. Chance = %3<br>")
-                                 .arg(triggerSpell->Id)
+                              .arg(triggerSpell->getId())
                                  .arg(triggerSpell->GetSpellNameRank())
                                  .arg(spellAuraOptionEntry != nullptr ? spellAuraOptionEntry->procChance : 0.0f);
 
-                if (!triggerSpell->Description.empty())
+                if (!triggerSpell->getDescription().empty())
                 {
-                    result += QString("   Description: %1<br>").arg(triggerSpell->Description.c_str());
+                    result += QString("   Description: %1<br>").arg(triggerSpell->getDescription().c_str());
                 }
 
-                if (!triggerSpell->ToolTip.empty())
+                if (!triggerSpell->getToolTip().empty())
                 {
-                    result += QString("ToolTip: %1<br>").arg(triggerSpell->ToolTip.c_str());
+                    result += QString("ToolTip: %1<br>").arg(triggerSpell->getToolTip().c_str());
                 }
 
                 result += "</span>";
 
-                if (const auto* triggerAuraOptions = GetDBCEntry(triggerSpell->SpellAuraOptionsId, sDBCStores->m_SpellAuraOptionsEntries))
+                if (const auto* triggerAuraOptions = GetDBCEntry(triggerSpell->getSpellAuraOptionsId(), sDBCStores->m_SpellAuraOptionsEntries))
                 {
                     result += QString("Charges - %1<br>").arg(triggerAuraOptions->procCharges);
                     result += line;
@@ -1010,50 +1009,53 @@ QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
     QString spellText;
 
     spellText += QString("<b>ID: %1 %2</b><br>")
-                     .arg(Id)
+                     .arg(getId())
                      .arg(GetSpellNameRank());
 
     spellText += line;
 
-    if (!Description.empty())
+    if (!getDescription().empty())
     {
-        spellText += Description.c_str();
+        spellText += getDescription().c_str();
         spellText += "<br>";
         spellText += line;
     }
 
-    spellText += QString("ToolTip: %1<br>").arg(ToolTip.c_str());
+    spellText += QString("ToolTip: %1<br>").arg(getToolTip().c_str());
     spellText += line;
     spellText += QString("Category = %1, SpellIconID = %2, activeIconID = %3, SpellVisual = (%4, %5)<br>")
-                     .arg(SpellCategoriesId)
-                     .arg(SpellIconID)
-                     .arg(ActiveIconID)
-                     .arg(SpellVisual[0])
-                     .arg(SpellVisual[1]);
+                     .arg(getSpellCategoriesId())
+                     .arg(getSpellIconID())
+                     .arg(getActiveIconID())
+                     .arg(getSpellVisual1())
+                     .arg(getSpellVisual2());
     spellText += QString("SpellSchoolMask = %1 (%2)<br>")
-                     .arg(SchoolMask)
-                     .arg(GetFirstSchoolMaskNameStr(SchoolMask));
+                     .arg(getSchoolMask())
+                     .arg(GetFirstSchoolMaskNameStr(getSchoolMask()));
 
-    PrintSpellClassOptions(spellText, SpellClassOptionsId);
-    PrintSpellCategory(spellText, SpellCategoriesId);
-    PrintAttributes(spellText, Attributes);
-    PrintTargetRestrictions(spellText, SpellTargetRestrictionsId, SpellLevelsId, (Attributes[5] & SPELL_ATTR5_LIMIT_N) != 0);
-    PrintShapeShiftingInfo(spellText, SpellShapeshiftId);
-    PrintSkillLinks(spellText, Id);
-    PrintReagents(spellText, SpellReagentsId);
-    PrintSpellEquipmentInfo(spellText, SpellEquippedItemsId);
+    PrintSpellClassOptions(spellText, getSpellClassOptionsId());
+    PrintSpellCategory(spellText, getSpellCategoriesId());
+    PrintAttributes(spellText, {getAttribute0(), getAttribute1(), getAttribute2(),
+                                getAttribute3(), getAttribute4(), getAttribute5(),
+                                getAttribute6(), getAttribute7(), getAttribute8(),
+                                getAttribute9(), getAttribute10()});
+    PrintTargetRestrictions(spellText, getSpellTargetRestrictionsId(), getSpellLevelsId(), (getAttribute5() & SPELL_ATTR5_LIMIT_N) != 0);
+    PrintShapeShiftingInfo(spellText, getSpellShapeshiftId());
+    PrintSkillLinks(spellText, getId());
+    PrintReagents(spellText, getSpellReagentsId());
+    PrintSpellEquipmentInfo(spellText, getSpellEquippedItemsId());
 
     spellText += line;
 
-    PrintSpellRangeInfo(spellText, rangeIndex);
-    PrintSpellAuraOptions(spellText, SpellAuraOptionsId);
-    PrintSpellCastTimeInfo(spellText, CastingTimeIndex, speed);
-    PrintSpellCooldownInfo(spellText, SpellCooldownsId);
-    PrintSpellDurationInfo(spellText, DurationIndex);
-    PrintSpellPowerInfo(spellText, SpellPowerId, powerType);
-    PrintInterruptInfo(spellText, SpellInterruptsId);
-    PrintSpellRestrictionsInfo(spellText, SpellAuraRestrictionsId);
-    PrintSpellCastRequirements(spellText, SpellCastingRequirementsId);
+    PrintSpellRangeInfo(spellText, getRangeIndex());
+    PrintSpellAuraOptions(spellText, getSpellAuraOptionsId());
+    PrintSpellCastTimeInfo(spellText, getCastingTimeIndex(), getSpeed());
+    PrintSpellCooldownInfo(spellText, getSpellCooldownsId());
+    PrintSpellDurationInfo(spellText, getDurationIndex());
+    PrintSpellPowerInfo(spellText, getSpellPowerId(), getPowerType());
+    PrintInterruptInfo(spellText, getSpellInterruptsId());
+    PrintSpellRestrictionsInfo(spellText, getSpellAuraRestrictionsId());
+    PrintSpellCastRequirements(spellText, getSpellCastingRequirementsId());
     return spellText;
 }
 
@@ -1193,7 +1195,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
                     result = "<b>Overriding Spells:</b><br>";
                 }
                 const auto* spell = GetDBCEntry(std::abs(pSpellId), sDBCStores->m_spellEntries);
-                result += QString("<span style=\"color: orange\">- %1</span> %2<br>").arg(pSpellId).arg(spell != nullptr ? spell->SpellName.c_str() : "unknown");
+                result += QString("<span style=\"color: orange\">- %1</span> %2<br>").arg(pSpellId).arg(spell != nullptr ? spell->getSpellName().c_str() : "unknown");
             }
 
             formattedStr->replace(strToRep, result);

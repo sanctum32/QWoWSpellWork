@@ -157,33 +157,7 @@ bool DBCStore::LoadSqlDBCData()
                 continue;
             }
 
-            SpellEntry spell;
-            spell.m_IsServerSide = true;
-            spell.Id = entry;
-
-            // 1 - 11
-            for (uint8_t i = 0; i < MAX_SPELL_ATTRIBUTES; ++i)
-            {
-                spell.Attributes[0] = static_cast<uint32_t>(atoi(row[1 + i]));
-            }
-
-            spell.CastingTimeIndex      = static_cast<uint32_t>(std::stoul(row[12]));
-            spell.DurationIndex         = static_cast<uint32_t>(std::stoul(row[13]));
-            spell.rangeIndex            = static_cast<uint32_t>(std::stoul(row[14]));
-            spell.SchoolMask            = static_cast<uint32_t>(std::stoul(row[15]));
-            spell.SpellAuraOptionsId    = static_cast<uint32_t>(std::stoul(row[16]));
-            spell.SpellCastingRequirementsId = static_cast<uint32_t>(std::stoul(row[17]));
-            spell.SpellCategoriesId     = static_cast<uint32_t>(std::stoul(row[18]));
-            spell.SpellClassOptionsId   = static_cast<uint32_t>(std::stoul(row[19]));
-            spell.SpellEquippedItemsId  = static_cast<uint32_t>(std::stoul(row[20]));
-            spell.SpellInterruptsId     = static_cast<uint32_t>(std::stoul(row[21]));
-            spell.SpellLevelsId         = static_cast<uint32_t>(std::stoul(row[22]));
-            spell.SpellTargetRestrictionsId = static_cast<uint32_t>(std::stoul(row[23]));
-            spell.SpellName             = row[24];
-            spell.SpellName += " - Server Side";
-            spell.m_spellNameUpper = QString(spell.SpellName.c_str()).toUpper();
-
-            m_spellEntries.try_emplace(entry, spell);
+            m_spellEntries.try_emplace(entry, SpellEntry(row));
             ++count;
         }
 

@@ -359,62 +359,110 @@ SpellRadiusEntry::SpellRadiusEntry(DBCFileLoader::Record const& record)
 
 SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
 {
-    Id                          = record.getUInt(0);
+    _getID()                    = record.getUInt(0);
+    _getAttribute0()            = record.getUInt(1);
+    _getAttribute1()            = record.getUInt(2);
+    _getAttribute2()            = record.getUInt(3);
+    _getAttribute3()            = record.getUInt(4);
+    _getAttribute4()            = record.getUInt(5);
+    _getAttribute5()            = record.getUInt(6);
+    _getAttribute6()            = record.getUInt(7);
+    _getAttribute7()            = record.getUInt(8);
+    _getAttribute8()            = record.getUInt(9);
+    _getAttribute9()            = record.getUInt(10);
+    _getAttribute9()            = record.getUInt(11);
+    _getCastingTimeIndex()      = record.getUInt(12);
+    _getDurationIndex()         = record.getUInt(13);
+    _getPowerType()             = record.getUInt(14);
+    _getRangeIndex()            = record.getUInt(15);
+    _getSpeed()                 = record.getFloat(16);
+    _getSpellVisual1()          = record.getUInt(17);
+    _getSpellVisual1()          = record.getUInt(18);
+    _getSpellIconID()                 = record.getUInt(19);
+    _getActiveIconID()                = record.getUInt(20);
+    _getSpellName()                   = record.getString(21);
+    _getRank()                        = record.getString(22);
+    _getDescription()                 = record.getString(23);
+    _getToolTip()                     = record.getString(24);
+    _getSchoolMask()                  = record.getUInt(25);
+    //_getRuneCostID()                  = record.getUInt(26);
+    //_getSpellMissileID()              = record.getUInt(27);
+    //_getSpellDescriptionVariableID()  = record.getUInt(28);
+    //_getSpellDifficultyId()           = record.getUInt(29);
+    //_getSpellCoef()                   = record.getFloat(30);
+    _getSpellScalingId()              = record.getUInt(31);
+    _getSpellAuraOptionsId()          = record.getUInt(32);
+    _getSpellAuraRestrictionsId()     = record.getUInt(33);
+    _getSpellCastingRequirementsId()  = record.getUInt(34);
+    _getSpellCategoriesId()           = record.getUInt(35);
+    _getSpellClassOptionsId()         = record.getUInt(36);
+    _getSpellCooldownsId()            = record.getUInt(37);
+    //_getUnkIndex7()                   = record.getUInt(38);
+    _getSpellEquippedItemsId()        = record.getUInt(39);
+    _getSpellInterruptsId()           = record.getUInt(40);
+    _getSpellLevelsId()               = record.getUInt(41);
+    _getSpellPowerId()                = record.getUInt(42);
+    _getSpellReagentsId()             = record.getUInt(43);
+    _getSpellShapeshiftId()           = record.getUInt(44);
+    _getSpellTargetRestrictionsId()   = record.getUInt(45);
+    //SpellTotemsId()               = record.getUInt(46);
+    //ResearchProject()             = record.getUInt(47);
+
+    if (getDescription().empty() || getDescription().size() <= 1)
+    {
+        _getDescription() = "-- No description --";
+    }
+
+    m_spellNameUpper = QString(getSpellName().c_str()).toUpper();
+
+    if (getDescription().empty() || getDescription().size() <= 1)
+    {
+        _fields[23] = "-- No description --";
+    }
+
+    m_spellNameUpper = QString(getSpellName().c_str()).toUpper();
+}
+
+SpellEntry::SpellEntry(const MYSQL_ROW& row)
+{
+    m_IsServerSide = true;
+    _getID() = static_cast<uint32_t>(std::stoul(row[0]));
+    _getAttribute0() = static_cast<uint32_t>(atoi(row[1]));
+    _getAttribute1() = static_cast<uint32_t>(atoi(row[2]));
+    _getAttribute2() = static_cast<uint32_t>(atoi(row[3]));
+    _getAttribute3() = static_cast<uint32_t>(atoi(row[4]));
+    _getAttribute4() = static_cast<uint32_t>(atoi(row[5]));
+    _getAttribute5() = static_cast<uint32_t>(atoi(row[6]));
+    _getAttribute6() = static_cast<uint32_t>(atoi(row[7]));
+    _getAttribute7() = static_cast<uint32_t>(atoi(row[8]));
+    _getAttribute8() = static_cast<uint32_t>(atoi(row[9]));
+    _getAttribute9() = static_cast<uint32_t>(atoi(row[10]));
+    _getAttribute10() = static_cast<uint32_t>(atoi(row[11]));
+
+    _getCastingTimeIndex()      = static_cast<uint32_t>(std::stoul(row[12]));
+    _getDurationIndex()         = static_cast<uint32_t>(std::stoul(row[13]));
+    _getRangeIndex()            = static_cast<uint32_t>(std::stoul(row[14]));
+    _getSchoolMask()            = static_cast<uint32_t>(std::stoul(row[15]));
+    _getSpellAuraOptionsId()    = static_cast<uint32_t>(std::stoul(row[16]));
+    _getSpellCastingRequirementsId() = static_cast<uint32_t>(std::stoul(row[17]));
+    _getSpellCategoriesId()     = static_cast<uint32_t>(std::stoul(row[18]));
+    _getSpellClassOptionsId()   = static_cast<uint32_t>(std::stoul(row[19]));
+    _getSpellEquippedItemsId()  = static_cast<uint32_t>(std::stoul(row[20]));
+    _getSpellInterruptsId()     = static_cast<uint32_t>(std::stoul(row[21]));
+    _getSpellLevelsId()         = static_cast<uint32_t>(std::stoul(row[22]));
+    _getSpellTargetRestrictionsId() = static_cast<uint32_t>(std::stoul(row[23]));
+    _getSpellName()             = row[24];
+    _getSpellName().textVal += " - Server Side";
+
+    _fields[0] = static_cast<uint32_t>(std::stoul(row[0])); // Id
 
     // 1 - 11
-    for (uint8_t i = 0; i < 11; ++i)
+    for (uint8_t i = 0; i < MAX_SPELL_ATTRIBUTES; ++i)
     {
-        Attributes[i] = record.getUInt(1 + i);
+        _fields[1 + i] = static_cast<uint32_t>(atoi(row[1 + i]));
     }
 
-    CastingTimeIndex            = record.getUInt(12);
-    DurationIndex               = record.getUInt(13);
-    powerType                   = record.getUInt(14);
-    rangeIndex                  = record.getUInt(15);
-    speed                       = record.getFloat(16);
-
-    // 17 - 18
-    for (uint8_t i = 0; i < 2; ++i)
-    {
-        SpellVisual[i] = record.getUInt(17 + i);
-    }
-
-    SpellIconID                 = record.getUInt(19);
-    ActiveIconID                = record.getUInt(20);
-    SpellName                   = record.getString(21);
-    Rank                        = record.getString(22);
-    Description                 = record.getString(23);
-    ToolTip                     = record.getString(24);
-    SchoolMask                  = record.getUInt(25);
-    //runeCostID                  = record.getUInt(26);
-    //spellMissileID              = record.getUInt(27);
-    //spellDescriptionVariableID  = record.getUInt(28);
-    //SpellDifficultyId           = record.getUInt(29);
-    //SpellCoef                   = record.getFloat(30);
-    SpellScalingId              = record.getUInt(31);
-    SpellAuraOptionsId          = record.getUInt(32);
-    SpellAuraRestrictionsId     = record.getUInt(33);
-    SpellCastingRequirementsId  = record.getUInt(34);
-    SpellCategoriesId           = record.getUInt(35);
-    SpellClassOptionsId         = record.getUInt(36);
-    SpellCooldownsId            = record.getUInt(37);
-    //unkIndex7                   = record.getUInt(38);
-    SpellEquippedItemsId        = record.getUInt(39);
-    SpellInterruptsId           = record.getUInt(40);
-    SpellLevelsId               = record.getUInt(41);
-    SpellPowerId                = record.getUInt(42);
-    SpellReagentsId             = record.getUInt(43);
-    SpellShapeshiftId           = record.getUInt(44);
-    SpellTargetRestrictionsId   = record.getUInt(45);
-    //SpellTotemsId               = record.getUInt(46);
-    //ResearchProject             = record.getUInt(47);
-
-    if (Description.empty() || Description.size() <= 1)
-    {
-        Description = "-- No description --";
-    }
-
-    m_spellNameUpper = QString(SpellName.c_str()).toUpper();
+    m_spellNameUpper = QString(_getSpellName().textVal.c_str()).toUpper();
 }
 
 FactionEntry::FactionEntry(DBCFileLoader::Record const& record)

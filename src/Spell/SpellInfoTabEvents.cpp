@@ -186,7 +186,7 @@ void MainWindow::PerformSpellSearch()
 
         if (spellFamilyId.has_value())
         {
-            const auto* spellClassOptions = GetDBCEntry(_spellInfo.SpellClassOptionsId, sDBCStores->m_SpellClassOptions);
+            const auto* spellClassOptions = GetDBCEntry(_spellInfo.getSpellClassOptionsId(), sDBCStores->m_SpellClassOptions);
             if (spellClassOptions == nullptr || spellClassOptions->SpellFamilyName != *spellFamilyId)
             {
                 continue;
@@ -229,7 +229,7 @@ void MainWindow::PerformSpellSearch()
             }
         }
 
-        foundEntries[_id] = _spellInfo.SpellName.c_str();
+        foundEntries[_id] = _spellInfo.getSpellName().c_str();
     }
 
     if (foundEntries.empty())
