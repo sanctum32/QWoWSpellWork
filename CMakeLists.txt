@@ -47,7 +47,8 @@ set(PROJECT_SOURCES
     src/JsonData/JsonData.cpp
     src/Globals/appSettings.hpp
     src/Globals/appSettings.cpp
-    src/Globals/SharedDefines.hpp
+    src/Globals/Common.hpp
+    src/Globals/ValueComparition.hpp
     src/Enums/SpellEnums.hpp
     src/Enums/UnitDefines.hpp
     src/Enums/CreatureDefines.hpp
@@ -65,7 +66,8 @@ endif()
 set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_SOURCE_DIR}/src/Forms")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
+    qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES}
+    )
 
 
 # Define target properties for Android with Qt 6 as:
