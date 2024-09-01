@@ -1,4 +1,5 @@
 #include "DBCStructures.hpp"
+#include "ValueComparition.hpp"
 
 SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
 {
@@ -503,3 +504,55 @@ FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
     //Description = record.getString(24);
     //Expansion = record.getUInt(25);
 }
+
+// For advanced filter
+const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*type*/>> SpellEntryFields =
+{
+    {1, {"Attributes", CompareTypes::Numeric}},
+    {2, {"AttributesEx", CompareTypes::Numeric}},
+    {3, {"AttributesEx2", CompareTypes::Numeric}},
+    {4, {"AttributesEx3", CompareTypes::Numeric}},
+    {5, {"AttributesEx4", CompareTypes::Numeric}},
+    {6, {"AttributesEx5", CompareTypes::Numeric}},
+    {7, {"AttributesEx6", CompareTypes::Numeric}},
+    {8, {"AttributesEx7", CompareTypes::Numeric}},
+    {9, {"AttributesEx8", CompareTypes::Numeric}},
+    {10, {"AttributesEx9", CompareTypes::Numeric}},
+    {11, {"AttributesEx10", CompareTypes::Numeric}},
+    {12, {"CastingTimeIndex", CompareTypes::Numeric}},
+    {13, {"DurationIndex", CompareTypes::Numeric}},
+    {14, {"powerType", CompareTypes::Numeric}},
+    {15, {"rangeIndex", CompareTypes::Numeric}},
+    {16, {"speed", CompareTypes::Float}},
+    {17, {"SpellVisual1", CompareTypes::Numeric}},
+    {18, {"SpellVisual2", CompareTypes::Numeric}},
+    {19, {"SpellIconID", CompareTypes::Numeric}},
+    {20, {"ActiveIconID", CompareTypes::Numeric}},
+    {21, {"SpellName", CompareTypes::String}},
+    {22, {"Rank", CompareTypes::String}},
+    {23, {"Description", CompareTypes::String}},
+    {24, {"ToolTip", CompareTypes::String}},
+    {25, {"SchoolMask", CompareTypes::Numeric}},
+    //{26, {"runeCostID", CompareTypes::Numeric}},
+    //{27, {"spellMissileID", CompareTypes::Numeric}},
+    //{28, {"spellDescriptionVariableID", CompareTypes::Numeric}},
+    //{29, {"SpellDifficultyId", CompareTypes::Numeric}},
+    //{30, {"SpellCoef", CompareTypes::Float}},
+    {31, {"SpellScalingId", CompareTypes::Numeric}},
+    {32, {"SpellAuraOptionsId", CompareTypes::Numeric}},
+    {33, {"SpellAuraRestrictionsId", CompareTypes::Numeric}},
+    {34, {"SpellCastingRequirementsId", CompareTypes::Numeric}},
+    {35, {"SpellCategoriesId", CompareTypes::Numeric}},
+    {36, {"SpellClassOptionsId", CompareTypes::Numeric}},
+    {37, {"SpellCooldownsId", CompareTypes::Numeric}},
+    //{38, {"unkIndex7", CompareTypes::Numeric}}
+    {39, {"SpellEquippedItemsId", CompareTypes::Numeric}},
+    {40, {"SpellInterruptsId", CompareTypes::Numeric}},
+    {41, {"SpellLevelsId", CompareTypes::Numeric}},
+    {42, {"SpellPowerId", CompareTypes::Numeric}},
+    {43, {"SpellReagentsId", CompareTypes::Numeric}},
+    {44, {"SpellShapeshiftId", CompareTypes::Numeric}},
+    {45, {"SpellTargetRestrictionsId", CompareTypes::Numeric}},
+    {46, {"SpellTotemsId", CompareTypes::Numeric}},
+    {47, {"ResearchProject", CompareTypes::Numeric}}
+};

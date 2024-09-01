@@ -13,55 +13,18 @@ enum class CompareTypes
 
 enum class ConditionCompareType : uint8_t
 {
-    NotEqual,           // x != y
-    Equal,              // x == y
-    GreaterThan,        // x > y
-    GreaterOrEqual,     // x >= y
-    LowerThan,          // x < y
-    LowerOrEqual,       // x <= y
-    BitValue,           // (x & y) != 0
-    NoBitValue,         // (x & y) == 0
-    StartsWith,         // x Starts With y
-    EndsWith,           // x Ends With y
-    Contains            // x Contains y
+    NotEqual        = 0,    // x != y
+    Equal           = 1,    // x == y
+    GreaterThan     = 2,    // x > y
+    GreaterOrEqual  = 3,    // x >= y
+    LowerThan       = 4,    // x < y
+    LowerOrEqual    = 5,    // x <= y
+    BitValue        = 6,    // (x & y) != 0
+    NoBitValue      = 7,    // (x & y) == 0
+    StartsWith      = 8,    // x Starts With y
+    EndsWith        = 9,    // x Ends With y
+    Contains        = 10    // x Contains y
 };
-
-constexpr uint8_t MAX_COMPARE_CHECK_TYPES = 11;
-
-static QString GetValueCompareTypeStr(ConditionCompareType type)
-{
-    using enum ConditionCompareType;
-    switch (type)
-    {
-    case NotEqual:
-        return "x != y";
-    case Equal:
-        return "x == y";
-    case GreaterThan:
-        return "x > y";
-    case GreaterOrEqual:
-        return "x >= y";
-    case LowerThan:
-        return "x < y";
-    case LowerOrEqual:
-        return "x <= y";
-    case BitValue:
-        return "(x & y) != 0";
-    case NoBitValue:
-        return "(x & y) == 0";
-    case StartsWith:
-        return "x Starts With y";
-    case EndsWith:
-        return "x Ends With y";
-    case Contains:
-        return "x Contains y";
-    default:
-        assert(false && "unhandled condition check type");
-    }
-
-    // Should not happen
-    return "";
-}
 
 /**
  * @brief DoConditionCompare

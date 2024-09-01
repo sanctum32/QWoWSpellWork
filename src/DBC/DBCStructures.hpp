@@ -2,10 +2,13 @@
 #include <QString>
 #include <array>
 #include <cstdint>
+#include <map>
 
 #include "DBCFileLoader.hpp"
 #include "Enums/SpellEnums.hpp"
 #include "mysql/mysql.h"
+
+enum class CompareTypes;
 
 // SpellEffect.dbc
 struct SpellEffectEntry
@@ -807,3 +810,7 @@ struct FactionEntry
         return "ixxxxxxxxxxxxxxxxxxxxxxsxx";
     }
 };
+
+
+// For advanced filter
+extern const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*type*/>> SpellEntryFields;
