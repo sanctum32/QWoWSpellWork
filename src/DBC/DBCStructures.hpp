@@ -55,9 +55,12 @@ struct SpellCategoryEntry
     explicit SpellCategoryEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    //uint32_t Flags{};                                           // 1
-    //uint32_t UsesPerWeek{};                                     // 2
-    std::string Name;                                           // 3
+    //uint32_t Flags{};                                         // 1
+    //uint32_t UsesPerWeek{};                                   // 2
+private:
+    QString Name;                                               // 3
+public:
+    QStringView GetName() const { return Name; }
 
     static char const* GetDBCFormat()
     {
@@ -89,11 +92,11 @@ struct SpellClassOptionsEntry
 {
     explicit SpellClassOptionsEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0
+    uint32_t    Id{};                                         // 0
     uint32_t    modalNextSpell{};                             // 1       m_modalNextSpell not used
     std::array<uint32_t, 3> SpellFamilyFlags{};               // 2-4
     uint32_t    SpellFamilyName{};                            // 5       m_spellClassSet
-    //std::string     Description;                            // 6       4.0.0
+    //QString     Description;                                // 6       4.0.0
 
     static char const* GetDBCFormat()
     {
@@ -167,12 +170,15 @@ struct SkillLineEntry
     explicit SkillLineEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    //int32_t     categoryId{};                                   // 1        m_categoryID
-    std::string name;                                           // 3        m_displayName_lang
-    //std::string description;                                    // 4        m_description_lang
-    //uint32_t    spellIcon{};                                    // 5        m_spellIconID
-    //std::string alternateVerb;                                  // 6        m_alternateVerb_lang
-    //uint32_t    canLink{};                                      // 7        m_canLink (prof. with recipes)
+    //int32_t     categoryId{};                                  // 1        m_categoryID
+private:
+    QString     name;                                           // 3        m_displayName_lang
+public:
+    QStringView GetName() const { return name; }
+    //QString description;                                       // 4        m_description_lang
+    //uint32_t    spellIcon{};                                   // 5        m_spellIconID
+    //QString alternateVerb;                                     // 6        m_alternateVerb_lang
+    //uint32_t    canLink{};                                     // 7        m_canLink (prof. with recipes)
 
     static char const* GetDBCFormat()
     {
@@ -232,14 +238,17 @@ struct SpellRangeEntry
 {
     explicit SpellRangeEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                           // 0
-    float     minRangeHostile{};
-    float     minRangeFriend{};
-    float     maxRangeHostile{};
-    float     maxRangeFriend{};                               //friend means unattackable unit here
-    //uint32_t  type{};
-    std::string   Name;                                         // 6-21     m_displayName_lang
-    //std::string   ShortName;                                    // 23-38    m_displayNameShort_lang
+    uint32_t    Id{};                                       // 0
+    float     minRangeHostile{};                            // 1
+    float     minRangeFriend{};                             // 2
+    float     maxRangeHostile{};                            // 3
+    float     maxRangeFriend{};                             // 4 friend means unattackable unit here
+    //uint32_t  type{};                                      // 5
+private:
+    QString   Name;                                         // 6-21     m_displayName_lang
+public:
+    QStringView GetName() const { return Name; }
+    //QString   ShortName;                                   // 23-38    m_displayNameShort_lang
 
     static char const* GetDBCFormat()
     {
@@ -398,7 +407,10 @@ struct AreaTableEntry
     //uint32_t ZoneMusic{};                                       // 8
     //uint32_t IntroSound{};                                      // 9
     //uint32_t ExplorationLevel{};                                // 10
-    std::string AreaName{};                                     // 11
+private:
+    QString AreaName;                                             // 11
+public:
+    QStringView GetName() const { return AreaName; }
     //uint32_t FactionGroupMask{};                                // 12
     //std::array<uint32_t, 4> LiquidTypeID{};                     // 13-16 liquid override by type
     //float MinElevation{};                                       // 17
@@ -479,8 +491,8 @@ struct OverrideSpellDataEntry
 
     uint32_t    Id{};                                           // 0
     std::array<int32_t, MAX_OVERRIDE_SPELL> Spells{};           // 1-10
-    //uint32_t      unk0;                                        // 11
-    //std::string   SpellBarName;                                // 12
+    //uint32_t      unk0;                                       // 11
+    //QString   SpellBarName;                                   // 12
 
     static char const* GetDBCFormat()
     {
@@ -493,7 +505,10 @@ struct ScreenEffectEntry
     explicit ScreenEffectEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    std::string Name;                                           // 1
+private:
+    QString Name;                                               // 1
+public:
+    QStringView GetName() const { return Name; }
     //uint32_t    Unk0{};                                       // 2
     //float       Unk1{};                                       // 3
     //uint32_t    Unk2{};                                       // 4
@@ -783,9 +798,9 @@ struct FactionEntry
     //uint32_t  ParentFactionID{};                               // 18
     //std::array<float, 2> ParentFactionMod{};                   // 19 - 20 Faction gains incoming rep * spilloverRateIn and  Faction outputs rep * spilloverRateOut as spillover reputation
     //std::array<uint32_t, 2> ParentFactionCap{};                // 21 - 22 The highest rank the faction will profit from incoming spillover and It does not seem to be the max standing at which a faction outputs spillover ...so no idea
-    std::string   Name;                                        // 23
-    //std::string   Description;                                // 24
-    //uint32_t  Expansion{};                                    // 25
+    QString   Name;                                             // 23
+    //QString   Description;                                     // 24
+    //uint32_t  Expansion{};                                     // 25
 
     static char const* GetDBCFormat()
     {

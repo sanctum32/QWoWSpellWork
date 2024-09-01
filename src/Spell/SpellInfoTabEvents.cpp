@@ -37,7 +37,7 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
         return;
     }
 
-    if (const auto* spell = GetDBCEntry(spellId, sDBCStores->m_spellEntries))
+    if (const auto* spell = sDBCStores->GetSpellEntry(spellId))
     {
         ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }
@@ -51,14 +51,13 @@ void MainWindow::PerformSpellSearch()
     auto* resultList = ui.resultList;
     resultList->setRowCount(0);
 
-    if (sDBCStores->m_spellEntries.empty())
+    if (sDBCStores->GetSpellEntries().empty())
     {
         ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
-    const QString spellNameOrId = ui.spellIdNameInput->text().toUpper();
-
+    QStringView spellNameOrId = ui.spellIdNameInput->text();
     uint32_t spellId = 0;
 
     const bool searchById = ui.searchByIdCheckBox->isChecked();
@@ -165,7 +164,7 @@ void MainWindow::PerformSpellSearch()
     }
 
     std::map<uint32_t /*spell*/, QString /*name*/> foundEntries;
-    for (const auto& [_id, _spellInfo] : sDBCStores->m_spellEntries)
+    for (const auto& [_id, _spellInfo] : sDBCStores->GetSpellEntries())
     {
         bool canInsert = spellNameOrId.isEmpty();
         if (!canInsert && searchById && spellId != 0 && _id == spellId)
@@ -186,7 +185,7 @@ void MainWindow::PerformSpellSearch()
 
         if (spellFamilyId.has_value())
         {
-            const auto* spellClassOptions = GetDBCEntry(_spellInfo.getSpellClassOptionsId(), sDBCStores->m_SpellClassOptions);
+            const auto* spellClassOptions = sDBCStores->GetSpellClassOptionsEntry(_spellInfo.getSpellClassOptionsId());
             if (spellClassOptions == nullptr || spellClassOptions->SpellFamilyName != *spellFamilyId)
             {
                 continue;
@@ -285,7 +284,7 @@ void MainWindow::onLevelScalingSliderValueChange()
         return;
     }
 
-    if (const auto* spell = GetDBCEntry(spellId, sDBCStores->m_spellEntries))
+    if (const auto* spell = sDBCStores->GetSpellEntry(spellId))
     {
         ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }

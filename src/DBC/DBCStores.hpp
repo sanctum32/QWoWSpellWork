@@ -1,7 +1,6 @@
 #pragma once
-
-#include <QLoggingCategory>
 #include <map>
+#include <QLoggingCategory>
 #include "DBCStructures.hpp"
 
 Q_DECLARE_LOGGING_CATEGORY(DBCStores)
@@ -16,8 +15,54 @@ public:
     }
 
     bool LoadData();
+
+    const auto& GetSpellEntries() const { return m_spellEntries; }
+    const auto* GetSpellEntry(uint32_t id) const { return GetDBCEntry(id, m_spellEntries); }
+    const auto* GetSpellScalingEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellScalingEntries); }
+    const auto* GetSpellCategoryEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellCategoryEntries); }
+    const auto* GetSpellCategoriesEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellCategories); }
+    const auto* GetSpellClassOptionsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellClassOptions); }
+    const auto* GetSpellTargetRestrictionsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellTargetRestrictions); }
+    const auto* GetSpellShapeshiftEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellShapeshiftEntries); }
+    const auto* GetSkillLineAbilityEntry(uint32_t id) const { return GetDBCEntry(id, m_SkillLineAbilityEntries); }
+    const auto& GetSkillLineAbilityEntries() const { return m_SkillLineAbilityEntries; }
+    const auto* GetSkillLineEntry(uint32_t id) const { return GetDBCEntry(id, m_SkillLineEntries); }
+    const auto& GetSkillLineEntries() const { return m_SkillLineEntries; }
+    const auto* GetSpellLevelsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellLevelsEntries); }
+    const auto* GetSpellReagentsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellReagentsEntries); }
+    const auto* GetSpellEquippedItemsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellEquippedItemsEntries); }
+    const auto* GetSpellRangeEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellRangeEntries); }
+    const auto* GetSpellAuraOptionsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellAuraOptionsEntries); }
+    const auto* GetSpellCastTimesEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellCastTimesEntries); }
+    const auto* GetSpellCooldownsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellCooldownsEntries); }
+    const auto* GetSpellDurationEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellDurationEntries); }
+    const auto* GetSpellPowerEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellPowerEntries); }
+    const auto* GetSpellInterruptsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellInterruptsEntries); }
+    const auto* GetSpellAuraRestrictionsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellAuraRestrictionsEntries); }
+    const auto* GetAreaGroupEntry(uint32_t id) const { return GetDBCEntry(id, m_AreaGroupEntries); }
+    const auto* GetAreaTableEntry(uint32_t id) const { return GetDBCEntry(id, m_AreaTableEntries); }
+    const auto* GetSpellCastingRequirementsEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellCastingRequirementsEntries); }
+    const auto* GetGtSpellScalingEntry(uint32_t id) const { return GetDBCEntry(id, m_GtSpellScalingEntries); }
+    const auto* GetOverrideSpellDataEntry(uint32_t id) const { return GetDBCEntry(id, m_OverrideSpellDataEntries); }
+    const auto* GetScreenEffectEntry(uint32_t id) const { return GetDBCEntry(id, m_ScreenEffectEntries); }
+    const auto* GetSpellRadiusEntry(uint32_t id) const { return GetDBCEntry(id, m_SpellRadiusEntries); }
+    const auto* GetFactionEntry(uint32_t id) const { return GetDBCEntry(id, m_FactionEntries); }
+
+private:
     bool LoadDBCDatas();
     bool LoadSqlDBCData();
+
+    template<class T>
+    T const* GetDBCEntry(uint32_t id, std::map<uint32_t, T> const& storage) const
+    {
+        if (id == 0)
+        {
+            return nullptr;
+        }
+
+        auto const& itr = storage.find(id);
+        return itr != storage.end() ? &(itr->second) : nullptr;
+    }
 
     // Stores
     std::map<uint32_t, SpellEntry>                   m_spellEntries;                             // Spell.dbc
@@ -52,15 +97,3 @@ public:
 };
 
 #define sDBCStores DBCStore::instance()
-
-template<class T>
-T const* GetDBCEntry(uint32_t id, std::map<uint32_t, T> const& storage)
-{
-    if (id == 0)
-    {
-        return nullptr;
-    }
-
-    auto const& itr = storage.find(id);
-    return itr != storage.end() ? &(itr->second) : nullptr;
-}

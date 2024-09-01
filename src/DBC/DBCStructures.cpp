@@ -41,7 +41,7 @@ SpellCategoryEntry::SpellCategoryEntry(DBCFileLoader::Record const& record)
     Id = record.getUInt(0);
     //Flags = record.getUInt(1);
     //UsesPerWeek = record.getUInt(2);
-    Name = record.getString(3);
+    Name = QString::fromStdString(record.getString(3));
 }
 
 SpellCategoriesEntry::SpellCategoriesEntry(DBCFileLoader::Record const& record)
@@ -114,7 +114,7 @@ SkillLineEntry::SkillLineEntry(DBCFileLoader::Record const& record)
 {
     Id                  = record.getUInt(0);
     //categoryId          = record.getInt(1);
-    name                = record.getString(2);
+    name                = QString::fromStdString(record.getString(2));
     //description         = record.getString(3);
     //spellIcon           = record.getUInt(4);
     //alternateVerb       = record.getString(5);
@@ -160,7 +160,7 @@ SpellRangeEntry::SpellRangeEntry(DBCFileLoader::Record const& record)
     maxRangeHostile     = record.getFloat(3);
     maxRangeFriend      = record.getFloat(4);
     //type                = record.getUInt(5);
-    Name                = record.getString(6);
+    Name                = QString::fromStdString(record.getString(6));
     //ShortName           = record.getString(7);
 }
 
@@ -257,7 +257,7 @@ AreaTableEntry::AreaTableEntry(DBCFileLoader::Record const& record)
     //ZoneMusic           = record.getUInt(8);
     //IntroSound          = record.getUInt(9);
     //ExplorationLevel    = record.getUInt(10);
-    AreaName            = record.getString(11);
+    AreaName            = QString::fromStdString(record.getString(11));
     //FactionGroupMask    = record.getUInt(12);
     //LiquidTypeID[0]     = record.getUInt(13);
     //LiquidTypeID[0]     = record.getUInt(14);
@@ -335,7 +335,7 @@ OverrideSpellDataEntry::OverrideSpellDataEntry(DBCFileLoader::Record const& reco
 ScreenEffectEntry::ScreenEffectEntry(DBCFileLoader::Record const& record)
 {
     Id = record.getUInt(0);
-    Name = record.getString(1);
+    Name = QString::fromStdString(record.getString(1));
     /*
     Unk0 = record.getUInt(2);
     Unk1 = record.getFloat(3);
@@ -499,7 +499,7 @@ FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
     //    ParentFactionCap[i] = record.getUInt(21 + i);
     //}
 
-    Name = record.getString(23);
+    Name = QString::fromStdString(record.getString(23));
     //Description = record.getString(24);
     //Expansion = record.getUInt(25);
 }
