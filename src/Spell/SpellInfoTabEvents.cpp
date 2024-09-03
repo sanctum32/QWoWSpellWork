@@ -380,7 +380,7 @@ void MainWindow::PerformSpellSearch()
             }
         }
 
-        if (std::any_of(advancedSearchParams.begin(), advancedSearchParams.end(), [=](auto const advancedSrchParam)
+        if (std::any_of(advancedSearchParams.begin(), advancedSearchParams.end(), [_spellInfo](auto const advancedSrchParam)
         {
             return !advancedSrchParam.CheckSpellFields(_spellInfo);
         }))
