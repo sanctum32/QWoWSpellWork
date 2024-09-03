@@ -392,7 +392,7 @@ void MainWindow::PerformSpellSearch()
         idItem->setData(Qt::EditRole, _id);
 
         QTableWidgetItem* spell = new QTableWidgetItem();
-        spell->setData(Qt::EditRole, QString(_spellInfo.getSpellName().toString()));
+        spell->setData(Qt::EditRole, _spellInfo.getSpellName());
 
         foundEntries.emplace_back(idItem, spell);
     }

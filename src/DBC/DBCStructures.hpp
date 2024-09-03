@@ -563,7 +563,7 @@ private:
         SpellEntryValues& operator=(uint32_t val) { uint32Val = val; return *this; }
         SpellEntryValues& operator=(int32_t val) { int32Val = val; return *this; }
         SpellEntryValues& operator=(float val) { floatVal = val; return *this; }
-        SpellEntryValues& operator=(std::string val) { textVal = QString::fromStdString(val); return *this; }
+        SpellEntryValues& operator=(const std::string& val) { textVal = val.c_str(); return *this; }
     };
 
     auto& _getID() { return _fields[0]; }
@@ -734,10 +734,10 @@ public:
     const uint32_t getSpellVisual2() const { return _getSpellVisual2().uint32Val;; }       // 18
     const uint32_t getSpellIconID() const { return _getSpellIconID().uint32Val;; }        // 19
     const uint32_t getActiveIconID() const { return _getActiveIconID().uint32Val;; }       // 20
-    QStringView getSpellName() const { return _getSpellName().textVal; }    // 21
-    QStringView getRank() const { return _getRank().textVal; }         // 22
-    QStringView getDescription() const { return _getDescription().textVal; }  // 23
-    QStringView getToolTip() const { return _getToolTip().textVal; }      // 24
+    const QString& getSpellName() const { return _getSpellName().textVal; }    // 21
+    const QString& getRank() const { return _getRank().textVal; }         // 22
+    const QString& getDescription() const { return _getDescription().textVal; }  // 23
+    const QString& getToolTip() const { return _getToolTip().textVal; }      // 24
     const uint32_t getSchoolMask() const { return _getSchoolMask().uint32Val; }         // 25
     //const uint32_t getRuneCostID() const { return _getRuneCostID().uint32Val; }         // 26
     //const uint32_t getSpellMissileID() const { return _getSpellMissileID(.uint32Val; }     // 27
@@ -767,9 +767,9 @@ public:
         return "iiiiiiiiiiiiiiifiiiissssixxxxxiiiiiiixiiiiiiixi";
     }
 
-    inline QStringView GetSpellNameRank() const
+    inline const QString GetSpellNameRank() const
     {
-        if (getRank().empty())
+        if (getRank().isEmpty())
         {
             return getSpellName();
         }
