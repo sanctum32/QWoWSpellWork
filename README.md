@@ -1,7 +1,9 @@
 QSpellwork is a basic crossplatform tool to show basic information about "World of Warcraft" game spells (originally is inspired by https://github.com/trinitycore/spellwork).
 The tool is written in C++ and uses Qt UI framework.
 
-Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB client)
+Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB client).
+
+NOTING: tool is not in alpha or beta stage. Tool development currently is at design/creation stage.
 
 ## Features:
 * Cross platform. Runs in Windows and Linux system natively
@@ -17,9 +19,9 @@ Currently, the tool supports only 4.3.4 (build 15595) data (tested with enGB cli
 *json folder contains necessary definitions*
 
 ### Requirements:
-* CMake 3.5 (or higher)
-* Qt5 or Qt6 framework libraries
-* C++ compiler with C++20 standart support
+* CMake >= 3.16
+* Qt5 or Qt6 framework libraries (https://www.qt.io)
+* C++ compiler with C++20 standart support (Mingw, GCC >= 8, MSVC >= 16.0 (visual studio 2019), clang >= 10)
 * MySQL 8+/MariaDB 10.3+ for sql
 
 ### Final setup steps:
