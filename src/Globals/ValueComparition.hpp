@@ -4,11 +4,14 @@
 #include <QStringList>
 #include <QStringView>
 
+// in actual defitions only one flag should be used.
 enum class CompareTypes
 {
-    Numeric,
-    Float,
-    String
+    None                = 0,
+    SignedNumber        = 1,
+    UnsignedNumber      = 2,
+    Float               = 3,
+    String              = 4,
 };
 
 enum class ConditionCompareType : uint8_t
@@ -78,11 +81,11 @@ static bool CompareStringValues(ConditionCompareType type, QStringView xVal, QSt
     switch (type)
     {
     case StartsWith:
-        return xVal.startsWith(yVal);
+        return xVal.startsWith(yVal, Qt::CaseInsensitive);
     case EndsWith:
-        return xVal.endsWith(yVal);
+        return xVal.endsWith(yVal, Qt::CaseInsensitive);
     case Contains:
-        return xVal.contains(yVal);
+        return xVal.contains(yVal, Qt::CaseInsensitive);
     default:
         break;
     }

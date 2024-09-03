@@ -541,7 +541,7 @@ QStringView SpellWorkJson::GetSpellInterruptFlagName(uint32_t flag) const
 
 QStringView SpellWorkJson::GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId) const
 {
-    assert(flagsId < AuraInterruptFlags.size());
+    assert(flagsId < 2);
     const auto& itr = m_auraInterruptFlagNames[flagsId].find(flag);
     return itr != m_auraInterruptFlagNames[flagsId].end() ? itr->second : QString("AURA_INTERRUPT_FLAG%1_UNK_%2").arg(flagsId).arg(flag, 8, 16, QLatin1Char('0'));
 }

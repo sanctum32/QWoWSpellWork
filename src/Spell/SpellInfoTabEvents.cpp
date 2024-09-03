@@ -3,6 +3,7 @@
 #include <QTableWidget>
 
 // project
+#include "ValueComparition.hpp"
 #include "mainwindow.hpp"
 #include "ui/ui_mainwindow.h"
 #include "DBC/DBCStores.hpp"
@@ -169,6 +170,151 @@ void MainWindow::PerformSpellSearch()
         }
     }
 
+    // advanced filters
+    struct AdvancedSearchParams
+    {
+        bool hasData = false;
+        ConditionCompareType compareType;
+        std::optional<int32_t> int32val;
+        std::optional<uint32_t> uint32val;
+        std::optional<float> floatVal;
+        std::optional<QString> textVal;
+
+        uint8_t spellFieldId;
+
+        bool CheckSpellFields(const SpellEntry& spell) const
+        {
+            // Nothing to check
+            if (!hasData)
+            {
+                return true;
+            }
+
+            switch (compareType)
+            {
+            case ConditionCompareType::NotEqual:
+            case ConditionCompareType::Equal:
+            case ConditionCompareType::GreaterThan:
+            case ConditionCompareType::GreaterOrEqual:
+            case ConditionCompareType::LowerThan:
+            case ConditionCompareType::LowerOrEqual:
+            {
+                const auto& aVal = spell.GetField(spellFieldId);
+                if (int32val.has_value())
+                {
+                    return CompareNumericValues(compareType, aVal.int32Val, *int32val);
+                }
+                else if (uint32val.has_value())
+                {
+                    return CompareNumericValues(compareType, aVal.uint32Val, *uint32val);
+                }
+                else if (floatVal.has_value())
+                {
+                    return CompareNumericValues(compareType, aVal.floatVal, *floatVal);
+                }
+                break;
+            }
+            case ConditionCompareType::BitValue:
+            case ConditionCompareType::NoBitValue:
+            {
+                const auto& aVal = spell.GetField(spellFieldId);
+                if (uint32val.has_value())
+                {
+                    return CompareBitMasks(compareType, aVal.uint32Val, *uint32val);
+                }
+                break;
+            }
+            case ConditionCompareType::StartsWith:
+            case ConditionCompareType::EndsWith:
+            case ConditionCompareType::Contains:
+            {
+                const auto& aVal = spell.GetField(spellFieldId);
+                if (textVal.has_value())
+                {
+                    return CompareStringValues(compareType, aVal.textVal, *textVal);
+                }
+                break;
+            }
+            }
+
+            return false;
+        }
+    };
+
+    std::array<AdvancedSearchParams, 2> advancedSearchParams;
+    std::array<QString, 2> advSearchInput = { ui.advFilterInput1->text(), ui.advFilterInput2->text() };
+    const std::array<int, 2> advSearchConditions = { ui.advFilterCondition1->currentIndex(), ui.advFilterCondition2->currentIndex() };
+    const std::array<QString, 2> advSearchFieldIdNames = { ui.advFilterTypes1->currentText(), ui.advFilterTypes2->currentText() };
+
+    for (uint8_t i = 0; i < 2; ++i)
+    {
+        if (advSearchInput[i].isEmpty())
+        {
+            continue;
+        }
+
+        const auto& itr = std::find_if(SpellEntryFields.begin(), SpellEntryFields.end(), [fieldName = advSearchFieldIdNames[i]](const auto& data)
+        {
+            return data.second.fieldName.contains(fieldName);
+        });
+
+        if (itr == SpellEntryFields.end())
+        {
+            continue;
+        }
+
+        ConditionCompareType compareType = ConditionCompareType(advSearchConditions[i]);
+        qDebug() << int(compareType);
+        auto& searchParam = advancedSearchParams[i];
+
+        switch (itr->second.cmpType)
+        {
+        case CompareTypes::SignedNumber:
+        {
+            bool ok = false;
+            const int32_t val = advSearchInput[i].toInt(&ok);
+            if (ok)
+            {
+                searchParam.int32val = val;
+            }
+
+            break;
+        }
+        case CompareTypes::UnsignedNumber:
+        {
+            bool ok = false;
+            const uint32_t val = advSearchInput[i].toUInt(&ok);
+            if (ok)
+            {
+                searchParam.uint32val = val;
+            }
+
+            break;
+        }
+        case CompareTypes::Float:
+        {
+            bool ok = false;
+            const float val = advSearchInput[i].toFloat(&ok);
+            if (ok)
+            {
+                searchParam.floatVal = val;
+            }
+
+            break;
+
+        }
+        case CompareTypes::String:
+            searchParam.textVal = advSearchInput[i];
+            break;
+        default:
+            break;
+        }
+
+        searchParam.spellFieldId = itr->first;
+        searchParam.compareType = compareType;
+        searchParam.hasData = true;
+    }
+
     std::vector<std::pair<QTableWidgetItem* /*id*/, QTableWidgetItem* /*name*/>> foundEntries;
     for (const auto& [_id, _spellInfo] : sDBCStores->GetSpellEntries())
     {
@@ -232,6 +378,14 @@ void MainWindow::PerformSpellSearch()
             {
                 continue;
             }
+        }
+
+        if (std::any_of(advancedSearchParams.begin(), advancedSearchParams.end(), [=](auto const advancedSrchParam)
+        {
+            return !advancedSrchParam.CheckSpellFields(_spellInfo);
+        }))
+        {
+            continue;
         }
 
         QTableWidgetItem* idItem = new QTableWidgetItem();

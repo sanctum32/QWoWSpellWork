@@ -780,6 +780,8 @@ public:
     QString const PrintBaseInfo(uint32_t scalingLevel) const;
     QString const PrintSpellEffectInfo(uint32_t scalingLevel) const;
 
+    const auto& GetField(uint8_t index) const { return _fields.at(index); }
+
     // Other data
     std::array<const SpellEffectEntry*, MAX_SPELL_EFFECTS> m_spellEffects{};
     bool m_IsServerSide{false};
@@ -811,6 +813,11 @@ struct FactionEntry
     }
 };
 
-
 // For advanced filter
-extern const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*type*/>> SpellEntryFields;
+struct SpellEntryAttributeInfo
+{
+    QString fieldName;
+    CompareTypes cmpType;
+};
+
+extern const std::map<uint8_t /*fieldId*/, SpellEntryAttributeInfo /*info*/> SpellEntryFields;

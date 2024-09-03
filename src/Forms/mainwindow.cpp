@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Init advanced filter types
     for (auto const& itr : SpellEntryFields)
     {
-        ui.advFilterTypes1->addItem(itr.second.first);
-        ui.advFilterTypes2->addItem(itr.second.first);
+        ui.advFilterTypes1->addItem(itr.second.fieldName);
+        ui.advFilterTypes2->addItem(itr.second.fieldName);
     }
 
     constexpr std::array<const char*, 11> ConditionCompareTypeStr =
