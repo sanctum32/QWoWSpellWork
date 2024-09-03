@@ -103,7 +103,7 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
     }
 }
 
-inline void PrintAttributes(QString& result, const std::vector<uint32_t> attributes)
+inline void PrintAttributes(QString& result, const std::vector<uint32_t>& attributes)
 {
     if (!attributes.empty() && std::any_of(attributes.begin(), attributes.end(), [](uint32_t attr){ return attr != 0; }))
     {
@@ -829,10 +829,9 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                           .arg(effectInfo->EffectMiscValueB)
                           .arg(effectInfo->EffectAmplitude);
 
-            const auto& itr = sSpellWorkJson->_spellEffectInfo.find(effectInfo->Effect);
-            if (itr != sSpellWorkJson->_spellEffectInfo.end())
+            if (const auto* effectJsonInfo = sSpellWorkJson->GetSpellEffectInfo(effectInfo->Effect))
             {
-                if (const auto genDetail = effectInfo->GenerateExtraDetails(itr->second.effectDetail))
+                if (const auto genDetail = effectInfo->GenerateExtraDetails(effectJsonInfo->extraDetailFormatStr))
                 {
                     result += *genDetail;
                     result += "<br>";
@@ -868,10 +867,9 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             result += QString(", miscB = %1").arg(effectInfo->EffectMiscValueB);
             result += QString(", periodic = %1<br>").arg(effectInfo->EffectAuraPeriod);
 
-            const auto& itr = sSpellWorkJson->_spellAuraTypes.find(effectInfo->EffectAura);
-            if (itr != sSpellWorkJson->_spellAuraTypes.end())
+            if (const auto* aurEffInfo = sSpellWorkJson->GetSpellAuraEffectInfo(effectInfo->EffectAura))
             {
-                if (const auto genDetail = effectInfo->GenerateExtraDetails(itr->second.effectDetail))
+                if (const auto genDetail = effectInfo->GenerateExtraDetails(aurEffInfo->extraDetailFormatStr))
                 {
                     result += *genDetail;
                     result += "<br>";

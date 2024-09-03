@@ -97,7 +97,7 @@ void MainWindow::UpdateJsonStatus(bool success)
 void MainWindow::UpdateComboBoxItems()
 {
     // SpellFamilyFilter
-    for (const auto& spellFamily : sSpellWorkJson->SpellFamilyInfo)
+    for (const auto& spellFamily : sSpellWorkJson->GetSpellFamilyData())
     {
         ui.SpellFamilyFilter->addItem(spellFamily.second);
     }
@@ -105,7 +105,7 @@ void MainWindow::UpdateComboBoxItems()
     ui.SpellFamilyFilter->setMaxVisibleItems(10);
 
     // SpellAuraTypeFilter
-    for (const auto& spellAuraTypes : sSpellWorkJson->_spellAuraTypes)
+    for (const auto& spellAuraTypes : sSpellWorkJson->GetSpellAuraEffectData())
     {
         ui.SpellAuraTypeFilter->addItem(spellAuraTypes.second.name);
     }
@@ -113,26 +113,17 @@ void MainWindow::UpdateComboBoxItems()
     ui.SpellAuraTypeFilter->setMaxVisibleItems(10);
 
     // SpellEffectFilter
-    for (const auto& spellEffect : sSpellWorkJson->_spellEffectInfo)
+    for (const auto& spellEffect : sSpellWorkJson->GetSpellEffectData())
     {
         ui.SpellEffectFilter->addItem(spellEffect.second.name);
     }
     ui.SpellEffectFilter->setEditable(true);
     ui.SpellEffectFilter->setMaxVisibleItems(10);
 
-    // SpellTargetFilterA
-    for (const auto& targetName : sSpellWorkJson->SpellTargetNames)
+    // SpellTargetFilter
+    for (const auto& targetName : sSpellWorkJson->GetSpellTargetData())
     {
         ui.SpellTargetFilterA->addItem(targetName.second);
-    }
-    ui.SpellTargetFilterA->setEditable(true);
-    ui.SpellTargetFilterA->setMaxVisibleItems(10);
-
-    // SpellTargetFilterB
-    for (const auto& targetName : sSpellWorkJson->SpellTargetNames)
-    {
         ui.SpellTargetFilterB->addItem(targetName.second);
     }
-    ui.SpellTargetFilterB->setEditable(true);
-    ui.SpellTargetFilterB->setMaxVisibleItems(10);
 }

@@ -7,7 +7,7 @@
 Q_LOGGING_CATEGORY(DBCStores, "spellwork.dbcstores");
 
 template<typename T>
-bool OpenAndReadDBC(const std::string_view& path, const std::string_view& dbcFileName, std::unordered_map<uint32_t, T>& storage)
+bool OpenAndReadDBC(const std::string_view& path, const std::string_view& dbcFileName, std::map<uint32_t, T>& storage)
 {
     DBCFileLoader dbcFile(std::string(path) + "//" + std::string(dbcFileName), T::GetDBCFormat());
     if (!dbcFile.IsLoaded())
@@ -25,17 +25,24 @@ bool OpenAndReadDBC(const std::string_view& path, const std::string_view& dbcFil
 
 bool DBCStore::LoadData()
 {
-    if (!LoadDBCDatas())
-    {
-        return false;
-    }
-
     if (!sSpellWorkConfig->GetAppConfig().loadDBCSpells && !sSpellWorkConfig->GetAppConfig().loadSQLSpells)
     {
         return false;
     }
 
-    if (sSpellWorkConfig->GetSQLConfig().enable && sSpellWorkConfig->GetAppConfig().loadSQLSpells && !LoadSqlDBCData())
+    bool isDBCLoaded = true;
+    bool isSQLLoaded = false;
+    if (sSpellWorkConfig->GetAppConfig().loadDBCSpells)
+    {
+        isDBCLoaded = LoadDBCDatas();
+    }
+
+    if (sSpellWorkConfig->GetSQLConfig().enable && sSpellWorkConfig->GetAppConfig().loadSQLSpells)
+    {
+        isSQLLoaded = LoadSqlDBCData();;
+    }
+
+    if (!isDBCLoaded && !isSQLLoaded)
     {
         return false;
     }

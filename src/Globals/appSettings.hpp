@@ -9,10 +9,10 @@ struct SQLSettings
     QString username;
     QString password;
     QString worldDB;
-    unsigned int port;
-    unsigned int pingDelayInMS;
-    bool enable;
-    bool canReconnect;
+    unsigned int port{};
+    unsigned int pingDelayInMS{};
+    bool enable{};
+    bool canReconnect{};
 };
 
 
@@ -20,8 +20,8 @@ struct AppSettings
 {
     std::string dbcFilePath;
     QString themeName;
-    bool loadDBCSpells;
-    bool loadSQLSpells;
+    bool loadDBCSpells{};
+    bool loadSQLSpells{};
 };
 
 class SpellWorkConfig

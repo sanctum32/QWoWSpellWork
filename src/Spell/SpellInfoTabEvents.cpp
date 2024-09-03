@@ -49,7 +49,7 @@ void MainWindow::PerformSpellSearch()
     const auto startMS = QDateTime::currentMSecsSinceEpoch();
 
     auto* resultList = ui.resultList;
-    resultList->setRowCount(0);
+    resultList->clearContents();
 
     if (sDBCStores->GetSpellEntries().empty())
     {
@@ -61,7 +61,7 @@ void MainWindow::PerformSpellSearch()
     uint32_t spellId = 0;
 
     const bool searchById = ui.searchByIdCheckBox->isChecked();
-    const bool searchByName = ui.seearchByNameCheckBox->isChecked();
+    const bool searchByName = ui.searchByNameCheckBox->isChecked();
 
     if (!searchById && !searchByName)
     {
@@ -91,13 +91,14 @@ void MainWindow::PerformSpellSearch()
     // Spell family filter
     if (ui.SpellFamilyFilter->currentIndex() != 0)
     {
-        const auto& spellFamilyItr = std::find_if(sSpellWorkJson->SpellFamilyInfo.begin(), sSpellWorkJson->SpellFamilyInfo.end(),
+        const auto& spellFamilyData = sSpellWorkJson->GetSpellFamilyData();
+        const auto& spellFamilyItr = std::find_if(spellFamilyData.begin(), spellFamilyData.end(),
             [familyStr = ui.SpellFamilyFilter->currentText()](const auto& spellFamily)
         {
             return spellFamily.second == familyStr;
         });
 
-        if (spellFamilyItr != sSpellWorkJson->SpellFamilyInfo.end())
+        if (spellFamilyItr != spellFamilyData.end())
         {
             spellFamilyId = spellFamilyItr->first;
         }
@@ -106,13 +107,14 @@ void MainWindow::PerformSpellSearch()
     // Spell aura type filter
     if (ui.SpellAuraTypeFilter->currentIndex() != 0)
     {
-        const auto& spellAuraTypeItr = std::find_if(sSpellWorkJson->_spellAuraTypes.begin(), sSpellWorkJson->_spellAuraTypes.end(),
+        const auto& spellAuraData = sSpellWorkJson->GetSpellAuraEffectData();
+        const auto& spellAuraTypeItr = std::find_if(spellAuraData.begin(), spellAuraData.end(),
             [auraTypeStr = ui.SpellAuraTypeFilter->currentText()](const auto& spellAuraType)
         {
             return spellAuraType.second.name == auraTypeStr;
         });
 
-        if (spellAuraTypeItr != sSpellWorkJson->_spellAuraTypes.end())
+        if (spellAuraTypeItr != spellAuraData.end())
         {
             auraTypeId = spellAuraTypeItr->first;
         }
@@ -121,49 +123,53 @@ void MainWindow::PerformSpellSearch()
     // Spell effect filter
     if (ui.SpellEffectFilter->currentIndex() != 0)
     {
-        const auto& effectNameItr = std::find_if(sSpellWorkJson->_spellEffectInfo.begin(), sSpellWorkJson->_spellEffectInfo.end(),
+        const auto& spellEffectData = sSpellWorkJson->GetSpellEffectData();
+        const auto& effectNameItr = std::find_if(spellEffectData.begin(), spellEffectData.end(),
             [selectedEffect = ui.SpellEffectFilter->currentText()](const auto& data)
         {
             return data.second.name == selectedEffect;
         });
 
-        if (effectNameItr != sSpellWorkJson->_spellEffectInfo.end())
+        if (effectNameItr != spellEffectData.end())
         {
             spellEffectId = effectNameItr->first;
         }
     }
 
-    // TargetA filter
-    if (ui.SpellTargetFilterA->currentIndex() != 0)
     {
-        const auto& targetNameItr = std::find_if(sSpellWorkJson->SpellTargetNames.begin(), sSpellWorkJson->SpellTargetNames.end(),
-            [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
+        const auto& targetData = sSpellWorkJson->GetSpellTargetData();
+        // TargetA filter
+        if (ui.SpellTargetFilterA->currentIndex() != 0)
         {
-            return spellTarget.second == selectedTarget;
-        });
+            const auto& targetNameItr = std::find_if(targetData.begin(), targetData.end(),
+                [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
+            {
+                return spellTarget.second == selectedTarget;
+            });
 
-        if (targetNameItr != sSpellWorkJson->SpellTargetNames.end())
+            if (targetNameItr != targetData.end())
+            {
+                spellTargetA = targetNameItr->first;
+            }
+        }
+
+        // TargetB filter
+        if (ui.SpellTargetFilterB->currentIndex() != 0)
         {
-            spellTargetA = targetNameItr->first;
+            const auto& targetNameItr = std::find_if(targetData.begin(), targetData.end(),
+                [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
+            {
+                return spellTarget.second == selectedTarget;
+            });
+
+            if (targetNameItr != targetData.end())
+            {
+                spellTargetB = targetNameItr->first;
+            }
         }
     }
 
-    // TargetB filter
-    if (ui.SpellTargetFilterB->currentIndex() != 0)
-    {
-        const auto& targetNameItr = std::find_if(sSpellWorkJson->SpellTargetNames.begin(), sSpellWorkJson->SpellTargetNames.end(),
-            [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
-        {
-            return spellTarget.second == selectedTarget;
-        });
-
-        if (targetNameItr != sSpellWorkJson->SpellTargetNames.end())
-        {
-            spellTargetB = targetNameItr->first;
-        }
-    }
-
-    std::unordered_map<uint32_t /*spell*/, QString /*name*/> foundEntries;
+    std::vector<std::pair<QTableWidgetItem* /*id*/, QTableWidgetItem* /*name*/>> foundEntries;
     for (const auto& [_id, _spellInfo] : sDBCStores->GetSpellEntries())
     {
         bool canInsert = spellNameOrId.isEmpty();
@@ -228,7 +234,13 @@ void MainWindow::PerformSpellSearch()
             }
         }
 
-        foundEntries[_id] = _spellInfo.getSpellName().toString();
+        QTableWidgetItem* idItem = new QTableWidgetItem();
+        idItem->setData(Qt::EditRole, _id);
+
+        QTableWidgetItem* spell = new QTableWidgetItem();
+        spell->setData(Qt::EditRole, QString(_spellInfo.getSpellName().toString()));
+
+        foundEntries.emplace_back(idItem, spell);
     }
 
     if (foundEntries.empty())
@@ -237,27 +249,17 @@ void MainWindow::PerformSpellSearch()
         return;
     }
 
-    ui.resultCountLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
-
     resultList->setRowCount(static_cast<int>(foundEntries.size()));
+
     int rowId = 0;
     for (const auto& [_spellId, _spellname] : foundEntries)
     {
-        // Set id
-        {
-            auto* idWidget = new QTableWidgetItem();
-            idWidget->setData(Qt::EditRole, _spellId);
-            resultList->setItem(rowId, 0, idWidget);
-        }
-        // Set name
-        {
-            auto* spellNameWidget = new QTableWidgetItem();
-            spellNameWidget->setData(Qt::EditRole, _spellname);
-            resultList->setItem(rowId, 1, spellNameWidget);
-        }
-
+        resultList->setItem(rowId, 0, _spellId);
+        resultList->setItem(rowId, 1, _spellname);
         ++rowId;
     }
+
+    ui.resultCountLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
 }
 
 void MainWindow::onLevelScalingSliderValueChange()

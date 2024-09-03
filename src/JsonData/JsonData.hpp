@@ -9,62 +9,51 @@
 
 Q_DECLARE_LOGGING_CATEGORY(JSON)
 
+struct SpellEffectInfo
+{
+    // Effect name
+    QString name;
+
+    // If set, it will add extra formatted details
+    QString extraDetailFormatStr;
+};
+
 class SpellWorkJson
 {
-public:
-    struct SpellEffectInfo
-    {
-        // Effect name
-        QString name;
-
-        // If set, it will add extra formatted details
-        QString effectDetail;
-    };
-
-    struct SpellAuraTypeInfo
-    {
-        // Aura effect name
-        QString name;
-
-        // If set, it will add extra formatted details
-        QString effectDetail;
-    };
+    SpellWorkJson() = default;
 
     // Storage
-    std::map<uint32_t /*id*/, QString /*name*/> SpellSchools;
-    std::map<uint32_t /*hex*/, QString /*name*/> SpellSchoolMasks;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellModOps;
-    std::map<uint32_t /*flag*/, QString /*name*/> SpellInterruptFlags;
-    std::array<std::map<uint32_t /*flag*/, QString /*name*/>, 2> AuraInterruptFlags;
-    std::map<uint16_t /*id*/, SpellAuraTypeInfo /*info*/> _spellAuraTypes;
-    std::map<uint32_t /*flag*/, QString /*description*/> SpellProcInfo;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellFamilyInfo;
-    std::array<std::map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> SpellAttributes;
-    std::map<uint32_t /*id*/, SpellEffectInfo /*info*/> _spellEffectInfo;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellTargetNames;
-    std::map<uint32_t /*flag*/, QString /*name*/> SpellTargetFlags;
-    std::map<uint32_t /*id*/, QString /*name*/> CombatRatingNames;
-    std::map<uint32_t /*id*/, QString /*name*/> UnitModsNames;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellAuraStatesNames;
-    std::map<int32_t /*id*/, QString /*name*/> PowerTypeNames;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellMechanicNames;
-    std::map<uint32_t /*id*/, QString /*name*/> DispelNames;
-    std::map<uint32_t /*id*/, QString /*name*/> ItemInventoryNames;
-    std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassWeapon;
-    std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassJunk;
-    std::map<uint32_t /*id*/, QString /*name*/> ItemSubclassArmor;
-    std::map<uint32_t /*id*/, QString /*name*/> ItemClassNames;
-    std::map<uint32_t /*id*/, QString /*name*/> ShapeshiftForms;
-    std::map<uint32_t /*id*/, QString /*name*/> CreatureTypeNames;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellDamageTypeNames;
-    std::map<uint32_t /*id*/, QString /*name*/> SpellPreventionTypeNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellSchoolNames;
+    std::map<uint32_t /*hex*/, QString /*name*/> m_spellSchoolMaskNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellModOpNames;
+    std::map<uint32_t /*flag*/, QString /*name*/> m_spellInterruptFlagNames;
+    std::array<std::map<uint32_t /*flag*/, QString /*name*/>, 2> m_auraInterruptFlagNames;
+    std::map<uint16_t /*id*/, SpellEffectInfo /*info*/> m_spellAuraTypeNames;
+    std::map<uint32_t /*flag*/, QString /*description*/> m_spellProcFlagNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellFamilyNames;
+    std::array<std::map<uint32_t /*flag*/, QString /*name*/>, MAX_SPELL_ATTRIBUTES> m_spellAttributeNames;
+    std::map<uint32_t /*id*/, SpellEffectInfo /*info*/> m_spellEffectInfo;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellTargetNames;
+    std::map<uint32_t /*flag*/, QString /*name*/> m_SpellTargetFlagNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_combatRatingNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_unitModsNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellAuraStatesNames;
+    std::map<int32_t /*id*/, QString /*name*/> m_powerTypeNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellMechanicNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_dispelNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_itemInventoryNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_itemSubClassWeaponNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_itemSubclassJunkNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_itemSubclassArmorNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_itemClassNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_shapeshiftFormNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_creatureTypeNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellDamageTypeNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_spellPreventionTypeNames;
 
-    SpellWorkJson() = default;
-    // Prevent copies
+public:
     SpellWorkJson(SpellWorkJson const&) = delete;
-    SpellWorkJson(SpellWorkJson&&) = delete;
     SpellWorkJson& operator= (SpellWorkJson const&) = delete;
-    SpellWorkJson& operator= (SpellWorkJson&&) = delete;
 
     static SpellWorkJson* instance()
     {
@@ -86,13 +75,19 @@ public:
 
     // flagsIds: 0 -> AuraInterruptFlags, 1 -> AuraInterruptFlags2
     QStringView GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId) const;
-
     QStringView GetSpellAuraTypeName(uint32_t id) const;
+    const SpellEffectInfo* GetSpellAuraEffectInfo(uint32_t id) const;
+    const auto& GetSpellAuraEffectData() const { return m_spellAuraTypeNames; }
     QStringView GetSpellProcDescription(uint32_t id) const;
+    const auto& GetSpellFamilyData() const { return m_spellFamilyNames; }
     QStringView GetSpellFamilyName(uint32_t id) const;
+
     QStringView GetSpellAttributeName(uint32_t attributeId, uint32_t attributeFlag) const;
     QStringView GetSpellEffectName(uint32_t id) const;
+    const SpellEffectInfo* GetSpellEffectInfo(uint32_t id) const;
+    auto const& GetSpellEffectData() const { return m_spellEffectInfo; }
     QStringView GetSpellTargetName(uint32_t id) const;
+    auto const& GetSpellTargetData() const { return m_spellTargetNames; }
     QStringView GetSpellTargetFlagName(uint32_t flag) const;
     QStringView GetCombatRatingName(uint32_t id) const;
     QStringView GetUnitModName(uint32_t id) const;

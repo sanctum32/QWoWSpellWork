@@ -25,7 +25,6 @@ void PingSQL(MYSQL* connection, unsigned int delay)
     }
 }
 
-
 SpellWorkSQL::~SpellWorkSQL()
 {
     if (m_connection != nullptr)
