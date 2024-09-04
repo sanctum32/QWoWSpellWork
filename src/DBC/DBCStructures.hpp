@@ -33,33 +33,7 @@ struct SpellEffectEntry
     SpellEffectEntry(DBCFileLoader::Record const& record);
     SpellEffectEntry(const MYSQL_ROW& result);
 
-    uint32_t    Id{};                                           // 0
-    uint32_t    Effect{};                                       // 1
-    float       EffectAmplitude{};                              // 2
-    uint32_t    EffectAura{};                                   // 3
-    uint32_t    EffectAuraPeriod{};                             // 4
-    int32_t     EffectBasePoints{};                             // 5
-    float       EffectBonusCoefficient{};                       // 6
-    float       EffectChainAmplitude{};                         // 7
-    uint32_t    EffectChainTargets{};                           // 8
-    int32_t     EffectDieSides{};                               // 9
-    uint32_t    EffectItemType{};                               // 10
-    uint32_t    EffectMechanic{};                               // 11
-    int32_t     EffectMiscValue{};                              // 12
-    int32_t     EffectMiscValueB{};                             // 13
-    float       EffectPointsPerResource{};                      // 14
-    uint32_t    EffectRadiusIndex{};                            // 15
-    uint32_t    EffectRadiusMaxIndex{};                         // 16
-    float       EffectRealPointsPerLevel{};                     // 17
-    std::array<uint32_t, 3> EffectSpellClassMask{};             // 18 - 20
-    uint32_t    EffectTriggerSpell{};                           // 21
-    uint32_t    EffectImplicitTargetA{};                        // 22
-    uint32_t    EffectImplicitTargetB{};                        // 23
-    uint32_t    SpellID{};                                      // 24
-    uint32_t    EffectIndex{};                                  // 25
-    //uint32_t    EffectAttributes{};                             // 26
-
-    inline bool HasSpellClassMask() const { return std::any_of(EffectSpellClassMask.begin(), EffectSpellClassMask.end(), [](uint32_t val) { return val != 0; }); }
+    inline bool HasSpellClassMask() const { return getEffectSpellClassMaskA() != 0 || getEffectSpellClassMaskB() != 0 || getEffectSpellClassMaskC() != 0; }
     static char const* GetDBCFormat()
     {
         return "iifiiiffiiiiiifiifiiiiiiiix";
@@ -67,6 +41,64 @@ struct SpellEffectEntry
 
     // Generates extra effect details by given format
     std::shared_ptr<QString> GenerateExtraDetails(const QString& format) const;
+
+    const auto getId() const { return _fields[0].uint32Val; }                     // 0
+    const auto getEffect() const { return _fields[1].uint32Val; }                 // 1
+    const auto getEffectAmplitude() const { return _fields[2].floatVal; }         // 2
+    const auto getEffectAura() const { return _fields[3].uint32Val; }             // 3
+    const auto getEffectAuraPeriod() const { return _fields[4].uint32Val; }       // 4
+    const auto getEffectBasePoints() const { return _fields[5].int32Val; }        // 5
+    const auto getEffectBonusCoefficient() const { return _fields[6].floatVal; }  // 6
+    const auto getEffectChainAmplitude() const { return _fields[7].floatVal; }    // 7
+    const auto getEffectChainTargets() const { return _fields[8].uint32Val; }     // 8
+    const auto getEffectDieSides() const { return _fields[9].int32Val; }          // 9
+    const auto getEffectItemType() const { return _fields[10].uint32Val; }        // 10
+    const auto getEffectMechanic() const { return _fields[11].uint32Val; }        // 11
+    const auto getEffectMiscValue() const { return _fields[12].int32Val; }        // 12
+    const auto getEffectMiscValueB() const { return _fields[13].int32Val; }       // 13
+    const auto getEffectPointsPerResource() const { return _fields[14].floatVal; }// 14
+    const auto getEffectRadiusIndex() const { return _fields[15].uint32Val; }     // 15
+    const auto getEffectRadiusMaxIndex() const { return _fields[16].uint32Val; }  // 16
+    const auto getEffectRealPointsPerLevel() const { return _fields[17].floatVal; } // 17
+    const uint32_t getEffectSpellClassMaskA() const { return _fields[18].uint32Val; } // 18
+    const uint32_t getEffectSpellClassMaskB() const { return _fields[18].uint32Val; } // 19
+    const uint32_t getEffectSpellClassMaskC() const { return _fields[18].uint32Val; } // 20
+    const auto getEffectTriggerSpell() const { return _fields[19].uint32Val; }    // 21
+    const auto getEffectImplicitTargetA() const { return _fields[20].uint32Val; } // 22
+    const auto getEffectImplicitTargetB() const { return _fields[21].uint32Val; } // 23
+    const auto getSpellID() const { return _fields[22].uint32Val; }               // 24
+    const auto getEffectIndex() const { return _fields[23].uint32Val; }           // 25
+    const auto getEffectAttributes() const { return _fields[24].uint32Val; }      // 26
+
+private:
+    std::array<DbcEntryValues, 27> _fields;
+    auto& _getId() { return _fields[0].uint32Val; }                     // 0
+    auto& _getEffect() { return _fields[1].uint32Val; }                 // 1
+    auto& _getEffectAmplitude() { return _fields[2].floatVal; }         // 2
+    auto& _getEffectAura() { return _fields[3].uint32Val; }             // 3
+    auto& _getEffectAuraPeriod() { return _fields[4].uint32Val; }       // 4
+    auto& _getEffectBasePoints() { return _fields[5].int32Val; }        // 5
+    auto& _getEffectBonusCoefficient() { return _fields[6].floatVal; }  // 6
+    auto& _getEffectChainAmplitude() { return _fields[7].floatVal; }    // 7
+    auto& _getEffectChainTargets() { return _fields[8].uint32Val; }     // 8
+    auto& _getEffectDieSides() { return _fields[9].int32Val; }          // 9
+    auto& _getEffectItemType() { return _fields[10].uint32Val; }        // 10
+    auto& _getEffectMechanic() { return _fields[11].uint32Val; }        // 11
+    auto& _getEffectMiscValue() { return _fields[12].int32Val; }        // 12
+    auto& _getEffectMiscValueB() { return _fields[13].int32Val; }       // 13
+    auto& _getEffectPointsPerResource() { return _fields[14].floatVal; }// 14
+    auto& _getEffectRadiusIndex() { return _fields[15].uint32Val; }     // 15
+    auto& _getEffectRadiusMaxIndex() { return _fields[16].uint32Val; }  // 16
+    auto& _getEffectRealPointsPerLevel() { return _fields[17].floatVal; } // 17
+    auto& _getEffectSpellClassMaskA() { return _fields[18].uint32Val; } // 18
+    auto& _getEffectSpellClassMaskB() { return _fields[18].uint32Val; } // 19
+    auto& _getEffectSpellClassMaskC() { return _fields[18].uint32Val; } // 20
+    auto& _getEffectTriggerSpell() { return _fields[19].uint32Val; }    // 21
+    auto& _getEffectImplicitTargetA() { return _fields[20].uint32Val; } // 22
+    auto& _getEffectImplicitTargetB() { return _fields[21].uint32Val; } // 23
+    auto& _getSpellID() { return _fields[22].uint32Val; }               // 24
+    auto& _getEffectIndex() { return _fields[23].uint32Val; }           // 25
+    auto& _getEffectAttributes() { return _fields[24].uint32Val; }      // 26
 };
 
 // SpellCategory.dbc
@@ -567,7 +599,82 @@ struct SpellEntry
     explicit SpellEntry(const DBCFileLoader::Record& record);
     explicit SpellEntry(const MYSQL_ROW& sqlRow);
 
+
+    const auto getId() const { return _fields[0].uint32Val; };                 // 0
+    const auto getAttribute0() const { return _fields[1].uint32Val; }          // 1
+    const auto getAttribute1() const { return _fields[2].uint32Val; }          // 2
+    const auto getAttribute2() const { return _fields[3].uint32Val; }          // 3
+    const auto getAttribute3() const { return _fields[4].uint32Val; }          // 4
+    const auto getAttribute4() const { return _fields[5].uint32Val; }          // 5
+    const auto getAttribute5() const { return _fields[6].uint32Val; }          // 6
+    const auto getAttribute6() const { return _fields[7].uint32Val; }          // 7
+    const auto getAttribute7() const { return _fields[8].uint32Val; }          // 8
+    const auto getAttribute8() const { return _fields[9].uint32Val; }          // 9
+    const auto getAttribute9() const { return _fields[10].uint32Val; }         // 10
+    const auto getAttribute10() const { return _fields[11].uint32Val; }        // 11
+    const auto getCastingTimeIndex() const { return _fields[12].uint32Val; }   // 12
+    const auto getDurationIndex() const { return _fields[13].uint32Val; }      // 13
+    const auto getPowerType() const { return _fields[14].int32Val; }            // 14
+    const auto getRangeIndex() const { return _fields[15].uint32Val; }         // 15
+    const auto getSpeed() const { return _fields[16].floatVal; }                    // 16
+    const auto getSpellVisual1() const { return _fields[17].uint32Val;; }       // 17
+    const auto getSpellVisual2() const { return _fields[18].uint32Val;; }       // 18
+    const auto getSpellIconID() const { return _fields[19].uint32Val;; }        // 19
+    const auto getActiveIconID() const { return _fields[20].uint32Val;; }       // 20
+    const auto& getSpellName() const { return _fields[21].textVal; }    // 21
+    const auto& getRank() const { return _fields[22].textVal; }         // 22
+    const auto& getDescription() const { return _fields[23].textVal; }  // 23
+    const auto& getToolTip() const { return _fields[24].textVal; }      // 24
+    const auto getSchoolMask() const { return _fields[25].uint32Val; }         // 25
+    //const uint32_t getRuneCostID() const { return _fields[26].uint32Val; }         // 26
+    //const uint32_t getSpellMissileID() const { return _fields[27].uint32Val; }     // 27
+    //const uint32_t getSpellDescriptionVariableID() const { return _fields[28].uint32Val; }  // 28
+    //const uint32_t getSpellDifficultyId() const { return _fields[29].uint32Val; }    // 29
+    //const float getSpellCoef() const { return _fields[30].floatVal; }                 // 30
+    const auto getSpellScalingId() const { return _fields[31].uint32Val; }         // 31
+    const auto getSpellAuraOptionsId() const { return _fields[32].uint32Val; }  // 32
+    const auto getSpellAuraRestrictionsId() const { return _fields[33].uint32Val; }  // 33
+    const auto getSpellCastingRequirementsId() const { return _fields[34].uint32Val; }  // 34
+    const auto getSpellCategoriesId() const { return _fields[35].uint32Val; }  // 35
+    const auto getSpellClassOptionsId() const { return _fields[36].uint32Val; }  // 36
+    const auto getSpellCooldownsId() const { return _fields[37].uint32Val; }  // 37
+    //const auto getUnkIndex7() const { return _fields[38].uint32Val; }  // 38
+    const auto getSpellEquippedItemsId() const { return _fields[39].uint32Val; }  // 39
+    const auto getSpellInterruptsId() const { return _fields[40].uint32Val; }  // 40
+    const auto getSpellLevelsId() const { return _fields[41].uint32Val; }  // 41
+    const auto getSpellPowerId() const { return _fields[42].uint32Val; }  // 42
+    const auto getSpellReagentsId() const { return _fields[43].uint32Val; }  // 43
+    const auto getSpellShapeshiftId() const { return _fields[44].uint32Val; }  // 44
+    const auto getSpellTargetRestrictionsId() const { return _fields[45].uint32Val; }  // 45
+    //const auto getSpellTotemsId() const { return _fields[46].uint32Val; }  // 46
+    const auto getResearchProject() const { return _fields[47].uint32Val; }  // 47
+
+    static char const* GetDBCFormat()
+    {
+        return "iiiiiiiiiiiiiiifiiiissssixxxxxiiiiiiixiiiiiiixi";
+    }
+
+    inline const QString GetSpellNameRank() const
+    {
+        if (getRank().isEmpty())
+        {
+            return getSpellName();
+        }
+
+        return QString("%1, Rank name: %2").arg(getSpellName(), getRank());
+    }
+
+    QString const PrintBaseInfo(uint32_t scalingLevel) const;
+    QString const PrintSpellEffectInfo(uint32_t scalingLevel) const;
+
+    const auto& GetField(uint8_t index) const { return _fields.at(index); }
+
+    // Other data
+    std::array<const SpellEffectEntry*, MAX_SPELL_EFFECTS> m_spellEffects{};
+    bool m_IsServerSide{false};
+
 private:
+    std::array<DbcEntryValues, 47> _fields;
     auto& _getID() { return _fields[0]; }
     auto& _getAttribute0() { return _fields[1]; }
     auto& _getAttribute1() { return _fields[2]; }
@@ -616,131 +723,6 @@ private:
     auto& _getSpellTargetRestrictionsId() { return _fields[45]; }
     //auto& _getSpellTotemsId() { return _fields[46]; }
     auto& _getResearchProject() { return _fields[47]; }
-
-    const auto& _getID() const { return _fields[0]; }
-    const auto& _getAttribute0() const { return _fields[1]; }
-    const auto& _getAttribute1() const { return _fields[2]; }
-    const auto& _getAttribute2() const { return _fields[3]; }
-    const auto& _getAttribute3() const { return _fields[4]; }
-    const auto& _getAttribute4() const { return _fields[5]; }
-    const auto& _getAttribute5() const { return _fields[6]; }
-    const auto& _getAttribute6() const { return _fields[7]; }
-    const auto& _getAttribute7() const { return _fields[8]; }
-    const auto& _getAttribute8() const { return _fields[9]; }
-    const auto& _getAttribute9() const { return _fields[10]; }
-    const auto& _getAttribute10() const { return _fields[11]; }
-    const auto& _getCastingTimeIndex() const { return _fields[12]; }
-    const auto& _getDurationIndex() const { return _fields[13]; }
-    const auto& _getPowerType() const { return _fields[14]; }
-    const auto& _getRangeIndex() const { return _fields[15]; }
-    const auto& _getSpeed() const { return _fields[16]; }
-    const auto& _getSpellVisual1() const { return _fields[17]; }
-    const auto& _getSpellVisual2() const { return _fields[18]; }
-    const auto& _getSpellIconID() const { return _fields[19]; }
-    const auto& _getActiveIconID() const { return _fields[20]; }
-    const auto& _getSpellName() const { return _fields[21]; }
-    const auto& _getRank() const { return _fields[22]; }
-    const auto& _getDescription() const { return _fields[23]; }
-    const auto& _getToolTip() const { return _fields[24]; }
-    const auto& _getSchoolMask() const { return _fields[25]; }
-    const auto& _getRuneCostID() const { return _fields[26]; }
-    const auto& _getSpellMissileID() const { return _fields[27]; }
-    const auto& _getSpellDescriptionVariableID() const { return _fields[28]; }
-    const auto& _getSpellDifficultyId() const { return _fields[29]; }
-    const auto& _getSpellCoef() const { return _fields[30]; }
-    const auto& _getSpellScalingId() const { return _fields[31]; }
-    const auto& _getSpellAuraOptionsId() const { return _fields[32]; }
-    const auto& _getSpellAuraRestrictionsId() const { return _fields[33]; }
-    const auto& _getSpellCastingRequirementsId() const { return _fields[34]; }
-    const auto& _getSpellCategoriesId() const { return _fields[35]; }
-    const auto& _getSpellClassOptionsId() const { return _fields[36]; }
-    const auto& _getSpellCooldownsId() const { return _fields[37]; }
-    //const auto& _getUnkIndex7() const { return _fields[38]; }
-    const auto& _getSpellEquippedItemsId() const { return _fields[39]; }
-    const auto& _getSpellInterruptsId() const { return _fields[40]; }
-    const auto& _getSpellLevelsId() const { return _fields[41]; }
-    const auto& _getSpellPowerId() const { return _fields[42]; }
-    const auto& _getSpellReagentsId() const { return _fields[43]; }
-    const auto& _getSpellShapeshiftId() const { return _fields[44]; }
-    const auto& _getSpellTargetRestrictionsId() const { return _fields[45]; }
-    //const auto& _getSpellTotemsId() const { return _fields[46]; }
-    const auto& _getResearchProject() const { return _fields[47]; }
-public:
-    const uint32_t getId() const { return _getID().uint32Val; };                 // 0
-    const uint32_t getAttribute0() const { return _getAttribute0().uint32Val; }          // 1
-    const uint32_t getAttribute1() const { return _getAttribute1().uint32Val; }          // 2
-    const uint32_t getAttribute2() const { return _getAttribute2().uint32Val; }          // 3
-    const uint32_t getAttribute3() const { return _getAttribute3().uint32Val; }          // 4
-    const uint32_t getAttribute4() const { return _getAttribute4().uint32Val; }          // 5
-    const uint32_t getAttribute5() const { return _getAttribute5().uint32Val; }          // 6
-    const uint32_t getAttribute6() const { return _getAttribute6().uint32Val; }          // 7
-    const uint32_t getAttribute7() const { return _getAttribute7().uint32Val; }          // 8
-    const uint32_t getAttribute8() const { return _getAttribute8().uint32Val; }          // 9
-    const uint32_t getAttribute9() const { return _getAttribute9().uint32Val; }         // 10
-    const uint32_t getAttribute10() const { return _getAttribute10().uint32Val; }        // 11
-    const uint32_t getCastingTimeIndex() const { return _getCastingTimeIndex().uint32Val; }   // 12
-    const uint32_t getDurationIndex() const { return _getDurationIndex().uint32Val; }      // 13
-    const int32_t getPowerType() const { return _getPowerType().int32Val; }            // 14
-    const uint32_t getRangeIndex() const { return _getRangeIndex().uint32Val; }         // 15
-    const float getSpeed() const { return _getSpeed().floatVal; }                    // 16
-    const uint32_t getSpellVisual1() const { return _getSpellVisual1().uint32Val;; }       // 17
-    const uint32_t getSpellVisual2() const { return _getSpellVisual2().uint32Val;; }       // 18
-    const uint32_t getSpellIconID() const { return _getSpellIconID().uint32Val;; }        // 19
-    const uint32_t getActiveIconID() const { return _getActiveIconID().uint32Val;; }       // 20
-    const QString& getSpellName() const { return _getSpellName().textVal; }    // 21
-    const QString& getRank() const { return _getRank().textVal; }         // 22
-    const QString& getDescription() const { return _getDescription().textVal; }  // 23
-    const QString& getToolTip() const { return _getToolTip().textVal; }      // 24
-    const uint32_t getSchoolMask() const { return _getSchoolMask().uint32Val; }         // 25
-    //const uint32_t getRuneCostID() const { return _getRuneCostID().uint32Val; }         // 26
-    //const uint32_t getSpellMissileID() const { return _getSpellMissileID(.uint32Val; }     // 27
-    //const uint32_t getSpellDescriptionVariableID() const { return _getSpellDescriptionVariableID().uint32Val; }  // 28
-    //const uint32_t getSpellDifficultyId() const { return _getSpellDifficultyId().uint32Val; }    // 29
-    //const float getSpellCoef() const { return std::get<2>(_getSpellCoef().floatVal; }                 // 30
-    const uint32_t getSpellScalingId() const { return _getSpellScalingId().uint32Val; }         // 31
-    const uint32_t getSpellAuraOptionsId() const { return _getSpellAuraOptionsId().uint32Val; }  // 32
-    const uint32_t getSpellAuraRestrictionsId() const { return _getSpellAuraRestrictionsId().uint32Val; }  // 33
-    const uint32_t getSpellCastingRequirementsId() const { return _getSpellCastingRequirementsId().uint32Val; }  // 34
-    const uint32_t getSpellCategoriesId() const { return _getSpellCategoriesId().uint32Val; }  // 35
-    const uint32_t getSpellClassOptionsId() const { return _getSpellClassOptionsId().uint32Val; }  // 36
-    const uint32_t getSpellCooldownsId() const { return _getSpellCooldownsId().uint32Val; }  // 37
-    //const uint32_t getUnkIndex7() const { return _getUnkIndex7().uint32Val; }  // 38
-    const uint32_t getSpellEquippedItemsId() const { return _getSpellEquippedItemsId().uint32Val; }  // 39
-    const uint32_t getSpellInterruptsId() const { return _getSpellInterruptsId().uint32Val; }  // 40
-    const uint32_t getSpellLevelsId() const { return _getSpellLevelsId().uint32Val; }  // 41
-    const uint32_t getSpellPowerId() const { return _getSpellPowerId().uint32Val; }  // 42
-    const uint32_t getSpellReagentsId() const { return _getSpellReagentsId().uint32Val; }  // 43
-    const uint32_t getSpellShapeshiftId() const { return _getSpellShapeshiftId().uint32Val; }  // 44
-    const uint32_t getSpellTargetRestrictionsId() const { return _getSpellTargetRestrictionsId().uint32Val; }  // 45
-    //const uint32_t getSpellTotemsId() const { return _getSpellTotemsId().uint32Val; }  // 46
-    const uint32_t getResearchProject() const { return _getResearchProject().uint32Val; }  // 47
-
-    static char const* GetDBCFormat()
-    {
-        return "iiiiiiiiiiiiiiifiiiissssixxxxxiiiiiiixiiiiiiixi";
-    }
-
-    inline const QString GetSpellNameRank() const
-    {
-        if (getRank().isEmpty())
-        {
-            return getSpellName();
-        }
-
-        return QString("%1, Rank name: %2").arg(getSpellName(), getRank());
-    }
-
-    QString const PrintBaseInfo(uint32_t scalingLevel) const;
-    QString const PrintSpellEffectInfo(uint32_t scalingLevel) const;
-
-    const auto& GetField(uint8_t index) const { return _fields.at(index); }
-
-    // Other data
-    std::array<const SpellEffectEntry*, MAX_SPELL_EFFECTS> m_spellEffects{};
-    bool m_IsServerSide{false};
-
-private:
-    std::array<DbcEntryValues, 47> _fields;
 };
 
 struct FactionEntry

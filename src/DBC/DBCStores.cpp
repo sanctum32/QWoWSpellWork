@@ -51,12 +51,12 @@ bool DBCStore::LoadData()
     for (const auto& spellEffectItr : m_SpellEffectEntries)
     {
         auto const& effectEntry = spellEffectItr.second;
-        assert(effectEntry.EffectIndex < MAX_SPELL_EFFECTS);
+        assert(effectEntry.getEffectIndex() < MAX_SPELL_EFFECTS);
 
-        auto spellEntryItr = m_spellEntries.find(effectEntry.SpellID);
+        auto spellEntryItr = m_spellEntries.find(effectEntry.getSpellID());
         if (spellEntryItr != m_spellEntries.end())
         {
-            spellEntryItr->second.m_spellEffects[effectEntry.EffectIndex] = &effectEntry;
+            spellEntryItr->second.m_spellEffects[effectEntry.getEffectIndex()] = &effectEntry;
         }
     }
 

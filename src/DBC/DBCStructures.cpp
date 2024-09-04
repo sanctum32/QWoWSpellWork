@@ -5,66 +5,64 @@ SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
 {
     uint8_t colId = 0;
 
-    Id                          = record.getUInt(colId++);
-    Effect                      = record.getUInt(colId++);
-    EffectAmplitude             = record.getFloat(colId++);
-    EffectAura                  = record.getUInt(colId++);
-    EffectAuraPeriod            = record.getUInt(colId++);
-    EffectBasePoints            = record.getInt(colId++);
-    EffectBonusCoefficient      = record.getFloat(colId++);
-    EffectChainAmplitude        = record.getFloat(colId++);
-    EffectChainTargets          = record.getUInt(colId++);
-    EffectDieSides              = record.getInt(colId++);
-    EffectItemType              = record.getUInt(colId++);
-    EffectMechanic              = record.getUInt(colId++);
-    EffectMiscValue             = record.getInt(colId++);
-    EffectMiscValueB            = record.getInt(colId++);
-    EffectPointsPerResource     = record.getFloat(colId++);
-    EffectRadiusIndex           = record.getUInt(colId++);
-    EffectRadiusMaxIndex        = record.getUInt(colId++);
-    EffectRealPointsPerLevel    = record.getFloat(colId++);
+    _getId() = record.getUInt(colId++);
+    _getEffect() = record.getUInt(colId++);
+    _getEffectAmplitude() = record.getFloat(colId++);
+    _getEffectAura() = record.getUInt(colId++);
+    _getEffectAuraPeriod() = record.getUInt(colId++);
+    _getEffectBasePoints() = record.getInt(colId++);
+    _getEffectBonusCoefficient() = record.getFloat(colId++);
+    _getEffectChainAmplitude() = record.getFloat(colId++);
+    _getEffectChainTargets() = record.getUInt(colId++);
+    _getEffectDieSides() = record.getInt(colId++);
+    _getEffectItemType() = record.getUInt(colId++);
+    _getEffectMechanic() = record.getUInt(colId++);
+    _getEffectMiscValue() = record.getInt(colId++);
+    _getEffectMiscValueB() = record.getInt(colId++);
+    _getEffectPointsPerResource() = record.getFloat(colId++);
+    _getEffectRadiusIndex() = record.getUInt(colId++);
+    _getEffectRadiusMaxIndex() = record.getUInt(colId++);
+    _getEffectRealPointsPerLevel() = record.getFloat(colId++);
+    _getEffectSpellClassMaskA() = record.getUInt(colId++);
+    _getEffectSpellClassMaskB() = record.getUInt(colId++);
+    _getEffectSpellClassMaskC() = record.getUInt(colId++);
 
-    for (auto& classMask : EffectSpellClassMask)
-    {
-        classMask = record.getUInt(colId++);
-    }
-
-    EffectTriggerSpell          = record.getUInt(colId++);
-    EffectImplicitTargetA       = record.getUInt(colId++);
-    EffectImplicitTargetB       = record.getUInt(colId++);
-    SpellID                     = record.getUInt(colId++);
-    EffectIndex                 = record.getUInt(colId++);
-    //EffectAttributes            = record.getUInt(id++);
+    _getEffectTriggerSpell() = record.getUInt(colId++);
+    _getEffectImplicitTargetA() = record.getUInt(colId++);
+    _getEffectImplicitTargetB() = record.getUInt(colId++);
+    _getSpellID() = record.getUInt(colId++);
+    _getEffectIndex() = record.getUInt(colId++);
+    _getEffectAttributes() = record.getUInt(colId++);
 }
 
 SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
 {
-    Id = static_cast<uint32_t>(std::stoul(row[0]));
-    Effect = static_cast<uint32_t>(std::stoul(row[1]));
-    EffectAmplitude = std::atof(row[2]);
-    EffectAura = static_cast<uint32_t>(std::stoul(row[3]));
-    EffectAuraPeriod = static_cast<uint32_t>(std::stoul(row[4]));
-    EffectBasePoints = static_cast<int32_t>(std::stoi(row[5]));
-    EffectBonusCoefficient = std::atof(row[6]);
-    EffectChainAmplitude = std::atof(row[7]);
-    EffectChainTargets = static_cast<int32_t>(std::stoul(row[8]));
-    EffectDieSides = static_cast<int32_t>(std::stoi(row[9]));
-    EffectItemType = static_cast<uint32_t>(std::stoul(row[10]));
-    EffectMechanic = static_cast<uint32_t>(std::stoul(row[11]));
-    EffectMiscValue = static_cast<int32_t>(std::stoi(row[12]));
-    EffectMiscValueB = static_cast<int32_t>(std::stoi(row[13]));
-    EffectPointsPerResource = std::atof(row[14]);
-    EffectRadiusIndex = static_cast<uint32_t>(std::stoul(row[15]));
-    EffectRadiusMaxIndex = static_cast<uint32_t>(std::stoul(row[16]));
-    EffectRealPointsPerLevel = std::atof(row[17]);
-    EffectSpellClassMask[0] = static_cast<uint32_t>(std::stoul(row[18]));
-    EffectSpellClassMask[1] = static_cast<uint32_t>(std::stoul(row[19]));
-    EffectSpellClassMask[2] = static_cast<uint32_t>(std::stoul(row[20]));
-    EffectTriggerSpell = static_cast<uint32_t>(std::stoul(row[21]));
-    EffectImplicitTargetA = static_cast<uint32_t>(std::stoul(row[22]));
-    EffectImplicitTargetB = static_cast<uint32_t>(std::stoul(row[23]));
-    SpellID = static_cast<uint32_t>(std::stoul(row[24]));
-    EffectIndex = static_cast<uint32_t>(std::stoul(row[25]));
+    _getId() = std::stoul(row[0]);
+    _getEffect() = std::stoul(row[1]);
+    _getEffectAmplitude() = std::atof(row[2]);
+    _getEffectAura() = std::stoul(row[3]);
+    _getEffectAuraPeriod() = std::stoul(row[4]);
+    _getEffectBasePoints() = std::stoi(row[5]);
+    _getEffectBonusCoefficient() = std::atof(row[6]);
+    _getEffectChainAmplitude() = std::atof(row[7]);
+    _getEffectChainTargets() = std::stoul(row[8]);
+    _getEffectDieSides() = std::stoi(row[9]);
+    _getEffectItemType() = std::stoul(row[10]);
+    _getEffectMechanic() = std::stoul(row[11]);
+    _getEffectMiscValue() = std::stoi(row[12]);
+    _getEffectMiscValueB() = std::stoi(row[13]);
+    _getEffectPointsPerResource() = std::atof(row[14]);
+    _getEffectRadiusIndex() = std::stoul(row[15]);
+    _getEffectRadiusMaxIndex() = std::stoul(row[16]);
+    _getEffectRealPointsPerLevel() = std::atof(row[17]);
+    _getEffectSpellClassMaskA() = std::stoul(row[18]);
+    _getEffectSpellClassMaskB() = std::stoul(row[19]);
+    _getEffectSpellClassMaskC() = std::stoul(row[20]);
+    _getEffectTriggerSpell() = std::stoul(row[21]);
+    _getEffectImplicitTargetA() = std::stoul(row[22]);
+    _getEffectImplicitTargetB() = std::stoul(row[23]);
+    _getSpellID() = std::stoul(row[24]);
+    _getEffectIndex() = std::stoul(row[25]);
 }
 
 SpellCategoryEntry::SpellCategoryEntry(DBCFileLoader::Record const& record)

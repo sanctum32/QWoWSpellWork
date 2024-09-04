@@ -736,8 +736,8 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 
         result += QString("<b>Effect %1: Id %2 (%3)</b><br>")
                       .arg(effIndex)
-                      .arg(effectInfo->Effect)
-                      .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->Effect));
+                      .arg(effectInfo->getEffect())
+                      .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->getEffect()));
 
         const auto* scalingInfo = sDBCStores->GetSpellScalingEntry(getSpellScalingId());
         if (scalingInfo != nullptr && scalingInfo->Coefficient[effIndex] != 0.0f &&  scalingInfo->Class != 0)
@@ -775,64 +775,64 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             }
             else
             {
-                result += QString(" + combo *  %1").arg(effectInfo->EffectPointsPerResource);
+                result += QString(" + combo *  %1").arg(effectInfo->getEffectPointsPerResource());
             }
         }
         else
         {
-            result += QString("BasePoints = %1").arg(effectInfo->EffectBasePoints + ((effectInfo->EffectDieSides == 0) ? 0 : 1));
+            result += QString("BasePoints = %1").arg(effectInfo->getEffectBasePoints() + ((effectInfo->getEffectDieSides() == 0) ? 0 : 1));
 
-            if (effectInfo->EffectRealPointsPerLevel != 0)
+            if (effectInfo->getEffectRealPointsPerLevel() != 0)
             {
-                result += QString(" + Level * %1").arg(effectInfo->EffectRealPointsPerLevel);
+                result += QString(" + Level * %1").arg(effectInfo->getEffectRealPointsPerLevel());
             }
 
-            if (effectInfo->EffectDieSides > 1)
+            if (effectInfo->getEffectDieSides() > 1)
             {
-                if (effectInfo->EffectRealPointsPerLevel != 0)
+                if (effectInfo->getEffectRealPointsPerLevel() != 0)
                 {
-                    result += QString(" to %1 + lvl * %2").arg(effectInfo->EffectBasePoints + effectInfo->EffectDieSides, effectInfo->EffectRealPointsPerLevel);
+                    result += QString(" to %1 + lvl * %2").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides(), effectInfo->getEffectRealPointsPerLevel());
                 }
                 else
                 {
-                    result += QString(" to %1").arg(effectInfo->EffectBasePoints + effectInfo->EffectDieSides);
+                    result += QString(" to %1").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides());
                 }
             }
 
-            if (effectInfo->EffectPointsPerResource > 0)
+            if (effectInfo->getEffectPointsPerResource() > 0)
             {
-                result += QString(" + combo * %1").arg(effectInfo->EffectPointsPerResource);
+                result += QString(" + combo * %1").arg(effectInfo->getEffectPointsPerResource());
             }
         }
 
-        if (effectInfo->EffectBonusCoefficient > 1.0f)
+        if (effectInfo->getEffectBonusCoefficient() > 1.0f)
         {
-            result += QString(" x %1").arg(effectInfo->EffectBonusCoefficient);
+            result += QString(" x %1").arg(effectInfo->getEffectBonusCoefficient());
         }
 
-        if (effectInfo->EffectAmplitude > 0.0f)
+        if (effectInfo->getEffectAmplitude() > 0.0f)
         {
-            result += QString("  Multiple = %1").arg(effectInfo->EffectAmplitude);
+            result += QString("  Multiple = %1").arg(effectInfo->getEffectAmplitude());
         }
 
         result += "<br>";
 
         result += QString("Targets: (%1, %2) (%3, %4)<br>")
-                      .arg(effectInfo->EffectImplicitTargetA)
-                      .arg(effectInfo->EffectImplicitTargetB)
-                      .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->EffectImplicitTargetA))
-                      .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->EffectImplicitTargetB));
+                .arg(effectInfo->getEffectImplicitTargetA())
+                .arg(effectInfo->getEffectImplicitTargetB())
+                .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetA()))
+                .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetB()));
 
         result += line;
 
-        if (effectInfo->EffectAura == 0)
+        if (effectInfo->getEffectAura() == 0)
         {
             result += QString("EffectMiscValueA = %1, EffectMiscValueB = %2, EffectAmplitude = %3<br>")
-                          .arg(effectInfo->EffectMiscValue)
-                          .arg(effectInfo->EffectMiscValueB)
-                          .arg(effectInfo->EffectAmplitude);
+                    .arg(effectInfo->getEffectMiscValue())
+                    .arg(effectInfo->getEffectMiscValueB())
+                    .arg(effectInfo->getEffectAmplitude());
 
-            if (const auto* effectJsonInfo = sSpellWorkJson->GetSpellEffectInfo(effectInfo->Effect))
+            if (const auto* effectJsonInfo = sSpellWorkJson->GetSpellEffectInfo(effectInfo->getEffect()))
             {
                 if (const auto genDetail = effectInfo->GenerateExtraDetails(effectJsonInfo->extraDetailFormatStr))
                 {
@@ -844,22 +844,22 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
         else
         {
             result += QString("Aura Id %1 (%2), value = %3, misc = %4")
-                          .arg(effectInfo->EffectAura)
-                          .arg(sSpellWorkJson->GetSpellAuraTypeName(effectInfo->EffectAura))
-                          .arg(effectInfo->EffectBasePoints)
-                          .arg(effectInfo->EffectMiscValue);
+                    .arg(effectInfo->getEffectAura())
+                    .arg(sSpellWorkJson->GetSpellAuraTypeName(effectInfo->getEffectAura()))
+                    .arg(effectInfo->getEffectBasePoints())
+                    .arg(effectInfo->getEffectMiscValue());
 
-            switch (effectInfo->EffectAura)
+            switch (effectInfo->getEffectAura())
             {
             case SPELL_AURA_MOD_STAT:
             {
-                result += QString(" (%1)").arg(sSpellWorkJson->GetUnitModName(effectInfo->EffectMiscValue));
+                result += QString(" (%1)").arg(sSpellWorkJson->GetUnitModName(effectInfo->getEffectMiscValue()));
                 break;
             }
             case SPELL_AURA_ADD_FLAT_MODIFIER:
             case SPELL_AURA_ADD_PCT_MODIFIER:
             {
-                result += QString(" (%1)").arg(sSpellWorkJson->GetSpellModName(effectInfo->EffectMiscValue));
+                result += QString(" (%1)").arg(sSpellWorkJson->GetSpellModName(effectInfo->getEffectMiscValue()));
                 break;
             }
             // todo: more cases
@@ -867,10 +867,10 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                 break;
             }
 
-            result += QString(", miscB = %1").arg(effectInfo->EffectMiscValueB);
-            result += QString(", periodic = %1<br>").arg(effectInfo->EffectAuraPeriod);
+            result += QString(", miscB = %1").arg(effectInfo->getEffectMiscValueB());
+            result += QString(", periodic = %1<br>").arg(effectInfo->getEffectAuraPeriod());
 
-            if (const auto* aurEffInfo = sSpellWorkJson->GetSpellAuraEffectInfo(effectInfo->EffectAura))
+            if (const auto* aurEffInfo = sSpellWorkJson->GetSpellAuraEffectInfo(effectInfo->getEffectAura()))
             {
                 if (const auto genDetail = effectInfo->GenerateExtraDetails(aurEffInfo->extraDetailFormatStr))
                 {
@@ -885,9 +885,9 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             if (const auto* thisEffClassOptions = sDBCStores->GetSpellClassOptionsEntry(getSpellClassOptionsId()))
             {
                 result += QString("SpellClassMask = 0x%1 0x%2 0x%3<br>")
-                              .arg(effectInfo->EffectSpellClassMask[0], 8, 16, QLatin1Char('0'))
-                              .arg(effectInfo->EffectSpellClassMask[1], 8, 16, QLatin1Char('0'))
-                              .arg(effectInfo->EffectSpellClassMask[2], 8, 16, QLatin1Char('0'));
+                              .arg(effectInfo->getEffectSpellClassMaskA(), 8, 16, QLatin1Char('0'))
+                              .arg(effectInfo->getEffectSpellClassMaskB(), 8, 16, QLatin1Char('0'))
+                              .arg(effectInfo->getEffectSpellClassMaskC(), 8, 16, QLatin1Char('0'));
 
                 for (const auto& itr : sDBCStores->GetSpellEntries())
                 {
@@ -928,9 +928,9 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             }
         }
 
-        if (effectInfo->EffectRadiusIndex != 0)
+        if (effectInfo->getEffectRadiusIndex() != 0)
         {
-            if (const auto* spellRadius = sDBCStores->GetSpellRadiusEntry(effectInfo->EffectRadiusIndex))
+            if (const auto* spellRadius = sDBCStores->GetSpellRadiusEntry(effectInfo->getEffectRadiusIndex()))
             {
                 result += QString("Min radius: %1, max radius: %2<br>").arg(spellRadius->RadiusMin).arg(spellRadius->RadiusMax);
             }
@@ -939,9 +939,9 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
         const auto* spellAuraOptionEntry = sDBCStores->GetSpellAuraOptionsEntry(getSpellAuraOptionsId());
 
         // append trigger spell
-        if (effectInfo->EffectTriggerSpell != 0)
+        if (effectInfo->getEffectTriggerSpell() != 0)
         {
-            if (const auto* triggerSpell = sDBCStores->GetSpellEntry(effectInfo->EffectTriggerSpell))
+            if (const auto* triggerSpell = sDBCStores->GetSpellEntry(effectInfo->getEffectTriggerSpell()))
             {
                 result += "<span style=\"color:green; font-weight: bold\">";
                 result += QString("   Trigger spell (%1) %2. Chance = %3<br>")
@@ -981,25 +981,25 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             }
             else
             {
-                result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->EffectTriggerSpell).arg(spellAuraOptionEntry != nullptr ? spellAuraOptionEntry->procChance : 0.0f);
+                result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(spellAuraOptionEntry != nullptr ? spellAuraOptionEntry->procChance : 0.0f);
             }
         }
 
-        if (effectInfo->EffectChainTargets != 0)
+        if (effectInfo->getEffectChainTargets() != 0)
         {
-            result += QString("EffectChainTarget = %1<br>").arg(effectInfo->EffectChainTargets);
+            result += QString("EffectChainTarget = %1<br>").arg(effectInfo->getEffectChainTargets());
         }
 
-        if (effectInfo->EffectItemType != 0)
+        if (effectInfo->getEffectItemType() != 0)
         {
-            result += QString("EffectItemType = %1<br>").arg(effectInfo->EffectItemType);
+            result += QString("EffectItemType = %1<br>").arg(effectInfo->getEffectItemType());
         }
 
-        if (effectInfo->EffectMechanic != MECHANIC_NONE)
+        if (effectInfo->getEffectMechanic() != MECHANIC_NONE)
         {
             result += QString("Effect Mechanic = %1 (%2)<br>")
-                          .arg(effectInfo->EffectMechanic)
-                          .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->EffectMechanic));
+                    .arg(effectInfo->getEffectMechanic())
+                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
         }
 
         result += "<br>";
@@ -1074,7 +1074,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
 
     using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;
 
-    const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", EffectMiscValue }, { ":MiscValueB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", getEffectMiscValue() }, { ":MiscValueB:", getEffectMiscValueB() } }};
     for (const auto& [strToRep, value] : miscValues)
     {
         if (!formattedStr->contains(strToRep))
@@ -1085,7 +1085,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(strToRep, QString::number(value));
     }
 
-    const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", EffectMiscValue }, { ":AreaEntryNameMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", getEffectMiscValue() }, { ":AreaEntryNameMiscValB:", getEffectMiscValueB() } }};
     for (auto const& [strToRep, value] : areaEntryNames)
     {
         if (!formattedStr->contains(strToRep))
@@ -1097,7 +1097,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->GetName().toString() : "Unknown");
     }
 
-    const std::array<const strRepFormatData, 2> modStat = {{ {":ModStatNameMiscVal:", EffectMiscValue }, { ":ModStatNameMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> modStat = {{ {":ModStatNameMiscVal:", getEffectMiscValue() }, { ":ModStatNameMiscValB:", getEffectMiscValueB() } }};
     for (auto const& [strToRep, value] : modStat)
     {
         if (!formattedStr->contains(strToRep))
@@ -1109,7 +1109,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(strToRep, QString(statName.data()));
     }
 
-    const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", EffectMiscValue }, { ":FactionNameMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", getEffectMiscValue() }, { ":FactionNameMiscValB:", getEffectMiscValueB() } }};
     for (auto const& [strToRep, value] : factionName)
     {
         if (!formattedStr->contains(strToRep))
@@ -1127,7 +1127,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         }
     }
 
-    const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", EffectMiscValue }, { ":CBRatingListMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", getEffectMiscValue() }, { ":CBRatingListMiscValB:", getEffectMiscValueB() } }};
     for (auto const& [strToRep, value] : combatRating)
     {
         if (!formattedStr->contains(strToRep))
@@ -1157,7 +1157,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(strToRep, ratingsStr);
     }
 
-    const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", EffectMiscValue }, { ":ScreenEffectMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", getEffectMiscValue() }, { ":ScreenEffectMiscValB:", getEffectMiscValueB() } }};
     for (auto const& [strToRep, value] : screenEffect)
     {
         if (!formattedStr->contains(strToRep))
@@ -1169,7 +1169,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(strToRep, _screenEffect != nullptr ? _screenEffect->GetName().toString() : "unknown");
     }
 
-    const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", EffectMiscValue }, { ":OverrideSpellListMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", getEffectMiscValue() }, { ":OverrideSpellListMiscValB:", getEffectMiscValueB() } }};
     for (auto const& [strToRep, value] : overrideSpellList)
     {
         if (!formattedStr->contains(strToRep))
@@ -1206,7 +1206,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         }
     }
 
-    const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunitiesMiscVal:", EffectMiscValue }, { ":MechanicImmunitiesMiscValB:", EffectMiscValueB } }};
+    const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunitiesMiscVal:", getEffectMiscValue() }, { ":MechanicImmunitiesMiscValB:", getEffectMiscValueB() } }};
     for (auto const& [strToRep, value] : mechanicImmunities)
     {
         if (!formattedStr->contains(strToRep))

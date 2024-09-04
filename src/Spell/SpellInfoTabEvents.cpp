@@ -291,22 +291,22 @@ void MainWindow::PerformSpellSearch()
                     return false;
                 }
 
-                if (auraTypeId.has_value() && effectInfo->EffectAura != *auraTypeId)
+                if (auraTypeId.has_value() && effectInfo->getEffectAura() != *auraTypeId)
                 {
                     return false;
                 }
 
-                if (spellEffectId.has_value() && effectInfo->Effect != *spellEffectId)
+                if (spellEffectId.has_value() && effectInfo->getEffect() != *spellEffectId)
                 {
                     return false;
                 }
 
-                if (spellTargetA.has_value() && effectInfo->EffectImplicitTargetA != *spellTargetA)
+                if (spellTargetA.has_value() && effectInfo->getEffectImplicitTargetA() != *spellTargetA)
                 {
                     return false;
                 }
 
-                if (spellTargetB.has_value() && effectInfo->EffectImplicitTargetB != *spellTargetB)
+                if (spellTargetB.has_value() && effectInfo->getEffectImplicitTargetB() != *spellTargetB)
                 {
                     return false;
                 }
