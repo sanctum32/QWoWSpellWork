@@ -99,6 +99,14 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
         if (auto* mainWindow = GetMainWindow())
         {
             mainWindow->setEnabled(true);
+            if (genericFilter.HasData() || spellAttributesFilter.HasData())
+            {
+                mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:green\">active</span>");
+            }
+            else
+            {
+                mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:red\">inactive</span>");
+            }
         }
     }
     case QDialogButtonBox::Reset:
@@ -133,6 +141,14 @@ void SearchFilter::closeEvent(QCloseEvent* /*e*/)
     if (MainWindow* mainWindow = GetMainWindow())
     {
         mainWindow->setEnabled(true);
+        if (genericFilter.HasData() || spellAttributesFilter.HasData())
+        {
+            mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:green\">active</span>");
+        }
+        else
+        {
+            mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:red\">inactive</span>");
+        }
     }
 }
 

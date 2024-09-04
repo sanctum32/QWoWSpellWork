@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    friend class SearchFilter;
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -31,7 +32,7 @@ private slots:
     void onSpellIdNameInputReturnPressed();
     void onResultListClick(QTableWidgetItem *item);
     void onLevelScalingSliderValueChange();
-    void onAdvancedSearchBtnClick();
+    void onFiltersBtnClick();
 
 private:
     Ui::MainWindow ui;

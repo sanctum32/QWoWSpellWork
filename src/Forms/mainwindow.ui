@@ -153,29 +153,6 @@
              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="2" column="0">
-              <widget class="QCheckBox" name="searchByIdCheckBox">
-               <property name="text">
-                <string>By id</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QPushButton" name="searchBtn">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Search</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="0" colspan="3">
               <widget class="QLineEdit" name="spellIdNameInput">
                <property name="sizePolicy">
@@ -198,6 +175,19 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="3">
+              <widget class="QPushButton" name="searchBtn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Search</string>
+               </property>
+              </widget>
+             </item>
              <item row="2" column="1">
               <widget class="QCheckBox" name="searchByNameCheckBox">
                <property name="text">
@@ -208,10 +198,27 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="3">
-              <widget class="QPushButton" name="advSearchBtn">
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="searchByIdCheckBox">
                <property name="text">
-                <string>Advanced Filters</string>
+                <string>By id</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="2">
+              <widget class="QPushButton" name="filtersBtn">
+               <property name="text">
+                <string>Additional filters</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2" colspan="2">
+              <widget class="QLabel" name="filtersStatus">
+               <property name="text">
+                <string>Extra filters: &lt;span style=&quot;color:red&quot;&gt;inactive&lt;/span&gt;</string>
                </property>
               </widget>
              </item>

@@ -382,7 +382,7 @@ void MainWindow::onLevelScalingSliderValueChange()
     }
 }
 
-void MainWindow::onAdvancedSearchBtnClick()
+void MainWindow::onFiltersBtnClick()
 {
     this->setEnabled(false);
     searchFilterForm->setEnabled(true);

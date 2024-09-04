@@ -32,6 +32,11 @@ private:
         int spellEffect{-1};
         int spellTargetA{-1};
         int spellTargetB{-1};
+
+        inline bool HasData() const
+        {
+            return spellFamily != -1 || spellAuraType != -1 || spellEffect != -1 || spellTargetA != -1 || spellTargetB != -1;
+        }
     } genericFilter;
 
     struct
@@ -40,9 +45,22 @@ private:
         std::array<int, 2> conditionCompareType{-1, -1};
         std::array<QString, 2> conditionValue;
 
-        bool HasData(uint8_t id) const
+        inline bool HasData(uint8_t id) const
         {
             return id < 2 && conditionFieldName[id] != -1 && conditionCompareType[id] != -1 && !conditionValue.empty();
+        }
+
+        bool HasData() const
+        {
+            for (uint8_t i = 0; i < 2; ++i)
+            {
+                if (HasData(i))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     } spellAttributesFilter;
 
