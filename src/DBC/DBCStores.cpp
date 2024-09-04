@@ -7,7 +7,7 @@
 Q_LOGGING_CATEGORY(DBCStores, "spellwork.dbcstores");
 
 template<typename T>
-bool OpenAndReadDBC(const std::string_view& path, const std::string_view& dbcFileName, std::map<uint32_t, T>& storage)
+bool OpenAndReadDBC(std::string_view path, std::string_view dbcFileName, std::map<uint32_t, T>& storage)
 {
     DBCFileLoader dbcFile(std::string(path) + "//" + std::string(dbcFileName), T::GetDBCFormat());
     if (!dbcFile.IsLoaded())
@@ -140,7 +140,7 @@ bool DBCStore::LoadSqlDBCData()
         query << "`SpellLevelsId`,";                // 22
         query << "`SpellTargetRestrictionsId`,";    // 23
         query << "`SpellName`";                     // 24
-        query << " FROM `spell_dbc`";
+        query << " FROM `spell_dbc` WHERE `Id` > 0";
 
         if (mysql_query(connection, query.str().c_str()) != 0)
         {
@@ -158,13 +158,7 @@ bool DBCStore::LoadSqlDBCData()
         uint32_t count = 0;
         while (auto row = mysql_fetch_row(result))
         {
-            const uint32_t entry = static_cast<uint32_t>(std::stoul(row[0]));
-            if (entry == 0)
-            {
-                continue;
-            }
-
-            m_spellEntries.try_emplace(entry, SpellEntry(row));
+            m_spellEntries.try_emplace(static_cast<uint32_t>(std::stoul(row[0])), row);
             ++count;
         }
 
@@ -203,7 +197,7 @@ bool DBCStore::LoadSqlDBCData()
         query << "`EffectImplicitTargetB`,";    // 23
         query << "`SpellID`,";                  // 24
         query << "`EffectIndex`";               // 25
-        query << " FROM `spelleffect_dbc`";
+        query << " FROM `spelleffect_dbc` WHERE `Id` > 0";
 
         if (mysql_query(connection, query.str().c_str()) != 0)
         {
@@ -221,40 +215,7 @@ bool DBCStore::LoadSqlDBCData()
         uint32_t count = 0;
         while (auto row = mysql_fetch_row(result))
         {
-            const uint32_t entry = static_cast<uint32_t>(std::stoul(row[0]));
-            if (entry == 0)
-            {
-                continue;
-            }
-
-            SpellEffectEntry effect;
-            effect.Id                       = entry;
-            effect.Effect                   = static_cast<uint32_t>(std::stoul(row[1]));
-            effect.EffectAmplitude          = std::stof(row[2]);
-            effect.EffectAura               = static_cast<uint32_t>(std::stoul(row[3]));
-            effect.EffectAuraPeriod         = static_cast<uint32_t>(std::stoul(row[4]));
-            effect.EffectBasePoints         = static_cast<uint32_t>(std::stoul(row[5]));
-            effect.EffectBonusCoefficient   = std::stof(row[6]);
-            effect.EffectChainAmplitude     = std::stof(row[7]);
-            effect.EffectChainTargets       = static_cast<uint32_t>(std::stoul(row[8]));
-            effect.EffectDieSides           = static_cast<uint32_t>(std::stoul(row[9]));
-            effect.EffectItemType           = static_cast<uint32_t>(std::stoul(row[10]));
-            effect.EffectMechanic           = static_cast<uint32_t>(std::stoul(row[11]));
-            effect.EffectMiscValue          = static_cast<uint32_t>(std::stoul(row[12]));
-            effect.EffectMiscValueB         = static_cast<uint32_t>(std::stoul(row[13]));
-            effect.EffectPointsPerResource  = std::stof(row[14]);;
-            effect.EffectRadiusIndex        = static_cast<uint32_t>(std::stoul(row[15]));
-            effect.EffectRadiusMaxIndex     = static_cast<uint32_t>(std::stoul(row[16]));
-            effect.EffectRealPointsPerLevel = std::stof(row[17]);
-            effect.EffectSpellClassMask[0]  = static_cast<uint32_t>(std::stoul(row[18]));
-            effect.EffectSpellClassMask[1]  = static_cast<uint32_t>(std::stoul(row[19]));
-            effect.EffectSpellClassMask[2]  = static_cast<uint32_t>(std::stoul(row[20]));
-            effect.EffectTriggerSpell       = static_cast<uint32_t>(std::stoul(row[21]));
-            effect.EffectImplicitTargetA    = static_cast<uint32_t>(std::stoul(row[22]));
-            effect.EffectImplicitTargetB    = static_cast<uint32_t>(std::stoul(row[23]));
-            effect.SpellID                  = static_cast<uint32_t>(std::stoul(row[24]));
-            effect.EffectIndex              = static_cast<uint32_t>(std::stoul(row[25]));
-            m_SpellEffectEntries.try_emplace(entry, effect);
+            m_SpellEffectEntries.try_emplace(static_cast<uint32_t>(std::stoul(row[0])), row);
             ++count;
         }
         mysql_free_result(result);

@@ -10,11 +10,27 @@
 
 enum class CompareTypes;
 
+struct DbcEntryValues
+{
+    DbcEntryValues() = default;
+
+    uint32_t uint32Val{};
+    int32_t int32Val{};
+    float floatVal{};
+    QString textVal;
+
+    DbcEntryValues& operator=(uint32_t val) { uint32Val = val; return *this; }
+    DbcEntryValues& operator=(int32_t val) { int32Val = val; return *this; }
+    DbcEntryValues& operator=(float val) { floatVal = val; return *this; }
+    DbcEntryValues& operator=(const std::string& val) { textVal = val.c_str(); return *this; }
+};
+
 // SpellEffect.dbc
 struct SpellEffectEntry
 {
     SpellEffectEntry() = default;
-    explicit SpellEffectEntry(DBCFileLoader::Record const& record);
+    SpellEffectEntry(DBCFileLoader::Record const& record);
+    SpellEffectEntry(const MYSQL_ROW& result);
 
     uint32_t    Id{};                                           // 0
     uint32_t    Effect{};                                       // 1
@@ -551,21 +567,6 @@ struct SpellEntry
     explicit SpellEntry(const MYSQL_ROW& sqlRow);
 
 private:
-    struct SpellEntryValues
-    {
-        SpellEntryValues() = default;
-
-        uint32_t uint32Val{};
-        int32_t int32Val{};
-        float floatVal{};
-        QString textVal;
-
-        SpellEntryValues& operator=(uint32_t val) { uint32Val = val; return *this; }
-        SpellEntryValues& operator=(int32_t val) { int32Val = val; return *this; }
-        SpellEntryValues& operator=(float val) { floatVal = val; return *this; }
-        SpellEntryValues& operator=(const std::string& val) { textVal = val.c_str(); return *this; }
-    };
-
     auto& _getID() { return _fields[0]; }
     auto& _getAttribute0() { return _fields[1]; }
     auto& _getAttribute1() { return _fields[2]; }
@@ -664,55 +665,6 @@ private:
     //const auto& _getSpellTotemsId() const { return _fields[46]; }
     const auto& _getResearchProject() const { return _fields[47]; }
 public:
-    uint32_t getId() { return _getID().uint32Val; };                 // 0
-    uint32_t getAttribute0() { return _getAttribute0().uint32Val; }          // 1
-    uint32_t getAttribute1() { return _getAttribute1().uint32Val; }          // 2
-    uint32_t getAttribute2() { return _getAttribute2().uint32Val; }          // 3
-    uint32_t getAttribute3() { return _getAttribute3().uint32Val; }          // 4
-    uint32_t getAttribute4() { return _getAttribute4().uint32Val; }          // 5
-    uint32_t getAttribute5() { return _getAttribute5().uint32Val; }          // 6
-    uint32_t getAttribute6() { return _getAttribute6().uint32Val; }          // 7
-    uint32_t getAttribute7() { return _getAttribute7().uint32Val; }          // 8
-    uint32_t getAttribute8() { return _getAttribute8().uint32Val; }          // 9
-    uint32_t getAttribute9() { return _getAttribute9().uint32Val; }         // 10
-    uint32_t getAttribute10() { return _getAttribute10().uint32Val; }        // 11
-    uint32_t getCastingTimeIndex() { return _getCastingTimeIndex().uint32Val; }   // 12
-    uint32_t getDurationIndex() { return _getDurationIndex().uint32Val; }      // 13
-    int32_t getPowerType() { return _getPowerType().int32Val; }            // 14
-    uint32_t getRangeIndex() { return _getRangeIndex().uint32Val; }         // 15
-    float getSpeed() { return _getSpeed().floatVal; }                    // 16
-    uint32_t getSpellVisual1() { return _getSpellVisual1().uint32Val;; }       // 17
-    uint32_t getSpellVisual2() { return _getSpellVisual2().uint32Val;; }       // 18
-    uint32_t getSpellIconID() { return _getSpellIconID().uint32Val;; }        // 19
-    uint32_t getActiveIconID() { return _getActiveIconID().uint32Val;; }       // 20
-    QString& getSpellName() { return _getSpellName().textVal; }    // 21
-    QString& getRank() { return _getRank().textVal; }         // 22
-    QString& getDescription() { return _getDescription().textVal; }  // 23
-    QString& getToolTip() { return _getToolTip().textVal; }      // 24
-    uint32_t getSchoolMask() { return _getSchoolMask().uint32Val; }         // 25
-    //uint32_t getRuneCostID() { return _getRuneCostID().uint32Val; }         // 26
-    //uint32_t getSpellMissileID() { return _getSpellMissileID(.uint32Val; }     // 27
-    //uint32_t getSpellDescriptionVariableID() { return _getSpellDescriptionVariableID().uint32Val; }  // 28
-    //uint32_t getSpellDifficultyId() { return _getSpellDifficultyId().uint32Val; }    // 29
-    //float getSpellCoef() { return std::get<2>(_getSpellCoef().floatVal; }                 // 30
-    uint32_t getSpellScalingId() { return _getSpellScalingId().uint32Val; }         // 31
-    uint32_t getSpellAuraOptionsId() { return _getSpellAuraOptionsId().uint32Val; }  // 32
-    uint32_t getSpellAuraRestrictionsId() { return _getSpellAuraRestrictionsId().uint32Val; }  // 33
-    uint32_t getSpellCastingRequirementsId() { return _getSpellCastingRequirementsId().uint32Val; }  // 34
-    uint32_t getSpellCategoriesId() { return _getSpellCategoriesId().uint32Val; }  // 35
-    uint32_t getSpellClassOptionsId() { return _getSpellClassOptionsId().uint32Val; }  // 36
-    uint32_t getSpellCooldownsId() { return _getSpellCooldownsId().uint32Val; }  // 37
-    //uint32_t getUnkIndex7() { return _getUnkIndex7().uint32Val; }  // 38
-    uint32_t getSpellEquippedItemsId() { return _getSpellEquippedItemsId().uint32Val; }  // 39
-    uint32_t getSpellInterruptsId() { return _getSpellInterruptsId().uint32Val; }  // 40
-    uint32_t getSpellLevelsId() { return _getSpellLevelsId().uint32Val; }  // 41
-    uint32_t getSpellPowerId() { return _getSpellPowerId().uint32Val; }  // 42
-    uint32_t getSpellReagentsId() { return _getSpellReagentsId().uint32Val; }  // 43
-    uint32_t getSpellShapeshiftId() { return _getSpellShapeshiftId().uint32Val; }  // 44
-    uint32_t getSpellTargetRestrictionsId() { return _getSpellTargetRestrictionsId().uint32Val; }  // 45
-    //uint32_t getSpellTotemsId() { return _getSpellTotemsId().uint32Val; }  // 46
-    uint32_t getResearchProject() { return _getResearchProject().uint32Val; }  // 47
-
     const uint32_t getId() const { return _getID().uint32Val; };                 // 0
     const uint32_t getAttribute0() const { return _getAttribute0().uint32Val; }          // 1
     const uint32_t getAttribute1() const { return _getAttribute1().uint32Val; }          // 2
@@ -774,7 +726,7 @@ public:
             return getSpellName();
         }
 
-        return QString("%1, Rank name: %2").arg(getSpellName()).arg(getRank());
+        return QString("%1, Rank name: %2").arg(getSpellName(), getRank());
     }
 
     QString const PrintBaseInfo(uint32_t scalingLevel) const;
@@ -787,7 +739,7 @@ public:
     bool m_IsServerSide{false};
 
 private:
-    std::array<SpellEntryValues, 47> _fields;
+    std::array<DbcEntryValues, 47> _fields;
 };
 
 struct FactionEntry

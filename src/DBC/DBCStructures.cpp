@@ -37,6 +37,36 @@ SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
     //EffectAttributes            = record.getUInt(id++);
 }
 
+SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
+{
+    Id = static_cast<uint32_t>(std::stoul(row[0]));
+    Effect = static_cast<uint32_t>(std::stoul(row[1]));
+    EffectAmplitude = std::atof(row[2]);
+    EffectAura = static_cast<uint32_t>(std::stoul(row[3]));
+    EffectAuraPeriod = static_cast<uint32_t>(std::stoul(row[4]));
+    EffectBasePoints = static_cast<int32_t>(std::stoi(row[5]));
+    EffectBonusCoefficient = std::atof(row[6]);
+    EffectChainAmplitude = std::atof(row[7]);
+    EffectChainTargets = static_cast<int32_t>(std::stoul(row[8]));
+    EffectDieSides = static_cast<int32_t>(std::stoi(row[9]));
+    EffectItemType = static_cast<uint32_t>(std::stoul(row[10]));
+    EffectMechanic = static_cast<uint32_t>(std::stoul(row[11]));
+    EffectMiscValue = static_cast<int32_t>(std::stoi(row[12]));
+    EffectMiscValueB = static_cast<int32_t>(std::stoi(row[13]));
+    EffectPointsPerResource = std::atof(row[14]);
+    EffectRadiusIndex = static_cast<uint32_t>(std::stoul(row[15]));
+    EffectRadiusMaxIndex = static_cast<uint32_t>(std::stoul(row[16]));
+    EffectRealPointsPerLevel = std::atof(row[17]);
+    EffectSpellClassMask[0] = static_cast<uint32_t>(std::stoul(row[18]));
+    EffectSpellClassMask[1] = static_cast<uint32_t>(std::stoul(row[19]));
+    EffectSpellClassMask[2] = static_cast<uint32_t>(std::stoul(row[20]));
+    EffectTriggerSpell = static_cast<uint32_t>(std::stoul(row[21]));
+    EffectImplicitTargetA = static_cast<uint32_t>(std::stoul(row[22]));
+    EffectImplicitTargetB = static_cast<uint32_t>(std::stoul(row[23]));
+    SpellID = static_cast<uint32_t>(std::stoul(row[24]));
+    EffectIndex = static_cast<uint32_t>(std::stoul(row[25]));
+}
+
 SpellCategoryEntry::SpellCategoryEntry(DBCFileLoader::Record const& record)
 {
     Id = record.getUInt(0);
@@ -419,17 +449,17 @@ SpellEntry::SpellEntry(const MYSQL_ROW& row)
 {
     m_IsServerSide = true;
     _getID() = static_cast<uint32_t>(std::stoul(row[0]));
-    _getAttribute0() = static_cast<uint32_t>(atoi(row[1]));
-    _getAttribute1() = static_cast<uint32_t>(atoi(row[2]));
-    _getAttribute2() = static_cast<uint32_t>(atoi(row[3]));
-    _getAttribute3() = static_cast<uint32_t>(atoi(row[4]));
-    _getAttribute4() = static_cast<uint32_t>(atoi(row[5]));
-    _getAttribute5() = static_cast<uint32_t>(atoi(row[6]));
-    _getAttribute6() = static_cast<uint32_t>(atoi(row[7]));
-    _getAttribute7() = static_cast<uint32_t>(atoi(row[8]));
-    _getAttribute8() = static_cast<uint32_t>(atoi(row[9]));
-    _getAttribute9() = static_cast<uint32_t>(atoi(row[10]));
-    _getAttribute10() = static_cast<uint32_t>(atoi(row[11]));
+    _getAttribute0() = static_cast<uint32_t>(std::stoul(row[1]));
+    _getAttribute1() = static_cast<uint32_t>(std::stoul(row[2]));
+    _getAttribute2() = static_cast<uint32_t>(std::stoul(row[3]));
+    _getAttribute3() = static_cast<uint32_t>(std::stoul(row[4]));
+    _getAttribute4() = static_cast<uint32_t>(std::stoul(row[5]));
+    _getAttribute5() = static_cast<uint32_t>(std::stoul(row[6]));
+    _getAttribute6() = static_cast<uint32_t>(std::stoul(row[7]));
+    _getAttribute7() = static_cast<uint32_t>(std::stoul(row[8]));
+    _getAttribute8() = static_cast<uint32_t>(std::stoul(row[9]));
+    _getAttribute9() = static_cast<uint32_t>(std::stoul(row[10]));
+    _getAttribute10() = static_cast<uint32_t>(std::stoul(row[11]));
 
     _getCastingTimeIndex()      = static_cast<uint32_t>(std::stoul(row[12]));
     _getDurationIndex()         = static_cast<uint32_t>(std::stoul(row[13]));
