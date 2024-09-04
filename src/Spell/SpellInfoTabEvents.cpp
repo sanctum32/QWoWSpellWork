@@ -252,8 +252,10 @@ void MainWindow::PerformSpellSearch()
     }
 
     std::vector<std::pair<QTableWidgetItem* /*id*/, QTableWidgetItem* /*name*/>> foundEntries;
-    for (const auto& [_id, _spellInfo] : sDBCStores->GetSpellEntries())
+    for (const auto& itr : sDBCStores->GetSpellEntries())
     {
+        const auto _id = itr.first;
+        const auto& _spellInfo = itr.second;
         bool canInsert = spellNameOrId.isEmpty();
         if (!canInsert && spellId != 0 && _id == spellId)
         {

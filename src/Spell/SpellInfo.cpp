@@ -239,8 +239,11 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
     SkillLineEntry const* skillLine = nullptr;
     SkillLineAbilityEntry const* skillLineAbility = nullptr;
     const auto& skillLineAbilities = sDBCStores->GetSkillLineAbilityEntries();
-    for (const auto& [_skillId, _skillLineData] : sDBCStores->GetSkillLineEntries())
+    for (const auto& itr : sDBCStores->GetSkillLineEntries())
     {
+        const auto _skillId = itr.first;
+        const auto& _skillLineData = itr.second;
+
         const auto& itr2 = std::find_if(skillLineAbilities.begin(), skillLineAbilities.end(), [_skillId, spellId](const auto _skillLineAbility)
         {
             auto const& abilityData = _skillLineAbility.second;
@@ -886,8 +889,11 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                               .arg(effectInfo->EffectSpellClassMask[1], 8, 16, QLatin1Char('0'))
                               .arg(effectInfo->EffectSpellClassMask[2], 8, 16, QLatin1Char('0'));
 
-                for (const auto& [entry, spellInfo] : sDBCStores->GetSpellEntries())
+                for (const auto& itr : sDBCStores->GetSpellEntries())
                 {
+                    const auto entry = itr.first;
+                    const auto& spellInfo = itr.second;
+
                     const auto* otherSpellClassOpts = sDBCStores->GetSpellClassOptionsEntry(spellInfo.getSpellClassOptionsId());
                     if (otherSpellClassOpts == nullptr || otherSpellClassOpts->SpellFamilyName != thisEffClassOptions->SpellFamilyName)
                     {

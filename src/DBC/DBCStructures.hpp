@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdint>
 #include <map>
+#include <memory>
 
 #include "DBCFileLoader.hpp"
 #include "Enums/SpellEnums.hpp"

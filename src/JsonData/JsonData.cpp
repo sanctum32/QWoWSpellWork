@@ -22,7 +22,7 @@ inline bool ReadBasicArrayFromFile(const QString fileName, T& container, const Q
         {
             const auto& arrayObj = jsonArrayItem.toObject();
 
-            using keyType = T::key_type;
+            using keyType = typename T::key_type;
             const keyType _keyId = static_cast<keyType>(arrayObj.value(keyName).toDouble());
             const QString _nameStr = arrayObj.value(nameValName).toString();
 
