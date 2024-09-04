@@ -34,6 +34,11 @@ int main(int argc, char *argv[])
     }
 
     sSpellWorkConfig->ReadSettings();
+    const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
+    const bool dbcLoaded = sDBCStores->LoadData();
+#ifdef SPELLWORK_BUILD_SQL
+    const bool sqlConnected = sSpellWorkSQL->Init();
+#endif
     QApplication::setStyle("Fusion");
 
     // Load the CSS file
@@ -49,17 +54,15 @@ int main(int argc, char *argv[])
 
     MainWindow mainWindow;
 #ifdef SPELLWORK_BUILD_SQL
-    mainWindow.UpdateSqlStatus(sSpellWorkSQL->Init());
+    mainWindow.UpdateSqlStatus(sqlConnected);
 #else
     mainWindow.UpdateSqlStatus(false);
 #endif // SPELLWORK_BUILD_SQL
 
-    mainWindow.UpdateDBCStatus(sDBCStores->LoadData());
-    mainWindow.UpdateJsonStatus(sSpellWorkJson->LoadJsonData());
-    mainWindow.UpdateComboBoxItems();
-
-    _mainWindow = &mainWindow;
+    mainWindow.UpdateDBCStatus(dbcLoaded);
+    mainWindow.UpdateJsonStatus(jsonLoaded);
     mainWindow.show();
 
+    _mainWindow = &mainWindow;
     return a.exec();
 }

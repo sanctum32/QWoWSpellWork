@@ -29,6 +29,9 @@ set(TS_FILES
 )
 
 set(UI_FILES
+    src/Forms/searchFilter.ui
+    src/Forms/searchFilter.hpp
+    src/Forms/searchFilter.cpp
     src/Forms/mainwindow.ui
     src/Forms/mainwindow.hpp
     src/Forms/mainwindow.cpp

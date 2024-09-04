@@ -1,9 +1,9 @@
 #pragma once
-
 #include "ui/ui_mainwindow.h"
 #include <QMainWindow>
 #include <QLabel>
 #include <QLoggingCategory>
+#include "searchFilter.hpp"
 
 Q_DECLARE_LOGGING_CATEGORY(SPELLINFO_TAB)
 
@@ -25,13 +25,13 @@ public:
     void UpdateSqlStatus(bool success);
     void UpdateDBCStatus(bool success);
     void UpdateJsonStatus(bool success);
-    void UpdateComboBoxItems();
 
 private slots:
     void onSearchBtnClicked();
     void onSpellIdNameInputReturnPressed();
     void onResultListClick(QTableWidgetItem *item);
     void onLevelScalingSliderValueChange();
+    void onAdvancedSearchBtnClick();
 
 private:
     Ui::MainWindow ui;
@@ -42,7 +42,7 @@ private:
 // Generic functions
     void PerformSpellSearch();
 
-protected:
+    std::unique_ptr<SearchFilter> searchFilterForm;
 };
 
 extern MainWindow* _mainWindow;

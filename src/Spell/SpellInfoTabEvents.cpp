@@ -1,13 +1,13 @@
 // Qt
 #include <QDebug>
 #include <QTableWidget>
-
+#include <QDate>
 // project
 #include "ValueComparition.hpp"
 #include "mainwindow.hpp"
+#include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
 #include "DBC/DBCStores.hpp"
-#include "JsonData/JsonData.hpp"
 #include <cassert>
 #include <optional>
 
@@ -84,90 +84,32 @@ void MainWindow::PerformSpellSearch()
 
     // Prepare spell effect filter entries
     std::optional<uint32_t> spellFamilyId;
+    if (searchFilterForm->genericFilter.spellFamily != -1)
+    {
+        spellFamilyId = searchFilterForm->ui.SpellFamilyFilter->itemData(searchFilterForm->genericFilter.spellFamily).toUInt();
+    }
+
     std::optional<uint32_t> auraTypeId;
+    if (searchFilterForm->genericFilter.spellAuraType != -1)
+    {
+        auraTypeId = searchFilterForm->ui.SpellAuraTypeFilter->itemData(searchFilterForm->genericFilter.spellAuraType).toUInt();
+    }
+
     std::optional<uint32_t> spellEffectId;
+    if (searchFilterForm->genericFilter.spellEffect != -1)
+    {
+        spellEffectId = searchFilterForm->ui.SpellEffectFilter->itemData(searchFilterForm->genericFilter.spellEffect).toUInt();
+    }
+
     std::optional<uint32_t> spellTargetA;
+    if (searchFilterForm->genericFilter.spellTargetA != -1)
+    {
+        spellTargetA = searchFilterForm->ui.SpellTargetFilterA->itemData(searchFilterForm->genericFilter.spellTargetA).toUInt();
+    }
     std::optional<uint32_t> spellTargetB;
-
-    // Spell family filter
-    if (ui.SpellFamilyFilter->currentIndex() != 0)
+    if (searchFilterForm->genericFilter.spellTargetB != -1)
     {
-        const auto& spellFamilyData = sSpellWorkJson->GetSpellFamilyData();
-        const auto& spellFamilyItr = std::find_if(spellFamilyData.begin(), spellFamilyData.end(),
-            [familyStr = ui.SpellFamilyFilter->currentText()](const auto& spellFamily)
-        {
-            return spellFamily.second == familyStr;
-        });
-
-        if (spellFamilyItr != spellFamilyData.end())
-        {
-            spellFamilyId = spellFamilyItr->first;
-        }
-    }
-
-    // Spell aura type filter
-    if (ui.SpellAuraTypeFilter->currentIndex() != 0)
-    {
-        const auto& spellAuraData = sSpellWorkJson->GetSpellAuraEffectData();
-        const auto& spellAuraTypeItr = std::find_if(spellAuraData.begin(), spellAuraData.end(),
-            [auraTypeStr = ui.SpellAuraTypeFilter->currentText()](const auto& spellAuraType)
-        {
-            return spellAuraType.second.name == auraTypeStr;
-        });
-
-        if (spellAuraTypeItr != spellAuraData.end())
-        {
-            auraTypeId = spellAuraTypeItr->first;
-        }
-    }
-
-    // Spell effect filter
-    if (ui.SpellEffectFilter->currentIndex() != 0)
-    {
-        const auto& spellEffectData = sSpellWorkJson->GetSpellEffectData();
-        const auto& effectNameItr = std::find_if(spellEffectData.begin(), spellEffectData.end(),
-            [selectedEffect = ui.SpellEffectFilter->currentText()](const auto& data)
-        {
-            return data.second.name == selectedEffect;
-        });
-
-        if (effectNameItr != spellEffectData.end())
-        {
-            spellEffectId = effectNameItr->first;
-        }
-    }
-
-    {
-        const auto& targetData = sSpellWorkJson->GetSpellTargetData();
-        // TargetA filter
-        if (ui.SpellTargetFilterA->currentIndex() != 0)
-        {
-            const auto& targetNameItr = std::find_if(targetData.begin(), targetData.end(),
-                [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
-            {
-                return spellTarget.second == selectedTarget;
-            });
-
-            if (targetNameItr != targetData.end())
-            {
-                spellTargetA = targetNameItr->first;
-            }
-        }
-
-        // TargetB filter
-        if (ui.SpellTargetFilterB->currentIndex() != 0)
-        {
-            const auto& targetNameItr = std::find_if(targetData.begin(), targetData.end(),
-                [selectedTarget = ui.SpellTargetFilterA->currentText()](const auto& spellTarget)
-            {
-                return spellTarget.second == selectedTarget;
-            });
-
-            if (targetNameItr != targetData.end())
-            {
-                spellTargetB = targetNameItr->first;
-            }
-        }
+        spellTargetB = searchFilterForm->ui.SpellTargetFilterA->itemData(searchFilterForm->genericFilter.spellTargetB).toUInt();
     }
 
     // advanced filters
@@ -242,37 +184,31 @@ void MainWindow::PerformSpellSearch()
     };
 
     std::array<AdvancedSearchParams, 2> advancedSearchParams;
-    std::array<QString, 2> advSearchInput = { ui.advFilterInput1->text(), ui.advFilterInput2->text() };
-    const std::array<int, 2> advSearchConditions = { ui.advFilterCondition1->currentIndex(), ui.advFilterCondition2->currentIndex() };
-    const std::array<QString, 2> advSearchFieldIdNames = { ui.advFilterTypes1->currentText(), ui.advFilterTypes2->currentText() };
 
     for (uint8_t i = 0; i < 2; ++i)
     {
-        if (advSearchInput[i].isEmpty())
+        if (!searchFilterForm->spellAttributesFilter.HasData(i))
         {
             continue;
         }
 
-        const auto& itr = std::find_if(SpellEntryFields.begin(), SpellEntryFields.end(), [fieldName = advSearchFieldIdNames[i]](const auto& data)
-        {
-            return data.second.fieldName.contains(fieldName);
-        });
+        const auto& inputValue = searchFilterForm->spellAttributesFilter.conditionValue[i];
+        const auto fieldId = searchFilterForm->ui.spellAttrFieldName0->itemData(searchFilterForm->spellAttributesFilter.conditionFieldName[i]).toUInt();
+        ConditionCompareType compareType = ConditionCompareType(searchFilterForm->ui.spellAttrCompareType0->itemData(searchFilterForm->spellAttributesFilter.conditionCompareType[i]).toUInt());
 
+        auto const& itr = SpellEntryFields.find(fieldId);
         if (itr == SpellEntryFields.end())
         {
             continue;
         }
 
-        ConditionCompareType compareType = ConditionCompareType(advSearchConditions[i]);
-        qDebug() << int(compareType);
         auto& searchParam = advancedSearchParams[i];
-
         switch (itr->second.cmpType)
         {
         case CompareTypes::SignedNumber:
         {
             bool ok = false;
-            const int32_t val = advSearchInput[i].toInt(&ok);
+            const int32_t val = inputValue.toInt(&ok);
             if (ok)
             {
                 searchParam.int32val = val;
@@ -283,7 +219,7 @@ void MainWindow::PerformSpellSearch()
         case CompareTypes::UnsignedNumber:
         {
             bool ok = false;
-            const uint32_t val = advSearchInput[i].toUInt(&ok);
+            const uint32_t val = inputValue.toUInt(&ok);
             if (ok)
             {
                 searchParam.uint32val = val;
@@ -294,7 +230,7 @@ void MainWindow::PerformSpellSearch()
         case CompareTypes::Float:
         {
             bool ok = false;
-            const float val = advSearchInput[i].toFloat(&ok);
+            const float val = inputValue.toFloat(&ok);
             if (ok)
             {
                 searchParam.floatVal = val;
@@ -304,7 +240,7 @@ void MainWindow::PerformSpellSearch()
 
         }
         case CompareTypes::String:
-            searchParam.textVal = advSearchInput[i];
+            searchParam.textVal = inputValue;
             break;
         default:
             break;
@@ -444,4 +380,11 @@ void MainWindow::onLevelScalingSliderValueChange()
     {
         ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }
+}
+
+void MainWindow::onAdvancedSearchBtnClick()
+{
+    this->setEnabled(false);
+    searchFilterForm->setEnabled(true);
+    searchFilterForm->show();
 }

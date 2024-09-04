@@ -208,6 +208,13 @@
                </property>
               </widget>
              </item>
+             <item row="2" column="3">
+              <widget class="QPushButton" name="advSearchBtn">
+               <property name="text">
+                <string>Advanced Filters</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -249,134 +256,6 @@
                </property>
                <property name="orientation">
                 <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="spellFilterGroup">
-            <property name="title">
-             <string>Spell filter</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="QComboBox" name="SpellFamilyFilter">
-               <property name="editable">
-                <bool>true</bool>
-               </property>
-               <property name="currentText">
-                <string>SpellFamilyName</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="SpellAuraTypeFilter">
-               <property name="editable">
-                <bool>true</bool>
-               </property>
-               <property name="currentText">
-                <string>SpellAuraEffectType</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="SpellEffectFilter">
-               <property name="editable">
-                <bool>true</bool>
-               </property>
-               <property name="currentText">
-                <string>SpellEffect</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="SpellTargetFilterA">
-               <property name="editable">
-                <bool>true</bool>
-               </property>
-               <property name="currentText">
-                <string>SpellTargetA</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="SpellTargetFilterB">
-               <property name="editable">
-                <bool>true</bool>
-               </property>
-               <property name="currentText">
-                <string>SpellTargetB</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="groupBox">
-            <property name="title">
-             <string>Advanced Filter</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_5">
-             <item row="0" column="0">
-              <widget class="QComboBox" name="advFilterTypes1">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="advFilterCondition1">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLineEdit" name="advFilterInput1">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QComboBox" name="advFilterTypes2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="advFilterCondition2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLineEdit" name="advFilterInput2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
                </property>
               </widget>
              </item>
