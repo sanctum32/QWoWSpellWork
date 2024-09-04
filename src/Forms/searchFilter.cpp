@@ -12,21 +12,17 @@ SearchFilter::SearchFilter(MainWindow *parent) : QDialog(parent)
         ui.SpellFamilyFilter->addItem(name, id);
     }
 
-    ui.SpellFamilyFilter->setMaxVisibleItems(10);
-
     // SpellAuraTypeFilter
     for (const auto& [id, auraType] : sSpellWorkJson->GetSpellAuraEffectData())
     {
         ui.SpellAuraTypeFilter->addItem(auraType.name, id);
     }
-    ui.SpellAuraTypeFilter->setMaxVisibleItems(10);
 
     // SpellEffectFilter
     for (const auto& [id, effect] : sSpellWorkJson->GetSpellEffectData())
     {
         ui.SpellEffectFilter->addItem(effect.name, id);
     }
-    ui.SpellEffectFilter->setMaxVisibleItems(10);
 
     // SpellTargetFilter
     for (const auto& [id, name] : sSpellWorkJson->GetSpellTargetData())

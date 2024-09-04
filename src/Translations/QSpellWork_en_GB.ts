@@ -4,98 +4,149 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.ui" line="14"/>
+        <location filename="../Forms/mainwindow.ui" line="32"/>
         <source>QSpellWork</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="58"/>
+        <location filename="../Forms/mainwindow.ui" line="91"/>
         <source>Spell Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="151"/>
+        <location filename="../Forms/mainwindow.ui" line="150"/>
         <source>Spell Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="172"/>
-        <source>Attributes&amp;X</source>
+        <location filename="../Forms/mainwindow.ui" line="171"/>
+        <source>Id or name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="179"/>
-        <source>Id or Name</source>
+        <location filename="../Forms/mainwindow.ui" line="191"/>
+        <source>By name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="186"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;IconFileDataId&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../Forms/mainwindow.ui" line="201"/>
+        <source>By id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="196"/>
+        <location filename="../Forms/mainwindow.ui" line="211"/>
+        <source>Additional filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="218"/>
+        <source>Extra filters: &lt;span style=&quot;color:red&quot;&gt;inactive&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="228"/>
+        <source>Spell scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="237"/>
+        <source>Level: 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="269"/>
+        <source>Found 0 results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="310"/>
+        <source>id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="315"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="184"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="95"/>
-        <source>Spell Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="216"/>
-        <source>Advanced Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="284"/>
-        <source>Results</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="300"/>
-        <source>Entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="305"/>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="313"/>
-        <source>Spell Proc event</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="318"/>
-        <source>Compare Spells</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="323"/>
-        <source>Sql Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="339"/>
+        <location filename="../Forms/mainwindow.ui" line="342"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="346"/>
+        <location filename="../Forms/mainwindow.ui" line="348"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>SearchFilter</name>
     <message>
-        <location filename="mainwindow.ui" line="355"/>
-        <source>Settings</source>
+        <location filename="../Forms/searchFilter.ui" line="26"/>
+        <source>Spell Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="360"/>
-        <source>Exit</source>
+        <location filename="../Forms/searchFilter.ui" line="112"/>
+        <source>Generic filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="176"/>
+        <source>SpellTargetB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="150"/>
+        <source>SpellAuraEffectType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="163"/>
+        <source>SpellTargetA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="124"/>
+        <source>SpellEffect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="137"/>
+        <source>SpellFamilyName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="43"/>
+        <source>Spell effect attributes filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="192"/>
+        <source>Spell entry attributes filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="207"/>
+        <location filename="../Forms/searchFilter.ui" line="284"/>
+        <source>Compare type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="223"/>
+        <location filename="../Forms/searchFilter.ui" line="268"/>
+        <source>Spell entry field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="236"/>
+        <location filename="../Forms/searchFilter.ui" line="249"/>
+        <source>value</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

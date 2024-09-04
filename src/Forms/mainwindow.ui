@@ -58,7 +58,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5">
     <property name="sizeConstraint">
-     <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+     <enum>QLayout::SetDefaultConstraint</enum>
     </property>
     <item>
      <widget class="QTabWidget" name="tabWidget">
@@ -92,7 +92,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="sizeConstraint">
-         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+         <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <item>
          <layout class="QVBoxLayout" name="LeftSide">
@@ -127,7 +127,7 @@
         <item>
          <layout class="QVBoxLayout" name="RightSide">
           <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+           <enum>QLayout::SetDefaultConstraint</enum>
           </property>
           <item>
            <widget class="QGroupBox" name="SearchGroup">
@@ -149,9 +149,6 @@
             <property name="title">
              <string>Spell Search</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="0" colspan="3">
               <widget class="QLineEdit" name="spellIdNameInput">
@@ -165,7 +162,7 @@
                 <string/>
                </property>
                <property name="inputMethodHints">
-                <set>Qt::InputMethodHint::ImhNone</set>
+                <set>Qt::ImhNone</set>
                </property>
                <property name="text">
                 <string/>
@@ -239,9 +236,6 @@
                <property name="text">
                 <string>Level: 1</string>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-               </property>
               </widget>
              </item>
              <item>
@@ -262,7 +256,7 @@
                 <number>85</number>
                </property>
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -282,25 +276,25 @@
              <bool>true</bool>
             </property>
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="editTriggers">
-             <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+             <set>QAbstractItemView::NoEditTriggers</set>
             </property>
             <property name="selectionMode">
-             <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+             <enum>QAbstractItemView::NoSelection</enum>
             </property>
             <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+             <enum>QAbstractItemView::SelectItems</enum>
             </property>
             <property name="showGrid">
              <bool>true</bool>
             </property>
             <property name="gridStyle">
-             <enum>Qt::PenStyle::DashLine</enum>
+             <enum>Qt::NoPen</enum>
             </property>
             <attribute name="horizontalHeaderCascadingSectionResizes">
              <bool>false</bool>
@@ -337,7 +331,7 @@
      <x>0</x>
      <y>0</y>
      <width>1115</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -359,7 +353,7 @@
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="layoutDirection">
-    <enum>Qt::LayoutDirection::RightToLeft</enum>
+    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">padding: 5px;</string>

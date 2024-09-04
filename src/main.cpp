@@ -39,7 +39,10 @@ int main(int argc, char *argv[])
 #ifdef SPELLWORK_BUILD_SQL
     const bool sqlConnected = sSpellWorkSQL->Init();
 #endif
+
+#ifdef _WIN32
     QApplication::setStyle("Fusion");
+#endif // _WIN32
 
     // Load the CSS file
     if (!sSpellWorkConfig->GetAppConfig().themeName.isEmpty())
