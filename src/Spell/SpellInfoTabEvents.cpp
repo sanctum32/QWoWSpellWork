@@ -317,7 +317,7 @@ void MainWindow::onLevelScalingSliderValueChange()
 
 void MainWindow::onFiltersBtnClick()
 {
-    this->setEnabled(false);
+    setEnabled(false);
     searchFilterForm->setEnabled(true);
     searchFilterForm->show();
 }

@@ -19,6 +19,13 @@ public:
 
 private slots:
     void onButtonClicked(QAbstractButton* button);
+    void spellFamilyResetBtnClick();
+    void spellAuraEffResetBtnClick();
+    void spellEffResetBtnClick();
+    void spellTargetAResetBtnClick();
+    void spellTargetBResetBtnClick();
+    void spellAttrFilter0ResetBtnClick();
+    void spellAttrFilter1ResetBtnClick();
 
 private:
     void closeEvent(QCloseEvent* /*e*/) override;

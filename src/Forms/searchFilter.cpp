@@ -71,6 +71,13 @@ SearchFilter::SearchFilter(QWidget *parent) : QDialog(parent)
     }
 
     QObject::connect(ui.buttonBox, &QDialogButtonBox::clicked, this, &SearchFilter::onButtonClicked);
+    QObject::connect(ui.spellFamilyResetBtn, &QPushButton::clicked, this, &SearchFilter::spellFamilyResetBtnClick);
+    QObject::connect(ui.SpellAuraEffResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAuraEffResetBtnClick);
+    QObject::connect(ui.SpellEffResetBtn, &QPushButton::clicked, this, &SearchFilter::spellEffResetBtnClick);
+    QObject::connect(ui.SpellTargetAResetBtn, &QPushButton::clicked, this, &SearchFilter::spellTargetAResetBtnClick);
+    QObject::connect(ui.SpellTargetBResetBtn, &QPushButton::clicked, this, &SearchFilter::spellTargetBResetBtnClick);
+    QObject::connect(ui.SpellAttrFilter0ResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAttrFilter0ResetBtnClick);
+    QObject::connect(ui.SpellAttrFilter1ResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAttrFilter1ResetBtnClick);
 }
 
 inline void UpdateMainWindowState(MainWindow* mainWindow)
@@ -100,7 +107,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
 
     switch (buttonBox->standardButton(button))
     {
-    case QDialogButtonBox::Ok:
+    case QDialogButtonBox::Apply:
     {
         using namespace SpellWork::SearchFilters;
         // Generic filter
@@ -172,12 +179,13 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
                     id = ui.spellAttrCompareType1->currentIndex();
                     value = ui.spellAttrCompareType1->itemData(id).toUInt();
                 }
-                filter.m_compareValue = ui.spellAttrInput0->text();
+
+                filter.m_compareValue = ui.spellAttrInput1->text();
             }
         }
-    }
-    [[fallthrough]];
+    }break;
     case QDialogButtonBox::Cancel:
+    case QDialogButtonBox::Close:
     {
         UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
     }
@@ -201,6 +209,45 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
     default:
         break;
     }
+}
+
+void SearchFilter::spellFamilyResetBtnClick()
+{
+    ui.SpellFamilyFilter->setCurrentIndex(-1);
+}
+
+void SearchFilter::spellAuraEffResetBtnClick()
+{
+    ui.SpellAuraTypeFilter->setCurrentIndex(-1);
+}
+
+void SearchFilter::spellEffResetBtnClick()
+{
+    ui.SpellEffectFilter->setCurrentIndex(-1);
+}
+
+void SearchFilter::spellTargetAResetBtnClick()
+{
+    ui.SpellTargetFilterA->setCurrentIndex(-1);
+}
+
+void SearchFilter::spellTargetBResetBtnClick()
+{
+    ui.SpellTargetFilterB->setCurrentIndex(-1);
+}
+
+void SearchFilter::spellAttrFilter0ResetBtnClick()
+{
+    ui.spellAttrFieldName0->setCurrentIndex(-1);
+    ui.spellAttrCompareType0->setCurrentIndex(-1);
+    ui.spellAttrInput0->clear();
+}
+
+void SearchFilter::spellAttrFilter1ResetBtnClick()
+{
+    ui.spellAttrFieldName1->setCurrentIndex(-1);
+    ui.spellAttrCompareType1->setCurrentIndex(-1);
+    ui.spellAttrInput1->clear();
 }
 
 void SearchFilter::closeEvent(QCloseEvent* /*e*/)
