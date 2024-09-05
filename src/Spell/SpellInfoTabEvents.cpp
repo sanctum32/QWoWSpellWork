@@ -8,7 +8,7 @@
 #include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
 #include "DBC/DBCStores.hpp"
-#include "SearchFilters.hpp"
+#include "SearchFiltersStore.hpp"
 #include <cassert>
 #include <optional>
 
@@ -173,6 +173,7 @@ void MainWindow::PerformSpellSearch()
             }
         }
 
+        // Direct-generic effect filters
         if (auraTypeId.has_value() || spellEffectId.has_value() || spellTargetA.has_value() || spellTargetB.has_value())
         {
             if (!std::any_of(_spellInfo.m_spellEffects.begin(), _spellInfo.m_spellEffects.end(), [&](const auto* effectInfo)
@@ -314,7 +315,8 @@ void MainWindow::onLevelScalingSliderValueChange()
 
 void MainWindow::onFiltersBtnClick()
 {
-    setEnabled(false);
-    searchFilterForm->setEnabled(true);
-    searchFilterForm->show();
+    //setEnabled(false);
+    //searchFilterForm->setEnabled(true);
+    SearchFilter searchFilterForm(this);
+    searchFilterForm.exec();
 }

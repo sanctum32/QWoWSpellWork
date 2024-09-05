@@ -1,4 +1,7 @@
-#include "SearchFilters.hpp"
+#include <QMessageBox>
+
+#include "searchFilter.hpp"
+#include "SearchFiltersStore.hpp"
 #include "ValueComparition.hpp"
 #include "mainwindow.hpp"
 #include "DBCStructures.hpp"
@@ -76,7 +79,6 @@ inline void UpdateMainWindowState(MainWindow* mainWindow)
     }
 
     using namespace SpellWork::SearchFilters;
-    mainWindow->setEnabled(true);
     const bool hasBasicFilters = m_genericFilter.HasData();
     const bool hasSpellFieldFilters = std::any_of(m_spellEntryFilter.begin(), m_spellEntryFilter.end(), [](const auto& filter)
     {
@@ -214,6 +216,13 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
                 filter.m_compareValue = ui.effectAttrInput1->text();
             }
         }
+
+        UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
+
+        QMessageBox msgBox;
+        msgBox.setText("Filter settings were applied!");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
     }break;
     case QDialogButtonBox::Cancel:
     case QDialogButtonBox::Close:

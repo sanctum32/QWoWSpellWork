@@ -1,4 +1,4 @@
-#include "SearchFilters.hpp"
+#include "SearchFiltersStore.hpp"
 
 // extern variables
 namespace SpellWork::SearchFilters

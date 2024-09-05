@@ -52,8 +52,8 @@ set(PROJECT_SOURCES
     src/Globals/appSettings.cpp
     src/Globals/SharedDefines.hpp
     src/Globals/ValueComparition.hpp
-    src/Globals/SearchFilters.hpp
-    src/Globals/SearchFilters.cpp
+    src/Globals/SearchFiltersStore.hpp
+    src/Globals/SearchFiltersStore.cpp
     src/Enums/SpellEnums.hpp
     src/Enums/UnitDefines.hpp
     src/Enums/CreatureDefines.hpp

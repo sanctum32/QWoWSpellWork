@@ -3,7 +3,6 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QLoggingCategory>
-#include "searchFilter.hpp"
 
 Q_DECLARE_LOGGING_CATEGORY(SPELLINFO_TAB)
 
@@ -43,6 +42,4 @@ private:
 
 // Generic functions
     void PerformSpellSearch();
-
-    std::unique_ptr<SearchFilter> searchFilterForm;
 };

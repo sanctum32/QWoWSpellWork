@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     ui.statusBar->addPermanentWidget(&m_jsonStatus);
     ui.statusBar->addPermanentWidget(&m_sqlStatus);
 
-    searchFilterForm = std::make_unique<SearchFilter>(this);
-
     // Signal connections
     QObject::connect(ui.searchBtn,        &QPushButton::clicked,     this, &MainWindow::onSearchBtnClicked);
     QObject::connect(ui.spellIdNameInput, &QLineEdit::returnPressed, this, &MainWindow::onSpellIdNameInputReturnPressed);
