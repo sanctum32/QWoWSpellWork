@@ -60,6 +60,7 @@ build*
 *.opensdf
 *.vcxproj
 *vcxproj.*
+.vs
 
 # Visual Studio Code
 .vscode
