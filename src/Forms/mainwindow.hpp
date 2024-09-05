@@ -44,4 +44,5 @@ private:
 
 // Generic functions
     void PerformSpellSearch();
+    int32_t lastSpellSearchRowId{-1};    // Last select search list row id
 };

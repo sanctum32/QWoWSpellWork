@@ -24,7 +24,15 @@ void MainWindow::onSpellIdNameInputReturnPressed()
 
 void MainWindow::onResultListClick(QTableWidgetItem *item)
 {
-    QTableWidgetItem const* spellRowItem = item->column() != 0 ? ui.resultList->item(ui.resultList->row(item), 0) : item;
+    if (lastSpellSearchRowId == item->row())
+    {
+        return;
+    }
+
+    lastSpellSearchRowId = item->row();
+
+    // Select only number field
+    const auto* spellRowItem = ui.resultList->item(lastSpellSearchRowId, 0);
     if (spellRowItem == nullptr)
     {
         return;
@@ -32,10 +40,9 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
 
     // Extract entry
     bool ok = false;
-    uint32_t spellId = spellRowItem->text().toUInt(&ok);
-    if (!ok || spellId == 0)
+    const uint32_t spellId = spellRowItem->text().toUInt(&ok);
+    if (!ok)
     {
-        qCDebug(SPELLINFO_TAB) << "spell id was 0";
         return;
     }
 
@@ -52,6 +59,7 @@ void MainWindow::PerformSpellSearch()
 
     auto* resultList = ui.resultList;
     resultList->clearContents();
+    lastSpellSearchRowId = -1;
 
     if (sDBCStores->GetSpellEntries().empty())
     {
