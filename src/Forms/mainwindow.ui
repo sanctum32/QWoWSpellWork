@@ -229,16 +229,6 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QLabel" name="levelScalingText">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Level: 1</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QSlider" name="levelScalingSlider">
                <property name="enabled">
                 <bool>false</bool>
@@ -257,6 +247,16 @@
                </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="levelScalingText">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Level: 1 (max 85)</string>
                </property>
               </widget>
              </item>

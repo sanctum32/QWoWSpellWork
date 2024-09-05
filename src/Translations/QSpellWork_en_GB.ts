@@ -49,11 +49,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="237"/>
-        <source>Level: 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../Forms/mainwindow.ui" line="269"/>
         <source>Found 0 results</source>
         <translation type="unfinished"></translation>
@@ -71,6 +66,11 @@
     <message>
         <location filename="../Forms/mainwindow.ui" line="184"/>
         <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="259"/>
+        <source>Level: 1 (max 85)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

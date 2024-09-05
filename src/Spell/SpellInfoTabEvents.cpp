@@ -293,7 +293,7 @@ void MainWindow::PerformSpellSearch()
 
 void MainWindow::onLevelScalingSliderValueChange()
 {
-    ui.levelScalingText->setText(QString("Selected Level %1").arg(ui.levelScalingSlider->value()));
+    ui.levelScalingText->setText(QString("Selected Level %1, (max 85)").arg(ui.levelScalingSlider->value()));
     const auto* item = ui.resultList->currentItem();
     if (item == nullptr)
     {
@@ -333,4 +333,6 @@ void MainWindow::onClearResultsBtn()
     ui.resultList->clearContents();
     ui.spellIdNameInput->clear();
     ui.resultCountLabel->setText("Found 0 results");
+    ui.levelScalingSlider->setValue(1);
+    ui.levelScalingText->setText("Selected Level 1, (max 85)");
 }
