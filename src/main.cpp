@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
 
     mainWindow.UpdateDBCStatus(dbcLoaded);
     mainWindow.UpdateJsonStatus(jsonLoaded);
+    mainWindow.UpdateFilterStatus(false);
     mainWindow.show();
 
     _mainWindow = &mainWindow;
