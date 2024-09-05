@@ -66,3 +66,15 @@ void MainWindow::UpdateJsonStatus(bool success)
         m_jsonStatus.setText("JSON: <span style=\"color:red\">not loaded</span>");
     }
 }
+
+void MainWindow::UpdateFilterStatus(bool hasFilter)
+{
+    if (hasFilter)
+    {
+        ui.filtersStatus->setText("Extra filters: <span style=\"color:green\">active</span>");
+    }
+    else
+    {
+        ui.filtersStatus->setText("Extra filters: <span style=\"color:red\">inactive</span>");
+    }
+}

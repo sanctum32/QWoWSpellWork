@@ -1,8 +1,9 @@
+#include "SearchFilters.hpp"
 #include "mainwindow.hpp"
 #include "DBCStructures.hpp"
 #include "JsonData.hpp"
 
-SearchFilter::SearchFilter(MainWindow *parent) : QDialog(parent)
+SearchFilter::SearchFilter(QWidget *parent) : QDialog(parent)
 {
     ui.setupUi(this);
 
@@ -72,6 +73,23 @@ SearchFilter::SearchFilter(MainWindow *parent) : QDialog(parent)
     QObject::connect(ui.buttonBox, &QDialogButtonBox::clicked, this, &SearchFilter::onButtonClicked);
 }
 
+inline void UpdateMainWindowState(MainWindow* mainWindow)
+{
+    if (mainWindow == nullptr)
+    {
+        return;
+    }
+
+    using namespace SpellWork::SearchFilters;
+    mainWindow->setEnabled(true);
+    const bool hasFilters = m_genericFilter.HasData() || std::any_of(m_spellEntryFilter.begin(), m_spellEntryFilter.end(), [](const auto& filter)
+    {
+        return filter.HasData();
+    });
+
+    mainWindow->UpdateFilterStatus(hasFilters);
+}
+
 void SearchFilter::onButtonClicked(QAbstractButton* button)
 {
     const auto* buttonBox = qobject_cast<QDialogButtonBox*>(sender());
@@ -84,34 +102,84 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
     {
     case QDialogButtonBox::Ok:
     {
-        genericFilter.spellFamily = ui.SpellFamilyFilter->currentIndex();
-        genericFilter.spellAuraType = ui.SpellAuraTypeFilter->currentIndex();
-        genericFilter.spellEffect = ui.SpellEffectFilter->currentIndex();
-        genericFilter.spellTargetA = ui.SpellTargetFilterA->currentIndex();
-        genericFilter.spellTargetB = ui.SpellTargetFilterB->currentIndex();
+        using namespace SpellWork::SearchFilters;
+        // Generic filter
+        {
+            auto& genericFilter = m_genericFilter;
+            // SpellFamily
+            {
+                auto& [id, value] = genericFilter.m_spellFamily;
+                id = ui.SpellFamilyFilter->currentIndex();
+                value = ui.SpellFamilyFilter->itemData(id).toUInt();
+            }
+            // SpellAuraType
+            {
+                auto& [id, value] = genericFilter.m_spellAuraType;
+                id = ui.SpellAuraTypeFilter->currentIndex();
+                value = ui.SpellAuraTypeFilter->itemData(id).toUInt();
+            }
+            // SpellEffect
+            {
+                auto& [id, value] = genericFilter.m_spellEffect;
+                id = ui.SpellEffectFilter->currentIndex();
+                value = ui.SpellEffectFilter->itemData(id).toUInt();
+            }
+            // SpellTargetA
+            {
+                auto& [id, value] = genericFilter.m_spellTargetA;
+                id = ui.SpellTargetFilterA->currentIndex();
+                value = ui.SpellTargetFilterA->itemData(id).toUInt();
+            }
+            // SpellTargetB
+            {
+                auto& [id, value] = genericFilter.m_spellTargetB;
+                id = ui.SpellTargetFilterB->currentIndex();
+                value = ui.SpellTargetFilterB->itemData(id).toUInt();
+            }
+        }
 
-        spellAttributesFilter.conditionCompareType[0] = ui.spellAttrCompareType0->currentIndex();
-        spellAttributesFilter.conditionCompareType[1] = ui.spellAttrCompareType1->currentIndex();
-        spellAttributesFilter.conditionFieldName[0] = ui.spellAttrFieldName0->currentIndex();
-        spellAttributesFilter.conditionFieldName[1] = ui.spellAttrFieldName1->currentIndex();
-        spellAttributesFilter.conditionValue[0] = ui.spellAttrInput0->text();
-        spellAttributesFilter.conditionValue[1] = ui.spellAttrInput1->text();
+        // Spell entry filter
+        {
+            // Filter 1
+            {
+                auto& filter = m_spellEntryFilter.at(0);
+                // Field id
+                {
+                    auto& [id, value] = filter.m_entryField;
+                    id = ui.spellAttrFieldName0->currentIndex();
+                    value = ui.spellAttrFieldName0->itemData(id).toUInt();
+                }
+                // Compare type
+                {
+                    auto& [id, value] = filter.m_compareType;
+                    id = ui.spellAttrCompareType0->currentIndex();
+                    value = ui.spellAttrCompareType0->itemData(id).toUInt();
+                }
+                filter.m_compareValue = ui.spellAttrInput0->text();
+            }
+            // Filter 2
+            {
+                auto& filter = m_spellEntryFilter.at(1);
+                // Field id
+                {
+                    auto& [id, value] = filter.m_entryField;
+                    id = ui.spellAttrFieldName1->currentIndex();
+                    value = ui.spellAttrFieldName1->itemData(id).toUInt();
+                }
+                // Compare type
+                {
+                    auto& [id, value] = filter.m_compareType;
+                    id = ui.spellAttrCompareType1->currentIndex();
+                    value = ui.spellAttrCompareType1->itemData(id).toUInt();
+                }
+                filter.m_compareValue = ui.spellAttrInput0->text();
+            }
+        }
     }
     [[fallthrough]];
     case QDialogButtonBox::Cancel:
     {
-        if (auto* mainWindow = GetMainWindow())
-        {
-            mainWindow->setEnabled(true);
-            if (genericFilter.HasData() || spellAttributesFilter.HasData())
-            {
-                mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:green\">active</span>");
-            }
-            else
-            {
-                mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:red\">inactive</span>");
-            }
-        }
+        UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
     }
     case QDialogButtonBox::Reset:
     {
@@ -135,39 +203,24 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
     }
 }
 
-MainWindow* SearchFilter::GetMainWindow()
-{
-    return qobject_cast<MainWindow*>(this->parent());
-}
-
 void SearchFilter::closeEvent(QCloseEvent* /*e*/)
 {
-    if (MainWindow* mainWindow = GetMainWindow())
-    {
-        mainWindow->setEnabled(true);
-        if (genericFilter.HasData() || spellAttributesFilter.HasData())
-        {
-            mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:green\">active</span>");
-        }
-        else
-        {
-            mainWindow->ui.filtersStatus->setText("Extra filters: <span style=\"color:red\">inactive</span>");
-        }
-    }
+    UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
 }
 
 void SearchFilter::showEvent(QShowEvent* /*event*/)
 {
-    ui.SpellFamilyFilter->setCurrentIndex(genericFilter.spellFamily);
-    ui.SpellAuraTypeFilter->setCurrentIndex(genericFilter.spellAuraType);
-    ui.SpellEffectFilter->setCurrentIndex(genericFilter.spellEffect);
-    ui.SpellTargetFilterA->setCurrentIndex(genericFilter.spellTargetA);
-    ui.SpellTargetFilterB->setCurrentIndex(genericFilter.spellTargetB);
+    using namespace SpellWork::SearchFilters;
+    ui.SpellFamilyFilter->setCurrentIndex(m_genericFilter.m_spellFamily.first);
+    ui.SpellAuraTypeFilter->setCurrentIndex(m_genericFilter.m_spellAuraType.first);
+    ui.SpellEffectFilter->setCurrentIndex(m_genericFilter.m_spellEffect.first);
+    ui.SpellTargetFilterA->setCurrentIndex(m_genericFilter.m_spellTargetA.first);
+    ui.SpellTargetFilterB->setCurrentIndex(m_genericFilter.m_spellTargetB.first);
 
-    ui.spellAttrCompareType0->setCurrentIndex(spellAttributesFilter.conditionCompareType[0]);
-    ui.spellAttrCompareType1->setCurrentIndex(spellAttributesFilter.conditionCompareType[1]);
-    ui.spellAttrFieldName0->setCurrentIndex(spellAttributesFilter.conditionFieldName[0]);
-    ui.spellAttrFieldName1->setCurrentIndex(spellAttributesFilter.conditionFieldName[1]);
-    ui.spellAttrInput0->setText(spellAttributesFilter.conditionValue[0]);
-    ui.spellAttrInput1->setText(spellAttributesFilter.conditionValue[1]);
+    ui.spellAttrCompareType0->setCurrentIndex(m_spellEntryFilter.at(0).m_compareType.first);
+    ui.spellAttrCompareType1->setCurrentIndex(m_spellEntryFilter.at(1).m_compareType.first);
+    ui.spellAttrFieldName0->setCurrentIndex(m_spellEntryFilter.at(0).m_entryField.first);
+    ui.spellAttrFieldName1->setCurrentIndex(m_spellEntryFilter.at(1).m_entryField.first);
+    ui.spellAttrInput0->setText(m_spellEntryFilter.at(0).m_compareValue);
+    ui.spellAttrInput1->setText(m_spellEntryFilter.at(1).m_compareValue);
 }

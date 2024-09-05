@@ -8,6 +8,7 @@
 #include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
 #include "DBC/DBCStores.hpp"
+#include "SearchFilters.hpp"
 #include <cassert>
 #include <optional>
 
@@ -84,45 +85,47 @@ void MainWindow::PerformSpellSearch()
 
     // Prepare spell effect filter entries
     std::optional<uint32_t> spellFamilyId;
-    if (searchFilterForm->genericFilter.spellFamily != -1)
-    {
-        spellFamilyId = searchFilterForm->ui.SpellFamilyFilter->itemData(searchFilterForm->genericFilter.spellFamily).toUInt();
-    }
-
     std::optional<uint32_t> auraTypeId;
-    if (searchFilterForm->genericFilter.spellAuraType != -1)
-    {
-        auraTypeId = searchFilterForm->ui.SpellAuraTypeFilter->itemData(searchFilterForm->genericFilter.spellAuraType).toUInt();
-    }
-
     std::optional<uint32_t> spellEffectId;
-    if (searchFilterForm->genericFilter.spellEffect != -1)
+    std::optional<uint32_t> spellTargetA;
+    std::optional<uint32_t> spellTargetB;
+
+    if (const auto* spellFamily = SpellWork::SearchFilters::m_genericFilter.GetSpellFamily())
     {
-        spellEffectId = searchFilterForm->ui.SpellEffectFilter->itemData(searchFilterForm->genericFilter.spellEffect).toUInt();
+        spellFamilyId = *spellFamily;
     }
 
-    std::optional<uint32_t> spellTargetA;
-    if (searchFilterForm->genericFilter.spellTargetA != -1)
+    if (const auto* spellAuraType = SpellWork::SearchFilters::m_genericFilter.GetSpellAuraType())
     {
-        spellTargetA = searchFilterForm->ui.SpellTargetFilterA->itemData(searchFilterForm->genericFilter.spellTargetA).toUInt();
+        auraTypeId = *spellAuraType;
     }
-    std::optional<uint32_t> spellTargetB;
-    if (searchFilterForm->genericFilter.spellTargetB != -1)
+
+    if (const auto* spellEffect = SpellWork::SearchFilters::m_genericFilter.GetSpellEffect())
     {
-        spellTargetB = searchFilterForm->ui.SpellTargetFilterA->itemData(searchFilterForm->genericFilter.spellTargetB).toUInt();
+        spellEffectId = *spellEffect;
+    }
+
+    if (const auto* spellTarget_A = SpellWork::SearchFilters::m_genericFilter.GetSpellTargetA())
+    {
+        spellTargetA = *spellTarget_A;
+    }
+
+    if (const auto* spelltarget_B = SpellWork::SearchFilters::m_genericFilter.GetSpellTargetB())
+    {
+        spellTargetB = *spelltarget_B;
     }
 
     std::array<AdvancedSearchParams<SpellEntry>, 2> spellAttrFilter;
     for (uint8_t i = 0; i < 2; ++i)
     {
-        if (!searchFilterForm->spellAttributesFilter.HasData(i))
+        if (!SpellWork::SearchFilters::m_spellEntryFilter.at(i).HasData())
         {
             continue;
         }
 
-        const auto& inputValue = searchFilterForm->spellAttributesFilter.conditionValue[i];
-        const auto fieldId = searchFilterForm->ui.spellAttrFieldName0->itemData(searchFilterForm->spellAttributesFilter.conditionFieldName[i]).toUInt();
-        ConditionCompareType compareType = ConditionCompareType(searchFilterForm->ui.spellAttrCompareType0->itemData(searchFilterForm->spellAttributesFilter.conditionCompareType[i]).toUInt());
+        const auto& inputValue = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareVale();
+        const auto fieldId = *SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetFieldId();
+        ConditionCompareType compareType = ConditionCompareType(*SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareType());
 
         auto const& itr = SpellEntryFields.find(fieldId);
         if (itr == SpellEntryFields.end())

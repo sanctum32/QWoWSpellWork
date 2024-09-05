@@ -26,6 +26,7 @@ public:
     void UpdateSqlStatus(bool success);
     void UpdateDBCStatus(bool success);
     void UpdateJsonStatus(bool success);
+    void UpdateFilterStatus(bool hasFilter);
 
 private slots:
     void onSearchBtnClicked();
