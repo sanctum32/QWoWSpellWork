@@ -226,19 +226,24 @@ void MainWindow::PerformSpellSearch()
         }))
         {
             canInsert = false;
-            for (const auto* effectInfo : _spellInfo.m_spellEffects)
+            for (const auto& filter : spellEffectAttrFilter)
             {
-                if (effectInfo == nullptr)
+                if (!filter.hasData)
                 {
                     continue;
                 }
 
-                if (std::any_of(spellEffectAttrFilter.begin(), spellEffectAttrFilter.end(), [effectInfo](auto const& compareParam)
+                for (const auto* effectInfo : _spellInfo.m_spellEffects)
                 {
-                    return compareParam.DoCheck(*effectInfo);
-                }))
+                    if (effectInfo != nullptr && filter.DoCheck(*effectInfo))
+                    {
+                        canInsert = true;
+                        break;
+                    }
+                }
+
+                if (canInsert)
                 {
-                    canInsert = true;
                     break;
                 }
             }
