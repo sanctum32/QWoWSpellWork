@@ -46,13 +46,6 @@ constexpr std::array<const char*, 11> ConditionCompareTypeStr =
     "x Contains y"      // 10
 };
 
-/**
- * @brief DoConditionCompare
- * @param type - see enum ConditionCompareType
- * @param xVal
- * @param yVal
- * @return true if condition is fullfilled
- */
 template<typename T>
 static bool CompareNumericValues(ConditionCompareType type, T xVal, T yVal)
 {
