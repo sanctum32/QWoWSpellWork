@@ -6,9 +6,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class SearchFilter; }
 QT_END_NAMESPACE
 
-class MainWindow;
 class QAbstractButton;
-class SearchFilter;
 
 class SearchFilter : public QDialog
 {
@@ -38,6 +36,5 @@ private slots:
 private:
     void closeEvent(QCloseEvent* /*e*/) override;
     void showEvent(QShowEvent *event) override;
-
     Ui::SearchFilter ui;
 };

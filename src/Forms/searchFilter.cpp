@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QCloseEvent>
 
 #include "searchFilter.hpp"
 #include "SearchFiltersStore.hpp"
@@ -227,7 +228,10 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
     case QDialogButtonBox::Cancel:
     case QDialogButtonBox::Close:
     {
-        UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
+        if (MainWindow* mainWindow = dynamic_cast<MainWindow*>(parentWidget()))
+        {
+            UpdateMainWindowState(mainWindow);
+        }
     }
     case QDialogButtonBox::Reset:
     {
@@ -312,8 +316,11 @@ void SearchFilter::effectAttrFilter1ResetBtnClick()
     ui.effectAttrInput1->clear();
 }
 
-void SearchFilter::closeEvent(QCloseEvent* /*e*/)
+void SearchFilter::closeEvent(QCloseEvent* e)
 {
+    hide();
+    e->ignore();
+
     UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
 }
 

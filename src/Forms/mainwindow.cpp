@@ -1,4 +1,5 @@
 #include "mainwindow.hpp"
+#include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
 #include <QCloseEvent>
 
@@ -8,6 +9,8 @@ Q_LOGGING_CATEGORY(SPELLINFO_TAB, "spellwork.json");
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
+
+    m_searchFilter = std::make_unique<SearchFilter>(this);
 
     // resultList
     ui.resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
