@@ -92,61 +92,76 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="112"/>
+        <location filename="../Forms/searchFilter.ui" line="91"/>
+        <location filename="../Forms/searchFilter.ui" line="117"/>
+        <source>Effect entry field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="153"/>
         <source>Generic filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="176"/>
+        <location filename="../Forms/searchFilter.ui" line="217"/>
         <source>SpellTargetB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="150"/>
+        <location filename="../Forms/searchFilter.ui" line="191"/>
         <source>SpellAuraEffectType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="163"/>
+        <location filename="../Forms/searchFilter.ui" line="204"/>
         <source>SpellTargetA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="124"/>
+        <location filename="../Forms/searchFilter.ui" line="165"/>
         <source>SpellEffect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="137"/>
+        <location filename="../Forms/searchFilter.ui" line="178"/>
         <source>SpellFamilyName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="43"/>
+        <location filename="../Forms/searchFilter.ui" line="66"/>
         <source>Spell effect attributes filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="192"/>
+        <location filename="../Forms/searchFilter.ui" line="233"/>
         <source>Spell entry attributes filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="207"/>
-        <location filename="../Forms/searchFilter.ui" line="284"/>
+        <location filename="../Forms/searchFilter.ui" line="104"/>
+        <location filename="../Forms/searchFilter.ui" line="143"/>
+        <location filename="../Forms/searchFilter.ui" line="248"/>
+        <location filename="../Forms/searchFilter.ui" line="325"/>
         <source>Compare type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="223"/>
-        <location filename="../Forms/searchFilter.ui" line="268"/>
+        <location filename="../Forms/searchFilter.ui" line="264"/>
+        <location filename="../Forms/searchFilter.ui" line="309"/>
         <source>Spell entry field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="236"/>
-        <location filename="../Forms/searchFilter.ui" line="249"/>
+        <location filename="../Forms/searchFilter.ui" line="78"/>
+        <location filename="../Forms/searchFilter.ui" line="130"/>
+        <location filename="../Forms/searchFilter.ui" line="277"/>
+        <location filename="../Forms/searchFilter.ui" line="290"/>
         <source>value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/searchFilter.ui" line="335"/>
+        <source>CheckBox</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

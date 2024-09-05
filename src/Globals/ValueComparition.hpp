@@ -3,6 +3,7 @@
 #include <QString>
 #include <QStringList>
 #include <QStringView>
+#include <optional>
 
 // in actual defitions only one flag should be used.
 enum class CompareTypes
@@ -91,3 +92,74 @@ static bool CompareStringValues(ConditionCompareType type, QStringView xVal, QSt
     }
     return false;
 }
+
+template<class T>
+struct AdvancedSearchParams
+{
+    bool hasData = false;
+    ConditionCompareType compareType;
+    std::optional<int32_t> int32val;
+    std::optional<uint32_t> uint32val;
+    std::optional<float> floatVal;
+    std::optional<QString> textVal;
+
+    uint8_t spellFieldId;
+
+    bool CheckSpellFields(const T& dbcData) const
+    {
+        // Nothing to check
+        if (!hasData)
+        {
+            return true;
+        }
+
+        switch (compareType)
+        {
+        case ConditionCompareType::NotEqual:
+        case ConditionCompareType::Equal:
+        case ConditionCompareType::GreaterThan:
+        case ConditionCompareType::GreaterOrEqual:
+        case ConditionCompareType::LowerThan:
+        case ConditionCompareType::LowerOrEqual:
+        {
+            const auto& aVal = dbcData.GetField(spellFieldId);
+            if (int32val.has_value())
+            {
+                return CompareNumericValues(compareType, aVal.int32Val, *int32val);
+            }
+            else if (uint32val.has_value())
+            {
+                return CompareNumericValues(compareType, aVal.uint32Val, *uint32val);
+            }
+            else if (floatVal.has_value())
+            {
+                return CompareNumericValues(compareType, aVal.floatVal, *floatVal);
+            }
+            break;
+        }
+        case ConditionCompareType::BitValue:
+        case ConditionCompareType::NoBitValue:
+        {
+            const auto& aVal = dbcData.GetField(spellFieldId);
+            if (uint32val.has_value())
+            {
+                return CompareBitMasks(compareType, aVal.uint32Val, *uint32val);
+            }
+            break;
+        }
+        case ConditionCompareType::StartsWith:
+        case ConditionCompareType::EndsWith:
+        case ConditionCompareType::Contains:
+        {
+            const auto& aVal = dbcData.GetField(spellFieldId);
+            if (textVal.has_value())
+            {
+                return CompareStringValues(compareType, aVal.textVal, *textVal);
+            }
+            break;
+        }
+        }
+
+        return false;
+    }
+};

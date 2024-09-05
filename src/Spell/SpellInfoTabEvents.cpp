@@ -112,79 +112,7 @@ void MainWindow::PerformSpellSearch()
         spellTargetB = searchFilterForm->ui.SpellTargetFilterA->itemData(searchFilterForm->genericFilter.spellTargetB).toUInt();
     }
 
-    // advanced filters
-    struct AdvancedSearchParams
-    {
-        bool hasData = false;
-        ConditionCompareType compareType;
-        std::optional<int32_t> int32val;
-        std::optional<uint32_t> uint32val;
-        std::optional<float> floatVal;
-        std::optional<QString> textVal;
-
-        uint8_t spellFieldId;
-
-        bool CheckSpellFields(const SpellEntry& spell) const
-        {
-            // Nothing to check
-            if (!hasData)
-            {
-                return true;
-            }
-
-            switch (compareType)
-            {
-            case ConditionCompareType::NotEqual:
-            case ConditionCompareType::Equal:
-            case ConditionCompareType::GreaterThan:
-            case ConditionCompareType::GreaterOrEqual:
-            case ConditionCompareType::LowerThan:
-            case ConditionCompareType::LowerOrEqual:
-            {
-                const auto& aVal = spell.GetField(spellFieldId);
-                if (int32val.has_value())
-                {
-                    return CompareNumericValues(compareType, aVal.int32Val, *int32val);
-                }
-                else if (uint32val.has_value())
-                {
-                    return CompareNumericValues(compareType, aVal.uint32Val, *uint32val);
-                }
-                else if (floatVal.has_value())
-                {
-                    return CompareNumericValues(compareType, aVal.floatVal, *floatVal);
-                }
-                break;
-            }
-            case ConditionCompareType::BitValue:
-            case ConditionCompareType::NoBitValue:
-            {
-                const auto& aVal = spell.GetField(spellFieldId);
-                if (uint32val.has_value())
-                {
-                    return CompareBitMasks(compareType, aVal.uint32Val, *uint32val);
-                }
-                break;
-            }
-            case ConditionCompareType::StartsWith:
-            case ConditionCompareType::EndsWith:
-            case ConditionCompareType::Contains:
-            {
-                const auto& aVal = spell.GetField(spellFieldId);
-                if (textVal.has_value())
-                {
-                    return CompareStringValues(compareType, aVal.textVal, *textVal);
-                }
-                break;
-            }
-            }
-
-            return false;
-        }
-    };
-
-    std::array<AdvancedSearchParams, 2> advancedSearchParams;
-
+    std::array<AdvancedSearchParams<SpellEntry>, 2> spellAttrFilter;
     for (uint8_t i = 0; i < 2; ++i)
     {
         if (!searchFilterForm->spellAttributesFilter.HasData(i))
@@ -202,7 +130,7 @@ void MainWindow::PerformSpellSearch()
             continue;
         }
 
-        auto& searchParam = advancedSearchParams[i];
+        auto& searchParam = spellAttrFilter[i];
         switch (itr->second.cmpType)
         {
         case CompareTypes::SignedNumber:
@@ -318,7 +246,7 @@ void MainWindow::PerformSpellSearch()
             }
         }
 
-        if (std::any_of(advancedSearchParams.begin(), advancedSearchParams.end(), [_spellInfo](auto const advancedSrchParam)
+        if (std::any_of(spellAttrFilter.begin(), spellAttrFilter.end(), [_spellInfo](auto const advancedSrchParam)
         {
             return !advancedSrchParam.CheckSpellFields(_spellInfo);
         }))

@@ -534,7 +534,7 @@ FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
 }
 
 // For advanced filter
-const std::map<uint8_t /*fieldId*/, SpellEntryAttributeInfo /*info*/> SpellEntryFields =
+const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEntryFields =
 {
     {0, {"Id", CompareTypes::UnsignedNumber }},
     {1, {"Attributes", CompareTypes::UnsignedNumber}},
@@ -584,4 +584,35 @@ const std::map<uint8_t /*fieldId*/, SpellEntryAttributeInfo /*info*/> SpellEntry
     {45, {"SpellTargetRestrictionsId", CompareTypes::UnsignedNumber}},
     {46, {"SpellTotemsId", CompareTypes::UnsignedNumber}},
     {47, {"ResearchProject", CompareTypes::UnsignedNumber}}
+};
+
+const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEffectEntryFields =
+{
+    {0, {"Id", CompareTypes::UnsignedNumber}},
+    {1, {"Effect", CompareTypes::UnsignedNumber}},
+    {2, {"EffectAmplitude", CompareTypes::Float}},
+    {3, {"EffectAura", CompareTypes::UnsignedNumber}},
+    {4, {"EffectAuraPeriod", CompareTypes::UnsignedNumber}},
+    {5, {"EffectBasePoints", CompareTypes::SignedNumber}},
+    {6, {"EffectBonusCoefficient", CompareTypes::Float}},
+    {7, {"EffectChainAmplitude", CompareTypes::Float}},
+    {8, {"EffectChainTargets", CompareTypes::UnsignedNumber}},
+    {9, {"EffectDieSides", CompareTypes::SignedNumber}},
+    {10, {"EffectItemType", CompareTypes::UnsignedNumber}},
+    {11, {"EffectMechanic", CompareTypes::UnsignedNumber}},
+    {12, {"EffectMiscValue", CompareTypes::SignedNumber}},
+    {13, {"EffectMiscValueB", CompareTypes::SignedNumber}},
+    {14, {"EffectPointsPerResource", CompareTypes::Float}},
+    {15, {"EffectRadiusIndex", CompareTypes::UnsignedNumber}},
+    {16, {"EffectRadiusMaxIndex", CompareTypes::UnsignedNumber}},
+    {17, {"EffectRealPointsPerLevel", CompareTypes::Float}},
+    {18, {"EffectSpellClassMaskA", CompareTypes::UnsignedNumber}},
+    {19, {"EffectSpellClassMaskB", CompareTypes::UnsignedNumber}},
+    {20, {"EffectSpellClassMaskC", CompareTypes::UnsignedNumber}},
+    {21, {"EffectTriggerSpell", CompareTypes::UnsignedNumber}},
+    {22, {"EffectImplicitTargetA", CompareTypes::UnsignedNumber}},
+    {23, {"EffectImplicitTargetB", CompareTypes::UnsignedNumber}},
+    {24, {"SpellID", CompareTypes::UnsignedNumber}},
+    {25, {"EffectIndex", CompareTypes::UnsignedNumber}},
+    {26, {"EffectAttributes", CompareTypes::UnsignedNumber}}
 };

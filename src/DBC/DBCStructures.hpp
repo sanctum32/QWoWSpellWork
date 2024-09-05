@@ -61,14 +61,16 @@ struct SpellEffectEntry
     const auto getEffectRadiusMaxIndex() const { return _fields[16].uint32Val; }  // 16
     const auto getEffectRealPointsPerLevel() const { return _fields[17].floatVal; } // 17
     const uint32_t getEffectSpellClassMaskA() const { return _fields[18].uint32Val; } // 18
-    const uint32_t getEffectSpellClassMaskB() const { return _fields[18].uint32Val; } // 19
-    const uint32_t getEffectSpellClassMaskC() const { return _fields[18].uint32Val; } // 20
-    const auto getEffectTriggerSpell() const { return _fields[19].uint32Val; }    // 21
-    const auto getEffectImplicitTargetA() const { return _fields[20].uint32Val; } // 22
-    const auto getEffectImplicitTargetB() const { return _fields[21].uint32Val; } // 23
-    const auto getSpellID() const { return _fields[22].uint32Val; }               // 24
-    const auto getEffectIndex() const { return _fields[23].uint32Val; }           // 25
-    const auto getEffectAttributes() const { return _fields[24].uint32Val; }      // 26
+    const uint32_t getEffectSpellClassMaskB() const { return _fields[19].uint32Val; } // 19
+    const uint32_t getEffectSpellClassMaskC() const { return _fields[20].uint32Val; } // 20
+    const auto getEffectTriggerSpell() const { return _fields[21].uint32Val; }    // 21
+    const auto getEffectImplicitTargetA() const { return _fields[22].uint32Val; } // 22
+    const auto getEffectImplicitTargetB() const { return _fields[23].uint32Val; } // 23
+    const auto getSpellID() const { return _fields[24].uint32Val; }               // 24
+    const auto getEffectIndex() const { return _fields[25].uint32Val; }           // 25
+    const auto getEffectAttributes() const { return _fields[26].uint32Val; }      // 26
+
+    const auto& GetField(uint8_t index) const { return _fields.at(index); }
 
 private:
     std::array<DbcEntryValues, 27> _fields;
@@ -91,14 +93,14 @@ private:
     auto& _getEffectRadiusMaxIndex() { return _fields[16].uint32Val; }  // 16
     auto& _getEffectRealPointsPerLevel() { return _fields[17].floatVal; } // 17
     auto& _getEffectSpellClassMaskA() { return _fields[18].uint32Val; } // 18
-    auto& _getEffectSpellClassMaskB() { return _fields[18].uint32Val; } // 19
-    auto& _getEffectSpellClassMaskC() { return _fields[18].uint32Val; } // 20
-    auto& _getEffectTriggerSpell() { return _fields[19].uint32Val; }    // 21
-    auto& _getEffectImplicitTargetA() { return _fields[20].uint32Val; } // 22
-    auto& _getEffectImplicitTargetB() { return _fields[21].uint32Val; } // 23
-    auto& _getSpellID() { return _fields[22].uint32Val; }               // 24
-    auto& _getEffectIndex() { return _fields[23].uint32Val; }           // 25
-    auto& _getEffectAttributes() { return _fields[24].uint32Val; }      // 26
+    auto& _getEffectSpellClassMaskB() { return _fields[19].uint32Val; } // 19
+    auto& _getEffectSpellClassMaskC() { return _fields[20].uint32Val; } // 20
+    auto& _getEffectTriggerSpell() { return _fields[21].uint32Val; }    // 21
+    auto& _getEffectImplicitTargetA() { return _fields[22].uint32Val; } // 22
+    auto& _getEffectImplicitTargetB() { return _fields[23].uint32Val; } // 23
+    auto& _getSpellID() { return _fields[24].uint32Val; }               // 24
+    auto& _getEffectIndex() { return _fields[25].uint32Val; }           // 25
+    auto& _getEffectAttributes() { return _fields[26].uint32Val; }      // 26
 };
 
 // SpellCategory.dbc
@@ -749,10 +751,11 @@ struct FactionEntry
 };
 
 // For advanced filter
-struct SpellEntryAttributeInfo
+struct DbcFieldCMPInfo
 {
     QString fieldName;
     CompareTypes cmpType;
 };
 
-extern const std::map<uint8_t /*fieldId*/, SpellEntryAttributeInfo /*info*/> SpellEntryFields;
+extern const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEntryFields;
+extern const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEffectEntryFields;

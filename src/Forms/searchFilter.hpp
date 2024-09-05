@@ -62,7 +62,7 @@ private:
 
             return false;
         }
-    } spellAttributesFilter;
+    } spellAttributesFilter, spellEffectAttrFilter;
 
     Ui::SearchFilter ui;
 };

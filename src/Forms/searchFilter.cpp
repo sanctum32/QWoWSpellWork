@@ -38,6 +38,12 @@ SearchFilter::SearchFilter(MainWindow *parent) : QDialog(parent)
         ui.spellAttrFieldName1->addItem(fieldInfo.fieldName, fieldId);
     }
 
+    for (auto const& [fieldId, fieldInfo] : SpellEffectEntryFields)
+    {
+        ui.effectFieldName0->addItem(fieldInfo.fieldName, fieldId);
+        ui.effectFieldName1->addItem(fieldInfo.fieldName, fieldId);
+    }
+
     constexpr std::array<const char*, 11> ConditionCompareTypeStr =
     {
         "x != y",           // 0
@@ -58,6 +64,8 @@ SearchFilter::SearchFilter(MainWindow *parent) : QDialog(parent)
     {
         ui.spellAttrCompareType0->addItem(str, idVal);
         ui.spellAttrCompareType1->addItem(str, idVal);
+        ui.effectAttrCompareType0->addItem(str, idVal);
+        ui.effectAttrCompareType1->addItem(str, idVal);
         ++idVal;
     }
 
