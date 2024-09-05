@@ -92,83 +92,83 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="81"/>
-        <location filename="../Forms/searchFilter.ui" line="120"/>
+        <location filename="../Forms/searchFilter.ui" line="329"/>
+        <location filename="../Forms/searchFilter.ui" line="368"/>
         <source>Effect entry field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../Forms/searchFilter.ui" line="114"/>
+        <location filename="../Forms/searchFilter.ui" line="127"/>
         <location filename="../Forms/searchFilter.ui" line="140"/>
-        <location filename="../Forms/searchFilter.ui" line="147"/>
-        <location filename="../Forms/searchFilter.ui" line="244"/>
-        <location filename="../Forms/searchFilter.ui" line="257"/>
-        <location filename="../Forms/searchFilter.ui" line="270"/>
-        <location filename="../Forms/searchFilter.ui" line="283"/>
-        <location filename="../Forms/searchFilter.ui" line="296"/>
-        <location filename="../Forms/searchFilter.ui" line="411"/>
-        <location filename="../Forms/searchFilter.ui" line="418"/>
+        <location filename="../Forms/searchFilter.ui" line="153"/>
+        <location filename="../Forms/searchFilter.ui" line="166"/>
+        <location filename="../Forms/searchFilter.ui" line="281"/>
+        <location filename="../Forms/searchFilter.ui" line="288"/>
+        <location filename="../Forms/searchFilter.ui" line="388"/>
+        <location filename="../Forms/searchFilter.ui" line="395"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="167"/>
+        <location filename="../Forms/searchFilter.ui" line="37"/>
         <source>Generic filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="179"/>
+        <location filename="../Forms/searchFilter.ui" line="49"/>
         <source>SpellTargetB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="231"/>
+        <location filename="../Forms/searchFilter.ui" line="101"/>
         <source>SpellAuraEffectType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="205"/>
+        <location filename="../Forms/searchFilter.ui" line="75"/>
         <source>SpellTargetA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="218"/>
+        <location filename="../Forms/searchFilter.ui" line="88"/>
         <source>SpellEffect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="192"/>
+        <location filename="../Forms/searchFilter.ui" line="62"/>
         <source>SpellFamilyName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="56"/>
+        <location filename="../Forms/searchFilter.ui" line="304"/>
         <source>Spell effect attributes filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="312"/>
+        <location filename="../Forms/searchFilter.ui" line="182"/>
         <source>Spell entry attributes filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="94"/>
-        <location filename="../Forms/searchFilter.ui" line="107"/>
-        <location filename="../Forms/searchFilter.ui" line="327"/>
-        <location filename="../Forms/searchFilter.ui" line="385"/>
+        <location filename="../Forms/searchFilter.ui" line="197"/>
+        <location filename="../Forms/searchFilter.ui" line="255"/>
+        <location filename="../Forms/searchFilter.ui" line="342"/>
+        <location filename="../Forms/searchFilter.ui" line="355"/>
         <source>Compare type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="356"/>
-        <location filename="../Forms/searchFilter.ui" line="404"/>
+        <location filename="../Forms/searchFilter.ui" line="226"/>
+        <location filename="../Forms/searchFilter.ui" line="274"/>
         <source>Spell entry field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="68"/>
-        <location filename="../Forms/searchFilter.ui" line="133"/>
-        <location filename="../Forms/searchFilter.ui" line="340"/>
-        <location filename="../Forms/searchFilter.ui" line="369"/>
+        <location filename="../Forms/searchFilter.ui" line="210"/>
+        <location filename="../Forms/searchFilter.ui" line="239"/>
+        <location filename="../Forms/searchFilter.ui" line="316"/>
+        <location filename="../Forms/searchFilter.ui" line="381"/>
         <source>value</source>
         <translation type="unfinished"></translation>
     </message>

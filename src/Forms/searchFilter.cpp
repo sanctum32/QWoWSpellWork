@@ -64,6 +64,8 @@ SearchFilter::SearchFilter(QWidget *parent) : QDialog(parent)
     QObject::connect(ui.SpellTargetBResetBtn, &QPushButton::clicked, this, &SearchFilter::spellTargetBResetBtnClick);
     QObject::connect(ui.SpellAttrFilter0ResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAttrFilter0ResetBtnClick);
     QObject::connect(ui.SpellAttrFilter1ResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAttrFilter1ResetBtnClick);
+    QObject::connect(ui.EffectAttrFilter0ResetBtn, &QPushButton::clicked, this, &SearchFilter::effectAttrFilter0ResetBtnClick);
+    QObject::connect(ui.EffectAttrFilter1ResetBtn, &QPushButton::clicked, this, &SearchFilter::effectAttrFilter1ResetBtnClick);
 }
 
 inline void UpdateMainWindowState(MainWindow* mainWindow)
@@ -183,13 +185,21 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
         ui.SpellTargetFilterA->setCurrentIndex(-1);
         ui.SpellTargetFilterB->setCurrentIndex(-1);
 
-        //spellAttributesFilter
+        // spell attributes filter
         ui.spellAttrCompareType0->setCurrentIndex(-1);
         ui.spellAttrCompareType1->setCurrentIndex(-1);
         ui.spellAttrFieldName0->setCurrentIndex(-1);
         ui.spellAttrFieldName1->setCurrentIndex(-1);
         ui.spellAttrInput0->clear();
         ui.spellAttrInput1->clear();
+
+        // spell effect attributes filter
+        ui.effectFieldName0->setCurrentIndex(-1);
+        ui.effectAttrCompareType0->setCurrentIndex(-1);
+        ui.effectAttrInput0->clear();
+        ui.effectFieldName1->setCurrentIndex(-1);
+        ui.effectAttrCompareType1->setCurrentIndex(-1);
+        ui.effectAttrInput1->clear();
         break;
     }
     default:
@@ -234,6 +244,20 @@ void SearchFilter::spellAttrFilter1ResetBtnClick()
     ui.spellAttrFieldName1->setCurrentIndex(-1);
     ui.spellAttrCompareType1->setCurrentIndex(-1);
     ui.spellAttrInput1->clear();
+}
+
+void SearchFilter::effectAttrFilter0ResetBtnClick()
+{
+    ui.effectFieldName0->setCurrentIndex(-1);
+    ui.effectAttrCompareType0->setCurrentIndex(-1);
+    ui.effectAttrInput0->clear();
+}
+
+void SearchFilter::effectAttrFilter1ResetBtnClick()
+{
+    ui.effectFieldName1->setCurrentIndex(-1);
+    ui.effectAttrCompareType1->setCurrentIndex(-1);
+    ui.effectAttrInput1->clear();
 }
 
 void SearchFilter::closeEvent(QCloseEvent* /*e*/)
