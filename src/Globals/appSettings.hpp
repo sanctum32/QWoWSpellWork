@@ -15,13 +15,13 @@ struct SQLSettings
     bool canReconnect{};
 };
 
-
 struct AppSettings
 {
     std::string dbcFilePath;
     QString themeName;
     bool loadDBCSpells{};
     bool loadSQLSpells{};
+    bool useQtFusionStyle{};
 };
 
 class SpellWorkConfig

@@ -2,6 +2,7 @@
     "ThemeName" : "materialDarkDefault",
     "LoadDBCSpells": true,
     "LoadSQLSpells": true,
+    "UseQtFusionStyle": false,
     "Sql":
     {
         "Enable": false,

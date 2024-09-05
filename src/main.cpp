@@ -40,9 +40,10 @@ int main(int argc, char *argv[])
     const bool sqlConnected = sSpellWorkSQL->Init();
 #endif
 
-#ifdef _WIN32
-    QApplication::setStyle("Fusion");
-#endif // _WIN32
+    if (sSpellWorkConfig->GetAppConfig().useQtFusionStyle)
+    {
+        QApplication::setStyle("Fusion");
+    }
 
     // Load the CSS file
     if (!sSpellWorkConfig->GetAppConfig().themeName.isEmpty())
