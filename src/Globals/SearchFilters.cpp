@@ -5,7 +5,7 @@ namespace SpellWork::SearchFilters
 {
 GenericFilterData m_genericFilter;
 std::array<AttributesFilterData, 2> m_spellEntryFilter;
-std::array<AttributesFilterData, 2> m_spellEffectEntryFilter;
+std::array<AttributesFilterData, 2> m_spellEffectFilter;
 
 const uint32_t* GenericFilterData::GetSpellFamily() const
 {

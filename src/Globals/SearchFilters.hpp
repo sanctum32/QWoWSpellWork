@@ -55,6 +55,6 @@ namespace SpellWork::SearchFilters
     };
 
     extern GenericFilterData m_genericFilter;
-    extern std::array<AttributesFilterData, 2> m_spellEntryFilter;
-    extern std::array<AttributesFilterData, 2> m_spellEffectEntryFilter;
+    extern std::array<AttributesFilterData, 2> m_spellEntryFilter;          // Spell.dbc entry fields filter
+    extern std::array<AttributesFilterData, 2> m_spellEffectFilter;         // SpellEffect.dbc entry fields filter
 }

@@ -116,15 +116,29 @@ void MainWindow::PerformSpellSearch()
     }
 
     std::array<DBCFieldDataCompare, 2> spellAttrFilter;
+    std::array<DBCFieldDataCompare, 2> spellEffectAttrFilter;
     for (uint8_t i = 0; i < 2; ++i)
     {
-        const auto* fieldId = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetFieldId();
-        const auto* cmpType = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareType();
-        const auto& cmpValue = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareValue();
-        if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
+        // Spell.dbc filter
         {
-            auto& searchParam = spellAttrFilter[i];
-            searchParam.SetValues(SpellEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
+            const auto* fieldId = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetFieldId();
+            const auto* cmpType = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareType();
+            const auto& cmpValue = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareValue();
+            if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
+            {
+                spellAttrFilter.at(i).SetValues(SpellEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
+            }
+        }
+
+        // SpellEffect.dbc filter
+        {
+            const auto* fieldId = SpellWork::SearchFilters::m_spellEffectFilter.at(i).GetFieldId();
+            const auto* cmpType = SpellWork::SearchFilters::m_spellEffectFilter.at(i).GetCompareType();
+            const auto& cmpValue = SpellWork::SearchFilters::m_spellEffectFilter.at(i).GetCompareValue();
+            if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
+            {
+                spellEffectAttrFilter.at(i).SetValues(SpellEffectEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
+            }
         }
     }
 
@@ -195,10 +209,42 @@ void MainWindow::PerformSpellSearch()
             }
         }
 
-        if (std::any_of(spellAttrFilter.begin(), spellAttrFilter.end(), [_spellInfo](auto const advancedSrchParam)
+        // Spell.dbc filter
+        if (std::any_of(spellAttrFilter.begin(), spellAttrFilter.end(), [_spellInfo](const auto& compareParam)
         {
-            return !advancedSrchParam.DoCheck(_spellInfo);
+            return !compareParam.DoCheck(_spellInfo);
         }))
+        {
+            continue;
+        }
+
+        // SpellEffect.dbc filter
+        // return spells which has least one effect having effect matching field value
+        if (std::any_of(spellEffectAttrFilter.begin(), spellEffectAttrFilter.end(), [](const auto& compareParam)
+        {
+            return compareParam.hasData;
+        }))
+        {
+            canInsert = false;
+            for (const auto* effectInfo : _spellInfo.m_spellEffects)
+            {
+                if (effectInfo == nullptr)
+                {
+                    continue;
+                }
+
+                if (std::any_of(spellEffectAttrFilter.begin(), spellEffectAttrFilter.end(), [effectInfo](auto const& compareParam)
+                {
+                    return compareParam.DoCheck(*effectInfo);
+                }))
+                {
+                    canInsert = true;
+                    break;
+                }
+            }
+        }
+
+        if (!canInsert)
         {
             continue;
         }

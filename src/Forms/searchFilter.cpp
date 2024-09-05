@@ -77,12 +77,17 @@ inline void UpdateMainWindowState(MainWindow* mainWindow)
 
     using namespace SpellWork::SearchFilters;
     mainWindow->setEnabled(true);
-    const bool hasFilters = m_genericFilter.HasData() || std::any_of(m_spellEntryFilter.begin(), m_spellEntryFilter.end(), [](const auto& filter)
+    const bool hasBasicFilters = m_genericFilter.HasData();
+    const bool hasSpellFieldFilters = std::any_of(m_spellEntryFilter.begin(), m_spellEntryFilter.end(), [](const auto& filter)
+    {
+        return filter.HasData();
+    });
+    const bool hasSpellEffectFilters = std::any_of(m_spellEffectFilter.begin(), m_spellEffectFilter.end(), [](const auto& filter)
     {
         return filter.HasData();
     });
 
-    mainWindow->UpdateFilterStatus(hasFilters);
+    mainWindow->UpdateFilterStatus(hasBasicFilters || hasSpellFieldFilters || hasSpellEffectFilters);
 }
 
 void SearchFilter::onButtonClicked(QAbstractButton* button)
@@ -135,7 +140,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
 
         // Spell entry filter
         {
-            // Filter 1
+            // Filter 0
             {
                 auto& filter = m_spellEntryFilter.at(0);
                 // Field id
@@ -152,7 +157,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
                 }
                 filter.m_compareValue = ui.spellAttrInput0->text();
             }
-            // Filter 2
+            // Filter 1
             {
                 auto& filter = m_spellEntryFilter.at(1);
                 // Field id
@@ -169,6 +174,44 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
                 }
 
                 filter.m_compareValue = ui.spellAttrInput1->text();
+            }
+        }
+        // Spell effect filter
+        {
+            auto& genericFilter = m_genericFilter;
+            // Filter 0
+            {
+                auto& filter = m_spellEffectFilter.at(0);
+                // Field id
+                {
+                    auto& [id, value] = filter.m_entryField;
+                    id = ui.effectFieldName0->currentIndex();
+                    value = ui.effectFieldName0->itemData(id).toUInt();
+                }
+                // Compare type
+                {
+                    auto& [id, value] = filter.m_compareType;
+                    id = ui.effectAttrCompareType0->currentIndex();
+                    value = ui.effectAttrCompareType0->itemData(id).toUInt();
+                }
+                filter.m_compareValue = ui.effectAttrInput0->text();
+            }
+            // Filter 1
+            {
+                auto& filter = m_spellEffectFilter.at(1);
+                // Field id
+                {
+                    auto& [id, value] = filter.m_entryField;
+                    id = ui.effectFieldName1->currentIndex();
+                    value = ui.effectFieldName1->itemData(id).toUInt();
+                }
+                // Compare type
+                {
+                    auto& [id, value] = filter.m_compareType;
+                    id = ui.effectAttrCompareType1->currentIndex();
+                    value = ui.effectAttrCompareType1->itemData(id).toUInt();
+                }
+                filter.m_compareValue = ui.effectAttrInput1->text();
             }
         }
     }break;
@@ -268,16 +311,26 @@ void SearchFilter::closeEvent(QCloseEvent* /*e*/)
 void SearchFilter::showEvent(QShowEvent* /*event*/)
 {
     using namespace SpellWork::SearchFilters;
+    // Generic filter
     ui.SpellFamilyFilter->setCurrentIndex(m_genericFilter.m_spellFamily.first);
     ui.SpellAuraTypeFilter->setCurrentIndex(m_genericFilter.m_spellAuraType.first);
     ui.SpellEffectFilter->setCurrentIndex(m_genericFilter.m_spellEffect.first);
     ui.SpellTargetFilterA->setCurrentIndex(m_genericFilter.m_spellTargetA.first);
     ui.SpellTargetFilterB->setCurrentIndex(m_genericFilter.m_spellTargetB.first);
 
+    // Spell.dbc filter
     ui.spellAttrCompareType0->setCurrentIndex(m_spellEntryFilter.at(0).m_compareType.first);
     ui.spellAttrCompareType1->setCurrentIndex(m_spellEntryFilter.at(1).m_compareType.first);
     ui.spellAttrFieldName0->setCurrentIndex(m_spellEntryFilter.at(0).m_entryField.first);
     ui.spellAttrFieldName1->setCurrentIndex(m_spellEntryFilter.at(1).m_entryField.first);
     ui.spellAttrInput0->setText(m_spellEntryFilter.at(0).m_compareValue);
     ui.spellAttrInput1->setText(m_spellEntryFilter.at(1).m_compareValue);
+
+    // SpellEffect.dbc filter
+    ui.effectFieldName0->setCurrentIndex(m_spellEffectFilter.at(0).m_entryField.first);
+    ui.effectFieldName1->setCurrentIndex(m_spellEffectFilter.at(1).m_entryField.first);
+    ui.effectAttrCompareType0->setCurrentIndex(m_spellEffectFilter.at(0).m_compareType.first);
+    ui.effectAttrCompareType1->setCurrentIndex(m_spellEffectFilter.at(1).m_compareType.first);
+    ui.effectAttrInput0->setText(m_spellEffectFilter.at(0).m_compareValue);
+    ui.effectAttrInput1->setText(m_spellEffectFilter.at(1).m_compareValue);
 }
