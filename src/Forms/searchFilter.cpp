@@ -34,16 +34,16 @@ SearchFilter::SearchFilter(QWidget *parent) : QDialog(parent)
     }
 
     // Init advanced filter types
-    for (auto const& [fieldId, fieldInfo] : SpellEntryFields)
+    for (auto const& [fieldId, fieldData] : SpellEntryFields)
     {
-        ui.spellAttrFieldName0->addItem(fieldInfo.fieldName, fieldId);
-        ui.spellAttrFieldName1->addItem(fieldInfo.fieldName, fieldId);
+        ui.spellAttrFieldName0->addItem(fieldData.first, fieldId);
+        ui.spellAttrFieldName1->addItem(fieldData.first, fieldId);
     }
 
-    for (auto const& [fieldId, fieldInfo] : SpellEffectEntryFields)
+    for (auto const& [fieldId, fieldData] : SpellEffectEntryFields)
     {
-        ui.effectFieldName0->addItem(fieldInfo.fieldName, fieldId);
-        ui.effectFieldName1->addItem(fieldInfo.fieldName, fieldId);
+        ui.effectFieldName0->addItem(fieldData.first, fieldId);
+        ui.effectFieldName1->addItem(fieldData.first, fieldId);
     }
 
     uint8_t idVal = 0;

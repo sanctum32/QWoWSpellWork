@@ -115,71 +115,17 @@ void MainWindow::PerformSpellSearch()
         spellTargetB = *spelltarget_B;
     }
 
-    std::array<AdvancedSearchParams<SpellEntry>, 2> spellAttrFilter;
+    std::array<DBCFieldDataCompare, 2> spellAttrFilter;
     for (uint8_t i = 0; i < 2; ++i)
     {
-        if (!SpellWork::SearchFilters::m_spellEntryFilter.at(i).HasData())
+        const auto* fieldId = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetFieldId();
+        const auto* cmpType = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareType();
+        const auto& cmpValue = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareValue();
+        if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
         {
-            continue;
+            auto& searchParam = spellAttrFilter[i];
+            searchParam.SetValues(SpellEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
         }
-
-        const auto& inputValue = SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareVale();
-        const auto fieldId = *SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetFieldId();
-        ConditionCompareType compareType = ConditionCompareType(*SpellWork::SearchFilters::m_spellEntryFilter.at(i).GetCompareType());
-
-        auto const& itr = SpellEntryFields.find(fieldId);
-        if (itr == SpellEntryFields.end())
-        {
-            continue;
-        }
-
-        auto& searchParam = spellAttrFilter[i];
-        switch (itr->second.cmpType)
-        {
-        case CompareTypes::SignedNumber:
-        {
-            bool ok = false;
-            const int32_t val = inputValue.toInt(&ok);
-            if (ok)
-            {
-                searchParam.int32val = val;
-            }
-
-            break;
-        }
-        case CompareTypes::UnsignedNumber:
-        {
-            bool ok = false;
-            const uint32_t val = inputValue.toUInt(&ok);
-            if (ok)
-            {
-                searchParam.uint32val = val;
-            }
-
-            break;
-        }
-        case CompareTypes::Float:
-        {
-            bool ok = false;
-            const float val = inputValue.toFloat(&ok);
-            if (ok)
-            {
-                searchParam.floatVal = val;
-            }
-
-            break;
-
-        }
-        case CompareTypes::String:
-            searchParam.textVal = inputValue;
-            break;
-        default:
-            break;
-        }
-
-        searchParam.spellFieldId = itr->first;
-        searchParam.compareType = compareType;
-        searchParam.hasData = true;
     }
 
     std::vector<std::pair<QTableWidgetItem* /*id*/, QTableWidgetItem* /*name*/>> foundEntries;
@@ -251,7 +197,7 @@ void MainWindow::PerformSpellSearch()
 
         if (std::any_of(spellAttrFilter.begin(), spellAttrFilter.end(), [_spellInfo](auto const advancedSrchParam)
         {
-            return !advancedSrchParam.CheckSpellFields(_spellInfo);
+            return !advancedSrchParam.DoCheck(_spellInfo);
         }))
         {
             continue;

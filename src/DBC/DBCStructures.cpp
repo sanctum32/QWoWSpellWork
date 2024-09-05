@@ -534,7 +534,7 @@ FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
 }
 
 // For advanced filter
-const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEntryFields =
+const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEntryFields =
 {
     {0, {"Id", CompareTypes::UnsignedNumber }},
     {1, {"Attributes", CompareTypes::UnsignedNumber}},
@@ -586,7 +586,7 @@ const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEntryFields =
     {47, {"ResearchProject", CompareTypes::UnsignedNumber}}
 };
 
-const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEffectEntryFields =
+const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEffectEntryFields =
 {
     {0, {"Id", CompareTypes::UnsignedNumber}},
     {1, {"Effect", CompareTypes::UnsignedNumber}},

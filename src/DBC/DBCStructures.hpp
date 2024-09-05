@@ -750,12 +750,5 @@ struct FactionEntry
     }
 };
 
-// For advanced filter
-struct DbcFieldCMPInfo
-{
-    QString fieldName;
-    CompareTypes cmpType;
-};
-
-extern const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEntryFields;
-extern const std::map<uint8_t /*fieldId*/, DbcFieldCMPInfo /*info*/> SpellEffectEntryFields;
+extern const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEntryFields;
+extern const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEffectEntryFields;

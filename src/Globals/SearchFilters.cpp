@@ -32,12 +32,12 @@ const uint32_t *GenericFilterData::GetSpellTargetB() const
     return m_spellTargetB.first != -1 ? &m_spellTargetB.second : nullptr;
 }
 
-const uint32_t *AttributesFilterData::GetFieldId() const
+const uint8_t *AttributesFilterData::GetFieldId() const
 {
     return m_entryField.first != -1 ? &m_entryField.second : nullptr;
 }
 
-const uint32_t *AttributesFilterData::GetCompareType() const
+const uint8_t *AttributesFilterData::GetCompareType() const
 {
     return m_compareType.first != -1 ? &m_compareType.second : nullptr;
 }

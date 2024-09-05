@@ -3,6 +3,7 @@
 #include <QString>
 #include <QStringList>
 #include <QStringView>
+#include <map>
 #include <optional>
 
 // in actual defitions only one flag should be used.
@@ -109,20 +110,95 @@ static bool CompareStringValues(ConditionCompareType type, QStringView xVal, QSt
     return false;
 }
 
-template<class T>
-struct AdvancedSearchParams
+
+struct DBCFieldDataCompare
 {
     bool hasData = false;
-    // compare (B) values
-    ConditionCompareType compareType;
-    std::optional<int32_t> int32val;
-    std::optional<uint32_t> uint32val;
-    std::optional<float> floatVal;
-    std::optional<QString> textVal;
 
-    uint8_t spellFieldId;
+    ConditionCompareType m_compareType;
+    std::optional<int32_t> m_int32val;
+    std::optional<uint32_t> m_uint32val;
+    std::optional<float> m_floatVal;
+    std::optional<QString> m_textVal;
+    uint8_t m_fieldId;
 
-    bool CheckSpellFields(const T& dbcData) const
+    /**
+     * @brief SetValues
+     * Initializes comparition values
+     *
+     * @param attributeData
+     * @param fieldId
+     * @param cmpType
+     * @param inputValue
+     */
+    void SetValues(const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>>& attributeData,
+                   uint8_t fieldId,
+                   const ConditionCompareType cmpType,
+                   const QString& inputValue)
+    {
+        const auto& itr = attributeData.find(fieldId);
+        if (itr == attributeData.end())
+        {
+            return;
+        }
+
+        switch (itr->second.second)
+        {
+            case CompareTypes::SignedNumber:
+            {
+                bool ok = false;
+                const int32_t val = inputValue.toInt(&ok);
+                if (ok)
+                {
+                    m_int32val = val;
+                }
+
+            break;
+        }
+        case CompareTypes::UnsignedNumber:
+        {
+            bool ok = false;
+            const uint32_t val = inputValue.toUInt(&ok);
+            if (ok)
+            {
+                m_uint32val = val;
+            }
+
+            break;
+        }
+        case CompareTypes::Float:
+        {
+            bool ok = false;
+            const float val = inputValue.toFloat(&ok);
+            if (ok)
+            {
+                m_floatVal = val;
+            }
+
+            break;
+
+        }
+        case CompareTypes::String:
+            m_textVal = inputValue;
+            break;
+        default:
+            break;
+        }
+
+        m_fieldId = itr->first;
+        m_compareType = cmpType;
+        hasData = true;
+    }
+
+    /**
+     * @brief DoCheck
+     * function performs A(dbc field) and B(input) comparition
+     *
+     * @param dbcEntry - dbc entry
+     * @return true if comparition is successful
+     */
+    template<typename T>
+    bool DoCheck(const T& dbcEntry) const
     {
         // Nothing to check
         if (!hasData)
@@ -130,7 +206,7 @@ struct AdvancedSearchParams
             return true;
         }
 
-        switch (compareType)
+        switch (m_compareType)
         {
         case ConditionCompareType::NotEqual:
         case ConditionCompareType::Equal:
@@ -139,28 +215,28 @@ struct AdvancedSearchParams
         case ConditionCompareType::LowerThan:
         case ConditionCompareType::LowerOrEqual:
         {
-            const auto& aVal = dbcData.GetField(spellFieldId);  // A value
-            if (int32val.has_value())
+            const auto& aVal = dbcEntry.GetField(m_fieldId);  // A value
+            if (m_int32val.has_value())
             {
-                return CompareNumericValues(compareType, aVal.int32Val, *int32val);
+                return CompareNumericValues(m_compareType, aVal.int32Val, *m_int32val);
             }
-            else if (uint32val.has_value())
+            else if (m_uint32val.has_value())
             {
-                return CompareNumericValues(compareType, aVal.uint32Val, *uint32val);
+                return CompareNumericValues(m_compareType, aVal.uint32Val, *m_uint32val);
             }
-            else if (floatVal.has_value())
+            else if (m_floatVal.has_value())
             {
-                return CompareNumericValues(compareType, aVal.floatVal, *floatVal);
+                return CompareNumericValues(m_compareType, aVal.floatVal, *m_floatVal);
             }
             break;
         }
         case ConditionCompareType::BitValue:
         case ConditionCompareType::NoBitValue:
         {
-            const auto& aVal = dbcData.GetField(spellFieldId);
-            if (uint32val.has_value())
+            const auto& aVal = dbcEntry.GetField(m_fieldId);
+            if (m_uint32val.has_value())
             {
-                return CompareBitMasks(compareType, aVal.uint32Val, *uint32val);
+                return CompareBitMasks(m_compareType, aVal.uint32Val, *m_uint32val);
             }
             break;
         }
@@ -168,10 +244,10 @@ struct AdvancedSearchParams
         case ConditionCompareType::EndsWith:
         case ConditionCompareType::Contains:
         {
-            const auto& aVal = dbcData.GetField(spellFieldId);
-            if (textVal.has_value())
+            const auto& aVal = dbcEntry.GetField(m_fieldId);
+            if (m_textVal.has_value())
             {
-                return CompareStringValues(compareType, aVal.textVal, *textVal);
+                return CompareStringValues(m_compareType, aVal.textVal, *m_textVal);
             }
             break;
         }

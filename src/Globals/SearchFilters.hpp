@@ -2,6 +2,8 @@
 #include <QString>
 #include <array>
 
+enum class ConditionCompareType : uint8_t;
+
 namespace SpellWork::SearchFilters
 {
     struct GenericFilterData
@@ -40,15 +42,15 @@ namespace SpellWork::SearchFilters
 
         inline bool HasData() const
         {
-            return m_entryField.first != -1 && m_compareType.first != -1;
+            return m_entryField.first != -1 && m_compareType.first != -1 && !m_compareValue.isEmpty();
         }
 
-        const uint32_t* GetFieldId() const;
-        const uint32_t* GetCompareType() const;
-        const QString& GetCompareVale() const { return m_compareValue; }
+        const uint8_t* GetFieldId() const;
+        const uint8_t* GetCompareType() const;
+        const QString& GetCompareValue() const { return m_compareValue; }
 
-        std::pair<int /*comboBoxindex*/, uint32_t /*value*/> m_entryField{-1, 0};
-        std::pair<int /*comboBoxindex*/, uint32_t /*value*/> m_compareType{-1, 0};
+        std::pair<int /*comboBoxindex*/, uint8_t /*value*/> m_entryField{-1, 0};
+        std::pair<int /*comboBoxindex*/, uint8_t /*value*/> m_compareType{-1, 0};
         QString m_compareValue;
     };
 
