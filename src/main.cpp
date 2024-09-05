@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
                 qCDebug(SQL) << "Ping status: " << (lastResult == 0 ? "success" : "failed") << (" (") << lastResult << ")";
             }
         });
+        sqlPingThread.detach();
     }
 #endif // SPELLWORK_BUILD_SQL
 
