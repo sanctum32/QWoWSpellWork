@@ -30,6 +30,21 @@ enum class ConditionCompareType : uint8_t
     Contains        = 10    // x Contains y
 };
 
+constexpr std::array<const char*, 11> ConditionCompareTypeStr =
+{
+    "x != y",           // 0
+    "x == y",           // 1
+    "x > y",            // 2
+    "x >= y",           // 3
+    "x < y",            // 4
+    "x <= y",           // 5
+    "(x & y) != 0",     // 6
+    "(x & y) == 0",     // 7
+    "x Starts With y",  // 8
+    "x Ends With y",    // 9
+    "x Contains y"      // 10
+};
+
 /**
  * @brief DoConditionCompare
  * @param type - see enum ConditionCompareType
@@ -61,7 +76,8 @@ static bool CompareNumericValues(ConditionCompareType type, T xVal, T yVal)
     }
 }
 
-static bool CompareBitMasks(ConditionCompareType type, uint32_t xVal, uint32_t yVal)
+template<typename T>
+static bool CompareBitMasks(ConditionCompareType type, T xVal, T yVal)
 {
     using enum ConditionCompareType;
 
@@ -97,6 +113,7 @@ template<class T>
 struct AdvancedSearchParams
 {
     bool hasData = false;
+    // compare (B) values
     ConditionCompareType compareType;
     std::optional<int32_t> int32val;
     std::optional<uint32_t> uint32val;
@@ -122,7 +139,7 @@ struct AdvancedSearchParams
         case ConditionCompareType::LowerThan:
         case ConditionCompareType::LowerOrEqual:
         {
-            const auto& aVal = dbcData.GetField(spellFieldId);
+            const auto& aVal = dbcData.GetField(spellFieldId);  // A value
             if (int32val.has_value())
             {
                 return CompareNumericValues(compareType, aVal.int32Val, *int32val);

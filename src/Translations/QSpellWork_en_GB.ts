@@ -105,8 +105,8 @@
         <location filename="../Forms/searchFilter.ui" line="270"/>
         <location filename="../Forms/searchFilter.ui" line="283"/>
         <location filename="../Forms/searchFilter.ui" line="296"/>
+        <location filename="../Forms/searchFilter.ui" line="411"/>
         <location filename="../Forms/searchFilter.ui" line="418"/>
-        <location filename="../Forms/searchFilter.ui" line="425"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -146,35 +146,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="319"/>
+        <location filename="../Forms/searchFilter.ui" line="312"/>
         <source>Spell entry attributes filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Forms/searchFilter.ui" line="94"/>
         <location filename="../Forms/searchFilter.ui" line="107"/>
-        <location filename="../Forms/searchFilter.ui" line="334"/>
-        <location filename="../Forms/searchFilter.ui" line="392"/>
+        <location filename="../Forms/searchFilter.ui" line="327"/>
+        <location filename="../Forms/searchFilter.ui" line="385"/>
         <source>Compare type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/searchFilter.ui" line="363"/>
-        <location filename="../Forms/searchFilter.ui" line="411"/>
+        <location filename="../Forms/searchFilter.ui" line="356"/>
+        <location filename="../Forms/searchFilter.ui" line="404"/>
         <source>Spell entry field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Forms/searchFilter.ui" line="68"/>
         <location filename="../Forms/searchFilter.ui" line="133"/>
-        <location filename="../Forms/searchFilter.ui" line="347"/>
-        <location filename="../Forms/searchFilter.ui" line="376"/>
+        <location filename="../Forms/searchFilter.ui" line="340"/>
+        <location filename="../Forms/searchFilter.ui" line="369"/>
         <source>value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../Forms/searchFilter.ui" line="306"/>
-        <source>CheckBox</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

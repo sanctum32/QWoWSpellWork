@@ -1,4 +1,5 @@
 #include "SearchFilters.hpp"
+#include "ValueComparition.hpp"
 #include "mainwindow.hpp"
 #include "DBCStructures.hpp"
 #include "JsonData.hpp"
@@ -44,21 +45,6 @@ SearchFilter::SearchFilter(QWidget *parent) : QDialog(parent)
         ui.effectFieldName0->addItem(fieldInfo.fieldName, fieldId);
         ui.effectFieldName1->addItem(fieldInfo.fieldName, fieldId);
     }
-
-    constexpr std::array<const char*, 11> ConditionCompareTypeStr =
-    {
-        "x != y",           // 0
-        "x == y",           // 1
-        "x > y",            // 2
-        "x >= y",           // 3
-        "x < y",            // 4
-        "x <= y",           // 5
-        "(x & y) != 0",     // 6
-        "(x & y) == 0",     // 7
-        "x Starts With y",  // 8
-        "x Ends With y",    // 9
-        "x Contains y"      // 10
-    };
 
     uint8_t idVal = 0;
     for (auto const* str : ConditionCompareTypeStr)
