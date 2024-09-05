@@ -15,13 +15,19 @@ SpellWorkSQL::~SpellWorkSQL()
 
 bool SpellWorkSQL::Init()
 {
+    const auto& settings = sSpellWorkConfig->GetSQLConfig();
+    if (!settings.enable)
+    {
+        return false;
+    }
+
     if (initialized)
     {
         return m_connection != nullptr;
     }
 
     initialized = true;
-    const auto& settings = sSpellWorkConfig->GetSQLConfig();
+
     m_connection = mysql_init(nullptr);
 
     if (m_connection == nullptr)
