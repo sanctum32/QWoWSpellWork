@@ -317,6 +317,13 @@
             </column>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="clearResultsBtn">
+            <property name="text">
+             <string>Clear results</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>

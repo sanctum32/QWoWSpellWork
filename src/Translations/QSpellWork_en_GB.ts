@@ -74,12 +74,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="342"/>
+        <location filename="../Forms/mainwindow.ui" line="323"/>
+        <source>Clear results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Forms/mainwindow.ui" line="349"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="348"/>
+        <location filename="../Forms/mainwindow.ui" line="355"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>

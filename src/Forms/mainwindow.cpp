@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QObject::connect(ui.resultList,       &QTableWidget::itemClicked,    this, &MainWindow::onResultListClick);
     QObject::connect(ui.levelScalingSlider, &QSlider::valueChanged, this, &MainWindow::onLevelScalingSliderValueChange);
     QObject::connect(ui.filtersBtn,       &QPushButton::clicked, this, &MainWindow::onFiltersBtnClick);
+    QObject::connect(ui.clearResultsBtn,  &QPushButton::clicked, this, &MainWindow::onClearResultsBtn);
 }
 
 MainWindow::~MainWindow() = default;

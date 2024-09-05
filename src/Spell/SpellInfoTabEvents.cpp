@@ -24,15 +24,15 @@ void MainWindow::onSpellIdNameInputReturnPressed()
 
 void MainWindow::onResultListClick(QTableWidgetItem *item)
 {
-    if (lastSpellSearchRowId == item->row())
+    if (m_lastSpellSearchRowId == item->row())
     {
         return;
     }
 
-    lastSpellSearchRowId = item->row();
+    m_lastSpellSearchRowId = item->row();
 
     // Select only number field
-    const auto* spellRowItem = ui.resultList->item(lastSpellSearchRowId, 0);
+    const auto* spellRowItem = ui.resultList->item(m_lastSpellSearchRowId, 0);
     if (spellRowItem == nullptr)
     {
         return;
@@ -59,7 +59,7 @@ void MainWindow::PerformSpellSearch()
 
     auto* resultList = ui.resultList;
     resultList->clearContents();
-    lastSpellSearchRowId = -1;
+    m_lastSpellSearchRowId = -1;
 
     if (sDBCStores->GetSpellEntries().empty())
     {
@@ -324,4 +324,13 @@ void MainWindow::onLevelScalingSliderValueChange()
 void MainWindow::onFiltersBtnClick()
 {
     m_searchFilter->open();
+}
+
+void MainWindow::onClearResultsBtn()
+{
+    m_lastSpellSearchRowId = -1;
+    ui.spellInfoText->clear();
+    ui.resultList->clearContents();
+    ui.spellIdNameInput->clear();
+    ui.resultCountLabel->setText("Found 0 results");
 }

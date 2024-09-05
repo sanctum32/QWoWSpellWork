@@ -34,6 +34,7 @@ private slots:
     void onResultListClick(QTableWidgetItem *item);
     void onLevelScalingSliderValueChange();
     void onFiltersBtnClick();
+    void onClearResultsBtn();
 
 private:
     Ui::MainWindow ui;
@@ -44,5 +45,5 @@ private:
 
 // Generic functions
     void PerformSpellSearch();
-    int32_t lastSpellSearchRowId{-1};    // Last select search list row id
+    int32_t m_lastSpellSearchRowId{-1};    // Last select search list row id
 };
