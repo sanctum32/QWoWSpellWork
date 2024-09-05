@@ -8,7 +8,6 @@ Q_DECLARE_LOGGING_CATEGORY(SQL)
 
 class SpellWorkSQL
 {
-    std::thread m_pingThread;
     MYSQL* m_connection{nullptr};
     bool initialized{false};
     SpellWorkSQL() = default;
@@ -27,8 +26,6 @@ public:
     // Initializes and creates sql connection
     // Must be called only once
     bool Init();
-
-    void ShutdownThreads();
 
     // Returns active sql connection
     auto* GetConnection() const { return m_connection; }

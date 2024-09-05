@@ -1,38 +1,16 @@
 #ifdef SPELLWORK_BUILD_SQL
 #include "sqlConnection.hpp"
 #include "appSettings.hpp"
-#include "mainwindow.hpp"
 
 Q_LOGGING_CATEGORY(SQL, "spellwork.sql");
-
-void PingSQL(MYSQL* connection, unsigned int delay)
-{
-    int lastResult = -1;
-    if (connection == nullptr || _mainWindow == nullptr)
-    {
-        return;
-    }
-
-    while(true)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-        int result = mysql_ping(connection);
-        if (result != lastResult)
-        {
-            lastResult = result;
-            _mainWindow->UpdateSqlStatus(lastResult == 0);
-        }
-    }
-}
 
 SpellWorkSQL::~SpellWorkSQL()
 {
     if (m_connection != nullptr)
     {
         mysql_close(m_connection);
+        qCDebug(SQL) << "Disconnected";
     }
-
-    ShutdownThreads();
 }
 
 bool SpellWorkSQL::Init()
@@ -46,6 +24,11 @@ bool SpellWorkSQL::Init()
     const auto& settings = sSpellWorkConfig->GetSQLConfig();
     m_connection = mysql_init(nullptr);
 
+    if (m_connection == nullptr)
+    {
+        qCDebug(SQL) << "Failed to initialize connection. Error: " << mysql_error(m_connection);
+    }
+
     mysql_options(m_connection, MYSQL_OPT_RECONNECT, &settings.canReconnect);
 
     if (mysql_real_connect(m_connection,
@@ -56,23 +39,13 @@ bool SpellWorkSQL::Init()
                            settings.port,
                            nullptr, 0) == nullptr)
     {
-        qCDebug(SQL) << "SQL: Failed to connect. Error: " << mysql_error(m_connection);
+        qCDebug(SQL) << "Failed to connect. Error: " << mysql_error(m_connection);
         return false;
     }
 
-    qCDebug(SQL) << "SQL: connected";
+    qCDebug(SQL) << "connected";
 
-    if (settings.pingDelayInMS != 0)
-    {
-        m_pingThread = std::thread(PingSQL, m_connection, settings.pingDelayInMS);
-    }
     return true;
-}
-
-void SpellWorkSQL::ShutdownThreads()
-{
-    if (m_pingThread.joinable())
-        m_pingThread.join();
 }
 
 #endif

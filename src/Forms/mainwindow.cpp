@@ -3,7 +3,6 @@
 #include <QCloseEvent>
 
 Q_LOGGING_CATEGORY(SPELLINFO_TAB, "spellwork.json");
-MainWindow* _mainWindow = nullptr;
 
 // Base implementation
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)

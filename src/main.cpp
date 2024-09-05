@@ -8,6 +8,7 @@
 #include <QStatusBar>
 #include <QJsonArray>
 #include <QFile>
+#include <thread>
 
 // App
 #include "mainwindow.hpp"
@@ -68,6 +69,34 @@ int main(int argc, char *argv[])
     mainWindow.UpdateFilterStatus(false);
     mainWindow.show();
 
-    _mainWindow = &mainWindow;
+#ifdef SPELLWORK_BUILD_SQL
+    if (sSpellWorkConfig->GetSQLConfig().enable)
+    {
+        std::jthread sqlPingThread([&mainWindow, sqlConn = sSpellWorkSQL->GetConnection(), delay = sSpellWorkConfig->GetSQLConfig().pingDelayInMS]
+        {
+            qCDebug(SQL) << "Ping thread initialized";
+            int lastResult = -1;
+            if (sqlConn == nullptr)
+            {
+                qCDebug(SQL) << "Ping thread stopped: sql connection was not initialized";
+                return;
+            }
+
+            while(true)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+                int result = mysql_ping(sqlConn);
+                if (result != lastResult)
+                {
+                    lastResult = result;
+                    mainWindow.UpdateSqlStatus(lastResult == 0);
+                }
+
+                qCDebug(SQL) << "Ping status: " << (lastResult == 0 ? "success" : "failed") << (" (") << lastResult << ")";
+            }
+        });
+    }
+#endif // SPELLWORK_BUILD_SQL
+
     return a.exec();
 }

@@ -46,5 +46,3 @@ private:
 
     std::unique_ptr<SearchFilter> searchFilterForm;
 };
-
-extern MainWindow* _mainWindow;
