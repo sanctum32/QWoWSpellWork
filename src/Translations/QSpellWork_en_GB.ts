@@ -39,27 +39,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="218"/>
+        <location filename="../Forms/mainwindow.ui" line="221"/>
         <source>Extra filters: &lt;span style=&quot;color:red&quot;&gt;inactive&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="228"/>
+        <location filename="../Forms/mainwindow.ui" line="231"/>
         <source>Spell scaling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="269"/>
+        <location filename="../Forms/mainwindow.ui" line="299"/>
         <source>Found 0 results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="310"/>
+        <location filename="../Forms/mainwindow.ui" line="340"/>
         <source>id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="315"/>
+        <location filename="../Forms/mainwindow.ui" line="345"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -69,22 +69,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="259"/>
+        <location filename="../Forms/mainwindow.ui" line="289"/>
         <source>Level: 1 (max 85)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="323"/>
+        <location filename="../Forms/mainwindow.ui" line="353"/>
         <source>Clear results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="349"/>
+        <location filename="../Forms/mainwindow.ui" line="379"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Forms/mainwindow.ui" line="355"/>
+        <location filename="../Forms/mainwindow.ui" line="385"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
