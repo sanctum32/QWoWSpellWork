@@ -435,7 +435,7 @@ SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
     _getSpellShapeshiftId()           = record.getUInt(44);
     _getSpellTargetRestrictionsId()   = record.getUInt(45);
     //SpellTotemsId()               = record.getUInt(46);
-    //ResearchProject()             = record.getUInt(47);
+    _getResearchProject()             = record.getUInt(47);
 
     if (getDescription().isEmpty())
     {

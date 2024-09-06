@@ -676,7 +676,7 @@ struct SpellEntry
     bool m_IsServerSide{false};
 
 private:
-    std::array<DbcEntryValues, 47> _fields;
+    std::array<DbcEntryValues, 48> _fields;
     auto& _getID() { return _fields[0]; }
     auto& _getAttribute0() { return _fields[1]; }
     auto& _getAttribute1() { return _fields[2]; }
