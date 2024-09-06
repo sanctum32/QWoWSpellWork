@@ -3,7 +3,9 @@
 #include <QLoggingCategory>
 #include <mysql/mysql.h>
 #include <thread>
+#include <atomic>
 
+extern std::atomic_bool isSQLShuttingDown;
 Q_DECLARE_LOGGING_CATEGORY(SQL)
 
 class SpellWorkSQL

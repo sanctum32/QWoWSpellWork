@@ -70,30 +70,50 @@ int main(int argc, char *argv[])
     mainWindow.show();
 
 #ifdef SPELLWORK_BUILD_SQL
-    if (sSpellWorkConfig->GetSQLConfig().enable)
+    std::jthread sqlPingThread;
+    if (sSpellWorkConfig->GetSQLConfig().enable && sSpellWorkConfig->GetSQLConfig().pingDelayInMS > 0)
     {
-        std::jthread sqlPingThread([&mainWindow, sqlConn = sSpellWorkSQL->GetConnection(), delay = sSpellWorkConfig->GetSQLConfig().pingDelayInMS]
+        sqlPingThread = std::jthread([&mainWindow, delayInMS = sSpellWorkConfig->GetSQLConfig().pingDelayInMS]
         {
+            uint32_t timer = delayInMS; // first ping
             qCDebug(SQL) << "Ping thread initialized";
             int lastResult = -1;
-            if (sqlConn == nullptr)
+            if (sSpellWorkSQL->GetConnection() == nullptr)
             {
                 qCDebug(SQL) << "Ping thread stopped: sql connection was not initialized";
                 return;
             }
 
-            while(true)
+            while (!isSQLShuttingDown)
             {
-                std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-                int result = mysql_ping(sqlConn);
-                if (result != lastResult)
+                if (timer >= delayInMS)
                 {
-                    lastResult = result;
-                    mainWindow.UpdateSqlStatus(lastResult == 0);
+                    int result = mysql_ping(sSpellWorkSQL->GetConnection());
+                    if (result != lastResult)
+                    {
+                        lastResult = result;
+                        mainWindow.UpdateSqlStatus(lastResult == 0);
+                    }
+
+                    qCDebug(SQL) << "Ping status: " << (lastResult == 0 ? "success" : "failed") << (" (") << lastResult << ")";
+                    timer = 0;
                 }
 
-                qCDebug(SQL) << "Ping status: " << (lastResult == 0 ? "success" : "failed") << (" (") << lastResult << ")";
+                if (isSQLShuttingDown)
+                {
+                    break;
+                }
+                const auto timeBefore = std::chrono::high_resolution_clock::now();
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                if (isSQLShuttingDown)
+                {
+                    break;
+                }
+                const auto timerAfter = std::chrono::high_resolution_clock::now();
+
+                timer += std::chrono::duration_cast<std::chrono::milliseconds>(timerAfter - timeBefore).count();
             }
+            qCDebug(SQL) << "SQL ping thread finished was terminated";
         });
         sqlPingThread.detach();
     }

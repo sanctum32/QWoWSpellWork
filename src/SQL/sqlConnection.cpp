@@ -2,6 +2,7 @@
 #include "sqlConnection.hpp"
 #include "appSettings.hpp"
 
+std::atomic_bool isSQLShuttingDown = false;
 Q_LOGGING_CATEGORY(SQL, "spellwork.sql");
 
 SpellWorkSQL::~SpellWorkSQL()
@@ -9,8 +10,11 @@ SpellWorkSQL::~SpellWorkSQL()
     if (m_connection != nullptr)
     {
         mysql_close(m_connection);
+
         qCDebug(SQL) << "Disconnected";
     }
+
+    isSQLShuttingDown = true;
 }
 
 bool SpellWorkSQL::Init()
