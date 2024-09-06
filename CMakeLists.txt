@@ -52,6 +52,7 @@ set(PROJECT_SOURCES
     src/Globals/appSettings.cpp
     src/Globals/SharedDefines.hpp
     src/Globals/ValueComparition.hpp
+    src/Globals/ValueComparition.cpp
     src/Globals/SearchFiltersStore.hpp
     src/Globals/SearchFiltersStore.cpp
     src/Enums/SpellEnums.hpp

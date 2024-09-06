@@ -34,7 +34,7 @@ struct SpellEffectEntry
     SpellEffectEntry(const MYSQL_ROW& result);
 
     inline bool HasSpellClassMask() const { return getEffectSpellClassMaskA() != 0 || getEffectSpellClassMaskB() != 0 || getEffectSpellClassMaskC() != 0; }
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iifiiiffiiiiiifiifiiiiiiiix";
     }
@@ -116,7 +116,7 @@ private:
 public:
     QStringView GetName() const { return Name; }
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "ixxs";
     }
@@ -135,7 +135,7 @@ struct SpellCategoriesEntry
     uint32_t    PreventionType{};                               // 5      m_preventionType
     //uint32_t    StartRecoveryCategory{};                        // 6      m_startRecoveryCategory
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiiix";
     }
@@ -152,7 +152,7 @@ struct SpellClassOptionsEntry
     uint32_t    SpellFamilyName{};                            // 5       m_spellClassSet
     //QString     Description;                                // 6       4.0.0
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiix";
     }
@@ -170,7 +170,7 @@ struct SpellTargetRestrictionsEntry
     uint32_t    TargetCreatureType{};                           // 4       m_targetCreatureType
     uint32_t    Targets{};                                      // 5       m_targets
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "ifiiii";
     }
@@ -186,7 +186,7 @@ struct SpellShapeshiftEntry
     std::array<uint32_t, 2> ShapeshiftMask{};                   // 3 - 4
     //uint32_t    StanceBarOrder{};                               // 5 - m_stanceBarOrder not used
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiii";
     }
@@ -212,7 +212,7 @@ struct SkillLineAbilityEntry
     uint32_t    NumSkillUps;                                    // 12
     //uint32_t    UniqueBit;                                      // 13
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiixxxxiixiiix";
     }
@@ -234,7 +234,7 @@ public:
     //QString alternateVerb;                                     // 6        m_alternateVerb_lang
     //uint32_t    canLink{};                                     // 7        m_canLink (prof. with recipes)
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "ixsxxxx";
     }
@@ -249,7 +249,7 @@ struct SpellReagentsEntry
     std::array<int32_t, MAX_SPELL_REAGENTS> Reagent{};          // 54-61    m_reagent
     std::array<uint32_t, MAX_SPELL_REAGENTS> ReagentCount{};    // 62-69    m_reagentCount
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
     }
@@ -265,7 +265,7 @@ struct SpellLevelsEntry
     uint32_t    maxLevel{};                                     // 2       m_maxLevel
     uint32_t    spellLevel{};                                   // 3       m_spellLevel
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiii";
     }
@@ -281,7 +281,7 @@ struct SpellEquippedItemsEntry
     int32_t     EquippedItemInventoryTypeMask{};                // 72       m_equippedItemInvTypes (mask)
     int32_t     EquippedItemSubClassMask{};                     // 71       m_equippedItemSubclass (mask)
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiii";
     }
@@ -304,7 +304,7 @@ public:
     QStringView GetName() const { return Name; }
     //QString   ShortName;                                   // 23-38    m_displayNameShort_lang
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iffffxsx";
     }
@@ -321,7 +321,7 @@ struct SpellAuraOptionsEntry
     uint32_t    procCharges{};                                  // 3       m_procCharges
     uint32_t    procFlags{};                                    // 4       m_procTypeMask
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiii";
     }
@@ -337,7 +337,7 @@ struct SpellCastTimesEntry
     float       CastTimePerLevel{};                             // 2 unsure / per skill?
     int32_t     MinCastTime{};                                  // 3 unsure
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iifi";
     }
@@ -353,7 +353,7 @@ struct SpellCooldownsEntry
     uint32_t    RecoveryTime{};                                 // 2       m_recoveryTime
     uint32_t    StartRecoveryTime{};                            // 3      m_startRecoveryTime
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiii";
     }
@@ -367,7 +367,7 @@ struct SpellDurationEntry
     uint32_t    Id{};                                           // 0
     std::array<int32_t, 3> Duration{};  // 1 - 3
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiii";
     }
@@ -387,7 +387,7 @@ struct SpellPowerEntry
     //uint32_t    PowerDisplayId{};                               // 6       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
     //float       ManaCostPercentageFloat{};                      // 7       4.3.0
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiixixx";
     }
@@ -403,7 +403,7 @@ struct SpellInterruptsEntry
     std::array<uint32_t, 2> ChannelInterruptFlags{};            // 3 - 4       m_channelInterruptFlags
     uint32_t    InterruptFlags{};                               // 5       m_interruptFlags
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiii";
     }
@@ -424,7 +424,7 @@ struct SpellAuraRestrictionsEntry
     uint32_t    excludeCasterAuraSpell{};                       // 7       m_excludeCasterAuraSpell
     uint32_t    excludeTargetAuraSpell{};                       // 8       m_excludeTargetAuraSpell
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiiiiii";
     }
@@ -439,7 +439,7 @@ struct AreaGroupEntry
     std::array<uint32_t, MAX_GROUP_AREA_IDS> AreaId{};          // 1-6
     uint32_t  nextGroup{};                                      // 7 index of next group
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiiiii";
     }
@@ -477,7 +477,7 @@ public:
     //uint32_t World_pvp_ID{};                                    // 24
     //int32_t PvpCombatWorldStateID{};                            // 25- worldStateId
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iixxxxxxxxxsxxxxxxxxxxxxxx";
     }
@@ -496,7 +496,7 @@ struct SpellCastingRequirementsEntry
     //uint32_t RequiredAuraVision{};                             // 5
     uint32_t RequiresSpellFocus{};                              // 6
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "ixxxixi";
     }
@@ -518,7 +518,7 @@ struct SpellScalingEntry
     float       NerfFactor{};                                   // 14        some coefficient, mostly 1.0f
     int32_t     NerfMaxLevel{};                                 // 15        some level
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiiffffffffffi";
     }
@@ -532,7 +532,7 @@ struct GtSpellScalingEntry
     uint32_t    Id{};                                           // 0
     float value{};                                              // 1
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "if";
     }
@@ -548,7 +548,7 @@ struct OverrideSpellDataEntry
     //uint32_t      unk0;                                       // 11
     //QString   SpellBarName;                                   // 12
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiiiiiiixx";
     }
@@ -573,7 +573,7 @@ public:
     //uint32_t    Unk7{};                                       // 9
     //int32_t     Unk8{};                                       // 11
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "isxxxxxxxxx";
     }
@@ -588,7 +588,7 @@ struct SpellRadiusEntry
     float     RadiusPerLevel{};                                 // 2
     float     RadiusMax{};                                      // 3
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "ifff";
     }
@@ -651,7 +651,7 @@ struct SpellEntry
     //const auto getSpellTotemsId() const { return _fields[46].uint32Val; }  // 46
     const auto getResearchProject() const { return _fields[47].uint32Val; }  // 47
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "iiiiiiiiiiiiiiifiiiissssixxxxxiiiiiiixiiiiiiixi";
     }
@@ -744,11 +744,17 @@ struct FactionEntry
     //QString   Description;                                     // 24
     //uint32_t  Expansion{};                                     // 25
 
-    static char const* GetDBCFormat()
+    static constexpr const char* GetDBCFormat()
     {
         return "ixxxxxxxxxxxxxxxxxxxxxxsxx";
     }
 };
 
-extern const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEntryFields;
-extern const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEffectEntryFields;
+struct DBCFieldAttrInfo
+{
+    const QString fieldName;
+    CompareTypes compareType;
+};
+
+extern const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEntryFields;
+extern const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEffectEntryFields;

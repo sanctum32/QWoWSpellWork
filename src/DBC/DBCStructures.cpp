@@ -533,8 +533,7 @@ FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
     //Expansion = record.getUInt(25);
 }
 
-// For advanced filter
-const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEntryFields =
+const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEntryFields =
 {
     {0, {"Id", CompareTypes::UnsignedNumber }},
     {1, {"Attributes", CompareTypes::UnsignedNumber}},
@@ -586,7 +585,7 @@ const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareType
     {47, {"ResearchProject", CompareTypes::UnsignedNumber}}
 };
 
-const std::map<uint8_t /*fieldId*/, std::pair<QString /*fieldName*/, CompareTypes /*compareType*/>> SpellEffectEntryFields =
+const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEffectEntryFields =
 {
     {0, {"Id", CompareTypes::UnsignedNumber}},
     {1, {"Effect", CompareTypes::UnsignedNumber}},
