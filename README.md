@@ -24,6 +24,11 @@ NOTING: tool is not in alpha or beta stage. Tool development currently is at des
 * C++ compiler with C++20 standart support (Mingw, GCC >= 8, MSVC >= 16.0 (visual studio 2019), clang >= 10)
 * MySQL 8+/MariaDB 10.3+ for sql
 
+### CMake notes:
+* In order to have SQL support, generate cmake build with options -DWITH_SQL_SUPPORT=1.
+If you build in windows, use -DMYSQL_ROOT=root_path_to_mysql, for example: -DMYSQL_ROOT=C:/MySQL (or -DMYSQL_ROOT=C:/MariaDB)
+* JSON and Themes folders can be copied after build, for this option use -DCOPY_EXTRA_FILES=1
+
 ### Final setup steps:
 1. Copy dbc files to dbc folder in the application executable folder ("appExecutableFolder"/dbc).
 2. Rename file appSettings.json.const to appSettings.json (can be found in json folder which can be found in executable binary folder).

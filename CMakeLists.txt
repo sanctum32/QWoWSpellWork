@@ -10,14 +10,17 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# append modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
+# find REQUIRED components
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-option(WITH_SQL_SUPPORT "Compile with additional SQL features" ON)
-option(COPY_EXTRA_FILES "Copies json and qtlogging.ini file into compiled binary folder" ON)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake)
 
 if (WITH_SQL_SUPPORT)
-    include(CMake/FindMySQL.cmake)
+    find_package(MySQL)
 
     if (NOT MYSQL_FOUND)
         message(FATAL_ERROR "MYSQL was not found!")
