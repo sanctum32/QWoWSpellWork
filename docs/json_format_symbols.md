@@ -10,8 +10,10 @@ Misc value, Misc valueB - Spell effect's misc values. These field could have bit
 | :MiscValueB: | Prints effect's misc value | Misc valueB |
 | :AreaEntryNameMiscVal: | Prints area entry name. | Area entry by Misc value |
 | :AreaEntryNameMiscValB: | Prints area entry name. | Area entry by Misc valueB |
-| :ModStatNameMiscVal: | Prints unit mod type name. | Stat entry by Misc value |
-| :ModStatNameMiscValB: | Prints unit mod type name. | Stat entry by Misc valueB |
+| :UnitModNameMiscVal: | Prints unit mod type name. | Stat entry by Misc value |
+| :UnitModNameMiscValB: | Prints unit mod type name. | Stat entry by Misc valueB |
+| :SpellModNameMiscVal: | Prints SpellModOp type name | SpellMod entry by Misc value |
+| :SpellModNameMiscValB: | Prints SpellModOp type name | SpellMod entry by Misc value |
 | :FactionNameMiscVal: | Prints faction name. | Faction entry by Misc value |
 | :FactionNameMiscValB: | Prints faction name. | Faction by Misc valueB |
 | :CBRatingListMiscVal: | Prints combat rating type list | Combat names are extracted from Misc value bitmask |

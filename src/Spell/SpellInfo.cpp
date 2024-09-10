@@ -878,24 +878,6 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                     .arg(effectInfo->getEffectBasePoints())
                     .arg(effectInfo->getEffectMiscValue());
 
-            switch (effectInfo->getEffectAura())
-            {
-            case SPELL_AURA_MOD_STAT:
-            {
-                result += QString(" (%1)").arg(sSpellWorkJson->GetUnitModName(effectInfo->getEffectMiscValue()));
-                break;
-            }
-            case SPELL_AURA_ADD_FLAT_MODIFIER:
-            case SPELL_AURA_ADD_PCT_MODIFIER:
-            {
-                result += QString(" (%1)").arg(sSpellWorkJson->GetSpellModName(effectInfo->getEffectMiscValue()));
-                break;
-            }
-            // todo: more cases
-            default:
-                break;
-            }
-
             result += QString(", miscB = %1").arg(effectInfo->getEffectMiscValueB());
             result += QString(", periodic = %1<br>").arg(effectInfo->getEffectAuraPeriod());
 
@@ -1126,8 +1108,8 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->GetName().toString() : "Unknown");
     }
 
-    const std::array<const strRepFormatData, 2> modStat = {{ {":ModStatNameMiscVal:", getEffectMiscValue() }, { ":ModStatNameMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : modStat)
+    const std::array<const strRepFormatData, 2> unitModStat = {{ {":UnitModNameMiscVal:", getEffectMiscValue() }, { ":UnitModNameMiscValB:", getEffectMiscValueB() } }};
+    for (auto const& [strToRep, value] : unitModStat)
     {
         if (!formattedStr->contains(strToRep))
         {
@@ -1135,6 +1117,18 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         }
 
         const auto statName = sSpellWorkJson->GetUnitModName(value);
+        formattedStr->replace(strToRep, QString(statName.data()));
+    }
+
+    const std::array<const strRepFormatData, 2> spellMod = {{ {":SpellModNameMiscVal:", getEffectMiscValue() }, { ":SpellModNameMiscValB:", getEffectMiscValueB() } }};
+    for (auto const& [strToRep, value] : spellMod)
+    {
+        if (!formattedStr->contains(strToRep))
+        {
+            continue;
+        }
+
+        const auto statName = sSpellWorkJson->GetSpellModName(value);
         formattedStr->replace(strToRep, QString(statName.data()));
     }
 
