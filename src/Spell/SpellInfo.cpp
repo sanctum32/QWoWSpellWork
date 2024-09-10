@@ -27,15 +27,17 @@ inline QString GetStancesNames(uint32_t stancesNames)
     QString formNames;
     for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
     {
-        if (((1U << i) & stancesNames) != 0)
+        if (((1U << i) & stancesNames) == 0)
         {
-            if (!formNames.isEmpty())
-            {
-                formNames += ", ";
-            }
-
-            formNames += sSpellWorkJson->GetShapeshiftFormName(i);
+            continue;
         }
+
+        if (!formNames.isEmpty())
+        {
+            formNames += ", ";
+        }
+
+        formNames += sSpellWorkJson->GetShapeshiftFormName(i);
     }
 
     return formNames;
@@ -105,33 +107,40 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
 
 inline void PrintAttributes(QString& result, const std::vector<uint32_t>& attributes)
 {
-    if (!attributes.empty() && std::any_of(attributes.begin(), attributes.end(), [](uint32_t attr){ return attr != 0; }))
+    if (attributes.empty() || !std::any_of(attributes.begin(), attributes.end(), [](uint32_t attr){ return attr != 0; }))
     {
-        result += line;
-        for (uint8_t attribute = 0; attribute < attributes.size(); ++attribute)
-        {
-            const auto& attributeMask = attributes[attribute];
-            if (attributeMask != 0)
-            {
-                QString attributeStr;
-                for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
-                {
-                    const uint32_t mask = 1u << id;
-                    if ((mask & attributeMask) != 0)
-                    {
-                        if (!attributeStr.isEmpty())
-                        {
-                            attributeStr += ", ";
-                        }
+        return;
+    }
 
-                        attributeStr += sSpellWorkJson->GetSpellAttributeName(attribute, mask);
-                    }
-                }
-                result += QString("Attributes%1: %2<br><br>")
-                              .arg(attribute)
-                              .arg(attributeStr);
-            }
+    result += line;
+    for (uint8_t attribute = 0; attribute < MAX_SPELL_ATTRIBUTES; ++attribute)
+    {
+        const auto& attributeMask = attributes[attribute];
+        if (attributeMask == 0)
+        {
+            continue;
         }
+
+        QString attributeStr;
+        for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+        {
+            const uint32_t mask = 1u << id;
+            if ((mask & attributeMask) == 0)
+            {
+                continue;
+            }
+
+            if (!attributeStr.isEmpty())
+            {
+                attributeStr += ", ";
+            }
+
+            attributeStr += sSpellWorkJson->GetSpellAttributeName(attribute, mask);
+        }
+
+        result += QString("Attributes%1: %2<br><br>")
+                      .arg(attribute)
+                      .arg(attributeStr);
     }
 }
 
@@ -202,26 +211,28 @@ inline void PrintShapeShiftingInfo(QString& result, uint32_t SpellShapeshiftId)
 
     auto printList = [&](const std::list<uint32_t>& list, const QString& stancesType)
     {
-        if (!list.empty())
+        if (list.empty())
         {
-            result += stancesType;
-            bool first = true;
-            for (auto const stanceId : list)
-            {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    result += ", ";
-                }
+            return;
+        }
 
-                result += QString::number(stanceId);
+        result += stancesType;
+        bool first = true;
+        for (auto const stanceId : list)
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                result += ", ";
             }
 
-            result += "<br>";
+            result += QString::number(stanceId);
         }
+
+        result += "<br>";
     };
 
     std::list<uint32_t> stances = { shapeshiftingEntry->ShapeshiftMask.begin(), shapeshiftingEntry->ShapeshiftMask.end() };
@@ -277,125 +288,128 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 
 inline void PrintReagents(QString& result, uint32_t SpellReagentsId)
 {
-    if (const auto* spellReagent = sDBCStores->GetSpellReagentsEntry(SpellReagentsId))
+    const auto* spellReagent = sDBCStores->GetSpellReagentsEntry(SpellReagentsId);
+    if (spellReagent == nullptr || !std::any_of(spellReagent->Reagent.begin(), spellReagent->Reagent.end(), [](int32_t reagent){ return reagent != 0; }))
     {
-        if (std::any_of(spellReagent->Reagent.begin(), spellReagent->Reagent.end(), [](int32_t reagent){ return reagent != 0; }))
-        {
-            result += "Reagents:<br>";
-            for (uint8_t i = 0; i < MAX_SPELL_REAGENTS; ++i)
-            {
-                if (spellReagent->Reagent[i] != 0)
-                {
-                    result += QString(" reagentId %1, amount %2<br>").arg(spellReagent->Reagent[i]).arg(spellReagent->ReagentCount[i]);
-                }
-            }
+        return;
+    }
 
-            result += line;
+    result += "Reagents:<br>";
+    for (uint8_t i = 0; i < MAX_SPELL_REAGENTS; ++i)
+    {
+        if (spellReagent->Reagent[i] != 0)
+        {
+            result += QString(" reagentId %1, amount %2<br>").arg(spellReagent->Reagent[i]).arg(spellReagent->ReagentCount[i]);
         }
     }
+
+    result += line;
 }
 
 inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItemsId)
 {
-    if (const auto* spellEquipedItems = sDBCStores->GetSpellEquippedItemsEntry(SpellEquippedItemsId))
+    const auto* spellEquipedItems = sDBCStores->GetSpellEquippedItemsEntry(SpellEquippedItemsId);
+    if (spellEquipedItems == nullptr)
     {
-        result += QString("EquippedItemClass = %1 (%2)<br>")
-                  .arg(spellEquipedItems->EquippedItemClass)
-                  .arg(sSpellWorkJson->GetItemClassName(spellEquipedItems->EquippedItemClass));
+        return;
+    }
 
-        if (spellEquipedItems->EquippedItemSubClassMask != 0)
+    result += QString("EquippedItemClass = %1 (%2)<br>")
+              .arg(spellEquipedItems->EquippedItemClass)
+              .arg(sSpellWorkJson->GetItemClassName(spellEquipedItems->EquippedItemClass));
+
+    if (spellEquipedItems->EquippedItemSubClassMask != 0)
+    {
+        switch (spellEquipedItems->EquippedItemClass)
         {
-            switch (spellEquipedItems->EquippedItemClass)
+        case ITEM_CLASS_WEAPON:
+        {
+            QString subclassNames;
+            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-            case ITEM_CLASS_WEAPON:
-            {
-                QString subclassNames;
-                for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+                if ((spellEquipedItems->EquippedItemClass & (1U << i)) != 0)
                 {
-                    if ((spellEquipedItems->EquippedItemClass & (1U << i)) != 0)
+                    if (!subclassNames.isEmpty())
                     {
-                        if (!subclassNames.isEmpty())
-                        {
-                            subclassNames += ", ";
-                        }
-
-                        subclassNames += sSpellWorkJson->GetItemSubclassWeaponName(i);
+                        subclassNames += ", ";
                     }
-                }
 
-                if (!subclassNames.isEmpty())
-                {
-                    result += QString("SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
+                    subclassNames += sSpellWorkJson->GetItemSubclassWeaponName(i);
                 }
-                break;
             }
-            case ITEM_CLASS_ARMOR:
+
+            if (!subclassNames.isEmpty())
             {
-                QString subclassNames;
-                for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
-                {
-                    if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) != 0)
-                    {
-                        if (!subclassNames.isEmpty())
-                        {
-                            subclassNames += ", ";
-                        }
-
-                        subclassNames += sSpellWorkJson->GetItemSubclassArmorName(i);
-                    }
-                }
-
-                if (!subclassNames.isEmpty())
-                {
-                    result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
-                }
-                break;
+                result += QString("SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
             }
-            case ITEM_CLASS_MISCELLANEOUS:
+            break;
+        }
+        case ITEM_CLASS_ARMOR:
+        {
+            QString subclassNames;
+            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                QString subclassNames;
-                for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+                if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) != 0)
                 {
-                    if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) != 0)
+                    if (!subclassNames.isEmpty())
                     {
-                        if (!subclassNames.isEmpty())
-                        {
-                            subclassNames += ", ";
-                        }
-
-                        subclassNames += sSpellWorkJson->GetItemSubclassJunkName(i);
+                        subclassNames += ", ";
                     }
+
+                    subclassNames += sSpellWorkJson->GetItemSubclassArmorName(i);
+                }
+            }
+
+            if (!subclassNames.isEmpty())
+            {
+                result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
+            }
+            break;
+        }
+        case ITEM_CLASS_MISCELLANEOUS:
+        {
+            QString subclassNames;
+            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+            {
+                if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) != 0)
+                {
+                    if (!subclassNames.isEmpty())
+                    {
+                        subclassNames += ", ";
+                    }
+
+                    subclassNames += sSpellWorkJson->GetItemSubclassJunkName(i);
+                }
+            }
+
+            if (!subclassNames.isEmpty())
+            {
+                result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
+            }
+            break;
+        }
+        }
+    }
+
+    if (spellEquipedItems->EquippedItemInventoryTypeMask != 0)
+    {
+        QString inventoryNames;
+        for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+        {
+            if ((spellEquipedItems->EquippedItemInventoryTypeMask & (1U << i)) != 0)
+            {
+                if (!inventoryNames.isEmpty())
+                {
+                    inventoryNames += ", ";
                 }
 
-                if (!subclassNames.isEmpty())
-                {
-                    result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
-                }
-                break;
-            }
+                inventoryNames += sSpellWorkJson->GetItemInventoryName(i);
             }
         }
 
-        if (spellEquipedItems->EquippedItemInventoryTypeMask != 0)
+        if (!inventoryNames.isEmpty())
         {
-            QString inventoryNames;
-            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
-            {
-                if ((spellEquipedItems->EquippedItemInventoryTypeMask & (1U << i)) != 0)
-                {
-                    if (!inventoryNames.isEmpty())
-                    {
-                        inventoryNames += ", ";
-                    }
-
-                    inventoryNames += sSpellWorkJson->GetItemInventoryName(i);
-                }
-            }
-
-            if (!inventoryNames.isEmpty())
-            {
-                result += QString("    InventoryType mask = 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemInventoryTypeMask, 8, 16, QLatin1Char('0')).arg(inventoryNames);
-            }
+            result += QString("    InventoryType mask = 0x%1 (%2)<br>").arg(spellEquipedItems->EquippedItemInventoryTypeMask, 8, 16, QLatin1Char('0')).arg(inventoryNames);
         }
     }
 }
@@ -420,36 +434,38 @@ inline void PrintSpellRangeInfo(QString& result, uint32_t rangeIndex)
 inline void PrintSpellAuraOptions(QString& result, uint32_t SpellAuraOptionsId)
 {
     const auto* spellAuraOptionEntry = sDBCStores->GetSpellAuraOptionsEntry(SpellAuraOptionsId);
-    if (spellAuraOptionEntry != nullptr)
+    if (spellAuraOptionEntry == nullptr)
     {
-        result += QString("Stackable up to %1 times<br>").arg(spellAuraOptionEntry->StackAmount);
+        return;
+    }
 
-        if (spellAuraOptionEntry->procFlags != 0)
+    result += QString("Stackable up to %1 times<br>").arg(spellAuraOptionEntry->StackAmount);
+
+    if (spellAuraOptionEntry->procFlags != 0)
+    {
+        result += "<br>";
+        result += QString("Proc flag 0x%1, chance = %2%, charges - %3<br>")
+                         .arg(spellAuraOptionEntry->procFlags, 8, 16, QLatin1Char('0'))
+                         .arg(spellAuraOptionEntry->procChance)
+                         .arg(spellAuraOptionEntry->procCharges);
+
+        QString procNames;
+
+        for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
         {
-            result += "<br>";
-            result += QString("Proc flag 0x%1, chance = %2%, charges - %3<br>")
-                             .arg(spellAuraOptionEntry->procFlags, 8, 16, QLatin1Char('0'))
-                             .arg(spellAuraOptionEntry->procChance)
-                             .arg(spellAuraOptionEntry->procCharges);
-
-            QString procNames;
-
-            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+            const uint32_t mask = 1U << i;
+            if ((spellAuraOptionEntry->procFlags & mask) != 0)
             {
-                const uint32_t mask = 1U << i;
-                if ((spellAuraOptionEntry->procFlags & mask) != 0)
-                {
-                    procNames += QString("<span style=\"color:orange\">Flags %1,</span> %2<br>")
-                                     .arg(mask)
-                                     .arg(sSpellWorkJson->GetSpellProcDescription(mask));
-                }
+                procNames += QString("<span style=\"color:orange\">Flags %1,</span> %2<br>")
+                                 .arg(mask)
+                                 .arg(sSpellWorkJson->GetSpellProcDescription(mask));
             }
+        }
 
-            if (!procNames.isEmpty())
-            {
-                result += line;
-                result += procNames + "<br>";
-            }
+        if (!procNames.isEmpty())
+        {
+            result += line;
+            result += procNames + "<br>";
         }
     }
 }
@@ -469,13 +485,11 @@ inline void PrintSpellCastTimeInfo(QString& result, uint32_t CastingTimeIndex, f
 
 inline void PrintSpellCooldownInfo(QString& result, uint32_t SpellCooldownsId)
 {
-    if (const auto* spellCooldownEntry = sDBCStores->GetSpellCooldownsEntry(SpellCooldownsId))
+    const auto* spellCooldownEntry = sDBCStores->GetSpellCooldownsEntry(SpellCooldownsId);
+    if (spellCooldownEntry != nullptr && (spellCooldownEntry->RecoveryTime != 0 || spellCooldownEntry->CategoryRecoveryTime != 0 || spellCooldownEntry->StartRecoveryTime != 0))
     {
-        if (spellCooldownEntry->RecoveryTime != 0 || spellCooldownEntry->CategoryRecoveryTime != 0 || spellCooldownEntry->StartRecoveryTime != 0)
-        {
-            result += QString("RecoveryTime: %1 ms, CategoryRecoveryTime: %2 ms<br>").arg(spellCooldownEntry->RecoveryTime).arg(spellCooldownEntry->CategoryRecoveryTime);
-            result += QString("StartRecoveryCategory = %1, StartRecoveryTime = %2 ms<br>").arg(spellCooldownEntry->CategoryRecoveryTime).arg(spellCooldownEntry->StartRecoveryTime);
-        }
+        result += QString("RecoveryTime: %1 ms, CategoryRecoveryTime: %2 ms<br>").arg(spellCooldownEntry->RecoveryTime).arg(spellCooldownEntry->CategoryRecoveryTime);
+        result += QString("StartRecoveryCategory = %1, StartRecoveryTime = %2 ms<br>").arg(spellCooldownEntry->CategoryRecoveryTime).arg(spellCooldownEntry->StartRecoveryTime);
     }
 }
 
@@ -686,39 +700,115 @@ static void PrintSpellRestrictionsInfo(QString& result, uint32_t SpellAuraRestri
 
 inline void PrintSpellCastRequirements(QString& result, uint32_t SpellCastingRequirementsId)
 {
-    if (const auto* spellCastReqEntry = sDBCStores->GetSpellCastingRequirementsEntry(SpellCastingRequirementsId))
+    const auto* spellCastReqEntry = sDBCStores->GetSpellCastingRequirementsEntry(SpellCastingRequirementsId);
+    if (spellCastReqEntry == nullptr)
     {
-        if (const auto* groupEntry = sDBCStores->GetAreaGroupEntry(spellCastReqEntry->RequiredAreasID))
+        return;
+    }
+
+    result += QString("Requires Spell Focus %1<br>").arg(spellCastReqEntry->RequiresSpellFocus);
+
+    const auto* groupEntry = sDBCStores->GetAreaGroupEntry(spellCastReqEntry->RequiredAreasID);
+    if (groupEntry == nullptr)
+    {
+        return;
+    }
+    result += "<br>";
+    result += "<b>Allowed areas:</b><br>";
+
+    uint32_t groupId = 0;
+    do
+    {
+        for (uint32_t const areaId : groupEntry->AreaId)
         {
-            result += "<br>";
-            result += "<b>Allowed areas:</b><br>";
-
-            uint32_t groupId = 0;
-            do
+            if (const auto* areaEntry = sDBCStores->GetAreaTableEntry(areaId))
             {
-                for (uint32_t const areaId : groupEntry->AreaId)
-                {
-                    if (const auto* areaEntry = sDBCStores->GetAreaTableEntry(areaId))
-                    {
-                        result += QString("%1 - %2(MapId: %3)<br>").arg(areaId).arg(areaEntry->GetName()).arg(areaEntry->ContinentID);
-                    }
-                }
-
-                groupId = groupEntry->nextGroup;
+                result += QString("%1 - %2(MapId: %3)<br>").arg(areaId).arg(areaEntry->GetName()).arg(areaEntry->ContinentID);
             }
-            while ((groupEntry = sDBCStores->GetAreaGroupEntry(groupId)) != nullptr);
-
-            result += "<br>";
         }
 
-        result += QString("Requires Spell Focus %1<br>").arg(spellCastReqEntry->RequiresSpellFocus);
+        groupId = groupEntry->nextGroup;
+    }
+    while ((groupEntry = sDBCStores->GetAreaGroupEntry(groupId)) != nullptr);
+
+    result += "<br>";
+}
+
+inline void PrintEffectScalingInfo(QString& result, const SpellEffectEntry* effectInfo, const SpellScalingEntry* scalingInfo, uint32_t scalingLevel)
+{
+    assert(effectInfo != nullptr);
+
+    const auto effIndex = effectInfo->getEffectIndex();
+    if (scalingInfo != nullptr && scalingInfo->Coefficient[effIndex] != 0.0f &&  scalingInfo->Class != 0)
+    {
+        uint32_t const selectedLevel = scalingLevel;
+
+        uint32_t gtEntryId = static_cast<uint32_t>((scalingInfo->Class != -1 ? scalingInfo->Class - 1 : 11) * 100) + selectedLevel - 1;
+        const auto* gtEntry = sDBCStores->GetGtSpellScalingEntry(gtEntryId);
+        float gtMultiplier = gtEntry != nullptr ? gtEntry->value : 0.0f;
+
+        if (scalingInfo->CastTimeMax > 0 && static_cast<uint32_t>(scalingInfo->CastTimeMaxLevel) > selectedLevel)
+        {
+            gtMultiplier *= static_cast<float>(scalingInfo->CastTimeMin + (selectedLevel - 1) * (scalingInfo->CastTimeMax - scalingInfo->CastTimeMin) / (scalingInfo->CastTimeMaxLevel - 1)) / static_cast<float>(scalingInfo->CastTimeMax);
+        }
+
+        if (scalingInfo->NerfMaxLevel > static_cast<int32_t>(selectedLevel))
+        {
+            gtMultiplier *= (1.0f -  scalingInfo->NerfFactor) * (float)(selectedLevel - 1) / (float)(scalingInfo->NerfMaxLevel - 1) + scalingInfo->NerfFactor;
+        }
+
+        if (scalingInfo->Variance[effIndex] != 0.0f)
+        {
+            float avg = scalingInfo->Coefficient[effIndex] * gtMultiplier;
+            float delta = scalingInfo->Variance[effIndex] * scalingInfo->Coefficient[effIndex] * gtMultiplier * 0.5;
+            result += QString("BasePoints = %1 to %2").arg(avg - delta).arg(avg + delta);
+        }
+        else
+        {
+            result += QString("AveragePoints = %1<br>").arg(scalingInfo->Coefficient[effIndex] * gtMultiplier);
+        }
+
+        if (scalingInfo->ComboPointsCoefficient[effIndex] != 0.0f)
+        {
+            result += QString(" + combo *  %1").arg(scalingInfo->ComboPointsCoefficient[effIndex] * gtMultiplier);
+        }
+        else
+        {
+            result += QString(" + combo *  %1").arg(effectInfo->getEffectPointsPerResource());
+        }
+    }
+    else
+    {
+        result += QString("BasePoints = %1").arg(effectInfo->getEffectBasePoints() + ((effectInfo->getEffectDieSides() == 0) ? 0 : 1));
+
+        if (effectInfo->getEffectRealPointsPerLevel() != 0)
+        {
+            result += QString(" + Level * %1").arg(effectInfo->getEffectRealPointsPerLevel());
+        }
+
+        if (effectInfo->getEffectDieSides() > 1)
+        {
+            if (effectInfo->getEffectRealPointsPerLevel() != 0)
+            {
+                result += QString(" to %1 + lvl * %2").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides(), effectInfo->getEffectRealPointsPerLevel());
+            }
+            else
+            {
+                result += QString(" to %1").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides());
+            }
+        }
+
+        if (effectInfo->getEffectPointsPerResource() > 0)
+        {
+            result += QString(" + combo * %1").arg(effectInfo->getEffectPointsPerResource());
+        }
     }
 }
 
 QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
 {
     QString result;
-    for (uint32_t effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
+    for (uint8_t effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
     {
         result += line;
 
@@ -733,77 +823,12 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             continue;
         }
 
-
         result += QString("<b>Effect %1: Id %2 (%3)</b><br>")
                       .arg(effIndex)
                       .arg(effectInfo->getEffect())
                       .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->getEffect()));
 
-        const auto* scalingInfo = sDBCStores->GetSpellScalingEntry(getSpellScalingId());
-        if (scalingInfo != nullptr && scalingInfo->Coefficient[effIndex] != 0.0f &&  scalingInfo->Class != 0)
-        {
-            uint32_t const selectedLevel = scalingLevel;
-
-            uint32_t gtEntryId = static_cast<uint32_t>((scalingInfo->Class != -1 ? scalingInfo->Class - 1 : 11) * 100) + selectedLevel - 1;
-            const auto* gtEntry = sDBCStores->GetGtSpellScalingEntry(gtEntryId);
-            float gtMultiplier = gtEntry != nullptr ? gtEntry->value : 0.0f;
-
-            if (scalingInfo->CastTimeMax > 0 && static_cast<uint32_t>(scalingInfo->CastTimeMaxLevel) > selectedLevel)
-            {
-                gtMultiplier *= static_cast<float>(scalingInfo->CastTimeMin + (selectedLevel - 1) * (scalingInfo->CastTimeMax - scalingInfo->CastTimeMin) / (scalingInfo->CastTimeMaxLevel - 1)) / static_cast<float>(scalingInfo->CastTimeMax);
-            }
-
-            if (scalingInfo->NerfMaxLevel > static_cast<int32_t>(selectedLevel))
-            {
-                gtMultiplier *= (1.0f -  scalingInfo->NerfFactor) * (float)(selectedLevel - 1) / (float)(scalingInfo->NerfMaxLevel - 1) + scalingInfo->NerfFactor;
-            }
-
-            if (scalingInfo->Variance[effIndex] != 0.0f)
-            {
-                float avg = scalingInfo->Coefficient[effIndex] * gtMultiplier;
-                float delta = scalingInfo->Variance[effIndex] * scalingInfo->Coefficient[effIndex] * gtMultiplier * 0.5;
-                result += QString("BasePoints = %1 to %2").arg(avg - delta).arg(avg + delta);
-            }
-            else
-            {
-                result += QString("AveragePoints = %1<br>").arg(scalingInfo->Coefficient[effIndex] * gtMultiplier);
-            }
-
-            if (scalingInfo->ComboPointsCoefficient[effIndex] != 0.0f)
-            {
-                result += QString(" + combo *  %1").arg(scalingInfo->ComboPointsCoefficient[effIndex] * gtMultiplier);
-            }
-            else
-            {
-                result += QString(" + combo *  %1").arg(effectInfo->getEffectPointsPerResource());
-            }
-        }
-        else
-        {
-            result += QString("BasePoints = %1").arg(effectInfo->getEffectBasePoints() + ((effectInfo->getEffectDieSides() == 0) ? 0 : 1));
-
-            if (effectInfo->getEffectRealPointsPerLevel() != 0)
-            {
-                result += QString(" + Level * %1").arg(effectInfo->getEffectRealPointsPerLevel());
-            }
-
-            if (effectInfo->getEffectDieSides() > 1)
-            {
-                if (effectInfo->getEffectRealPointsPerLevel() != 0)
-                {
-                    result += QString(" to %1 + lvl * %2").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides(), effectInfo->getEffectRealPointsPerLevel());
-                }
-                else
-                {
-                    result += QString(" to %1").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides());
-                }
-            }
-
-            if (effectInfo->getEffectPointsPerResource() > 0)
-            {
-                result += QString(" + combo * %1").arg(effectInfo->getEffectPointsPerResource());
-            }
-        }
+        PrintEffectScalingInfo(result, effectInfo, sDBCStores->GetSpellScalingEntry(getSpellScalingId()), scalingLevel);
 
         if (effectInfo->getEffectBonusCoefficient() > 1.0f)
         {
