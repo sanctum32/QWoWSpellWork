@@ -209,29 +209,25 @@ inline void PrintShapeShiftingInfo(QString& result, uint32_t SpellShapeshiftId)
         return;
     }
 
-    auto printList = [&](const std::list<uint32_t>& list, const QString& stancesType)
+    auto printList = [&](const std::list<uint32_t>& list, const QString& stancesTypeStr)
     {
         if (list.empty())
         {
             return;
         }
 
-        result += stancesType;
-        bool first = true;
+        QString stanceResult;
         for (auto const stanceId : list)
         {
-            if (first)
-            {
-                first = false;
-            }
-            else
+            if (!stanceResult.isEmpty())
             {
                 result += ", ";
             }
 
-            result += QString::number(stanceId);
+            stanceResult += QString::number(stanceId);
         }
 
+        result += stancesTypeStr + stanceResult;
         result += "<br>";
     };
 
@@ -327,15 +323,17 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             QString subclassNames;
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                if ((spellEquipedItems->EquippedItemClass & (1U << i)) != 0)
+                if ((spellEquipedItems->EquippedItemClass & (1U << i)) == 0)
                 {
-                    if (!subclassNames.isEmpty())
-                    {
-                        subclassNames += ", ";
-                    }
-
-                    subclassNames += sSpellWorkJson->GetItemSubclassWeaponName(i);
+                    continue;
                 }
+
+                if (!subclassNames.isEmpty())
+                {
+                    subclassNames += ", ";
+                }
+
+                subclassNames += sSpellWorkJson->GetItemSubclassWeaponName(i);
             }
 
             if (!subclassNames.isEmpty())
@@ -349,15 +347,17 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             QString subclassNames;
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) != 0)
+                if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) == 0)
                 {
-                    if (!subclassNames.isEmpty())
-                    {
-                        subclassNames += ", ";
-                    }
-
-                    subclassNames += sSpellWorkJson->GetItemSubclassArmorName(i);
+                    continue;
                 }
+
+                if (!subclassNames.isEmpty())
+                {
+                    subclassNames += ", ";
+                }
+
+                subclassNames += sSpellWorkJson->GetItemSubclassArmorName(i);
             }
 
             if (!subclassNames.isEmpty())
@@ -371,15 +371,17 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
             QString subclassNames;
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) != 0)
+                if ((spellEquipedItems->EquippedItemSubClassMask & (1U << i)) == 0)
                 {
-                    if (!subclassNames.isEmpty())
-                    {
-                        subclassNames += ", ";
-                    }
-
-                    subclassNames += sSpellWorkJson->GetItemSubclassJunkName(i);
+                    continue;
                 }
+
+                if (!subclassNames.isEmpty())
+                {
+                    subclassNames += ", ";
+                }
+
+                subclassNames += sSpellWorkJson->GetItemSubclassJunkName(i);
             }
 
             if (!subclassNames.isEmpty())
@@ -396,15 +398,17 @@ inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItems
         QString inventoryNames;
         for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
         {
-            if ((spellEquipedItems->EquippedItemInventoryTypeMask & (1U << i)) != 0)
+            if ((spellEquipedItems->EquippedItemInventoryTypeMask & (1U << i)) == 0)
             {
-                if (!inventoryNames.isEmpty())
-                {
-                    inventoryNames += ", ";
-                }
-
-                inventoryNames += sSpellWorkJson->GetItemInventoryName(i);
+                continue;
             }
+
+            if (!inventoryNames.isEmpty())
+            {
+                inventoryNames += ", ";
+            }
+
+            inventoryNames += sSpellWorkJson->GetItemInventoryName(i);
         }
 
         if (!inventoryNames.isEmpty())
