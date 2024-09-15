@@ -406,7 +406,7 @@ SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
     _getRangeIndex()            = record.getUInt(15);
     _getSpeed()                 = record.getFloat(16);
     _getSpellVisual1()          = record.getUInt(17);
-    _getSpellVisual1()          = record.getUInt(18);
+    _getSpellVisual2()          = record.getUInt(18);
     _getSpellIconID()                 = record.getUInt(19);
     _getActiveIconID()                = record.getUInt(20);
     _getSpellName()                   = record.getString(21);
