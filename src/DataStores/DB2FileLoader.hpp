@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <string_view>
 
 class DB2FileLoader
 {
@@ -10,7 +11,7 @@ public:
     DB2FileLoader();
     ~DB2FileLoader();
 
-    bool Load(const char *filename, const char *fmt);
+    bool Load(std::string_view filename, const char *fmt);
 
     class Record
     {

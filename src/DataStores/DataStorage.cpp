@@ -1,4 +1,4 @@
-#include "DBCStores.hpp"
+#include "DataStorage.hpp"
 #ifdef SPELLWORK_BUILD_SQL
 #include "SQL/sqlConnection.hpp"
 #endif // SPELLWORK_BUILD_SQL
@@ -23,7 +23,7 @@ bool OpenAndReadDBC(std::string_view path, std::string_view dbcFileName, std::ma
     return true;
 }
 
-bool DBCStore::LoadData()
+bool DataStorage::LoadData()
 {
     if (!sSpellWorkConfig->GetAppConfig().loadDBCSpells && !sSpellWorkConfig->GetAppConfig().loadSQLSpells)
     {
@@ -63,7 +63,7 @@ bool DBCStore::LoadData()
     return true;
 }
 
-bool DBCStore::LoadDBCDatas()
+bool DataStorage::LoadDBCDatas()
 {
     const auto& dbcFolderPath = sSpellWorkConfig->GetAppConfig().dbcFilePath;
     if (!OpenAndReadDBC(dbcFolderPath, "SpellCategory.dbc",             m_SpellCategoryEntries) ||
@@ -102,7 +102,7 @@ bool DBCStore::LoadDBCDatas()
     return true;
 }
 
-bool DBCStore::LoadSqlDBCData()
+bool DataStorage::LoadSqlDBCData()
 {
 #ifdef SPELLWORK_BUILD_SQL
     auto* connection = sSpellWorkSQL->GetConnection();

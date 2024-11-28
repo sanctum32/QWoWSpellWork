@@ -11,7 +11,7 @@
 
 // App
 #include "mainwindow.hpp"
-#include "DBCStores.hpp"
+#include "DataStorage.hpp"
 #include "JsonData/JsonData.hpp"
 #include "Globals/appSettings.hpp"
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     sSpellWorkConfig->ReadSettings();
     const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
-    const bool dbcLoaded = sDBCStores->LoadData();
+    const bool dbcLoaded = sDataStorage->LoadData();
 #ifdef SPELLWORK_BUILD_SQL
     const bool sqlConnected = sSpellWorkSQL->Init();
 #endif

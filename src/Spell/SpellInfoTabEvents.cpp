@@ -7,7 +7,7 @@
 #include "mainwindow.hpp"
 #include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
-#include "DBCStores.hpp"
+#include "DataStorage.hpp"
 #include "SearchFiltersStore.hpp"
 #include <cassert>
 #include <optional>
@@ -46,7 +46,7 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
         return;
     }
 
-    if (const auto* spell = sDBCStores->GetSpellEntry(spellId))
+    if (const auto* spell = sDataStorage->GetSpellEntry(spellId))
     {
         ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }
@@ -61,7 +61,7 @@ void MainWindow::PerformSpellSearch()
     resultList->clearContents();
     m_lastSpellSearchRowId = -1;
 
-    if (sDBCStores->GetSpellEntries().empty())
+    if (sDataStorage->GetSpellEntries().empty())
     {
         ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
@@ -151,7 +151,7 @@ void MainWindow::PerformSpellSearch()
     }
 
     std::vector<std::pair<QTableWidgetItem* /*id*/, QTableWidgetItem* /*name*/>> foundEntries;
-    for (const auto& itr : sDBCStores->GetSpellEntries())
+    for (const auto& itr : sDataStorage->GetSpellEntries())
     {
         const auto _id = itr.first;
         const auto& _spellInfo = itr.second;
@@ -174,7 +174,7 @@ void MainWindow::PerformSpellSearch()
 
         if (spellFamilyId.has_value())
         {
-            const auto* spellClassOptions = sDBCStores->GetSpellClassOptionsEntry(_spellInfo.getSpellClassOptionsId());
+            const auto* spellClassOptions = sDataStorage->GetSpellClassOptionsEntry(_spellInfo.getSpellClassOptionsId());
             if (spellClassOptions == nullptr || spellClassOptions->SpellFamilyName != *spellFamilyId)
             {
                 continue;
@@ -310,7 +310,7 @@ void MainWindow::onLevelScalingSliderValueChange()
         return;
     }
 
-    if (const auto* spell = sDBCStores->GetSpellEntry(spellId))
+    if (const auto* spell = sDataStorage->GetSpellEntry(spellId))
     {
         ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
     }

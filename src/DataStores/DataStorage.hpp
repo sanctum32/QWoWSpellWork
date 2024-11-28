@@ -5,13 +5,13 @@
 
 Q_DECLARE_LOGGING_CATEGORY(DBCStores)
 
-class DBCStore
+class DataStorage
 {
 public:
-    static DBCStore* instance()
+    static DataStorage* instance()
     {
-        static DBCStore dbc;
-        return &dbc;
+        static DataStorage storage;
+        return &storage;
     }
 
     bool LoadData();
@@ -96,4 +96,4 @@ private:
     std::map<uint32_t, FactionEntry>                 m_FactionEntries;                           // Faction.dbc
 };
 
-#define sDBCStores DBCStore::instance()
+#define sDataStorage DataStorage::instance()

@@ -19,7 +19,7 @@ DB2FileLoader::DB2FileLoader() :
 {
 }
 
-bool DB2FileLoader::Load(char const* filename, char const* fmt)
+bool DB2FileLoader::Load(std::string_view filename, char const* fmt)
 {
     if (m_data)
     {
@@ -27,7 +27,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         m_data = nullptr;
     }
 
-    FILE* f = fopen(filename, "rb");
+    FILE* f = fopen(filename.data(), "rb");
     if (!f)
         return false;
 

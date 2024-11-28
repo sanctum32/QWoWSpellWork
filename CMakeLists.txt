@@ -47,8 +47,8 @@ set(PROJECT_SOURCES
     src/DataStores/DBCFileLoader.hpp
     src/DataStores/DBCFileLoader.cpp
     src/DataStores/DBCStructures.cpp
-    src/DataStores/DBCStores.hpp
-    src/DataStores/DBCStores.cpp
+    src/DataStores/DataStorage.hpp
+    src/DataStores/DataStorage.cpp
     src/DataStores/DataStoresDefines.hpp
     src/Spell/SpellInfo.cpp
     src/Spell/SpellInfoTabEvents.cpp
