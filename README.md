@@ -31,11 +31,11 @@ If you build in windows, use -DMYSQL_ROOT=root_path_to_mysql, for example: -DMYS
 * JSON and Themes folders can be copied after build, for this option use -DCOPY_EXTRA_FILES=1
 
 ### Final setup steps:
-1. Copy dbc files to dbc folder in the application executable folder ("appExecutableFolder"/dbc).
+1. Copy dbc and db2 files to dbc folder in the application executable folder ("appExecutableFolder"/dbc).
 2. Rename file appSettings.json.const to appSettings.json (can be found in json folder which can be found in executable binary folder).
     Once file is renamed, you can customize settings in appSettings.json (can be opened with most text editors, for example - notepad or kate).
 2. The application should be ready to be started.
 
-PS: statusbar at the bottom will indicate the status about SQL, DBC and JSON status
+PS: statusbar at the bottom will indicate the status about SQL, DBC, DB2 and JSON status
 
 If json fails to load, spell information may will lack some details
