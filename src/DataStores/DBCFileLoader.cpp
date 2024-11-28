@@ -39,6 +39,8 @@ bool DBCFileLoader::Load(std::string_view filename, const char* fmt)
         return false;
     }
 
+    EndianConvert(dbcHeader.header);
+
     if (!dbcHeader.IsHeaderValid())
     {
         fclose(f);
@@ -52,12 +54,16 @@ bool DBCFileLoader::Load(std::string_view filename, const char* fmt)
         return false;
     }
 
+    EndianConvert(dbcHeader.recordCount);
+
     // Number of fields
     if (fread(&dbcHeader.fieldCount, 4, 1, f) != 1)
     {
         fclose(f);
         return false;
     }
+
+    EndianConvert(dbcHeader.fieldCount);
 
     // Size of a record
     if (fread(&dbcHeader.recordSize, 4, 1, f) != 1)
@@ -66,12 +72,16 @@ bool DBCFileLoader::Load(std::string_view filename, const char* fmt)
         return false;
     }
 
+    EndianConvert(dbcHeader.recordSize);
+
     // String size
     if (fread(&dbcHeader.stringSize, 4, 1, f) != 1)
     {
         fclose(f);
         return false;
     }
+
+    EndianConvert(dbcHeader.stringSize);
 
     fieldsOffset = new uint32_t[dbcHeader.fieldCount];
     fieldsOffset[0] = 0;

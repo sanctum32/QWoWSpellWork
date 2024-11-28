@@ -1,6 +1,6 @@
 #include "DB2FileLoader.hpp"
-#include "DataStoresDefines.hpp"
 #include "SharedDefines.hpp"
+#include "DataStoresDefines.hpp"
 #include <cstdio>
 #include <cstring>
 #include <format>
@@ -38,7 +38,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(header);
+    EndianConvert(header);
 
     if (header != 0x32424457)
     {
@@ -52,7 +52,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(m_recordCount);
+    EndianConvert(db2Header.m_recordCount);
 
     if (fread(&db2Header.m_fieldCount, 4, 1, f) != 1)                 // Number of fields
     {
@@ -60,7 +60,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(m_fieldCount);
+    EndianConvert(db2Header.m_fieldCount);
 
     if (fread(&db2Header.m_recordSize, 4, 1, f) != 1)                 // Size of a record
     {
@@ -68,7 +68,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(m_recordSize);
+    EndianConvert(db2Header.m_recordSize);
 
     if (fread(&db2Header.m_stringSize, 4, 1, f) != 1)                 // String size
     {
@@ -76,7 +76,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(m_stringSize);
+    EndianConvert(db2Header.m_stringSize);
 
     /* NEW WDB2 FIELDS*/
     if (fread(&db2Header.m_tableHash, 4, 1, f) != 1)                  // Table hash
@@ -85,7 +85,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(m_tableHash);
+    EndianConvert(db2Header.m_tableHash);
 
     if (fread(&db2Header.m_build, 4, 1, f) != 1)                     // Build
     {
@@ -93,7 +93,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(m_build);
+    EndianConvert(db2Header.m_build);
 
     if (fread(&db2Header.m_unk1, 4, 1, f) != 1)                     // Unknown WDB2
     {
@@ -101,7 +101,7 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
         return false;
     }
 
-    //EndianConvert(m_unk1);
+    EndianConvert(db2Header.m_unk1);
 
     if (db2Header.m_build > 12880)
     {
@@ -110,28 +110,28 @@ bool DB2FileLoader::Load(char const* filename, char const* fmt)
             fclose(f);
             return false;
         }
-        //EndianConvert(m_minIndex);
+        EndianConvert(db2Header.m_minIndex);
 
         if (fread(&db2Header.m_maxIndex, 4, 1, f) != 1)                           // MaxIndex WDB2
         {
             fclose(f);
             return false;
         }
-        //EndianConvert(m_maxIndex);
+        EndianConvert(db2Header.m_maxIndex);
 
         if (fread(&db2Header.m_locale, 4, 1, f) != 1)                             // Locales
         {
             fclose(f);
             return false;
         }
-        //EndianConvert(m_locale);
+        EndianConvert(db2Header.m_locale);
 
         if (fread(&db2Header.m_unk5, 4, 1, f) != 1)                               // Unknown WDB2
         {
             fclose(f);
             return false;
         }
-        //EndianConvert(m_unk5);
+        EndianConvert(db2Header.m_unk5);
     }
 
     if (db2Header.m_maxIndex != 0)
