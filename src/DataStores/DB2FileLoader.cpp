@@ -7,16 +7,11 @@
 
 constexpr char const* nullStr = "";
 
-struct LocalizedString
-{
-    char const* Str[TOTAL_LOCALES];
-};
+DB2FileLoader::DB2FileLoader() = default;
 
-DB2FileLoader::DB2FileLoader() :
-    m_fieldsOffset(nullptr),
-    m_data(nullptr),
-    m_stringTable(nullptr)
+DB2FileLoader::DB2FileLoader(std::string_view filename, const char *fmt)
 {
+    Load(filename, fmt);
 }
 
 bool DB2FileLoader::Load(std::string_view filename, char const* fmt)
@@ -414,10 +409,36 @@ uint32_t DB2FileLoader::Record::getUInt(size_t field) const
     return val;
 }
 
+int32_t DB2FileLoader::Record::getInt(size_t field) const
+{
+    assert(field < file.db2Header.m_fieldCount);
+    int32_t val = *reinterpret_cast<int32_t*>(offset+file.GetOffset(field));
+    //EndianConvert(val);
+    return val;
+}
+
 uint8_t DB2FileLoader::Record::getUInt8(size_t field) const
 {
     assert(field < file.db2Header.m_fieldCount);
     return *reinterpret_cast<uint8_t*>(offset+file.GetOffset(field));
+}
+
+int8_t DB2FileLoader::Record::getInt8(size_t field) const
+{
+    assert(field < file.db2Header.m_fieldCount);
+    return *reinterpret_cast<int8_t*>(offset+file.GetOffset(field));
+}
+
+uint64_t DB2FileLoader::Record::getUInt64(size_t field) const
+{
+    assert(field < file.db2Header.m_fieldCount);
+    return *reinterpret_cast<uint64_t*>(offset+file.GetOffset(field));
+}
+
+int64_t DB2FileLoader::Record::getInt64(size_t field) const
+{
+    assert(field < file.db2Header.m_fieldCount);
+    return *reinterpret_cast<int64_t*>(offset+file.GetOffset(field));
 }
 
 const char *DB2FileLoader::Record::getString(size_t field) const

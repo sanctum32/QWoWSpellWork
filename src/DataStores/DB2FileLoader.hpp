@@ -9,6 +9,7 @@ class DB2FileLoader
 {
 public:
     DB2FileLoader();
+    DB2FileLoader(std::string_view filename, const char *fmt);
     ~DB2FileLoader();
 
     bool Load(std::string_view filename, const char *fmt);
@@ -23,7 +24,11 @@ public:
     public:
         float getFloat(size_t field) const;
         uint32_t getUInt(size_t field) const;
+        int32_t getInt(size_t field) const;
         uint8_t getUInt8(size_t field) const;
+        int8_t getInt8(size_t field) const;
+        uint64_t getUInt64(size_t field) const;
+        int64_t getInt64(size_t field) const;
 
         const char *getString(size_t field) const;
     };
@@ -60,8 +65,8 @@ private:
         int m_unk5{};          // WDB2
     } db2Header;
 
-    uint32_t *m_fieldsOffset;
-    unsigned char *m_data;
-    unsigned char *m_stringTable;
+    uint32_t *m_fieldsOffset{nullptr};
+    unsigned char *m_data{nullptr};
+    unsigned char *m_stringTable{nullptr};
 };
 

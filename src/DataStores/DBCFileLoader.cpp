@@ -5,19 +5,11 @@
 #include <cstdlib>
 #include <string>
 
-DBCFileLoader::DBCFileLoader(std::string_view filename, const char *fmt) :
-    fieldsOffset(nullptr),
-    data(nullptr),
-    stringTable(nullptr)
+DBCFileLoader::DBCFileLoader() = default;
+
+DBCFileLoader::DBCFileLoader(std::string_view filename, const char *fmt)
 {
     Load(filename, fmt);
-}
-
-DBCFileLoader::DBCFileLoader() :
-    fieldsOffset(nullptr),
-    data(nullptr),
-    stringTable(nullptr)
-{
 }
 
 bool DBCFileLoader::Load(std::string_view filename, const char* fmt)

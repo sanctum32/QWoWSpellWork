@@ -7,7 +7,6 @@ class DBCFileLoader
 public:
     DBCFileLoader();
     DBCFileLoader(std::string_view filename, const char *fmt);
-
     ~DBCFileLoader();
 
     bool Load(std::string_view filename, const char *fmt);
@@ -69,9 +68,9 @@ private:
         }
     } dbcHeader;
 
-    uint32_t *fieldsOffset;
-    unsigned char *data;
-    unsigned char *stringTable;
+    uint32_t *fieldsOffset{nullptr};
+    unsigned char *data{nullptr};
+    unsigned char *stringTable{nullptr};
 
     DBCFileLoader(DBCFileLoader const& right) = delete;
     DBCFileLoader& operator=(DBCFileLoader const& right) = delete;
