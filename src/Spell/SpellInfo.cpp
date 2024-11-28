@@ -253,7 +253,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 
         const auto& itr2 = std::find_if(skillLineAbilities.begin(), skillLineAbilities.end(), [_skillId, spellId](const auto _skillLineAbility)
         {
-            auto const& abilityData = _skillLineAbility.second;
+            const auto& abilityData = _skillLineAbility.second;
             return _skillId == abilityData.SkillLine && abilityData.Spell == spellId;
         });
 
@@ -1085,181 +1085,199 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
 
     using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;
 
-    const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", getEffectMiscValue() }, { ":MiscValueB:", getEffectMiscValueB() } }};
-    for (const auto& [strToRep, value] : miscValues)
     {
-        if (!formattedStr->contains(strToRep))
+        const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", getEffectMiscValue() }, { ":MiscValueB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : miscValues)
         {
-            continue;
-        }
-
-        formattedStr->replace(strToRep, QString::number(value));
-    }
-
-    const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", getEffectMiscValue() }, { ":AreaEntryNameMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : areaEntryNames)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        const auto* areaInfo = sDataStorage->GetAreaTableEntry(value);
-        formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->GetName().toString() : "Unknown");
-    }
-
-    const std::array<const strRepFormatData, 2> unitModStat = {{ {":UnitModNameMiscVal:", getEffectMiscValue() }, { ":UnitModNameMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : unitModStat)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        const auto statName = sSpellWorkJson->GetUnitModName(value);
-        formattedStr->replace(strToRep, QString(statName.data()));
-    }
-
-    const std::array<const strRepFormatData, 2> spellMod = {{ {":SpellModNameMiscVal:", getEffectMiscValue() }, { ":SpellModNameMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : spellMod)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        const auto statName = sSpellWorkJson->GetSpellModName(value);
-        formattedStr->replace(strToRep, QString(statName.data()));
-    }
-
-    const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", getEffectMiscValue() }, { ":FactionNameMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : factionName)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        if (const auto* factionEntry = sDataStorage->GetFactionEntry(value))
-        {
-            formattedStr->replace(strToRep, factionEntry->Name);
-        }
-        else
-        {
-            formattedStr->replace(strToRep, QString("<b>Cannot find entry %1 in Faction.dbc</b><br>").arg(value));
-        }
-    }
-
-    const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", getEffectMiscValue() }, { ":CBRatingListMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : combatRating)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        QString ratingsStr;
-        for (uint8_t ratingId = 0; ratingId <= MAX_UINT32_BITMASK_INDEX; ++ratingId)
-        {
-            const uint32_t mask = 1U << ratingId;
-            if ((value & mask) != 0)
-            {
-                if (!ratingsStr.isEmpty())
-                {
-                    ratingsStr += ", ";
-                }
-
-                ratingsStr += sSpellWorkJson->GetCombatRatingName(ratingId);
-            }
-        }
-
-        if (ratingsStr.isEmpty())
-        {
-            ratingsStr = "Unknown";
-        }
-        formattedStr->replace(strToRep, ratingsStr);
-    }
-
-    const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", getEffectMiscValue() }, { ":ScreenEffectMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : screenEffect)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        const auto* _screenEffect = sDataStorage->GetScreenEffectEntry(value);
-        formattedStr->replace(strToRep, _screenEffect != nullptr ? _screenEffect->GetName().toString() : "unknown");
-    }
-
-    const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", getEffectMiscValue() }, { ":OverrideSpellListMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : overrideSpellList)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        const auto* spellOverride = sDataStorage->GetOverrideSpellDataEntry(value);
-        if (spellOverride == nullptr)
-        {
-            formattedStr->replace(strToRep, QString("entry %1 does not exist in OverrideSpellData.dbc").arg(value));
-        }
-        else
-        {
-            bool first = false;
-            QString result;
-            for (auto pSpellId : spellOverride->Spells)
-            {
-                if (pSpellId == 0)
-                {
-                    continue;
-                }
-
-                if (!first)
-                {
-                    first = true;
-                    result = "<b>Overriding Spells:</b><br>";
-                }
-                const auto* spell = sDataStorage->GetSpellEntry(pSpellId);
-                result += QString("<span style=\"color: orange\">- %1</span> %2<br>").arg(pSpellId).arg(spell != nullptr ? spell->getSpellName() : "unknown");
-            }
-
-            formattedStr->replace(strToRep, result);
-        }
-    }
-
-    const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunitiesMiscVal:", getEffectMiscValue() }, { ":MechanicImmunitiesMiscValB:", getEffectMiscValueB() } }};
-    for (auto const& [strToRep, value] : mechanicImmunities)
-    {
-        if (!formattedStr->contains(strToRep))
-        {
-            continue;
-        }
-
-        QString result;
-        for (uint8_t id = 1; id <= MAX_UINT32_BITMASK_INDEX; ++id)
-        {
-            const uint32_t flag = 1U << (id - 1);
-            if ((value & flag) == 0)
+            if (!formattedStr->contains(strToRep))
             {
                 continue;
             }
 
-            if (!result.isEmpty())
+            formattedStr->replace(strToRep, QString::number(value), Qt::CaseInsensitive);
+        }
+    }
+
+    {
+        const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", getEffectMiscValue() }, { ":AreaEntryNameMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : areaEntryNames)
+        {
+            if (!formattedStr->contains(strToRep))
             {
-                result += ", ";
+                continue;
             }
 
-            result += sSpellWorkJson->GetSpellMechanicName(id);
+            const auto* areaInfo = sDataStorage->GetAreaTableEntry(value);
+            formattedStr->replace(strToRep, areaInfo != nullptr ? areaInfo->GetName().toString() : "Unknown", Qt::CaseInsensitive);
         }
+    }
 
-        if (result.isEmpty())
+    {
+        const std::array<const strRepFormatData, 2> unitModStat = {{ {":UnitModNameMiscVal:", getEffectMiscValue() }, { ":UnitModNameMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : unitModStat)
         {
-            result += sSpellWorkJson->GetSpellMechanicName(MECHANIC_NONE);
-        }
+            if (!formattedStr->contains(strToRep))
+            {
+                continue;
+            }
 
-        formattedStr->replace(strToRep, result);
+            const auto statName = sSpellWorkJson->GetUnitModName(value);
+            formattedStr->replace(strToRep, QString(statName.data()), Qt::CaseInsensitive);
+        }
+    }
+
+    {
+        const std::array<const strRepFormatData, 2> spellMod = {{ {":SpellModNameMiscVal:", getEffectMiscValue() }, { ":SpellModNameMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : spellMod)
+        {
+            if (!formattedStr->contains(strToRep))
+            {
+                continue;
+            }
+
+            const auto statName = sSpellWorkJson->GetSpellModName(value);
+            formattedStr->replace(strToRep, QString(statName.data()), Qt::CaseInsensitive);
+        }
+    }
+
+    {
+        const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", getEffectMiscValue() }, { ":FactionNameMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : factionName)
+        {
+            if (!formattedStr->contains(strToRep))
+            {
+                continue;
+            }
+
+            if (const auto* factionEntry = sDataStorage->GetFactionEntry(value))
+            {
+                formattedStr->replace(strToRep, factionEntry->Name, Qt::CaseInsensitive);
+            }
+            else
+            {
+                formattedStr->replace(strToRep, QString("<b>Cannot find entry %1 in Faction.dbc</b><br>").arg(value), Qt::CaseInsensitive);
+            }
+        }
+    }
+
+    {
+        const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", getEffectMiscValue() }, { ":CBRatingListMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : combatRating)
+        {
+            if (!formattedStr->contains(strToRep))
+            {
+                continue;
+            }
+
+            QString ratingsStr;
+            for (uint8_t ratingId = 0; ratingId <= MAX_UINT32_BITMASK_INDEX; ++ratingId)
+            {
+                const uint32_t mask = 1U << ratingId;
+                if ((value & mask) != 0)
+                {
+                    if (!ratingsStr.isEmpty())
+                    {
+                        ratingsStr += ", ";
+                    }
+
+                    ratingsStr += sSpellWorkJson->GetCombatRatingName(ratingId);
+                }
+            }
+
+            if (ratingsStr.isEmpty())
+            {
+                ratingsStr = "Unknown";
+            }
+            formattedStr->replace(strToRep, ratingsStr, Qt::CaseInsensitive);
+        }
+    }
+
+    {
+        const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", getEffectMiscValue() }, { ":ScreenEffectMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : screenEffect)
+        {
+            if (!formattedStr->contains(strToRep))
+            {
+                continue;
+            }
+
+            const auto* _screenEffect = sDataStorage->GetScreenEffectEntry(value);
+            formattedStr->replace(strToRep, _screenEffect != nullptr ? _screenEffect->GetName().toString() : "unknown", Qt::CaseInsensitive);
+        }
+    }
+
+    {
+        const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", getEffectMiscValue() }, { ":OverrideSpellListMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : overrideSpellList)
+        {
+            if (!formattedStr->contains(strToRep))
+            {
+                continue;
+            }
+
+            const auto* spellOverride = sDataStorage->GetOverrideSpellDataEntry(value);
+            if (spellOverride == nullptr)
+            {
+                formattedStr->replace(strToRep, QString("entry %1 does not exist in OverrideSpellData.dbc").arg(value));
+            }
+            else
+            {
+                bool first = false;
+                QString result;
+                for (auto pSpellId : spellOverride->Spells)
+                {
+                    if (pSpellId == 0)
+                    {
+                        continue;
+                    }
+
+                    if (!first)
+                    {
+                        first = true;
+                        result = "<b>Overriding Spells:</b><br>";
+                    }
+                    const auto* spell = sDataStorage->GetSpellEntry(pSpellId);
+                    result += QString("<span style=\"color: orange\">- %1</span> %2<br>").arg(pSpellId).arg(spell != nullptr ? spell->getSpellName() : "unknown");
+                }
+
+                formattedStr->replace(strToRep, result, Qt::CaseInsensitive);
+            }
+        }
+    }
+
+    {
+        const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunitiesMiscVal:", getEffectMiscValue() }, { ":MechanicImmunitiesMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : mechanicImmunities)
+        {
+            if (!formattedStr->contains(strToRep))
+            {
+                continue;
+            }
+
+            QString result;
+            for (uint8_t id = 1; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+            {
+                const uint32_t flag = 1U << (id - 1);
+                if ((value & flag) == 0)
+                {
+                    continue;
+                }
+
+                if (!result.isEmpty())
+                {
+                    result += ", ";
+                }
+
+                result += sSpellWorkJson->GetSpellMechanicName(id);
+            }
+
+            if (result.isEmpty())
+            {
+                result += sSpellWorkJson->GetSpellMechanicName(MECHANIC_NONE);
+            }
+
+            formattedStr->replace(strToRep, result, Qt::CaseInsensitive);
+        }
     }
 
     if (formattedStr->contains(":EffectItemType:"))
@@ -1270,7 +1288,7 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
     if (formattedStr->contains(":EffectItemTypeName:"))
     {
         const auto* itemEntry = sDataStorage->GetItemEntry(getEffectItemType());
-        formattedStr->replace(":EffectItemName:", itemEntry != nullptr ? itemEntry->GetName() : "<unknown>", Qt::CaseInsensitive);
+        formattedStr->replace(":EffectItemName:", itemEntry != nullptr ? itemEntry->GetName() : "Unknown", Qt::CaseInsensitive);
     }
 
     return formattedStr;
