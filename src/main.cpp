@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
     const bool dbcLoaded = sDataStorage->LoadDBCData();
     const bool db2Loaded = sDataStorage->LoadDB2Datas();
 
+    sDataStorage->GenerateExtraDataInfo();
+
 #ifdef SPELLWORK_BUILD_SQL
     const bool sqlConnected = sSpellWorkSQL->Init();
 #endif

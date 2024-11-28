@@ -65,19 +65,6 @@ bool DataStorage::LoadDBCData()
         return false;
     }
 
-    for (const auto& spellEffectItr : m_SpellEffectEntries)
-    {
-        auto& effectEntry = spellEffectItr.second;
-        assert(effectEntry.getEffectIndex() < MAX_SPELL_EFFECTS);
-
-        // link spell related pointers
-        auto spellEntryItr = m_spellEntries.find(effectEntry.getSpellID());
-        if (spellEntryItr != m_spellEntries.end())
-        {
-            spellEntryItr->second.m_spellEffects[effectEntry.getEffectIndex()] = &effectEntry;
-        }
-    }
-
     return true;
 }
 
@@ -254,13 +241,24 @@ bool DataStorage::LoadDB2Datas()
         return false;
     }
 
-    // Generate effect extra details
+    return true;
+}
+
+void DataStorage::GenerateExtraDataInfo()
+{
     for (auto& spellEffectItr : m_SpellEffectEntries)
     {
         auto& effectEntry = spellEffectItr.second;
         assert(effectEntry.getEffectIndex() < MAX_SPELL_EFFECTS);
+
+        // link spell related pointers
+        auto spellEntryItr = m_spellEntries.find(effectEntry.getSpellID());
+        if (spellEntryItr != m_spellEntries.end())
+        {
+            spellEntryItr->second.m_spellEffects[effectEntry.getEffectIndex()] = &effectEntry;
+        }
+
+        // Generate effect extra details
         effectEntry.GenerateExtraInfo();
     }
-
-    return true;
 }

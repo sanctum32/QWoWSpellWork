@@ -53,6 +53,9 @@ public:
     bool LoadDB2Datas();
     const auto* GetItemEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ItemSparseEntries); }
 
+    // Generates extra and links information to dbc data
+    void GenerateExtraDataInfo();
+
 private:
     bool LoadDBCDatas();
     bool LoadSqlDBCData();
