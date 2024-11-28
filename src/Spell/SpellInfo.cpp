@@ -1282,13 +1282,13 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
 
     if (formattedStr->contains(":EffectItemType:"))
     {
-        formattedStr->replace(":EffectItemType:", QString(getEffectItemType()), Qt::CaseInsensitive);
+        formattedStr->replace(":EffectItemType:", QString::number(getEffectItemType()), Qt::CaseInsensitive);
     }
 
     if (formattedStr->contains(":EffectItemTypeName:"))
     {
         const auto* itemEntry = sDataStorage->GetItemEntry(getEffectItemType());
-        formattedStr->replace(":EffectItemName:", itemEntry != nullptr ? itemEntry->GetName() : "Unknown", Qt::CaseInsensitive);
+        formattedStr->replace(":EffectItemTypeName:", itemEntry != nullptr ? itemEntry->GetName() : "Unknown", Qt::CaseInsensitive);
     }
 
     return formattedStr;
