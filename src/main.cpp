@@ -36,14 +36,13 @@ int main(int argc, char *argv[])
 
     sSpellWorkConfig->ReadSettings();
     const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
+#ifdef SPELLWORK_BUILD_SQL
+    const bool sqlConnected = sSpellWorkSQL->Init();
+#endif
     const bool dbcLoaded = sDataStorage->LoadDBCData();
     const bool db2Loaded = sDataStorage->LoadDB2Datas();
 
     sDataStorage->GenerateExtraDataInfo();
-
-#ifdef SPELLWORK_BUILD_SQL
-    const bool sqlConnected = sSpellWorkSQL->Init();
-#endif
 
     if (sSpellWorkConfig->GetAppConfig().useQtFusionStyle)
     {
