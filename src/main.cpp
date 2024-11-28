@@ -36,7 +36,9 @@ int main(int argc, char *argv[])
 
     sSpellWorkConfig->ReadSettings();
     const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
-    const bool dbcLoaded = sDataStorage->LoadData();
+    const bool dbcLoaded = sDataStorage->LoadDBCData();
+    const bool db2Loaded = sDataStorage->LoadDB2Datas();
+
 #ifdef SPELLWORK_BUILD_SQL
     const bool sqlConnected = sSpellWorkSQL->Init();
 #endif
@@ -67,6 +69,7 @@ int main(int argc, char *argv[])
     mainWindow.UpdateDBCStatus(dbcLoaded);
     mainWindow.UpdateJsonStatus(jsonLoaded);
     mainWindow.UpdateFilterStatus(false);
+    mainWindow.UpdateDB2Status(db2Loaded);
     mainWindow.show();
 
 #ifdef SPELLWORK_BUILD_SQL

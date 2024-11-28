@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // statusBar
     ui.statusBar->addPermanentWidget(&m_dbcStatus);
+    ui.statusBar->addPermanentWidget(&m_db2Status);
     ui.statusBar->addPermanentWidget(&m_jsonStatus);
     ui.statusBar->addPermanentWidget(&m_sqlStatus);
 
@@ -53,6 +54,18 @@ void MainWindow::UpdateDBCStatus(bool success)
     else
     {
         m_dbcStatus.setText("DBC: <span style=\"color:red\">not loaded</span>");
+    }
+}
+
+void MainWindow::UpdateDB2Status(bool success)
+{
+    if (success)
+    {
+        m_db2Status.setText("DB2: <span style=\"color:green\">loaded</span>");
+    }
+    else
+    {
+        m_db2Status.setText("DB2: <span style=\"color:red\">not loaded</span>");
     }
 }
 

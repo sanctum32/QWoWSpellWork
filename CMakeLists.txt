@@ -43,6 +43,8 @@ set(UI_FILES
 set(PROJECT_SOURCES
     src/DataStores/DB2FileLoader.hpp
     src/DataStores/DB2FileLoader.cpp
+    src/DataStores/DB2Structures.hpp
+    src/DataStores/DB2Structures.cpp
     src/DataStores/DBCStructures.hpp
     src/DataStores/DBCFileLoader.hpp
     src/DataStores/DBCFileLoader.cpp

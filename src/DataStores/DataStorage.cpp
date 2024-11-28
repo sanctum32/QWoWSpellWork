@@ -1,4 +1,5 @@
 #include "DataStorage.hpp"
+#include "DB2FileLoader.hpp"
 #ifdef SPELLWORK_BUILD_SQL
 #include "SQL/sqlConnection.hpp"
 #endif // SPELLWORK_BUILD_SQL
@@ -23,7 +24,24 @@ bool OpenAndReadDBC(std::string_view path, std::string_view dbcFileName, std::ma
     return true;
 }
 
-bool DataStorage::LoadData()
+template<typename T>
+bool OpenAndReadDB2(std::string_view path, std::string_view dbcFileName, std::map<uint32_t, T>& storage)
+{
+    DB2FileLoader db2File(std::string(path) + "//" + std::string(dbcFileName), T::GetDBCFormat());
+    if (!db2File.IsLoaded())
+    {
+        return false;
+    }
+
+    for (uint32_t i = 0; i < db2File.GetNumRows(); ++i)
+    {
+        storage.emplace(db2File.getRecord(i).getUInt(0), db2File.getRecord(i));
+    }
+
+    return true;
+}
+
+bool DataStorage::LoadDBCData()
 {
     if (!sSpellWorkConfig->GetAppConfig().loadDBCSpells && !sSpellWorkConfig->GetAppConfig().loadSQLSpells)
     {
@@ -228,3 +246,13 @@ bool DataStorage::LoadSqlDBCData()
 #endif // SPELLWORK_BUILD_SQL
 }
 
+bool DataStorage::LoadDB2Datas()
+{
+    const auto& dbcFolderPath = sSpellWorkConfig->GetAppConfig().dbcFilePath;
+    if (!OpenAndReadDB2(dbcFolderPath, "Item-sparse.db2", m_ItemSparseEntries))
+    {
+        return false;
+    }
+
+    return true;
+}
