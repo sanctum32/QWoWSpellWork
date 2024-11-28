@@ -1267,5 +1267,11 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(":EffectItemType:", QString(getEffectItemType()), Qt::CaseInsensitive);
     }
 
+    if (formattedStr->contains(":EffectItemTypeName:"))
+    {
+        const auto* itemEntry = sDataStorage->GetItemEntry(getEffectItemType());
+        formattedStr->replace(":EffectItemName:", itemEntry != nullptr ? itemEntry->GetName() : "<unknown>", Qt::CaseInsensitive);
+    }
+
     return formattedStr;
 }
