@@ -1001,11 +1001,6 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             result += QString("EffectChainTarget = %1<br>").arg(effectInfo->getEffectChainTargets());
         }
 
-        if (effectInfo->getEffectItemType() != 0)
-        {
-            result += QString("EffectItemType = %1<br>").arg(effectInfo->getEffectItemType());
-        }
-
         if (effectInfo->getEffectMechanic() != MECHANIC_NONE)
         {
             result += QString("Effect Mechanic = %1 (%2)<br>")
