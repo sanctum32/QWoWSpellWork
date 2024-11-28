@@ -15,8 +15,8 @@ public:
         return &storage;
     }
 
+    // DBC data
     bool LoadDBCData();
-
     const auto& GetSpellEntries() const { return m_spellEntries; }
     const auto* GetSpellEntry(uint32_t id) const { return GetEntryFromStorage(id, m_spellEntries); }
     const auto* GetSpellScalingEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellScalingEntries); }
@@ -49,7 +49,9 @@ public:
     const auto* GetSpellRadiusEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellRadiusEntries); }
     const auto* GetFactionEntry(uint32_t id) const { return GetEntryFromStorage(id, m_FactionEntries); }
 
+    // DB2 data
     bool LoadDB2Datas();
+    const auto* GetItemEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ItemSparseEntries); }
 
 private:
     bool LoadDBCDatas();

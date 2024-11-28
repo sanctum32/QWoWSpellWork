@@ -57,7 +57,7 @@ ItemSparseEntry::ItemSparseEntry(const DB2FileLoader::Record &record)
     RangedModRange      = record.getFloat(67);
 
     // 68 - 72
-    for (size_t i = 0; SpellID.size(); ++i)
+    for (size_t i = 0; i < SpellID.size(); ++i)
     {
         SpellID.at(i) = record.getInt(68 + i);
     }
@@ -120,19 +120,19 @@ ItemSparseEntry::ItemSparseEntry(const DB2FileLoader::Record &record)
         SocketColor.at(i) = record.getInt(118 + i);
     }
 
-    // 121 - 124
+    // 121 - 123
     for (size_t i = 0; i < Content.size(); ++i)
     {
         Content.at(i) = record.getInt(121 + i);
     }
 
-    SocketBonus         = record.getInt(125);
-    GemProperties       = record.getInt(126);
-    ArmorDamageModifier = record.getFloat(127);
-    Duration            = record.getInt(128);
-    ItemLimitCategory   = record.getUInt(129);
-    HolidayID           = record.getInt(130);
-    StatScalingFactor   = record.getFloat(131);
-    CurrencySubstitutionID = record.getInt(132);
-    CurrencySubstitutionCount = record.getInt(133);
+    SocketBonus         = record.getInt(124);
+    GemProperties       = record.getInt(125);
+    ArmorDamageModifier = record.getFloat(126);
+    Duration            = record.getInt(127);
+    ItemLimitCategory   = record.getUInt(128);
+    HolidayID           = record.getInt(129);
+    StatScalingFactor   = record.getFloat(130);
+    CurrencySubstitutionID = record.getInt(131);
+    CurrencySubstitutionCount = record.getInt(132);
 }

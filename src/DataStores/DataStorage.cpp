@@ -25,9 +25,9 @@ bool OpenAndReadDBC(std::string_view path, std::string_view dbcFileName, std::ma
 }
 
 template<typename T>
-bool OpenAndReadDB2(std::string_view path, std::string_view dbcFileName, std::map<uint32_t, T>& storage)
+bool OpenAndReadDB2(std::string_view path, std::string_view db2FileName, std::map<uint32_t, T>& storage)
 {
-    DB2FileLoader db2File(std::string(path) + "//" + std::string(dbcFileName), T::GetDB2Format());
+    DB2FileLoader db2File(std::string(path) + "//" + std::string(db2FileName), T::GetDB2Format());
     if (!db2File.IsLoaded())
     {
         return false;
