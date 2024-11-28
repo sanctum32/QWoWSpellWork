@@ -4,7 +4,7 @@
 #include "DB2Structures.hpp"
 #include "DBCStructures.hpp"
 
-Q_DECLARE_LOGGING_CATEGORY(DBCStores)
+Q_DECLARE_LOGGING_CATEGORY(DataStores)
 
 class DataStorage
 {

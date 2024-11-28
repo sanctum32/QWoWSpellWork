@@ -5,7 +5,7 @@
 #endif // SPELLWORK_BUILD_SQL
 #include "appSettings.hpp"
 
-Q_LOGGING_CATEGORY(DBCStores, "spellwork.dbcstores");
+Q_LOGGING_CATEGORY(DataStores, "spellwork.dataStores");
 
 template<typename T>
 bool OpenAndReadDBC(std::string_view path, std::string_view dbcFileName, std::map<uint32_t, T>& storage)
