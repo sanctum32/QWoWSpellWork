@@ -26,16 +26,15 @@ bool DB2FileLoader::Load(std::string_view filename, char const* fmt)
     if (!f)
         return false;
 
-    uint32_t header;
-    if (fread(&header, 4, 1, f) != 1)                        // Signature
+    if (fread(&db2Header.header, 4, 1, f) != 1)                        // Signature
     {
         fclose(f);
         return false;
     }
 
-    EndianConvert(header);
+    EndianConvert(db2Header.header);
 
-    if (header != 0x32424457)
+    if (!db2Header.IsHeaderValid())
     {
         fclose(f);
         return false;                                       //'WDB2'

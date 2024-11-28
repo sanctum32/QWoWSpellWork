@@ -55,6 +55,7 @@ private:
 
     struct
     {
+        uint32_t header{};
         uint32_t m_recordSize{};
         uint32_t m_recordCount{};
         uint32_t m_fieldCount{};
@@ -67,6 +68,12 @@ private:
         int m_maxIndex{};      // WDB2 (index table)
         int m_locale{};        // WDB2
         int m_unk5{};          // WDB2
+
+        inline bool IsHeaderValid() const
+        {
+            // 'WDB2'
+            return header == 0x32424457;
+        }
     } db2Header;
 
     uint32_t *m_fieldsOffset{nullptr};
