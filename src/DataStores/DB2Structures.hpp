@@ -87,7 +87,7 @@ struct ItemSparseEntry
     int32_t      CurrencySubstitutionID;                                // 132
     int32_t      CurrencySubstitutionCount;                             // 133
 
-    static constexpr const char* GetDBCFormat()
+    static constexpr const char* GetDB2Format()
     {
         return "niiiffiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiisssssiiiiiiiiiiiiiiiiiiiiiifiiifii";
     }

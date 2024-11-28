@@ -93,11 +93,11 @@ ItemSparseEntry::ItemSparseEntry(const DB2FileLoader::Record &record)
     }
 
     Bonding         = record.getInt(98);
-    Display         = record.getString(99);
-    Display1        = record.getString(100);
-    Display2        = record.getString(101);
-    Display3        = record.getString(102);
-    Description     = record.getString(103);
+    Display         = QString::fromStdString(record.getString(99));
+    Display1        = QString::fromStdString(record.getString(100));
+    Display2        = QString::fromStdString(record.getString(101));
+    Display3        = QString::fromStdString(record.getString(102));
+    Description     = QString::fromStdString(record.getString(103));
     PageText        = record.getUInt(104);
     LanguageID      = record.getInt(105);
     PageMaterial    = record.getInt(106);
