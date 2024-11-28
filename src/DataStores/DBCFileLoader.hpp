@@ -9,6 +9,10 @@ public:
     DBCFileLoader(std::string_view filename, const char *fmt);
     ~DBCFileLoader();
 
+    // Prevent copies
+    DBCFileLoader(DBCFileLoader const& right) = delete;
+    DBCFileLoader& operator=(DBCFileLoader const& right) = delete;
+
     bool Load(std::string_view filename, const char *fmt);
 
     class Record
@@ -71,7 +75,4 @@ private:
     uint32_t *fieldsOffset{nullptr};
     unsigned char *data{nullptr};
     unsigned char *stringTable{nullptr};
-
-    DBCFileLoader(DBCFileLoader const& right) = delete;
-    DBCFileLoader& operator=(DBCFileLoader const& right) = delete;
 };

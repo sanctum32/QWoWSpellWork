@@ -12,6 +12,10 @@ public:
     DB2FileLoader(std::string_view filename, const char *fmt);
     ~DB2FileLoader();
 
+    // Prevent copies
+    DB2FileLoader(DB2FileLoader const& right) = delete;
+    DB2FileLoader& operator=(DB2FileLoader const& right) = delete;
+
     bool Load(std::string_view filename, const char *fmt);
 
     class Record
