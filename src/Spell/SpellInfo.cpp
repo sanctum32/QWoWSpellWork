@@ -1262,5 +1262,10 @@ std::shared_ptr<QString> SpellEffectEntry::GenerateExtraDetails(const QString& f
         formattedStr->replace(strToRep, result);
     }
 
+    if (formattedStr->contains(":EffectItemType:"))
+    {
+        formattedStr->replace(":EffectItemType:", QString(getEffectItemType()), Qt::CaseInsensitive);
+    }
+
     return formattedStr;
 }

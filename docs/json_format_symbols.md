@@ -24,3 +24,4 @@ Misc value, Misc valueB - Spell effect's misc values. These field could have bit
 | :OverrideSpellListMiscValB: | Prints spell override list | Override list entry by Misc valueB |
 | :MechanicImmunitiesMiscVal: | Prints mechanic immunity type names list | Mechanic type names are extracted from Misc value bitmask |
 | :MechanicImmunitiesMiscValB: | Prints mechanic immunity type names list | Mechanic type names are extracted from Misc valueB bitmask |
+| :EffectItemType: | Prints effected item entry or type | EffectItemType |
