@@ -1,4 +1,4 @@
-#include "DBC/DBCStructures.hpp"
+#include "DBCStructures.hpp"
 #include "DBCStores.hpp"
 #include "ItemDefines.hpp"
 #include "JsonData/JsonData.hpp"

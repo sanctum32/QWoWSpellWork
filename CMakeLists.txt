@@ -41,12 +41,15 @@ set(UI_FILES
 )
 
 set(PROJECT_SOURCES
-    src/DBC/DBCStructures.hpp
-    src/DBC/DBCFileLoader.hpp
-    src/DBC/DBCFileLoader.cpp
-    src/DBC/DBCStructures.cpp
-    src/DBC/DBCStores.hpp
-    src/DBC/DBCStores.cpp
+    src/DataStores/DB2FileLoader.hpp
+    src/DataStores/DB2FileLoader.cpp
+    src/DataStores/DBCStructures.hpp
+    src/DataStores/DBCFileLoader.hpp
+    src/DataStores/DBCFileLoader.cpp
+    src/DataStores/DBCStructures.cpp
+    src/DataStores/DBCStores.hpp
+    src/DataStores/DBCStores.cpp
+    src/DataStores/DataStoresDefines.hpp
     src/Spell/SpellInfo.cpp
     src/Spell/SpellInfoTabEvents.cpp
     src/JsonData/JsonData.hpp
@@ -120,7 +123,7 @@ endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     src
-    src/DBC
+    src/DataStores
     src/Enums
     src/Globals
     src/JsonData

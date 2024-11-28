@@ -1,9 +1,9 @@
+#include "DBCFileLoader.hpp"
+#include "DataStoresDefines.hpp"
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
-
-#include "DBCFileLoader.hpp"
 
 DBCFileLoader::DBCFileLoader(std::string_view filename, const char *fmt) :
     fieldsOffset(nullptr),

@@ -7,7 +7,7 @@
 #include "mainwindow.hpp"
 #include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
-#include "DBC/DBCStores.hpp"
+#include "DBCStores.hpp"
 #include "SearchFiltersStore.hpp"
 #include <cassert>
 #include <optional>

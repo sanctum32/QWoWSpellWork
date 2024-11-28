@@ -8,15 +8,15 @@
 #include <QStatusBar>
 #include <QJsonArray>
 #include <QFile>
-#include <thread>
 
 // App
 #include "mainwindow.hpp"
-#include "DBC/DBCStores.hpp"
+#include "DBCStores.hpp"
 #include "JsonData/JsonData.hpp"
 #include "Globals/appSettings.hpp"
 
 #ifdef SPELLWORK_BUILD_SQL
+#include <thread>
 #include "SQL/sqlConnection.hpp"
 #endif // SPELLWORK_BUILD_SQL
 
