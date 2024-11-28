@@ -267,6 +267,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 
     if (skillLine != nullptr && skillLineAbility != nullptr)
     {
+        result += line;
         result += QString("Skill (Id %1) \"%2\"<br>").arg(skillLineAbility->SkillLine).arg(skillLine->GetName());
         result += QString("    MinSkillLineRank %1<br>").arg(skillLineAbility->MinSkillLineRank);
 
@@ -277,8 +278,6 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 
         result += QString(", NumSkillups (%1)<br>")
                       .arg(skillLineAbility->NumSkillUps);
-
-        result += line;
     }
 }
 
@@ -290,16 +289,18 @@ inline void PrintReagents(QString& result, uint32_t SpellReagentsId)
         return;
     }
 
-    result += "Reagents:<br>";
+    result += "<br><b>Required items (or reagents):</b><br>";
     for (uint8_t i = 0; i < MAX_SPELL_REAGENTS; ++i)
     {
         if (spellReagent->Reagent[i] != 0)
         {
-            result += QString(" reagentId %1, amount %2<br>").arg(spellReagent->Reagent[i]).arg(spellReagent->ReagentCount[i]);
+            const auto* itemEntry = sDataStorage->GetItemEntry(spellReagent->Reagent[i]);
+            result += QString("Item: %1 (\"%2\"), required amount %3<br>")
+                .arg(spellReagent->Reagent[i])
+                .arg(itemEntry != nullptr ? itemEntry->GetName() : "Unknown")
+                .arg(spellReagent->ReagentCount[i]);
         }
     }
-
-    result += line;
 }
 
 inline void PrintSpellEquipmentInfo(QString& result, uint32_t SpellEquippedItemsId)
