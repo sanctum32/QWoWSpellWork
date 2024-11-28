@@ -13,6 +13,7 @@ NOTING: tool is not in alpha or beta stage. Tool development currently is at des
 * JSON formatting - It is possible to customize spell related descriptions without making application code changes
 * MariaDB/MySQL connection support. Currently supports only "Cataclysm preservation project's" trinitycore database structure
 * Spell filters
+* DBC and DB2 archive support
 
 ## Setup:
 *To run application, you must have extracted '4.3.4 (build 15595)" dbcs archive files (not provided in this project).*
