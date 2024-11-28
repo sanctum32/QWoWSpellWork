@@ -184,7 +184,7 @@ void MainWindow::PerformSpellSearch()
         // Direct-generic effect filters
         if (auraTypeId.has_value() || spellEffectId.has_value() || spellTargetA.has_value() || spellTargetB.has_value())
         {
-            if (!std::any_of(_spellInfo.m_spellEffects.begin(), _spellInfo.m_spellEffects.end(), [&](const auto* effectInfo)
+            if (!std::ranges::any_of(_spellInfo.m_spellEffects, [&](const auto* effectInfo)
             {
                 if (effectInfo == nullptr)
                 {
@@ -219,7 +219,7 @@ void MainWindow::PerformSpellSearch()
         }
 
         // Spell.dbc filter
-        if (std::any_of(spellAttrFilter.begin(), spellAttrFilter.end(), [_spellInfo](const auto& compareParam)
+        if (std::ranges::any_of(spellAttrFilter, [_spellInfo](const auto& compareParam)
         {
             return !compareParam.DoCheck(_spellInfo);
         }))
@@ -229,7 +229,7 @@ void MainWindow::PerformSpellSearch()
 
         // SpellEffect.dbc filter
         // return spells which has least one effect having effect matching field value
-        if (std::any_of(spellEffectAttrFilter.begin(), spellEffectAttrFilter.end(), [](const auto& compareParam)
+        if (std::ranges::any_of(spellEffectAttrFilter, [](const auto& compareParam)
         {
             return compareParam.hasData;
         }))
@@ -242,7 +242,7 @@ void MainWindow::PerformSpellSearch()
                     continue;
                 }
 
-                if (std::any_of(_spellInfo.m_spellEffects.begin(), _spellInfo.m_spellEffects.end(), [filter](const auto* effectInfo)
+                if (std::ranges::any_of(_spellInfo.m_spellEffects, [filter](const auto* effectInfo)
                 {
                     return effectInfo != nullptr && filter.DoCheck(*effectInfo);
                 }))

@@ -81,11 +81,11 @@ inline void UpdateMainWindowState(MainWindow* mainWindow)
 
     using namespace SpellWork::SearchFilters;
     const bool hasBasicFilters = m_genericFilter.HasData();
-    const bool hasSpellFieldFilters = std::any_of(m_spellEntryFilter.begin(), m_spellEntryFilter.end(), [](const auto& filter)
+    const bool hasSpellFieldFilters = std::ranges::any_of(m_spellEntryFilter, [](const auto& filter)
     {
         return filter.HasData();
     });
-    const bool hasSpellEffectFilters = std::any_of(m_spellEffectFilter.begin(), m_spellEffectFilter.end(), [](const auto& filter)
+    const bool hasSpellEffectFilters = std::ranges::any_of(m_spellEffectFilter, [](const auto& filter)
     {
         return filter.HasData();
     });

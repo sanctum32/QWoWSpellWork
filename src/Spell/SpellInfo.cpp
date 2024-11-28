@@ -107,7 +107,7 @@ inline void PrintSpellCategory(QString& result, uint32_t category_id)
 
 inline void PrintAttributes(QString& result, const std::vector<uint32_t>& attributes)
 {
-    if (attributes.empty() || !std::any_of(attributes.begin(), attributes.end(), [](uint32_t attr){ return attr != 0; }))
+    if (attributes.empty() || !std::ranges::any_of(attributes, [](uint32_t attr){ return attr != 0; }))
     {
         return;
     }
@@ -251,7 +251,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
         const auto _skillId = itr.first;
         const auto& _skillLineData = itr.second;
 
-        const auto& itr2 = std::find_if(skillLineAbilities.begin(), skillLineAbilities.end(), [_skillId, spellId](const auto _skillLineAbility)
+        const auto& itr2 = std::ranges::find_if(skillLineAbilities, [_skillId, spellId](const auto _skillLineAbility)
         {
             const auto& abilityData = _skillLineAbility.second;
             return _skillId == abilityData.SkillLine && abilityData.Spell == spellId;
@@ -284,7 +284,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 inline void PrintReagents(QString& result, uint32_t SpellReagentsId)
 {
     const auto* spellReagent = sDataStorage->GetSpellReagentsEntry(SpellReagentsId);
-    if (spellReagent == nullptr || !std::any_of(spellReagent->Reagent.begin(), spellReagent->Reagent.end(), [](int32_t reagent){ return reagent != 0; }))
+    if (spellReagent == nullptr || !std::ranges::any_of(spellReagent->Reagent, [](int32_t reagent){ return reagent != 0; }))
     {
         return;
     }
@@ -924,7 +924,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                     }
 
                     const auto& skillLineAbilities = sDataStorage->GetSkillLineAbilityEntries();
-                    const bool skillAbilityFound = std::any_of(skillLineAbilities.begin(), skillLineAbilities.end(), [entry](const auto& skillAbility)
+                    const bool skillAbilityFound = std::ranges::any_of(skillLineAbilities, [entry](const auto& skillAbility)
                     {
                         return skillAbility.second.Spell == entry;
                     });
