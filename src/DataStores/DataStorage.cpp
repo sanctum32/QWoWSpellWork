@@ -65,12 +65,12 @@ bool DataStorage::LoadDBCData()
         return false;
     }
 
-    // link spell related pointers
     for (const auto& spellEffectItr : m_SpellEffectEntries)
     {
-        auto const& effectEntry = spellEffectItr.second;
+        auto& effectEntry = spellEffectItr.second;
         assert(effectEntry.getEffectIndex() < MAX_SPELL_EFFECTS);
 
+        // link spell related pointers
         auto spellEntryItr = m_spellEntries.find(effectEntry.getSpellID());
         if (spellEntryItr != m_spellEntries.end())
         {
@@ -252,6 +252,14 @@ bool DataStorage::LoadDB2Datas()
     if (!OpenAndReadDB2(dbcFolderPath, "Item-sparse.db2", m_ItemSparseEntries))
     {
         return false;
+    }
+
+    // Generate effect extra details
+    for (auto& spellEffectItr : m_SpellEffectEntries)
+    {
+        auto& effectEntry = spellEffectItr.second;
+        assert(effectEntry.getEffectIndex() < MAX_SPELL_EFFECTS);
+        effectEntry.GenerateExtraInfo();
     }
 
     return true;

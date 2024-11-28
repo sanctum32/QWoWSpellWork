@@ -40,7 +40,9 @@ struct SpellEffectEntry
     }
 
     // Generates extra effect details by given format
-    std::shared_ptr<QString> GenerateExtraDetails(const QString& format) const;
+    void GenerateExtraInfo();
+    bool HasExtraInfo() const { return !m_extraInformation.isEmpty(); }
+    const QString& GetExtraInfo() const { return m_extraInformation; };
 
     const auto getId() const { return _fields[0].uint32Val; }                     // 0
     const auto getEffect() const { return _fields[1].uint32Val; }                 // 1
@@ -101,6 +103,9 @@ private:
     auto& _getSpellID() { return _fields[24].uint32Val; }               // 24
     auto& _getEffectIndex() { return _fields[25].uint32Val; }           // 25
     auto& _getEffectAttributes() { return _fields[26].uint32Val; }      // 26
+
+    // Extra information
+    QString m_extraInformation;
 };
 
 // SpellCategory.dbc
