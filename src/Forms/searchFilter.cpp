@@ -15,39 +15,39 @@ SearchFilter::SearchFilter(QWidget *parent) : QDialog(parent)
     // SpellFamilyFilter
     for (const auto& [id, name] : sSpellWorkJson->GetSpellFamilyData())
     {
-        ui.SpellFamilyFilter->addItem(name, id);
+        ui.SpellFamilyFilter->addItem(QString("%1 - %2").arg(id).arg(name), id);
     }
 
     // SpellAuraTypeFilter
     for (const auto& [id, auraType] : sSpellWorkJson->GetSpellAuraEffectData())
     {
-        ui.SpellAuraTypeFilter->addItem(auraType.name, id);
+        ui.SpellAuraTypeFilter->addItem(QString("%1 - %2").arg(id).arg(auraType.name), id);
     }
 
     // SpellEffectFilter
     for (const auto& [id, effect] : sSpellWorkJson->GetSpellEffectData())
     {
-        ui.SpellEffectFilter->addItem(effect.name, id);
+        ui.SpellEffectFilter->addItem(QString("%1 - %2").arg(id).arg(effect.name), id);
     }
 
     // SpellTargetFilter
     for (const auto& [id, name] : sSpellWorkJson->GetSpellTargetData())
     {
-        ui.SpellTargetFilterA->addItem(name, id);
-        ui.SpellTargetFilterB->addItem(name, id);
+        ui.SpellTargetFilterA->addItem(QString("%1 - %2").arg(id).arg(name), id);
+        ui.SpellTargetFilterB->addItem(QString("%1 - %2").arg(id).arg(name), id);
     }
 
     // Init advanced filter types
     for (auto const& [fieldId, fieldData] : SpellEntryFields)
     {
-        ui.spellAttrFieldName0->addItem(fieldData.fieldName, fieldId);
-        ui.spellAttrFieldName1->addItem(fieldData.fieldName, fieldId);
+        ui.spellAttrFieldName0->addItem(QString("%1 - %2").arg(fieldId).arg(fieldData.fieldName), fieldId);
+        ui.spellAttrFieldName1->addItem(QString("%1 - %2").arg(fieldId).arg(fieldData.fieldName), fieldId);
     }
 
     for (auto const& [fieldId, fieldData] : SpellEffectEntryFields)
     {
-        ui.effectFieldName0->addItem(fieldData.fieldName, fieldId);
-        ui.effectFieldName1->addItem(fieldData.fieldName, fieldId);
+        ui.effectFieldName0->addItem(QString("%1 - %2").arg(fieldId).arg(fieldData.fieldName), fieldId);
+        ui.effectFieldName1->addItem(QString("%1 - %2").arg(fieldId).arg(fieldData.fieldName), fieldId);
     }
 
     uint8_t idVal = 0;

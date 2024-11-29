@@ -425,7 +425,7 @@ inline void PrintSpellRangeInfo(QString& result, uint32_t rangeIndex)
     if (const auto* spellRange = sDataStorage->GetSpellRangeEntry(rangeIndex))
     {
         result += QString("SpellRange: (Id %1) \"%2\"<br>").arg(spellRange->Id).arg(spellRange->GetName());
-        result += QString("MinRangeNegative = %1, MinRangePositive %2<br>").arg(spellRange->minRangeHostile).arg(spellRange->minRangeFriend);
+        result += QString("MinRangeNegative = %1, MinRangePositive = %2<br>").arg(spellRange->minRangeHostile).arg(spellRange->minRangeFriend);
         result += QString("MaxRangeNegative = %1, MaxRangePositive = %2<br>").arg(spellRange->maxRangeHostile).arg(spellRange->maxRangeFriend);
     }
     else
