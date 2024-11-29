@@ -17,7 +17,7 @@ inline float frand(float min, float max)
     return distr(eng);
 }
 
-inline int irand(float min, float max)
+inline int irand(int min, int max)
 {
     std::random_device rd;
     std::mt19937 eng(rd());
