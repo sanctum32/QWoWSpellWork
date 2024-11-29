@@ -1278,7 +1278,17 @@ void SpellEffectEntry::GenerateExtraInfo()
 
     if (m_extraInformation.contains(":EffectItemTypeName:"))
     {
-        const auto* itemEntry = sDataStorage->GetItemEntry(getEffectItemType());
-        m_extraInformation.replace(":EffectItemTypeName:", itemEntry != nullptr ? itemEntry->GetName() : "Unknown", Qt::CaseInsensitive);
+        QString itemName;
+        if (getEffectItemType() == 0)
+        {
+            itemName = "None";
+        }
+        else
+        {
+            const auto* itemEntry = sDataStorage->GetItemEntry(getEffectItemType());
+            itemName = itemEntry != nullptr ? itemEntry->GetName() : "Unknown";
+        }
+
+        m_extraInformation.replace(":EffectItemTypeName:", itemName, Qt::CaseInsensitive);
     }
 }
