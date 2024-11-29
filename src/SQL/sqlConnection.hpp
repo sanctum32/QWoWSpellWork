@@ -2,7 +2,6 @@
 #ifdef SPELLWORK_BUILD_SQL
 #include <QLoggingCategory>
 #include <mysql/mysql.h>
-#include <thread>
 #include <atomic>
 
 extern std::atomic_bool isSQLShuttingDown;
@@ -25,8 +24,8 @@ public:
         return &sql;
     }
 
-    // Initializes and creates sql connection
-    // Must be called only once
+    // Initializes sql connection and tests world and hotfix databases
+    // Must be called only once!
     bool Init();
 
     // Returns active sql connection

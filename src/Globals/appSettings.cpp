@@ -34,6 +34,7 @@ bool SpellWorkConfig::ReadSettings()
             m_sql.username  = sqlJson.value("Username").toString();
             m_sql.password  = sqlJson.value("Password").toString();
             m_sql.worldDB   = sqlJson.value("WorldDB").toString();
+            m_sql.hotfixDB  = sqlJson.value("HotfixDB").toString();
             m_sql.pingDelayInMS = sqlJson.value("PingDelayInMS").toInt(10000);
             m_sql.canReconnect = sqlJson.value("CanReconnect").toBool(true);
         }

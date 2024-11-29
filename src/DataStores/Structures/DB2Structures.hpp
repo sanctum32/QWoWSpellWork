@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DB2FileLoader.hpp"
+#include "mysql.h"
 #include <array>
 #include <QString>
 
@@ -16,6 +17,7 @@ struct ItemSparseEntry
 {
     ItemSparseEntry() = default;
     ItemSparseEntry(DB2FileLoader::Record const& record);
+    ItemSparseEntry(const MYSQL_ROW& row);
 
     uint32_t     ID{};                                                    // 0
     uint32_t     Quality{};                                               // 1

@@ -9,6 +9,7 @@ struct SQLSettings
     QString username;
     QString password;
     QString worldDB;
+    QString hotfixDB;
     unsigned int port{};
     unsigned int pingDelayInMS{};
     bool enable{};

@@ -45,7 +45,7 @@ bool SpellWorkSQL::Init()
                            settings.hostname.toStdString().c_str(),
                            settings.username.toStdString().c_str(),
                            settings.password.toStdString().c_str(),
-                           settings.worldDB.toStdString().c_str(),
+                           nullptr,
                            settings.port,
                            nullptr, 0) == nullptr)
     {
@@ -53,9 +53,29 @@ bool SpellWorkSQL::Init()
         return false;
     }
 
-    qCDebug(SQL) << "connected";
+    // Test world database
+    std::stringstream query;
+    query << "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" << settings.worldDB.toStdString() << "'";
+    if (mysql_query(m_connection, query.str().c_str()) != 0)
+    {
+        qCDebug(SQL) << "Failed to connect to world database. Error: " << mysql_error(m_connection);
+        mysql_close(m_connection);
+        return false;
+    }
 
+    // Test hotfix database
+    query.clear();
+    query.str("");
+    query << "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" << settings.hotfixDB.toStdString() << "'";
+    if (mysql_query(m_connection, query.str().c_str()) != 0)
+    {
+        qCDebug(SQL) << "Failed to connect to hotfix database. Error: " << mysql_error(m_connection);
+        mysql_close(m_connection);
+        return false;
+    }
+
+    qCDebug(SQL) << "SQL connection was established successfully";
     return true;
 }
 
-#endif
+#endif // SPELLWORK_BUILD_SQL

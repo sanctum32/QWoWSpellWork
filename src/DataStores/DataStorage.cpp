@@ -145,18 +145,18 @@ bool DataStorage::LoadSqlDBCData()
         query << "`SpellLevelsId`,";                // 22
         query << "`SpellTargetRestrictionsId`,";    // 23
         query << "`SpellName`";                     // 24
-        query << " FROM `spell_dbc` WHERE `Id` > 0";
+        query << " FROM " << sSpellWorkConfig->GetSQLConfig().worldDB.toStdString() << ".`spell_dbc` WHERE `Id` > 0";
 
         if (mysql_query(connection, query.str().c_str()) != 0)
         {
-            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to execute spell_dbc query. Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to execute spell_dbc query. Error: " << mysql_error(connection);
             return false;
         }
 
         auto* result = mysql_store_result(connection);
         if (result == nullptr)
         {
-            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
             return false;
         }
 
@@ -169,7 +169,7 @@ bool DataStorage::LoadSqlDBCData()
 
         mysql_free_result(result);
 
-        qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spell_dbc";
+        qCDebug(DataStores) << "DataStores::LoadSqlDBCData: loaded " << count << " entries from spell_dbc";
     }
 
     // Load spelleffect_dbc
@@ -202,18 +202,18 @@ bool DataStorage::LoadSqlDBCData()
         query << "`EffectImplicitTargetB`,";    // 23
         query << "`SpellID`,";                  // 24
         query << "`EffectIndex`";               // 25
-        query << " FROM `spelleffect_dbc` WHERE `Id` > 0";
+        query << " FROM " << sSpellWorkConfig->GetSQLConfig().worldDB.toStdString() << ".`spelleffect_dbc` WHERE `Id` > 0";
 
         if (mysql_query(connection, query.str().c_str()) != 0)
         {
-            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to execute spelleffect_dbc query. Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to execute spelleffect_dbc query. Error: " << mysql_error(connection);
             return false;
         }
 
         auto* result = mysql_store_result(connection);
         if (result == nullptr)
         {
-            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
             return false;
         }
 
@@ -225,7 +225,7 @@ bool DataStorage::LoadSqlDBCData()
         }
         mysql_free_result(result);
 
-        qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spelleffect_dbc";
+        qCDebug(DataStores) << "DataStores::LoadSqlDBCData: loaded " << count << " entries from spelleffect_dbc";
     }
     return true;
 #else
@@ -233,14 +233,189 @@ bool DataStorage::LoadSqlDBCData()
 #endif // SPELLWORK_BUILD_SQL
 }
 
+void DataStorage::LoadSqlDB2Data()
+{
+#ifdef SPELLWORK_BUILD_SQL
+    auto* connection = sSpellWorkSQL->GetConnection();
+    if (connection == nullptr)
+    {
+        return;
+    }
+
+    {
+        std::stringstream query;
+        query << "SELECT "
+        << "ID, "                           // 0
+        << "Quality, "                      // 1
+        << "Flags1, "                       // 2
+        << "Flags2, "                       // 3
+        << "PriceRandomValue, "             // 4
+        << "PriceVariance, "                // 5
+        << "BuyCount, "                     // 6
+        << "BuyPrice, "                     // 7
+        << "SellPrice, "                    // 8
+        << "InventoryType, "                // 9
+        << "AllowableClass, "               // 10
+        << "AllowableRace, "                // 11
+        << "ItemLevel, "                    // 12
+        << "RequiredLevel, "                // 13
+        << "RequiredSkill, "                // 14
+        << "RequiredSkillRank, "            // 15
+        << "RequiredSpell, "                // 16
+        << "RequiredHonorRank, "            // 17
+        << "RequiredCityRank, "             // 18
+        << "RequiredReputationFaction, "    // 19
+        << "RequiredReputationRank, "       // 20
+        << "MaxCount, "                     // 21
+        << "Stackable, "                    // 22
+        << "ContainerSlots, "               // 23
+        << "ItemStatType1, "                // 24
+        << "ItemStatType2, "                // 25
+        << "ItemStatType3, "                // 26
+        << "ItemStatType4, "                // 27
+        << "ItemStatType5, "                // 28
+        << "ItemStatType6, "                // 29
+        << "ItemStatType7, "                // 30
+        << "ItemStatType8, "                // 31
+        << "ItemStatType9, "                // 32
+        << "ItemStatType10, "               // 33
+        << "ItemStatValue1, "               // 34
+        << "ItemStatValue2, "               // 35
+        << "ItemStatValue3, "               // 36
+        << "ItemStatValue4, "               // 37
+        << "ItemStatValue5, "               // 38
+        << "ItemStatValue6, "               // 39
+        << "ItemStatValue7, "               // 40
+        << "ItemStatValue8, "               // 41
+        << "ItemStatValue9, "               // 42
+        << "ItemStatValue10, "              // 43
+        << "ItemStatAllocation1, "          // 44
+        << "ItemStatAllocation2, "          // 45
+        << "ItemStatAllocation3, "          // 46
+        << "ItemStatAllocation4, "          // 47
+        << "ItemStatAllocation5, "          // 48
+        << "ItemStatAllocation6, "          // 49
+        << "ItemStatAllocation7, "          // 50
+        << "ItemStatAllocation8, "          // 51
+        << "ItemStatAllocation9, "          // 52
+        << "ItemStatAllocation10, "         // 53
+        << "ItemStatSocketCostMultiplier1, "    // 54
+        << "ItemStatSocketCostMultiplier2, "    // 55
+        << "ItemStatSocketCostMultiplier3, "    // 56
+        << "ItemStatSocketCostMultiplier4, "    // 57
+        << "ItemStatSocketCostMultiplier5, "    // 58
+        << "ItemStatSocketCostMultiplier6, "    // 59
+        << "ItemStatSocketCostMultiplier7, "    // 60
+        << "ItemStatSocketCostMultiplier8, "    // 61
+        << "ItemStatSocketCostMultiplier9, "    // 62
+        << "ItemStatSocketCostMultiplier10, "   // 63
+        << "ScalingStatDistribution, "      // 64
+        << "DamageType, "                   // 65
+        << "Delay, "                        // 66
+        << "RangedModRange, "               // 67
+        << "SpellID1, "                     // 68
+        << "SpellID2, "                     // 69
+        << "SpellID3, "                     // 70
+        << "SpellID4, "                     // 71
+        << "SpellID5, "                     // 72
+        << "SpellTrigger1, "                // 73
+        << "SpellTrigger2, "                // 74
+        << "SpellTrigger3, "                // 75
+        << "SpellTrigger4, "                // 76
+        << "SpellTrigger5, "                // 77
+        << "SpellCharges1, "                // 78
+        << "SpellCharges2, "                // 79
+        << "SpellCharges3, "                // 80
+        << "SpellCharges4, "                // 81
+        << "SpellCharges5, "                // 82
+        << "SpellCooldown1, "               // 83
+        << "SpellCooldown2, "               // 84
+        << "SpellCooldown3, "               // 85
+        << "SpellCooldown4, "               // 86
+        << "SpellCooldown5, "               // 87
+        << "SpellCategory1, "               // 88
+        << "SpellCategory2, "               // 89
+        << "SpellCategory3, "               // 90
+        << "SpellCategory4, "               // 91
+        << "SpellCategory5, "               // 92
+        << "SpellCategoryCooldown1, "       // 93
+        << "SpellCategoryCooldown2, "       // 94
+        << "SpellCategoryCooldown3, "       // 95
+        << "SpellCategoryCooldown4, "       // 96
+        << "SpellCategoryCooldown5, "       // 97
+        << "Bonding, "                      // 98
+        << "Display, "                      // 99
+        << "Display1, "                     // 100
+        << "Display2, "                     // 101
+        << "Display3, "                     // 102
+        << "Description, "                  // 103
+        << "PageText, "                     // 104
+        << "LanguageID, "                   // 105
+        << "PageMaterial, "                 // 106
+        << "StartQuest, "                   // 107
+        << "LockID, "                       // 108
+        << "Material, "                     // 109
+        << "SheatheType, "                  // 110
+        << "RandomProperty, "               // 111
+        << "RandomSuffix, "                 // 112
+        << "ItemSet, "                      // 113
+        << "AreaID, "                       // 114
+        << "MapID, "                        // 115
+        << "BagFamily, "                    // 116
+        << "TotemCategory, "                // 117
+        << "SocketColor1, "                 // 118
+        << "SocketColor2, "                 // 119
+        << "SocketColor3, "                 // 120
+        << "Content1, "                     // 121
+        << "Content2, "                     // 122
+        << "Content3, "                     // 123
+        << "SocketBonus, "                  // 124
+        << "GemProperties, "                // 125
+        << "ArmorDamageModifier, "          // 126
+        << "Duration, "                     // 127
+        << "ItemLimitCategory, "            // 128
+        << "HolidayID, "                    // 129
+        << "StatScalingFactor, "            // 130
+        << "CurrencySubstitutionID, "       // 131
+        << "CurrencySubstitutionCount"      // 132
+        << " FROM " << sSpellWorkConfig->GetSQLConfig().hotfixDB.toStdString() << ".`item_sparse` WHERE `ID` > 0";
+
+        if (mysql_query(connection, query.str().c_str()) != 0)
+        {
+            qCDebug(DataStores) << "DataStores::LoadSqlDB2Data: failed to execute query on table \"item_sparse\". Error: " << mysql_error(connection);
+            return;
+        }
+
+        auto* result = mysql_store_result(connection);
+        if (result == nullptr)
+        {
+            qCDebug(DataStores) << "DataStores::LoadSqlDB2Data: failed to fetch result data from table \"item_sparse\" query; Error: " << mysql_error(connection);
+            return;
+        }
+
+        uint32_t count = 0;
+        while (auto row = mysql_fetch_row(result))
+        {
+            m_ItemSparseEntries.try_emplace(static_cast<uint32_t>(std::stoul(row[0])), row);
+            ++count;
+        }
+        mysql_free_result(result);
+
+        qCDebug(DataStores) << "DataStores::LoadSqlDB2Data: loaded " << count << " entries from \"item_sparse\" table";
+    }
+    return;
+#endif // SPELLWORK_BUILD_SQL
+}
+
 bool DataStorage::LoadDB2Datas()
 {
     const auto& dbcFolderPath = sSpellWorkConfig->GetAppConfig().dbcFilePath;
-    if (!OpenAndReadDB2(dbcFolderPath, "Item-sparse.db2", m_ItemSparseEntries))
+    if (!(OpenAndReadDB2(dbcFolderPath, "Item-sparse.db2", m_ItemSparseEntries)))
     {
         return false;
     }
 
+    LoadSqlDB2Data();
     return true;
 }
 

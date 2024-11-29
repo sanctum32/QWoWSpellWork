@@ -11,6 +11,7 @@
         "Username": "root",
         "Password": "password",
         "WorldDB": "world_db_name",
+        "HotfixDB": "hotfix_db_name",
         "PingDelayInMS": 10000,
         "CanReconnect": true
     }

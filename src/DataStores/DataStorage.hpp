@@ -59,6 +59,7 @@ public:
 private:
     bool LoadDBCDatas();
     bool LoadSqlDBCData();
+    void LoadSqlDB2Data();
 
     template<class T>
     T const* GetEntryFromStorage(uint32_t id, std::map<uint32_t, T> const& storage) const
