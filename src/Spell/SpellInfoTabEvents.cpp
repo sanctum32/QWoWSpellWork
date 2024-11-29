@@ -336,4 +336,6 @@ void MainWindow::onClearResultsBtn()
     ui.resultCountLabel->setText("Found 0 results");
     ui.levelScalingSlider->setValue(1);
     ui.levelScalingText->setText("Selected Level 1, (max 85)");
+    ui.comboPointsSlider->setValue(0);
+    ui.comboScalingText->setText("Combo Points: 0");
 }
