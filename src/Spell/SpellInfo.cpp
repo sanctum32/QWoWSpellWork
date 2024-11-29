@@ -758,14 +758,14 @@ inline void PrintSpellCastRequirements(QString& result, uint32_t SpellCastingReq
     result += "<br>";
 }
 
-inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, uint8_t effIndex, uint8_t selectedLevel)
+inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, uint8_t effIndex, uint8_t selectedLevel, uint8_t comboPoints)
 {
     assert(spellEntry != nullptr);
     const auto* effectInfo = spellEntry->m_spellEffects.at(effIndex);
-
     assert(effectInfo != nullptr);
 
     result += QString("BasePoints = %1<br>").arg(effectInfo->getEffectBasePoints() + ((effectInfo->getEffectDieSides() == 0) ? 0 : 1));
+
 
     // Ported from SpellInfo::CalValue
     float basePointsPerLevel = effectInfo->getEffectRealPointsPerLevel();
@@ -810,18 +810,19 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
     {
         if (basePointsPerLevel != 0.0f)
         {
+            uint8_t level = selectedLevel;
             if (const auto* _levels = sDataStorage->GetSpellLevelsEntry(spellEntry->getSpellLevelsId()))
             {
-                if (selectedLevel > uint8_t(_levels->maxLevel) && _levels->maxLevel > 0)
-                    selectedLevel = uint8_t(_levels->maxLevel);
-                else if (selectedLevel < uint8_t(_levels->baseLevel))
-                    selectedLevel = uint8_t(_levels->baseLevel);
+                if (level > uint8_t(_levels->maxLevel) && _levels->maxLevel > 0)
+                    level = uint8_t(_levels->maxLevel);
+                else if (level < uint8_t(_levels->baseLevel))
+                    level = uint8_t(_levels->baseLevel);
 
                 if ((spellEntry->getAttribute0() & SPELL_ATTR0_PASSIVE) == 0)
-                    selectedLevel -= uint8_t(_levels->spellLevel);
+                    level -= uint8_t(_levels->spellLevel);
             }
 
-            basePoints += int32_t(selectedLevel * basePointsPerLevel);
+            basePoints += int32_t(level * basePointsPerLevel);
         }
 
         // roll in a range <1;EffectDieSides> as of patch 3.3.3
@@ -843,10 +844,74 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
         }
     }
 
-    result += QString("Calculated BasePoints = %1<br>").arg(uint32_t(std::floor(float(basePoints) + 0.5f)));
+    float value = static_cast<float>(basePoints);
+
+    // random damage
+    {
+        // bonus amount from combo points
+        if (comboPoints > 0 && (spellEntry->getAttribute1() & SPELL_ATTR1_FINISHING_MOVE_DAMAGE) != 0 && comboDamage != 0.f)
+            value += comboDamage * comboPoints;
+
+        if (const auto* _levels = sDataStorage->GetSpellLevelsEntry(spellEntry->getSpellLevelsId());
+            _levels != nullptr && _levels->spellLevel > 0 && _levels->spellLevel != selectedLevel &&
+            !basePointsPerLevel && (spellEntry->getAttribute0() & SPELL_ATTR0_SCALES_WITH_CREATURE_LEVEL) != 0)
+        {
+            bool canEffectScale = false;
+            switch (effectInfo->getEffect())
+            {
+            case SPELL_EFFECT_SCHOOL_DAMAGE:
+            case SPELL_EFFECT_DUMMY:
+            case SPELL_EFFECT_POWER_DRAIN:
+            case SPELL_EFFECT_HEALTH_LEECH:
+            case SPELL_EFFECT_HEAL:
+            case SPELL_EFFECT_WEAPON_DAMAGE:
+            case SPELL_EFFECT_POWER_BURN:
+            case SPELL_EFFECT_SCRIPT_EFFECT:
+            case SPELL_EFFECT_NORMALIZED_WEAPON_DMG:
+            case SPELL_EFFECT_FORCE_CAST_WITH_VALUE:
+            case SPELL_EFFECT_TRIGGER_SPELL_WITH_VALUE:
+            case SPELL_EFFECT_TRIGGER_MISSILE_SPELL_WITH_VALUE:
+                canEffectScale = true;
+                break;
+            default:
+                break;
+            }
+
+            switch (effectInfo->getEffectAura())
+            {
+            case SPELL_AURA_PERIODIC_DAMAGE:
+            case SPELL_AURA_DUMMY:
+            case SPELL_AURA_PERIODIC_HEAL:
+            case SPELL_AURA_DAMAGE_SHIELD:
+            case SPELL_AURA_PROC_TRIGGER_DAMAGE:
+            case SPELL_AURA_PERIODIC_LEECH:
+            case SPELL_AURA_PERIODIC_MANA_LEECH:
+            case SPELL_AURA_SCHOOL_ABSORB:
+            case SPELL_AURA_PERIODIC_TRIGGER_SPELL_WITH_VALUE:
+                canEffectScale = true;
+                break;
+            default:
+                break;
+            }
+
+            if (canEffectScale)
+            {
+                const auto* spellScaler = sDataStorage->GetGtNPCManaCostScalerEntry(_levels->spellLevel - 1);
+                const auto* casterScaler = sDataStorage->GetGtNPCManaCostScalerEntry(selectedLevel - 1);
+                if (spellScaler && casterScaler)
+                {
+                    value *= casterScaler->ratio / spellScaler->ratio;
+                    if (selectedLevel > 80)
+                        value *= (selectedLevel - 80) * 4.4f; // Cataclysm creatures have a way higher jump in stats than previous expansions so we use this estimated value based on combat log packet research
+                }
+            }
+        }
+    }
+
+    result += QString("Calculated BasePoints (before modifiers) = %1<br>").arg(uint32_t(std::floor(value + 0.5f)));
 }
 
-QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
+QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t comboPoints) const
 {
     QString result;
     for (uint8_t effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
@@ -881,7 +946,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
             }
         }
 
-        PrintEffectBaseValues(result, this, effIndex, scalingLevel);
+        PrintEffectBaseValues(result, this, effIndex, scalingLevel, comboPoints);
 
         if (effectInfo->getEffectBonusCoefficient() > 1.0f)
         {
@@ -1057,7 +1122,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
     return result;
 }
 
-QString const SpellEntry::PrintBaseInfo(uint32_t scalingLevel) const
+QString const SpellEntry::PrintBaseInfo(uint8_t scalingLevel) const
 {
     QString spellText;
 

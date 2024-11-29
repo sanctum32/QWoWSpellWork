@@ -33,7 +33,7 @@ private slots:
     void onSearchBtnClicked();
     void onSpellIdNameInputReturnPressed();
     void onResultListClick(QTableWidgetItem *item);
-    void onLevelScalingSliderValueChange();
+    void onScalingSliderUpdate();
     void onFiltersBtnClick();
     void onClearResultsBtn();
 

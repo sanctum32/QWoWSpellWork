@@ -58,7 +58,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5">
     <property name="sizeConstraint">
-     <enum>QLayout::SetDefaultConstraint</enum>
+     <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
     </property>
     <item>
      <widget class="QTabWidget" name="tabWidget">
@@ -92,7 +92,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <layout class="QVBoxLayout" name="LeftSide">
@@ -127,7 +127,7 @@
         <item>
          <layout class="QVBoxLayout" name="RightSide">
           <property name="sizeConstraint">
-           <enum>QLayout::SetDefaultConstraint</enum>
+           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
           </property>
           <item>
            <widget class="QGroupBox" name="SearchGroup">
@@ -162,7 +162,7 @@
                 <string/>
                </property>
                <property name="inputMethodHints">
-                <set>Qt::ImhNone</set>
+                <set>Qt::InputMethodHint::ImhNone</set>
                </property>
                <property name="text">
                 <string/>
@@ -232,6 +232,22 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
+              <widget class="QLabel" name="levelScalingText">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Selected Level: 1 (max 85)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QSlider" name="levelScalingSlider">
                <property name="enabled">
                 <bool>true</bool>
@@ -261,13 +277,13 @@
                 <number>85</number>
                </property>
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="invertedAppearance">
                 <bool>false</bool>
                </property>
                <property name="tickPosition">
-                <enum>QSlider::TicksBelow</enum>
+                <enum>QSlider::TickPosition::TicksBelow</enum>
                </property>
                <property name="tickInterval">
                 <number>9</number>
@@ -275,18 +291,28 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="levelScalingText">
+              <widget class="QLabel" name="comboScalingText">
                <property name="enabled">
                 <bool>false</bool>
                </property>
+               <property name="text">
+                <string>Combo Points: 0</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="comboPointsSlider">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text">
-                <string>Level: 1 (max 85)</string>
+               <property name="maximum">
+                <number>5</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -312,19 +338,19 @@
              </sizepolicy>
             </property>
             <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
+             <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
             </property>
             <property name="selectionMode">
-             <enum>QAbstractItemView::NoSelection</enum>
+             <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
             </property>
             <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectItems</enum>
+             <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
             </property>
             <property name="showGrid">
              <bool>true</bool>
             </property>
             <property name="gridStyle">
-             <enum>Qt::NoPen</enum>
+             <enum>Qt::PenStyle::NoPen</enum>
             </property>
             <attribute name="horizontalHeaderCascadingSectionResizes">
              <bool>false</bool>
@@ -368,7 +394,7 @@
      <x>0</x>
      <y>0</y>
      <width>1115</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -390,7 +416,7 @@
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+    <enum>Qt::LayoutDirection::LeftToRight</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">padding: 5px;</string>

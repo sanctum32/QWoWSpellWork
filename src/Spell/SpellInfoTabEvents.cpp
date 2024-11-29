@@ -48,7 +48,9 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
 
     if (const auto* spell = sDataStorage->GetSpellEntry(spellId))
     {
-        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
+        const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
+        const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
+        ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
     }
 }
 
@@ -286,9 +288,13 @@ void MainWindow::PerformSpellSearch()
     ui.resultCountLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
 }
 
-void MainWindow::onLevelScalingSliderValueChange()
+void MainWindow::onScalingSliderUpdate()
 {
-    ui.levelScalingText->setText(QString("Selected Level %1, (max 85)").arg(ui.levelScalingSlider->value()));
+    const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
+    const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
+
+    ui.levelScalingText->setText(QString("Selected Level %1, (max 85)").arg(selectedLevel));
+    ui.comboScalingText->setText(QString("Combo Points: %1").arg(comboPoints));
     const auto* item = ui.resultList->currentItem();
     if (item == nullptr)
     {
@@ -312,7 +318,7 @@ void MainWindow::onLevelScalingSliderValueChange()
 
     if (const auto* spell = sDataStorage->GetSpellEntry(spellId))
     {
-        ui.spellInfoText->setText(spell->PrintBaseInfo(ui.levelScalingSlider->value()) + "<br>" + spell->PrintSpellEffectInfo(ui.levelScalingSlider->value()));
+        ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
     }
 }
 

@@ -542,6 +542,21 @@ struct GtSpellScalingEntry
     }
 };
 
+// gtNPCManaCostScaler.dbc
+struct GtNPCManaCostScalerEntry
+{
+    explicit GtNPCManaCostScalerEntry(DBCFileLoader::Record const& record);
+
+    uint32_t    Id{};                                           // 0
+    float ratio{};                                              // 1
+
+    static constexpr const char* GetDBCFormat()
+    {
+        return "if";
+    }
+};
+
+
 constexpr uint8_t MAX_OVERRIDE_SPELL = 10;
 struct OverrideSpellDataEntry
 {
@@ -670,8 +685,8 @@ struct SpellEntry
         return QString("%1, Rank name: %2").arg(getSpellName(), getRank());
     }
 
-    QString const PrintBaseInfo(uint32_t scalingLevel) const;
-    QString const PrintSpellEffectInfo(uint32_t scalingLevel) const;
+    QString const PrintBaseInfo(uint8_t scalingLevel) const;
+    QString const PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t comboPoints) const;
 
     const auto& GetField(uint8_t index) const { return _fields.at(index); }
 

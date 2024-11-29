@@ -94,6 +94,7 @@ bool DataStorage::LoadDBCDatas()
         !OpenAndReadDBC(dbcFolderPath, "AreaTable.dbc",                 m_AreaTableEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellCastingRequirements.dbc",  m_SpellCastingRequirementsEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "gtSpellScaling.dbc",            m_GtSpellScalingEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "gtNPCManaCostScaler.dbc",       m_GtNPCManaCostScalerEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "OverrideSpellData.dbc",         m_OverrideSpellDataEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "ScreenEffect.dbc",              m_ScreenEffectEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellRadius.dbc",               m_SpellRadiusEntries) ||

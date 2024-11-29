@@ -44,6 +44,7 @@ public:
     const auto* GetAreaTableEntry(uint32_t id) const { return GetEntryFromStorage(id, m_AreaTableEntries); }
     const auto* GetSpellCastingRequirementsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCastingRequirementsEntries); }
     const auto* GetGtSpellScalingEntry(uint32_t id) const { return GetEntryFromStorage(id, m_GtSpellScalingEntries); }
+    const auto* GetGtNPCManaCostScalerEntry(uint32_t id) const { return GetEntryFromStorage(id, m_GtNPCManaCostScalerEntries); }
     const auto* GetOverrideSpellDataEntry(uint32_t id) const { return GetEntryFromStorage(id, m_OverrideSpellDataEntries); }
     const auto* GetScreenEffectEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ScreenEffectEntries); }
     const auto* GetSpellRadiusEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellRadiusEntries); }
@@ -99,6 +100,7 @@ private:
     std::map<uint32_t, AreaTableEntry>               m_AreaTableEntries;                         // AreaTable.dbc
     std::map<uint32_t, SpellCastingRequirementsEntry> m_SpellCastingRequirementsEntries;         // SpellCastingRequirements.dbc
     std::map<uint32_t, GtSpellScalingEntry>          m_GtSpellScalingEntries;                    // gtSpellScaling.dbc
+    std::map<uint32_t, GtNPCManaCostScalerEntry>     m_GtNPCManaCostScalerEntries;               // gtNPCManaCostScaler.dbc
     std::map<uint32_t, OverrideSpellDataEntry>       m_OverrideSpellDataEntries;                 // OverrideSpellData.dbc
     std::map<uint32_t, ScreenEffectEntry>            m_ScreenEffectEntries;                      // ScreenEffect.dbc
     std::map<uint32_t, SpellRadiusEntry>             m_SpellRadiusEntries;                       // SpellRadius.dbc

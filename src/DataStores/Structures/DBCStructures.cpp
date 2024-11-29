@@ -615,3 +615,9 @@ const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEffectEntryF
     {25, {"EffectIndex", CompareTypes::UnsignedNumber}},
     {26, {"EffectAttributes", CompareTypes::UnsignedNumber}}
 };
+
+GtNPCManaCostScalerEntry::GtNPCManaCostScalerEntry(const DBCFileLoader::Record &record)
+{
+    Id = record.getUInt(0);
+    ratio = record.getFloat(1);
+}
