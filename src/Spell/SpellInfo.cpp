@@ -3,8 +3,27 @@
 #include "ItemDefines.hpp"
 #include "JsonData/JsonData.hpp"
 #include "SharedDefines.hpp"
+#include "UnitDefines.hpp"
+#include <cmath>
+#include <random>
 
 constexpr char const* line = "==============================================<br>";
+
+inline float frand(float min, float max)
+{
+    std::random_device rd;
+    std::mt19937 eng(rd());
+    std::uniform_real_distribution<float> distr(min, max);
+    return distr(eng);
+}
+
+inline int irand(float min, float max)
+{
+    std::random_device rd;
+    std::mt19937 eng(rd());
+    std::uniform_int_distribution<int> distr(min, max);
+    return distr(eng);
+}
 
 // Returns first found school mask's name
 inline QString GetFirstSchoolMaskNameStr(uint32_t mask)
@@ -739,75 +758,92 @@ inline void PrintSpellCastRequirements(QString& result, uint32_t SpellCastingReq
     result += "<br>";
 }
 
-inline void PrintEffectScalingInfo(QString& result, const SpellEffectEntry* effectInfo, const SpellScalingEntry* scalingInfo, uint32_t scalingLevel)
+inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, uint8_t effIndex, uint8_t selectedLevel)
 {
+    assert(spellEntry != nullptr);
+    const auto* effectInfo = spellEntry->m_spellEffects.at(effIndex);
+
     assert(effectInfo != nullptr);
 
-    const auto effIndex = effectInfo->getEffectIndex();
-    if (scalingInfo != nullptr && scalingInfo->Coefficient[effIndex] != 0.0f &&  scalingInfo->Class != 0)
+    result += QString("BasePoints = %1<br>").arg(effectInfo->getEffectBasePoints() + ((effectInfo->getEffectDieSides() == 0) ? 0 : 1));
+
+    // Ported from SpellInfo::CalValue
+    float basePointsPerLevel = effectInfo->getEffectRealPointsPerLevel();
+    int32_t basePoints = effectInfo->getEffectBasePoints();
+    float comboDamage = effectInfo->getEffectPointsPerResource();
+
+    // base amount modification based on spell lvl vs caster lvl
+    if (const auto* Scaling = sDataStorage->GetSpellScalingEntry(spellEntry->getSpellScalingId()); Scaling != nullptr && Scaling->Coefficient.at(effectInfo->getEffectIndex()) != 0.0f)
     {
-        uint32_t const selectedLevel = scalingLevel;
-
-        uint32_t gtEntryId = static_cast<uint32_t>((scalingInfo->Class != -1 ? scalingInfo->Class - 1 : 11) * 100) + selectedLevel - 1;
-        const auto* gtEntry = sDataStorage->GetGtSpellScalingEntry(gtEntryId);
-        float gtMultiplier = gtEntry != nullptr ? gtEntry->value : 0.0f;
-
-        if (scalingInfo->CastTimeMax > 0 && static_cast<uint32_t>(scalingInfo->CastTimeMaxLevel) > selectedLevel)
+        float value = 0.0f;
+        if (selectedLevel > 0)
         {
-            gtMultiplier *= static_cast<float>(scalingInfo->CastTimeMin + (selectedLevel - 1) * (scalingInfo->CastTimeMax - scalingInfo->CastTimeMin) / (scalingInfo->CastTimeMaxLevel - 1)) / static_cast<float>(scalingInfo->CastTimeMax);
-        }
+            if (!Scaling->Class)
+                return;
 
-        if (scalingInfo->NerfMaxLevel > static_cast<int32_t>(selectedLevel))
-        {
-            gtMultiplier *= (1.0f -  scalingInfo->NerfFactor) * (float)(selectedLevel - 1) / (float)(scalingInfo->NerfMaxLevel - 1) + scalingInfo->NerfFactor;
-        }
+            if (GtSpellScalingEntry const* gtScaling = sDataStorage->GetGtSpellScalingEntry(((Scaling->Class > 0 ? Scaling->Class : ((MAX_CLASSES - 1 /*last class*/) - Scaling->Class)) - 1) * 100 + selectedLevel - 1))
+                value = gtScaling->value;
 
-        if (scalingInfo->Variance[effIndex] != 0.0f)
-        {
-            float avg = scalingInfo->Coefficient[effIndex] * gtMultiplier;
-            float delta = scalingInfo->Variance[effIndex] * scalingInfo->Coefficient[effIndex] * gtMultiplier * 0.5;
-            result += QString("BasePoints = %1 to %2").arg(avg - delta).arg(avg + delta);
-        }
-        else
-        {
-            result += QString("AveragePoints = %1<br>").arg(scalingInfo->Coefficient[effIndex] * gtMultiplier);
+            if (selectedLevel < Scaling->CastTimeMaxLevel && Scaling->CastTimeMax)
+                value *= float(Scaling->CastTimeMin + (selectedLevel - 1) * (Scaling->CastTimeMax - Scaling->CastTimeMin) / (Scaling->CastTimeMaxLevel - 1)) / float(Scaling->CastTimeMax);
+
+            if (selectedLevel < Scaling->NerfMaxLevel)
+                value *= ((((1.0 - Scaling->NerfFactor) * (selectedLevel - 1)) / (Scaling->NerfMaxLevel - 1)) + Scaling->NerfFactor);
         }
 
-        if (scalingInfo->ComboPointsCoefficient[effIndex] != 0.0f)
+        if (Scaling->ComboPointsCoefficient.at(effectInfo->getEffectIndex()) > 0.0f)
+            comboDamage = Scaling->ComboPointsCoefficient.at(effectInfo->getEffectIndex()) * value;
+
+        value *= Scaling->Coefficient.at(effectInfo->getEffectIndex());
+        if (value >= 0.0f && value < 1.0f)
+            value = 1.0f;
+
+        if (Scaling->Variance.at(effectInfo->getEffectIndex()))
         {
-            result += QString(" + combo *  %1").arg(scalingInfo->ComboPointsCoefficient[effIndex] * gtMultiplier);
+            float delta = std::fabs(Scaling->Variance.at(effectInfo->getEffectIndex()) * value * 0.5f);
+            value += frand(-delta, delta);
         }
-        else
-        {
-            result += QString(" + combo *  %1").arg(effectInfo->getEffectPointsPerResource());
-        }
+
+        basePoints = int32_t(round(value));
     }
     else
     {
-        result += QString("BasePoints = %1").arg(effectInfo->getEffectBasePoints() + ((effectInfo->getEffectDieSides() == 0) ? 0 : 1));
-
-        if (effectInfo->getEffectRealPointsPerLevel() != 0)
+        if (basePointsPerLevel != 0.0f)
         {
-            result += QString(" + Level * %1").arg(effectInfo->getEffectRealPointsPerLevel());
+            if (const auto* _levels = sDataStorage->GetSpellLevelsEntry(spellEntry->getSpellLevelsId()))
+            {
+                if (selectedLevel > uint8_t(_levels->maxLevel) && _levels->maxLevel > 0)
+                    selectedLevel = uint8_t(_levels->maxLevel);
+                else if (selectedLevel < uint8_t(_levels->baseLevel))
+                    selectedLevel = uint8_t(_levels->baseLevel);
+
+                if ((spellEntry->getAttribute0() & SPELL_ATTR0_PASSIVE) == 0)
+                    selectedLevel -= uint8_t(_levels->spellLevel);
+            }
+
+            basePoints += int32_t(selectedLevel * basePointsPerLevel);
         }
 
-        if (effectInfo->getEffectDieSides() > 1)
+        // roll in a range <1;EffectDieSides> as of patch 3.3.3
+        int32_t randomPoints = int32_t(effectInfo->getEffectDieSides());
+        switch (randomPoints)
         {
-            if (effectInfo->getEffectRealPointsPerLevel() != 0)
-            {
-                result += QString(" to %1 + lvl * %2").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides(), effectInfo->getEffectRealPointsPerLevel());
-            }
-            else
-            {
-                result += QString(" to %1").arg(effectInfo->getEffectBasePoints() + effectInfo->getEffectDieSides());
-            }
-        }
+        case 0: break;
+        case 1: ++basePoints; break;                     // range 1..1
+        default:
+        {
+            // range can have positive (1..rand) and negative (rand..1) values, so order its for irand
+            int32_t randvalue = (randomPoints >= 1)
+                                  ? irand(1, randomPoints)
+                                  : irand(randomPoints, 1);
 
-        if (effectInfo->getEffectPointsPerResource() > 0)
-        {
-            result += QString(" + combo * %1").arg(effectInfo->getEffectPointsPerResource());
+            basePoints += randvalue;
+            break;
+        }
         }
     }
+
+    result += QString("Calculated BasePoints = %1<br>").arg(uint32_t(std::floor(float(basePoints) + 0.5f)));
 }
 
 QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
@@ -833,7 +869,19 @@ QString const SpellEntry::PrintSpellEffectInfo(uint32_t scalingLevel) const
                       .arg(effectInfo->getEffect())
                       .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->getEffect()));
 
-        PrintEffectScalingInfo(result, effectInfo, sDataStorage->GetSpellScalingEntry(getSpellScalingId()), scalingLevel);
+        if ((getAttribute10() & SPELL_ATTR10_USE_SPELL_BASE_LEVEL_FOR_SCALING) != 0)
+        {
+            if (const auto* levelInfo = sDataStorage->GetSpellLevelsEntry(getSpellLevelsId()))
+            {
+                scalingLevel = levelInfo->baseLevel;
+            }
+            else
+            {
+                scalingLevel = 1;
+            }
+        }
+
+        PrintEffectBaseValues(result, this, effIndex, scalingLevel);
 
         if (effectInfo->getEffectBonusCoefficient() > 1.0f)
         {

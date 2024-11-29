@@ -1,5 +1,7 @@
 #pragma once
 
+constexpr unsigned short MAX_CLASSES = 12;
+
 enum CombatRating
 {
     CR_WEAPON_SKILL                     = 0,

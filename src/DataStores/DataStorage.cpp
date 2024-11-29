@@ -98,6 +98,7 @@ bool DataStorage::LoadDBCDatas()
         !OpenAndReadDBC(dbcFolderPath, "ScreenEffect.dbc",              m_ScreenEffectEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellRadius.dbc",               m_SpellRadiusEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "Faction.dbc",                   m_FactionEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "SpellScaling.dbc",              m_SpellScalingEntries) ||
         (sSpellWorkConfig->GetAppConfig().loadDBCSpells && (!OpenAndReadDBC(dbcFolderPath, "Spell.dbc", m_spellEntries) || !OpenAndReadDBC(dbcFolderPath, "SpellEffect.dbc", m_SpellEffectEntries)))
     )
     {
