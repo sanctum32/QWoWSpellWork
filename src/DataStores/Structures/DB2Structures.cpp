@@ -3,7 +3,7 @@
 ItemSparseEntry::ItemSparseEntry(const DB2FileLoader::Record &record)
 {
     ID                  = record.getUInt(0);
-    Quality             = record.getUInt(1);
+    /*Quality             = record.getUInt(1);
     Flags               = record.getUInt(2);
     Flags2              = record.getUInt(3);
     PriceRandomValue    = record.getFloat(4);
@@ -93,7 +93,9 @@ ItemSparseEntry::ItemSparseEntry(const DB2FileLoader::Record &record)
     }
 
     Bonding         = record.getInt(98);
+    */
     Display         = QString::fromStdString(record.getString(99));
+    /*
     Display1        = QString::fromStdString(record.getString(100));
     Display2        = QString::fromStdString(record.getString(101));
     Display3        = QString::fromStdString(record.getString(102));
@@ -135,11 +137,12 @@ ItemSparseEntry::ItemSparseEntry(const DB2FileLoader::Record &record)
     StatScalingFactor   = record.getFloat(130);
     CurrencySubstitutionID = record.getInt(131);
     CurrencySubstitutionCount = record.getInt(132);
+    */
 }
 
 ItemSparseEntry::ItemSparseEntry(const MYSQL_ROW &row)
 {
-    ID                  = static_cast<uint32_t>(std::stoul(row[0]));
+    /*ID                  = static_cast<uint32_t>(std::stoul(row[0]));
     Quality             = static_cast<uint32_t>(std::stoul(row[1]));
     Flags               = static_cast<uint32_t>(std::stoul(row[2]));
     Flags2              = static_cast<uint32_t>(std::stoul(row[3]));
@@ -271,5 +274,8 @@ ItemSparseEntry::ItemSparseEntry(const MYSQL_ROW &row)
     HolidayID           = static_cast<int32_t>(std::stoi(row[129]));
     StatScalingFactor   = std::stof(row[130]);
     CurrencySubstitutionID = static_cast<int32_t>(std::stoi(row[131]));
-    CurrencySubstitutionCount = static_cast<int32_t>(std::stoi(row[132]));
+    CurrencySubstitutionCount = static_cast<int32_t>(std::stoi(row[132]));*/
+
+    ID = static_cast<uint32_t>(std::stoul(row[0]));
+    Display         = QString(row[1]);
 }

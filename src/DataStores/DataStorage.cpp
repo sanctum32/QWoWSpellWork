@@ -245,7 +245,7 @@ void DataStorage::LoadSqlDB2Data()
     {
         std::stringstream query;
         query << "SELECT "
-        << "ID, "                           // 0
+        /*<< "ID, "                           // 0
         << "Quality, "                      // 1
         << "Flags1, "                       // 2
         << "Flags2, "                       // 3
@@ -378,6 +378,9 @@ void DataStorage::LoadSqlDB2Data()
         << "StatScalingFactor, "            // 130
         << "CurrencySubstitutionID, "       // 131
         << "CurrencySubstitutionCount"      // 132
+        */
+        << "ID, "    // 0
+        << "Display" // 1
         << " FROM " << sSpellWorkConfig->GetSQLConfig().hotfixDB.toStdString() << ".`item_sparse` WHERE `ID` > 0";
 
         if (mysql_query(connection, query.str().c_str()) != 0)

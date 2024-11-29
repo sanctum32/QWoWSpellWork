@@ -20,6 +20,7 @@ struct ItemSparseEntry
     ItemSparseEntry(const MYSQL_ROW& row);
 
     uint32_t     ID{};                                                    // 0
+    /*
     uint32_t     Quality{};                                               // 1
     uint32_t     Flags{};                                                 // 2
     uint32_t     Flags2{};                                                // 3
@@ -58,7 +59,9 @@ struct ItemSparseEntry
     std::array<int32_t, MAX_ITEM_PROTO_SPELLS> SpellCategory{};           // 88 - 92
     std::array<int32_t, MAX_ITEM_PROTO_SPELLS> SpellCategoryCooldown{};   // 93 - 97
     int32_t      Bonding;                                               // 98
+    */
     QString      Display;                                               // 99
+    /*
     QString      Display1;                                              // 100
     QString      Display2;                                              // 101
     QString      Display3;                                              // 102
@@ -88,10 +91,12 @@ struct ItemSparseEntry
     float        StatScalingFactor;                                     // 130
     int32_t      CurrencySubstitutionID{};                                // 131
     int32_t      CurrencySubstitutionCount{};                             // 132
+    */
 
     const QString& GetName() const { return Display; }
     static constexpr const char* GetDB2Format()
     {
-        return "iiiiffiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiisssssiiiiiiiiiiiiiiiiiiiiiifiiifii";
+        //return "iiiiffiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiisssssiiiiiiiiiiiiiiiiiiiiiifiiifii";
+        return "ixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     }
 };
