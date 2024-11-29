@@ -149,14 +149,14 @@ bool DataStorage::LoadSqlDBCData()
 
         if (mysql_query(connection, query.str().c_str()) != 0)
         {
-            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to execute spell_dbc query. Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to execute spell_dbc query. Error: " << mysql_error(connection);
             return false;
         }
 
         auto* result = mysql_store_result(connection);
         if (result == nullptr)
         {
-            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
             return false;
         }
 
@@ -169,7 +169,7 @@ bool DataStorage::LoadSqlDBCData()
 
         mysql_free_result(result);
 
-        qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spell_dbc";
+        qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spell_dbc";
     }
 
     // Load spelleffect_dbc
@@ -206,14 +206,14 @@ bool DataStorage::LoadSqlDBCData()
 
         if (mysql_query(connection, query.str().c_str()) != 0)
         {
-            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to execute spelleffect_dbc query. Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to execute spelleffect_dbc query. Error: " << mysql_error(connection);
             return false;
         }
 
         auto* result = mysql_store_result(connection);
         if (result == nullptr)
         {
-            qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
             return false;
         }
 
@@ -225,7 +225,7 @@ bool DataStorage::LoadSqlDBCData()
         }
         mysql_free_result(result);
 
-        qCDebug(DBCStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spelleffect_dbc";
+        qCDebug(DataStores) << "DBCStore::LoadSqlDBCData: loaded " << count << " entries from spelleffect_dbc";
     }
     return true;
 #else
