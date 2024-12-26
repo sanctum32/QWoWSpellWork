@@ -28,17 +28,24 @@ inline int irand(int min, int max)
 // Returns first found school mask's name
 inline QString GetFirstSchoolMaskNameStr(uint32_t mask)
 {
-    QString result;
     for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
     {
         const uint32_t schoolMask = (1U << i);
-        if ((mask & schoolMask) != 0)
+        if ((mask & schoolMask) == 0)
         {
-            result += sSpellWorkJson->GetSpellSchoolMaskName(schoolMask);
+            continue;
         }
+
+        auto result = sSpellWorkJson->GetSpellSchoolMaskName(schoolMask);
+        if (!result.isEmpty())
+        {
+            return QString(result.data());
+        }
+
+        return QString("UNKNOWN SCHOOLMASK %1").arg(schoolMask);
     }
 
-    return result;
+    return {};
 }
 
 inline QString GetStancesNames(uint32_t stancesNames)
