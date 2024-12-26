@@ -287,7 +287,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
     if (skillLine != nullptr && skillLineAbility != nullptr)
     {
         result += line;
-        result += QString("Skill (Id %1) \"%2\"<br>").arg(skillLineAbility->SkillLine).arg(skillLine->GetName());
+        result += QString("Skill (Id %1) \"%2\"<br>").arg(skillLineAbility->SkillLine).arg(skillLine->name);
         result += QString("MinSkillLineRank %1<br>").arg(skillLineAbility->MinSkillLineRank);
 
         result += QString("SupercedesSpell = %1, MinMaxValue (%2, %3)<br>")
@@ -303,7 +303,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 inline void PrintReagents(QString& result, uint32_t SpellReagentsId)
 {
     const auto* spellReagent = sDataStorage->GetSpellReagentsEntry(SpellReagentsId);
-    if (spellReagent == nullptr || !std::ranges::any_of(spellReagent->Reagent, [](int32_t reagent){ return reagent != 0; }))
+    if (spellReagent == nullptr || !std::ranges::any_of(spellReagent->Reagents, [](int32_t reagent){ return reagent != 0; }))
     {
         return;
     }
@@ -311,14 +311,14 @@ inline void PrintReagents(QString& result, uint32_t SpellReagentsId)
     result += "<br><b>Required items (or reagents):</b><br>";
     for (uint8_t i = 0; i < MAX_SPELL_REAGENTS; ++i)
     {
-        if (spellReagent->Reagent[i] == 0)
+        if (spellReagent->Reagents[i] == 0)
         {
             continue;
         }
 
-        const auto* itemEntry = sDataStorage->GetItemEntry(spellReagent->Reagent[i]);
+        const auto* itemEntry = sDataStorage->GetItemEntry(spellReagent->Reagents[i]);
         result += QString("Item: %1 (\"%2\"), required amount %3<br>")
-            .arg(spellReagent->Reagent[i])
+            .arg(spellReagent->Reagents[i])
             .arg(itemEntry != nullptr ? itemEntry->GetName() : "Unknown")
             .arg(spellReagent->ReagentCount[i]);
     }
@@ -445,9 +445,9 @@ inline void PrintSpellRangeInfo(QString& result, uint32_t rangeIndex)
     result += "<br>";
     if (const auto* spellRange = sDataStorage->GetSpellRangeEntry(rangeIndex))
     {
-        result += QString("SpellRange: (Id %1) \"%2\"<br>").arg(spellRange->Id).arg(spellRange->GetName());
-        result += QString("MinRangeNegative = %1, MinRangePositive = %2<br>").arg(spellRange->minRangeHostile).arg(spellRange->minRangeFriend);
-        result += QString("MaxRangeNegative = %1, MaxRangePositive = %2<br>").arg(spellRange->maxRangeHostile).arg(spellRange->maxRangeFriend);
+        result += QString("SpellRange: (Id %1) \"%2\"<br>").arg(spellRange->Id).arg(spellRange->DisplayName);
+        result += QString("MinRangeNegative = %1, MinRangePositive = %2<br>").arg(spellRange->RangeMin.at(0)).arg(spellRange->RangeMin.at(1));
+        result += QString("MaxRangeNegative = %1, MaxRangePositive = %2<br>").arg(spellRange->RangeMax.at(0)).arg(spellRange->RangeMax.at(1));
     }
     else
     {
@@ -465,25 +465,25 @@ inline void PrintSpellAuraOptions(QString& result, uint32_t SpellAuraOptionsId)
         return;
     }
 
-    result += QString("Stackable up to %1 times<br>").arg(spellAuraOptionEntry->StackAmount);
+    result += QString("Stackable up to %1 times<br>").arg(spellAuraOptionEntry->CumulativeAura);
 
-    if (spellAuraOptionEntry->procFlags == 0)
+    if (spellAuraOptionEntry->ProcTypeMask == 0)
     {
         return;
     }
 
     result += "<br>";
     result += QString("Proc flag 0x%1, chance = %2%, charges - %3<br>")
-                     .arg(spellAuraOptionEntry->procFlags, 8, 16, QLatin1Char('0'))
-                     .arg(spellAuraOptionEntry->procChance)
-                     .arg(spellAuraOptionEntry->procCharges);
+                     .arg(spellAuraOptionEntry->ProcTypeMask, 8, 16, QLatin1Char('0'))
+                     .arg(spellAuraOptionEntry->ProcChance)
+                     .arg(spellAuraOptionEntry->ProcCharges);
 
     QString procNames;
 
     for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
     {
         const uint32_t mask = 1U << i;
-        if ((spellAuraOptionEntry->procFlags & mask) != 0)
+        if ((spellAuraOptionEntry->ProcTypeMask & mask) != 0)
         {
             procNames += QString("<span style=\"color:orange\">Flags %1,</span> %2<br>")
                              .arg(mask)
@@ -527,19 +527,19 @@ inline void PrintSpellDurationInfo(QString& result, uint32_t DurationIndex)
     {
         result += QString("Duration: ID (%1) %2 ms, %3 ms, %4 ms<br>")
                       .arg(spellDurationEntry->Id)
-                      .arg(spellDurationEntry->Duration[0])
-                      .arg(spellDurationEntry->Duration[1])
-                      .arg(spellDurationEntry->Duration[2]);
+                      .arg(spellDurationEntry->Duration)
+                      .arg(spellDurationEntry->DurationPerLevel)
+                      .arg(spellDurationEntry->MaxDuration);
     }
 }
 
 inline void PrintSpellPowerInfo(QString& result, uint32_t SpellPowerId, int8_t powerType)
 {
     const auto* spellPowerEntry = sDataStorage->GetSpellPowerEntry(SpellPowerId);
-    if (spellPowerEntry == nullptr || (spellPowerEntry->manaCost == 0 &&
-                                       spellPowerEntry->ManaCostPercentage == 0 &&
-                                       spellPowerEntry->manaCostPerlevel == 0 &&
-                                       spellPowerEntry->manaPerSecondPerLevel == 0))
+    if (spellPowerEntry == nullptr || (spellPowerEntry->ManaCost == 0 &&
+                                       spellPowerEntry->PowerCostPct == 0 &&
+                                       spellPowerEntry->ManaCostPerLevel == 0 &&
+                                       spellPowerEntry->ManaPerSecond == 0))
     {
         return;
     }
@@ -548,13 +548,13 @@ inline void PrintSpellPowerInfo(QString& result, uint32_t SpellPowerId, int8_t p
                   .arg(powerType)
                   .arg(sSpellWorkJson->GetPowerTypeName(powerType));
 
-    if (spellPowerEntry->manaCost == 0)
+    if (spellPowerEntry->ManaCost == 0)
     {
-        result += QString("%1 %").arg(spellPowerEntry->ManaCostPercentage);
+        result += QString("%1 %").arg(spellPowerEntry->PowerCostPct);
     }
     else
     {
-        uint32_t powerCost = spellPowerEntry->manaCost;
+        uint32_t powerCost = spellPowerEntry->ManaCost;
         if (powerType == POWER_RAGE)
         {
             powerCost /= 10;
@@ -780,7 +780,8 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
     int32_t randomPoints = effectInfo->getEffectDieSides();
 
     // base amount modification based on spell lvl vs caster lvl
-    if (const auto* Scaling = sDataStorage->GetSpellScalingEntry(spellEntry->getSpellScalingId()); Scaling != nullptr && Scaling->Coefficient.at(effectInfo->getEffectIndex()) != 0.0f)
+    if (const auto* Scaling = sDataStorage->GetSpellScalingEntry(spellEntry->getSpellScalingId());
+        Scaling != nullptr && Scaling->Coefficient.at(effectInfo->getEffectIndex()) != 0.0f)
     {
         float value = 0.0f;
         if (selectedLevel > 0 && Scaling->Class > 0)
@@ -929,11 +930,11 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
             }
         }
 
-        value += 0.5f;
+        value = floor(value + 0.5f);
     }
 
-    int32_t basePointsMinINT = static_cast<int32_t>(std::floor(std::min(basePoints.at(0), basePoints.at(1))));
-    int32_t basePointsMaxINT = static_cast<int32_t>(std::floor(std::max(basePoints.at(0), basePoints.at(1))));
+    int32_t basePointsMinINT = static_cast<int32_t>(std::min(basePoints.at(0), basePoints.at(1)));
+    int32_t basePointsMaxINT = static_cast<int32_t>(std::max(basePoints.at(0), basePoints.at(1)));
     result += QString("Calculated BasePoints (before modifiers). Min = %1, max = %2, random points = %3, SpellScalingId = %4<br>").arg(basePointsMinINT).arg(basePointsMaxINT).arg(randomPoints).arg(spellEntry->getSpellLevelsId());
 }
 
@@ -1089,7 +1090,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                 result += QString("   Trigger spell (%1) %2. Chance = %3<br>")
                               .arg(triggerSpell->getId())
                                  .arg(triggerSpell->GetSpellNameRank())
-                                 .arg(spellAuraOptionEntry != nullptr ? spellAuraOptionEntry->procChance : 0.0f);
+                                 .arg(spellAuraOptionEntry != nullptr ? spellAuraOptionEntry->ProcChance : 0.0f);
 
                 if (!triggerSpell->getDescription().isEmpty())
                 {
@@ -1105,13 +1106,13 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
 
                 if (const auto* triggerAuraOptions = sDataStorage->GetSpellAuraOptionsEntry(triggerSpell->getSpellAuraOptionsId()))
                 {
-                    result += QString("Charges - %1<br>").arg(triggerAuraOptions->procCharges);
+                    result += QString("Charges - %1<br>").arg(triggerAuraOptions->ProcCharges);
                     result += line;
 
                     for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
                     {
                         const uint32_t mask = 1U << i;
-                        if ((triggerAuraOptions->procFlags & mask) != 0)
+                        if ((triggerAuraOptions->ProcTypeMask & mask) != 0)
                         {
                             result += sSpellWorkJson->GetSpellProcDescription(mask);
                             result += "<br>";
@@ -1123,7 +1124,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
             }
             else
             {
-                result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(spellAuraOptionEntry != nullptr ? spellAuraOptionEntry->procChance : 0.0f);
+                result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(spellAuraOptionEntry != nullptr ? spellAuraOptionEntry->ProcChance : 0.0f);
             }
         }
 
@@ -1216,7 +1217,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", getEffectMiscValue() }, { ":MiscValueB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : miscValues)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1229,7 +1230,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", getEffectMiscValue() }, { ":AreaEntryNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : areaEntryNames)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1243,7 +1244,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> unitModStat = {{ {":UnitModNameMiscVal:", getEffectMiscValue() }, { ":UnitModNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : unitModStat)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1257,7 +1258,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> spellMod = {{ {":SpellModNameMiscVal:", getEffectMiscValue() }, { ":SpellModNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : spellMod)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1271,7 +1272,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", getEffectMiscValue() }, { ":FactionNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : factionName)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1291,7 +1292,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", getEffectMiscValue() }, { ":CBRatingListMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : combatRating)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1323,7 +1324,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", getEffectMiscValue() }, { ":ScreenEffectMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : screenEffect)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1337,7 +1338,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", getEffectMiscValue() }, { ":OverrideSpellListMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : overrideSpellList)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1376,7 +1377,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunitiesMiscVal:", getEffectMiscValue() }, { ":MechanicImmunitiesMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : mechanicImmunities)
         {
-            if (!m_extraInformation.contains(strToRep))
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 continue;
             }
@@ -1407,12 +1408,12 @@ void SpellEffectEntry::GenerateExtraInfo()
         }
     }
 
-    if (m_extraInformation.contains(":EffectItemType:"))
+    if (m_extraInformation.contains(":EffectItemType:", Qt::CaseInsensitive))
     {
         m_extraInformation.replace(":EffectItemType:", QString::number(getEffectItemType()), Qt::CaseInsensitive);
     }
 
-    if (m_extraInformation.contains(":EffectItemTypeName:"))
+    if (m_extraInformation.contains(":EffectItemTypeName:", Qt::CaseInsensitive))
     {
         QString itemName;
         if (getEffectItemType() == 0)

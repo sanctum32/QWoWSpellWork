@@ -5,120 +5,123 @@ SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
 {
     uint8_t colId = 0;
 
-    _getId() = record.getUInt(colId++);
-    _getEffect() = record.getUInt(colId++);
-    _getEffectAmplitude() = record.getFloat(colId++);
-    _getEffectAura() = record.getUInt(colId++);
-    _getEffectAuraPeriod() = record.getUInt(colId++);
-    _getEffectBasePoints() = record.getInt(colId++);
-    _getEffectBonusCoefficient() = record.getFloat(colId++);
-    _getEffectChainAmplitude() = record.getFloat(colId++);
-    _getEffectChainTargets() = record.getUInt(colId++);
-    _getEffectDieSides() = record.getInt(colId++);
-    _getEffectItemType() = record.getUInt(colId++);
-    _getEffectMechanic() = record.getUInt(colId++);
-    _getEffectMiscValue() = record.getInt(colId++);
-    _getEffectMiscValueB() = record.getInt(colId++);
-    _getEffectPointsPerResource() = record.getFloat(colId++);
-    _getEffectRadiusIndex() = record.getUInt(colId++);
-    _getEffectRadiusMaxIndex() = record.getUInt(colId++);
-    _getEffectRealPointsPerLevel() = record.getFloat(colId++);
-    _getEffectSpellClassMaskA() = record.getUInt(colId++);
-    _getEffectSpellClassMaskB() = record.getUInt(colId++);
-    _getEffectSpellClassMaskC() = record.getUInt(colId++);
+    _getId()                        = record.getUInt(0);
+    _getEffect()                    = record.getUInt(1);
+    _getEffectAmplitude()           = record.getFloat(2);
+    _getEffectAura()                = record.getUInt(3);
+    _getEffectAuraPeriod()          = record.getUInt(4);
+    _getEffectBasePoints()          = record.getInt(5);
+    _getEffectBonusCoefficient()    = record.getFloat(6);
+    _getEffectChainAmplitude()      = record.getFloat(7);
+    _getEffectChainTargets()        = record.getUInt(8);
+    _getEffectDieSides()            = record.getInt(9);
+    _getEffectItemType()            = record.getUInt(10);
+    _getEffectMechanic()            = record.getUInt(11);
+    _getEffectMiscValue()           = record.getInt(12);
+    _getEffectMiscValueB()          = record.getInt(13);
+    _getEffectPointsPerResource()   = record.getFloat(14);
+    _getEffectRadiusIndex()         = record.getUInt(15);
+    _getEffectRadiusMaxIndex()      = record.getUInt(16);
+    _getEffectRealPointsPerLevel()  = record.getFloat(17);
+    _getEffectSpellClassMaskA()     = record.getUInt(18);
+    _getEffectSpellClassMaskB()     = record.getUInt(19);
+    _getEffectSpellClassMaskC()     = record.getUInt(20);
 
-    _getEffectTriggerSpell() = record.getUInt(colId++);
-    _getEffectImplicitTargetA() = record.getUInt(colId++);
-    _getEffectImplicitTargetB() = record.getUInt(colId++);
-    _getSpellID() = record.getUInt(colId++);
-    _getEffectIndex() = record.getUInt(colId++);
-    _getEffectAttributes() = record.getUInt(colId++);
+    _getEffectTriggerSpell()        = record.getUInt(21);
+    _getEffectImplicitTargetA()     = record.getUInt(22);
+    _getEffectImplicitTargetB()     = record.getUInt(23);
+    _getSpellID()                   = record.getUInt(24);
+    _getEffectIndex()               = record.getUInt(25);
+    _getEffectAttributes()          = record.getUInt(26);
 }
 
 SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
 {
-    _getId() = std::stoul(row[0]);
-    _getEffect() = std::stoul(row[1]);
-    _getEffectAmplitude() = std::atof(row[2]);
-    _getEffectAura() = std::stoul(row[3]);
-    _getEffectAuraPeriod() = std::stoul(row[4]);
-    _getEffectBasePoints() = std::stoi(row[5]);
-    _getEffectBonusCoefficient() = std::atof(row[6]);
-    _getEffectChainAmplitude() = std::atof(row[7]);
-    _getEffectChainTargets() = std::stoul(row[8]);
-    _getEffectDieSides() = std::stoi(row[9]);
-    _getEffectItemType() = std::stoul(row[10]);
-    _getEffectMechanic() = std::stoul(row[11]);
-    _getEffectMiscValue() = std::stoi(row[12]);
-    _getEffectMiscValueB() = std::stoi(row[13]);
-    _getEffectPointsPerResource() = std::atof(row[14]);
-    _getEffectRadiusIndex() = std::stoul(row[15]);
-    _getEffectRadiusMaxIndex() = std::stoul(row[16]);
-    _getEffectRealPointsPerLevel() = std::atof(row[17]);
-    _getEffectSpellClassMaskA() = std::stoul(row[18]);
-    _getEffectSpellClassMaskB() = std::stoul(row[19]);
-    _getEffectSpellClassMaskC() = std::stoul(row[20]);
-    _getEffectTriggerSpell() = std::stoul(row[21]);
-    _getEffectImplicitTargetA() = std::stoul(row[22]);
-    _getEffectImplicitTargetB() = std::stoul(row[23]);
-    _getSpellID() = std::stoul(row[24]);
-    _getEffectIndex() = std::stoul(row[25]);
+    _getId()                        = std::stoul(row[0]);
+    _getEffect()                    = std::stoul(row[1]);
+    _getEffectAmplitude()           = std::atof(row[2]);
+    _getEffectAura()                = std::stoul(row[3]);
+    _getEffectAuraPeriod()          = std::stoul(row[4]);
+    _getEffectBasePoints()          = std::stoi(row[5]);
+    _getEffectBonusCoefficient()    = std::atof(row[6]);
+    _getEffectChainAmplitude()      = std::atof(row[7]);
+    _getEffectChainTargets()        = std::stoul(row[8]);
+    _getEffectDieSides()            = std::stoi(row[9]);
+    _getEffectItemType()            = std::stoul(row[10]);
+    _getEffectMechanic()            = std::stoul(row[11]);
+    _getEffectMiscValue()           = std::stoi(row[12]);
+    _getEffectMiscValueB()          = std::stoi(row[13]);
+    _getEffectPointsPerResource()   = std::atof(row[14]);
+    _getEffectRadiusIndex()         = std::stoul(row[15]);
+    _getEffectRadiusMaxIndex()      = std::stoul(row[16]);
+    _getEffectRealPointsPerLevel()  = std::atof(row[17]);
+    _getEffectSpellClassMaskA()     = std::stoul(row[18]);
+    _getEffectSpellClassMaskB()     = std::stoul(row[19]);
+    _getEffectSpellClassMaskC()     = std::stoul(row[20]);
+    _getEffectTriggerSpell()        = std::stoul(row[21]);
+    _getEffectImplicitTargetA()     = std::stoul(row[22]);
+    _getEffectImplicitTargetB()     = std::stoul(row[23]);
+    _getSpellID()                   = std::stoul(row[24]);
+    _getEffectIndex()               = std::stoul(row[25]);
 }
 
 SpellCategoryEntry::SpellCategoryEntry(DBCFileLoader::Record const& record)
 {
-    Id = record.getUInt(0);
-    //Flags = record.getUInt(1);
-    //UsesPerWeek = record.getUInt(2);
-    Name = QString::fromStdString(record.getString(3));
+    Id                              = record.getUInt(0);
+    //Flags                         = record.getUInt(1);
+    //UsesPerWeek                   = record.getUInt(2);
+    Name                            = QString::fromStdString(record.getString(3));
 }
 
 SpellCategoriesEntry::SpellCategoriesEntry(DBCFileLoader::Record const& record)
 {
-    Id                          = record.getUInt(0);
-    Category                    = record.getUInt(1);
-    DefenseType                 = record.getUInt(2);
-    DispelType                  = record.getUInt(3);
-    Mechanic                    = record.getUInt(4);
-    PreventionType              = record.getUInt(5);
-    //StartRecoveryCategory       = record.getUInt(6);
+    Id                              = record.getUInt(0);
+    Category                        = record.getUInt(1);
+    DefenseType                     = record.getUInt(2);
+    DispelType                      = record.getUInt(3);
+    Mechanic                        = record.getUInt(4);
+    PreventionType                  = record.getUInt(5);
+    //StartRecoveryCategory          = record.getUInt(6);
 }
 
 SpellClassOptionsEntry::SpellClassOptionsEntry(DBCFileLoader::Record const& record)
 {
-    Id                  = record.getUInt(0);
-    modalNextSpell      = record.getUInt(1);
-    SpellFamilyFlags[0] = record.getUInt(2);
-    SpellFamilyFlags[1] = record.getUInt(3);
-    SpellFamilyFlags[2] = record.getUInt(4);
-    SpellFamilyName     = record.getUInt(5);
-    //Description         = record.getString(6);
+    Id                              = record.getUInt(0);
+    modalNextSpell                  = record.getUInt(1);
+    SpellFamilyFlags[0]             = record.getUInt(2);
+    SpellFamilyFlags[1]             = record.getUInt(3);
+    SpellFamilyFlags[2]             = record.getUInt(4);
+    SpellFamilyName                 = record.getUInt(5);
+    //Description                   = record.getString(6);
 }
 
 SpellTargetRestrictionsEntry::SpellTargetRestrictionsEntry(DBCFileLoader::Record const& record)
 {
-    Id                  = record.getUInt(0);
-    ConeAngle           = record.getFloat(1);
-    MaxAffectedTargets  = record.getUInt(2);
-    MaxTargetLevel      = record.getUInt(3);
-    TargetCreatureType  = record.getUInt(4);
-    Targets             = record.getUInt(5);
+    Id                              = record.getUInt(0);
+    ConeAngle                       = record.getFloat(1);
+    MaxAffectedTargets              = record.getUInt(2);
+    MaxTargetLevel                  = record.getUInt(3);
+    TargetCreatureType              = record.getUInt(4);
+    Targets                         = record.getUInt(5);
 }
 
 SpellShapeshiftEntry::SpellShapeshiftEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t colId = 0;
-    Id                  = record.getUInt(colId++);
+    Id                  = record.getUInt(0);
 
-    for (auto& mask : ShapeshiftMask)
+    // 1 - 2
+    for (size_t i = 0; i < ShapeshiftExclude.size(); ++i)
     {
-        mask = record.getUInt(colId++);
+        ShapeshiftExclude.at(i) = record.getUInt(1 + i);
     }
 
-    for (auto& excludeMask : ShapeshiftExclude)
+    // 3 - 4
+    for (size_t i = 0; i < ShapeshiftMask.size(); ++i)
     {
-        excludeMask = record.getUInt(colId++);
+        ShapeshiftMask.at(i) = record.getUInt(3 + i);
     }
+
+    // StanceBarOrder = record.getUInt(5);
 }
 
 SkillLineAbilityEntry::SkillLineAbilityEntry(DBCFileLoader::Record const& record)
@@ -152,16 +155,18 @@ SkillLineEntry::SkillLineEntry(DBCFileLoader::Record const& record)
 
 SpellReagentsEntry::SpellReagentsEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t id = 0;
-    Id = record.getUInt(id++);
-    for (int32_t& regent : Reagent)
+    Id = record.getUInt(0);
+
+    // 1 - 8
+    for (size_t i = 0; i < Reagents.size(); ++i)
     {
-        regent = record.getInt(id++);
+        Reagents.at(i) = record.getInt(1 + i);
     }
 
-    for (uint32_t& regentAmount : ReagentCount)
+    // 9 - 16
+    for (size_t i = 0; i < ReagentCount.size(); ++i)
     {
-        regentAmount = record.getUInt(id++);
+        ReagentCount.at(i) = record.getUInt(9 + i);
     }
 }
 
@@ -176,7 +181,7 @@ SpellLevelsEntry::SpellLevelsEntry(DBCFileLoader::Record const& record)
 SpellEquippedItemsEntry::SpellEquippedItemsEntry(DBCFileLoader::Record const& record)
 {
     Id                                      = record.getUInt(0);
-    EquippedItemClass                       = record.getUInt(1);
+    EquippedItemClass                       = record.getInt(1);
     EquippedItemInventoryTypeMask           = record.getInt(2);
     EquippedItemSubClassMask                = record.getInt(3);
 }
@@ -184,22 +189,31 @@ SpellEquippedItemsEntry::SpellEquippedItemsEntry(DBCFileLoader::Record const& re
 SpellRangeEntry::SpellRangeEntry(DBCFileLoader::Record const& record)
 {
     Id                  = record.getUInt(0);
-    minRangeHostile     = record.getFloat(1);
-    minRangeFriend      = record.getFloat(2);
-    maxRangeHostile     = record.getFloat(3);
-    maxRangeFriend      = record.getFloat(4);
-    //type                = record.getUInt(5);
-    Name                = QString::fromStdString(record.getString(6));
-    //ShortName           = record.getString(7);
+
+    // 1 - 2
+    for (size_t i = 0; i < RangeMin.size(); ++i)
+    {
+        RangeMin.at(i) = record.getFloat(1 + i);
+    }
+
+    // 3 - 4
+    for (size_t i = 0; i < RangeMax.size(); ++i)
+    {
+        RangeMax.at(i) = record.getFloat(3 + i);
+    }
+
+    //Flags = record.getFloat(5);
+    DisplayName                = QString::fromStdString(record.getString(6));
+    //DisplayNameShort          = QString::fromStdString(record.getString(7));
 }
 
 SpellAuraOptionsEntry::SpellAuraOptionsEntry(DBCFileLoader::Record const& record)
 {
     Id                  = record.getUInt(0);
-    StackAmount         = record.getUInt(1);
-    procChance          = record.getUInt(2);
-    procCharges         = record.getUInt(3);
-    procFlags           = record.getUInt(4);
+    CumulativeAura      = record.getUInt(1);
+    ProcChance          = record.getUInt(2);
+    ProcCharges         = record.getUInt(3);
+    ProcTypeMask        = record.getUInt(4);
 }
 
 SpellCastTimesEntry::SpellCastTimesEntry(DBCFileLoader::Record const& record)
@@ -220,22 +234,22 @@ SpellCooldownsEntry::SpellCooldownsEntry(DBCFileLoader::Record const& record)
 
 SpellDurationEntry::SpellDurationEntry(DBCFileLoader::Record const& record)
 {
-    Id              = record.getUInt(0);
-    Duration[0]     = record.getInt(1);
-    Duration[1]     = record.getInt(2);
-    Duration[2]     = record.getInt(3);
+    Id                      = record.getUInt(0);
+    Duration                = record.getInt(1);
+    DurationPerLevel        = record.getInt(2);
+    MaxDuration             = record.getInt(3);
 }
 
 SpellPowerEntry::SpellPowerEntry(DBCFileLoader::Record const& record)
 {
     Id                              = record.getUInt(0);
-    manaCost                        = record.getUInt(1);
-    manaCostPerlevel                = record.getUInt(2);
-    ManaCostPercentage              = record.getUInt(3);
-    //manaPerSecond                   = record.getUInt(4);
-    manaPerSecondPerLevel           = record.getUInt(5);
-    //PowerDisplayId                  = record.getUInt(6);
-    //ManaCostPercentageFloat         = record.getFloat(7);
+    ManaCost                        = record.getUInt(1);
+    ManaCostPerLevel                = record.getUInt(2);
+    PowerCostPct                    = record.getUInt(3);
+    ManaPerSecond                   = record.getUInt(4);
+    //PowerDisplayId                  = record.getUInt(5);
+    //AltPowerBarID                   = record.getFloat(6);
+    PowerCostPct2                   = record.getFloat(7);
 }
 
 SpellInterruptsEntry::SpellInterruptsEntry(DBCFileLoader::Record const& record)
@@ -316,30 +330,32 @@ SpellCastingRequirementsEntry::SpellCastingRequirementsEntry(DBCFileLoader::Reco
 
 SpellScalingEntry::SpellScalingEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t id = 0;
-    Id                      = record.getUInt(id++);
-    CastTimeMin             = record.getInt(id++);
-    CastTimeMax             = record.getInt(id++);
-    CastTimeMaxLevel        = record.getInt(id++);
-    Class                   = record.getInt(id++);
+    Id                      = record.getUInt(0);
+    CastTimeMin             = record.getInt(1);
+    CastTimeMax             = record.getInt(2);
+    CastTimeMaxLevel        = record.getInt(3);
+    Class                   = record.getInt(4);
 
-    for (float& multiplier : Coefficient)
+    // 5 - 7
+    for (size_t i = 0; i < Coefficient.size(); ++i)
     {
-        multiplier = record.getFloat(id++);
+        Coefficient.at(i) = record.getFloat(5 + i);
     }
 
-    for (float& multiplier : Variance)
+    // 8 - 10
+    for (size_t i = 0; i < Variance.size(); ++i)
     {
-        multiplier = record.getFloat(id++);
+        Variance.at(i) = record.getFloat(8 + i);
     }
 
-    for (float& multiplier : ComboPointsCoefficient)
+    // 11 - 13
+    for (size_t i = 0; i < ComboPointsCoefficient.size(); ++i)
     {
-        multiplier = record.getFloat(id++);
+        ComboPointsCoefficient.at(i) = record.getFloat(11 + i);
     }
 
-    NerfFactor                = record.getFloat(id++);
-    NerfMaxLevel              = record.getInt(id++);
+    NerfFactor                = record.getFloat(14);
+    NerfMaxLevel              = record.getInt(15);
 }
 
 GtSpellScalingEntry::GtSpellScalingEntry(DBCFileLoader::Record const& record)

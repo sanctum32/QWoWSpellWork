@@ -229,10 +229,9 @@ struct SkillLineEntry
 
     uint32_t    Id{};                                           // 0
     //int32_t     categoryId{};                                  // 1        m_categoryID
-private:
+
     QString     name;                                           // 3        m_displayName_lang
-public:
-    QStringView GetName() const { return name; }
+
     //QString description;                                       // 4        m_description_lang
     //uint32_t    spellIcon{};                                   // 5        m_spellIconID
     //QString alternateVerb;                                     // 6        m_alternateVerb_lang
@@ -250,8 +249,8 @@ struct SpellReagentsEntry
     explicit SpellReagentsEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    std::array<int32_t, MAX_SPELL_REAGENTS> Reagent{};          // 54-61    m_reagent
-    std::array<uint32_t, MAX_SPELL_REAGENTS> ReagentCount{};    // 62-69    m_reagentCount
+    std::array<int32_t, MAX_SPELL_REAGENTS> Reagents{};           // 1 - 8
+    std::array<uint32_t, MAX_SPELL_REAGENTS> ReagentCount{};      // 9 - 16
 
     static constexpr const char* GetDBCFormat()
     {
@@ -281,9 +280,9 @@ struct SpellEquippedItemsEntry
     explicit SpellEquippedItemsEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    int32_t     EquippedItemClass{};                            // 70       m_equippedItemClass (value)
-    int32_t     EquippedItemInventoryTypeMask{};                // 72       m_equippedItemInvTypes (mask)
-    int32_t     EquippedItemSubClassMask{};                     // 71       m_equippedItemSubclass (mask)
+    int32_t     EquippedItemClass{};                            // 1
+    int32_t     EquippedItemInventoryTypeMask{};                // 2
+    int32_t     EquippedItemSubClassMask{};                     // 3
 
     static constexpr const char* GetDBCFormat()
     {
@@ -296,17 +295,12 @@ struct SpellRangeEntry
 {
     explicit SpellRangeEntry(DBCFileLoader::Record const& record);
 
-    uint32_t    Id{};                                       // 0
-    float     minRangeHostile{};                            // 1
-    float     minRangeFriend{};                             // 2
-    float     maxRangeHostile{};                            // 3
-    float     maxRangeFriend{};                             // 4 friend means unattackable unit here
-    //uint32_t  type{};                                      // 5
-private:
-    QString   Name;                                         // 6-21     m_displayName_lang
-public:
-    QStringView GetName() const { return Name; }
-    //QString   ShortName;                                   // 23-38    m_displayNameShort_lang
+    uint32_t  Id{};                                         // 0
+    std::array<float, 2> RangeMin{};                        // 1 - 2 (hostile, friend)
+    std::array<float, 2> RangeMax{};                        // 3 - 4 (hostile, friend)
+    //uint32_t  Flags;                                      // 5
+    QString   DisplayName;                                  // 6
+    //QString DisplayNameShort;                             // 7
 
     static constexpr const char* GetDBCFormat()
     {
@@ -320,10 +314,10 @@ struct SpellAuraOptionsEntry
     explicit SpellAuraOptionsEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    uint32_t    StackAmount{};                                  // 1       m_cumulativeAura
-    uint32_t    procChance{};                                   // 2       m_procChance
-    uint32_t    procCharges{};                                  // 3       m_procCharges
-    uint32_t    procFlags{};                                    // 4       m_procTypeMask
+    uint32_t    CumulativeAura{};                                  // 1       m_cumulativeAura
+    uint32_t    ProcChance{};                                   // 2       m_procChance
+    uint32_t    ProcCharges{};                                  // 3       m_procCharges
+    uint32_t    ProcTypeMask{};                                    // 4       m_procTypeMask
 
     static constexpr const char* GetDBCFormat()
     {
@@ -369,7 +363,9 @@ struct SpellDurationEntry
     explicit SpellDurationEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    std::array<int32_t, 3> Duration{};  // 1 - 3
+    int32_t     Duration{};                                     // 1
+    int32_t     DurationPerLevel{};                             // 2
+    int32_t     MaxDuration{};                                  // 3
 
     static constexpr const char* GetDBCFormat()
     {
@@ -383,17 +379,17 @@ struct SpellPowerEntry
     explicit SpellPowerEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    uint32_t    manaCost{};                                     // 1       m_manaCost
-    uint32_t    manaCostPerlevel{};                             // 2       m_manaCostPerLevel
-    uint32_t    ManaCostPercentage{};                           // 3       m_manaCostPct
-    //uint32_t    manaPerSecond{};                                // 4       m_manaPerSecond
-    uint32_t    manaPerSecondPerLevel{};                        // 5       m_manaPerSecondPerLevel
-    //uint32_t    PowerDisplayId{};                               // 6       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
-    //float       ManaCostPercentageFloat{};                      // 7       4.3.0
+    uint32_t    ManaCost{};                                     // 1       m_manaCost
+    uint32_t    ManaCostPerLevel{};                             // 2       m_manaCostPerLevel
+    uint32_t    PowerCostPct{};                                 // 3       m_manaCostPct
+    uint32_t    ManaPerSecond;                                  // 4
+    //uint32     PowerDisplayID;                                 // 5
+    //uint32     AltPowerBarID;                                  // 6
+    float   PowerCostPct2;                                       // 7
 
     static constexpr const char* GetDBCFormat()
     {
-        return "iiiixixx";
+        return "iiiiixxi";
     }
 };
 
