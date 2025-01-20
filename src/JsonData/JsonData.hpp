@@ -50,6 +50,9 @@ class SpellWorkJson
     std::map<uint32_t /*id*/, QString /*name*/> m_creatureTypeNames;
     std::map<uint32_t /*id*/, QString /*name*/> m_spellDamageTypeNames;
     std::map<uint32_t /*id*/, QString /*name*/> m_spellPreventionTypeNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_SummonPropCategoryNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_SummonPropSummTypeNames;
+    std::map<uint32_t /*id*/, QString /*name*/> m_SummonPropSummFlagNames;
 
 public:
     SpellWorkJson(SpellWorkJson const&) = delete;
@@ -104,6 +107,9 @@ public:
     QStringView GetCreatureTypeName(uint32_t id) const;
     QStringView GetSpellDamageTypeName(uint32_t id) const;
     QStringView GetSpellPreventionTypeName(uint32_t id) const;
+    QStringView GetSummonCategoryName(uint32_t id) const;
+    QStringView GetSummonTypeName(uint32_t id) const;
+    QStringView GetSummonPropertyFlagName(uint32_t id) const;
 };
 
 #define sSpellWorkJson SpellWorkJson::instance()

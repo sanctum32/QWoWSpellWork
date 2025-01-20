@@ -1086,11 +1086,10 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
             }
         }
 
-        const auto* spellAuraOptionEntry = sDataStorage->GetSpellAuraOptionsEntry(getSpellAuraOptionsId());
-
         // append trigger spell
         if (effectInfo->getEffectTriggerSpell() != 0)
         {
+            const auto* spellAuraOptionEntry = sDataStorage->GetSpellAuraOptionsEntry(getSpellAuraOptionsId());
             if (const auto* triggerSpell = sDataStorage->GetSpellEntry(effectInfo->getEffectTriggerSpell()))
             {
                 result += "<span style=\"color:green; font-weight: bold\">";
@@ -1434,5 +1433,136 @@ void SpellEffectEntry::GenerateExtraInfo()
         }
 
         m_extraInformation.replace(":EffectItemTypeName:", itemName, Qt::CaseInsensitive);
+    }
+
+    if (getEffect() == SPELL_EFFECT_SUMMON || getEffect() == SPELL_EFFECT_SUMMON_PET)
+    {
+        auto GenSummonPropertyId = [&]
+        {
+            if (!m_extraInformation.contains(":SummonCategoryId:", Qt::CaseInsensitive))
+            {
+                return;
+            }
+
+            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
+            {
+                m_extraInformation.replace(":SummonCategoryId:", QString::number(summonProp->Id), Qt::CaseInsensitive);
+            }
+            else
+            {
+                m_extraInformation.replace(":SummonCategoryId:", "0", Qt::CaseInsensitive);
+            }
+
+        };
+
+        auto GenSummonPropertyName = [&]
+        {
+            if (!m_extraInformation.contains(":SummonCategoryName:", Qt::CaseInsensitive))
+            {
+                return;
+            }
+
+            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
+            {
+                m_extraInformation.replace(":SummonCategoryName:", sSpellWorkJson->GetSummonCategoryName(summonProp->CategoryId).toString(), Qt::CaseInsensitive);
+            }
+            else
+            {
+                m_extraInformation.replace(":SummonCategoryName:", sSpellWorkJson->GetSummonCategoryName(0).toString(), Qt::CaseInsensitive);
+            }
+        };
+
+        auto GenSummonTypeNameId = [&]
+        {
+            if (!m_extraInformation.contains(":SummonPropTitleId:", Qt::CaseInsensitive))
+            {
+                return;
+            }
+
+            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
+            {
+                m_extraInformation.replace(":SummonPropTitleId:", QString::number(summonProp->SummonTypeNameId), Qt::CaseInsensitive);
+            }
+            else
+            {
+                m_extraInformation.replace(":SummonPropTitleId:", "0", Qt::CaseInsensitive);
+            }
+        };
+
+        auto GenSummonTypeName = [&]
+        {
+            if (!m_extraInformation.contains(":SummonPropTitleName:", Qt::CaseInsensitive))
+            {
+                return;
+            }
+
+            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
+            {
+                m_extraInformation.replace(":SummonPropTitleName:", sSpellWorkJson->GetSummonTypeName(summonProp->SummonTypeNameId).toString(), Qt::CaseInsensitive);
+            }
+            else
+            {
+                m_extraInformation.replace(":SummonPropTitleName:", sSpellWorkJson->GetSummonTypeName(0).toString(), Qt::CaseInsensitive);
+            }
+        };
+
+        auto GenSummonFlags = [&]
+        {
+            if (!m_extraInformation.contains(":SummonPropFlags:", Qt::CaseInsensitive))
+            {
+                return;
+            }
+
+            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
+            {
+                m_extraInformation.replace(":SummonPropFlags:", QString::number(summonProp->Flags), Qt::CaseInsensitive);
+            }
+            else
+            {
+                m_extraInformation.replace(":SummonPropFlags:", "0", Qt::CaseInsensitive);
+            }
+        };
+
+        auto GenSummonFlagNames = [&]
+        {
+            if (!m_extraInformation.contains(":SummonPropFlagNames:", Qt::CaseInsensitive))
+            {
+                return;
+            }
+
+            const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
+            QString result;
+            if (summonProp != nullptr && summonProp->Flags != 0)
+            {
+                for (uint8_t id = 1; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+                {
+                    const uint32_t flag = 1U << (id - 1);
+                    if ((summonProp->Flags & flag) == 0)
+                    {
+                        continue;
+                    }
+
+                    if (!result.isEmpty())
+                    {
+                        result += ", ";
+                    }
+
+                    result += sSpellWorkJson->GetSummonPropertyFlagName(flag);
+                }
+            }
+
+            if (result.isEmpty())
+            {
+                result = "None";
+            }
+            m_extraInformation.replace(":SummonPropFlagNames:", result, Qt::CaseInsensitive);
+        };
+
+        GenSummonPropertyId();
+        GenSummonPropertyName();
+        GenSummonTypeNameId();
+        GenSummonTypeName();
+        GenSummonFlags();
+        GenSummonFlagNames();
     }
 }

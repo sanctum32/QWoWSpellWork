@@ -27,7 +27,7 @@
     {"Id": 25, "Name": "SPELL_EFFECT_WEAPON", "EffectDetail" : null },
     {"Id": 26, "Name": "SPELL_EFFECT_DEFENSE", "EffectDetail" : null },
     {"Id": 27, "Name": "SPELL_EFFECT_PERSISTENT_AREA_AURA", "EffectDetail" : null },
-    {"Id": 28, "Name": "SPELL_EFFECT_SUMMON", "EffectDetail" : null },
+    {"Id": 28, "Name": "SPELL_EFFECT_SUMMON", "EffectDetail" : "Summon property id: :MiscValueB:, Summon category: :SummonCategoryId: (:SummonCategoryName:), summon type: :SummonPropTitleId: (:SummonPropTitleName:), Summon flags: :SummonPropFlags: (:SummonPropFlagNames:)" },
     {"Id": 29, "Name": "SPELL_EFFECT_LEAP", "EffectDetail" : null },
     {"Id": 30, "Name": "SPELL_EFFECT_ENERGIZE", "EffectDetail" : null },
     {"Id": 31, "Name": "SPELL_EFFECT_WEAPON_PERCENT_DAMAGE", "EffectDetail" : null },

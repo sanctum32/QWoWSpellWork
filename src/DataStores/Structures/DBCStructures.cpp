@@ -549,6 +549,16 @@ FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
     //Expansion = record.getUInt(25);
 }
 
+SummonPropertiesEntry::SummonPropertiesEntry(const DBCFileLoader::Record& record)
+{
+    Id = record.getUInt(0);
+    CategoryId = record.getUInt(1);
+    //Faction = record.getUInt(2);
+    SummonTypeNameId = record.getInt(3);
+    //Slot = record.getInt(4);
+    Flags = record.getUInt(5);
+}
+
 const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEntryFields =
 {
     {0, {"Id", CompareTypes::UnsignedNumber }},

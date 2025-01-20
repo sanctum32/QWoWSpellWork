@@ -49,6 +49,7 @@ public:
     const auto* GetScreenEffectEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ScreenEffectEntries); }
     const auto* GetSpellRadiusEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellRadiusEntries); }
     const auto* GetFactionEntry(uint32_t id) const { return GetEntryFromStorage(id, m_FactionEntries); }
+    const auto* GetSummonPropertiesEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SummonPropertiesEntries); }
 
     // DB2 data
     bool LoadDB2Datas();
@@ -105,6 +106,7 @@ private:
     std::map<uint32_t, ScreenEffectEntry>            m_ScreenEffectEntries;                      // ScreenEffect.dbc
     std::map<uint32_t, SpellRadiusEntry>             m_SpellRadiusEntries;                       // SpellRadius.dbc
     std::map<uint32_t, FactionEntry>                 m_FactionEntries;                           // Faction.dbc
+    std::map<uint32_t, SummonPropertiesEntry>        m_SummonPropertiesEntries;                  // SummonProperties.dbc
 
     // DB2 stores
     std::map<uint32_t, ItemSparseEntry>              m_ItemSparseEntries;                        // Item-sparse.db2

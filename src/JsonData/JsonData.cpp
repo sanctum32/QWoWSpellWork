@@ -1,4 +1,5 @@
 #include "JsonData.hpp"
+#include "DataStorage.hpp"
 #include <QJsonArray>
 #include <QFile>
 #include <QJsonObject>
@@ -492,6 +493,119 @@ bool SpellWorkJson::LoadJsonData()
         return false;
     }
 
+    if (!OpenJson("./json/SummonProperties.json", [&](const QJsonDocument& json)
+    {
+        if (!json.isObject())
+        {
+            qCDebug(JSON) << "Json file \"SummonProperties.json\" is not Object type";
+            return false;
+        }
+
+        const auto& jsonObj = json.object();
+        // SummonCategory
+        {
+            const auto& categoryArray = jsonObj.value("SummonCategory").toArray();
+            for (const auto& category : std::as_const(categoryArray))
+            {
+                const auto& categoryObj = category.toObject();
+                const uint32_t _keyId = categoryObj.value("Id").toInt();
+
+                if (m_SummonPropCategoryNames.contains(_keyId))
+                {
+                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has duplicate SummonCategory entry " << QString::number(_keyId) << ". Skipping";
+                    continue;
+                }
+
+                m_SummonPropCategoryNames[_keyId] = categoryObj.value("Name").toString();
+            }
+
+            if (m_SummonPropCategoryNames.empty())
+            {
+                qCDebug(JSON) << "Failed to load SummonCategory entries from SummonProperties.json";
+                return false;
+            }
+        }
+
+        // SummonTypeName
+        {
+            const auto& summTitleArray = jsonObj.value("SummonTypeName").toArray();
+            for (const auto& summTitle : std::as_const(summTitleArray))
+            {
+                const auto& summTitleObj = summTitle.toObject();
+                const uint32_t _keyId = summTitleObj.value("Id").toInt();
+
+                if (m_SummonPropSummTypeNames.contains(_keyId))
+                {
+                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has duplicate SummonTypeName entry " << QString::number(_keyId) << ". Skipping";
+                    continue;
+                }
+
+                m_SummonPropSummTypeNames[_keyId] = summTitleObj.value("Name").toString();
+            }
+
+            if (m_SummonPropSummTypeNames.empty())
+            {
+                qCDebug(JSON) << "Failed to load SummonTypeName entries from SummonProperties.json";
+                return false;
+            }
+        }
+
+        // SummonFlags
+        {
+            const auto& summFlagsArray = jsonObj.value("SummonFlags").toArray();
+            for (const auto& summFlag : std::as_const(summFlagsArray))
+            {
+                const auto& summFlagObj = summFlag.toObject();
+                const uint32_t _keyId = summFlagObj.value("Flag").toInt();
+
+                if (m_SummonPropSummFlagNames.contains(_keyId))
+                {
+                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has duplicate SummonFlags entry " << QString::number(_keyId) << ". Skipping";
+                    continue;
+                }
+
+                m_SummonPropSummFlagNames[_keyId] = summFlagObj.value("Name").toString();
+            }
+
+            if (m_SummonPropSummFlagNames.empty())
+            {
+                qCDebug(JSON) << "Failed to load SummonFlags entries from SummonProperties.json";
+                return false;
+            }
+        }
+
+        // TypeNameIdOverwrite
+        {
+            const auto& propExtraArray = jsonObj.value("TypeNameIdOverwrite").toArray();
+            for (const auto& propExtra : std::as_const(propExtraArray))
+            {
+                const auto& propExtraObj = propExtra.toObject();
+                const uint32_t propertyId = propExtraObj.value("PropertyId").toInt();
+                auto* summonProperty = const_cast<SummonPropertiesEntry*>(sDataStorage->GetSummonPropertiesEntry(propertyId));
+                if (summonProperty == nullptr)
+                {
+                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has invalid duplicate TypeNameIdOverwrite entry " << QString::number(propertyId) << ". Skipping";
+                    continue;
+                }
+                const uint32_t summonTypeNameId = propExtraObj.value("SummonTypeNameId").toInt();
+                if (!m_SummonPropSummTypeNames.contains(summonTypeNameId))
+                {
+                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has invalid SummonTitle entry " << QString::number(summonTypeNameId) << " for summon property entry "
+                                  << QString::number(propertyId) << ". Skipping";
+
+                    continue;
+                }
+
+                summonProperty->SummonTypeNameId = summonTypeNameId;
+            }
+        }
+
+        return true;
+    }))
+    {
+        return false;
+    }
+
     if (!ReadBasicArrayFromFile("./json/SpellMod.json", m_spellModOpNames) ||
         !ReadBasicArrayFromFile("./json/SpellProc.json", m_spellProcFlagNames, "Flag") ||
         !ReadBasicArrayFromFile("./json/SpellFamily.json", m_spellFamilyNames) ||
@@ -694,4 +808,22 @@ QStringView SpellWorkJson::GetSpellPreventionTypeName(uint32_t id) const
 {
     const auto& itr = m_spellPreventionTypeNames.find(id);
     return itr != m_spellPreventionTypeNames.end() ? itr->second : QString("SPELL_PREVENTION_TYPE_UNK_%1").arg(id);
+}
+
+QStringView SpellWorkJson::GetSummonCategoryName(uint32_t id) const
+{
+    const auto& itr = m_SummonPropCategoryNames.find(id);
+    return itr != m_SummonPropCategoryNames.end() ? itr->second : QString("UNKNOWN_SUMMON_CATEGORY_%1").arg(id);
+}
+
+QStringView SpellWorkJson::GetSummonTypeName(uint32_t id) const
+{
+    const auto& itr = m_SummonPropSummTypeNames.find(id);
+    return itr != m_SummonPropSummTypeNames.end() ? itr->second : QString("UNKNOWN_SUMMON_CONTROL_TITLE_%1").arg(id);
+}
+
+QStringView SpellWorkJson::GetSummonPropertyFlagName(uint32_t id) const
+{
+    const auto& itr = m_SummonPropSummFlagNames.find(id);
+    return itr != m_SummonPropSummFlagNames.end() ? itr->second : QString("SUMMON_PROP_FLAG_UNKNOWN_%1").arg(id);
 }

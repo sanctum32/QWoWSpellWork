@@ -26,3 +26,9 @@ Misc value, Misc valueB - Spell effect's misc values. These field could have bit
 | :MechanicImmunitiesMiscValB: | Prints mechanic immunity type names list | Mechanic type names are extracted from Misc valueB bitmask |
 | :EffectItemType: | Prints effected item entry | EffectItemType |
 | :EffectItemTypeName: | Prints effected item name | Item name by EffectItemType field value |
+| :SummonCategoryId: | Prints SpellSummonProperties.dbc entry category Id | Can be used only for SPELL_EFFECT_SUMMON and SPELL_EFFECT_SUMMON_PET effects |
+| :SummonCategoryName: | Prints SpellSummonProperties.dbc entry category name | Can be used only for SPELL_EFFECT_SUMMON and SPELL_EFFECT_SUMMON_PET effects |
+| :SummonPropTitleId: | Prints SpellSummonProperties.dbc entry summon type title id | Can be used only for SPELL_EFFECT_SUMMON and SPELL_EFFECT_SUMMON_PET effects |
+| :SummonPropTitleName: | Prints SpellSummonProperties.dbc entry summon type title name | Can be used only for SPELL_EFFECT_SUMMON and SPELL_EFFECT_SUMMON_PET effects |
+| :SummonPropFlags: | Prints SpellSummonProperties.dbc entry summon flags | Can be used only for SPELL_EFFECT_SUMMON and SPELL_EFFECT_SUMMON_PET effects |
+| :SummonPropFlagNames: | Prints SpellSummonProperties.dbc entry summon flag names | Can be used only for SPELL_EFFECT_SUMMON and SPELL_EFFECT_SUMMON_PET effects |

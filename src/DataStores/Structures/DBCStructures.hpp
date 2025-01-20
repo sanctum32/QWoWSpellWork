@@ -765,6 +765,23 @@ struct FactionEntry
     }
 };
 
+// SummonProperties.dbc
+struct SummonPropertiesEntry
+{
+    explicit SummonPropertiesEntry(DBCFileLoader::Record const& record);
+    uint32_t  Id{};                                             // 0
+    uint32_t  CategoryId{};                                     // 1, 0 - can't be controlled?, 1 - something guardian?, 2 - pet?, 3 - something controllable?, 4 - taxi/mount?
+    //uint32_t  Faction;                                        // 2, 14 rows > 0
+    int32_t   SummonTypeNameId{};                               // 3
+    //int32_t   Slot;                                           // 4, 0-6
+    uint32_t  Flags{};                                          // 5
+
+    static constexpr const char* GetDBCFormat()
+    {
+        return "iuxuxu";
+    }
+};
+
 struct DBCFieldAttrInfo
 {
     const QString fieldName;

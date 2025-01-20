@@ -100,6 +100,7 @@ bool DataStorage::LoadDBCDatas()
         !OpenAndReadDBC(dbcFolderPath, "SpellRadius.dbc",               m_SpellRadiusEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "Faction.dbc",                   m_FactionEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellScaling.dbc",              m_SpellScalingEntries) ||
+        !OpenAndReadDBC(dbcFolderPath, "SummonProperties.dbc",          m_SummonPropertiesEntries) ||
         (sSpellWorkConfig->GetAppConfig().loadDBCSpells && (!OpenAndReadDBC(dbcFolderPath, "Spell.dbc", m_spellEntries) || !OpenAndReadDBC(dbcFolderPath, "SpellEffect.dbc", m_SpellEffectEntries)))
     )
     {
