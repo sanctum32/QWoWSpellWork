@@ -55,7 +55,7 @@
     {"Id": 53, "Name": "SPELL_EFFECT_ENCHANT_ITEM", "EffectDetail" : "Creates item entry: <span style=\"color:green\">:EffectItemType: (:EffectItemTypeName:)</span>" },
     {"Id": 54, "Name": "SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY", "EffectDetail" : null },
     {"Id": 55, "Name": "SPELL_EFFECT_TAMECREATURE", "EffectDetail" : null },
-    {"Id": 56, "Name": "SPELL_EFFECT_SUMMON_PET", "EffectDetail" : null },
+    {"Id": 56, "Name": "SPELL_EFFECT_SUMMON_PET", "EffectDetail" : "Summon property id: :MiscValueB:, Summon category: :SummonCategoryId: (:SummonCategoryName:), summon type: :SummonPropTitleId: (:SummonPropTitleName:), Summon flags: :SummonPropFlags: (:SummonPropFlagNames:)" },
     {"Id": 57, "Name": "SPELL_EFFECT_LEARN_PET_SPELL", "EffectDetail" : null },
     {"Id": 58, "Name": "SPELL_EFFECT_WEAPON_DAMAGE", "EffectDetail" : null },
     {"Id": 59, "Name": "SPELL_EFFECT_CREATE_RANDOM_ITEM", "EffectDetail" : null },
