@@ -1033,6 +1033,8 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
             }
         }
 
+        result += QString("Effect entry mechanic = %1 (%2)<br>").arg(effectInfo->getEffectMechanic()).arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
+
         if (effectInfo->HasSpellClassMask())
         {
             if (const auto* thisEffClassOptions = sDataStorage->GetSpellClassOptionsEntry(getSpellClassOptionsId()))
