@@ -140,6 +140,7 @@ ItemSparseEntry::ItemSparseEntry(const DB2FileLoader::Record &record)
     */
 }
 
+#ifdef SPELLWORK_BUILD_SQL
 ItemSparseEntry::ItemSparseEntry(const MYSQL_ROW &row)
 {
     /*ID                  = static_cast<uint32_t>(std::stoul(row[0]));
@@ -279,3 +280,4 @@ ItemSparseEntry::ItemSparseEntry(const MYSQL_ROW &row)
     ID = static_cast<uint32_t>(std::stoul(row[0]));
     Display         = QString(row[1]);
 }
+#endif // SPELLWORK_BUILD_SQL

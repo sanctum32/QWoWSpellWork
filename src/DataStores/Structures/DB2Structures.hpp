@@ -1,8 +1,11 @@
 #pragma once
 
 #include "DB2FileLoader.hpp"
+
+#ifdef SPELLWORK_BUILD_SQL
 #include "mysql.h"
-#include <array>
+#endif // SPELLWORK_BUILD_SQL
+
 #include <QString>
 
 enum : uint8_t
@@ -17,7 +20,9 @@ struct ItemSparseEntry
 {
     ItemSparseEntry() = default;
     ItemSparseEntry(DB2FileLoader::Record const& record);
+#ifdef SPELLWORK_BUILD_SQL
     ItemSparseEntry(const MYSQL_ROW& row);
+#endif // SPELLWORK_BUILD_SQL
 
     uint32_t     ID{};                                                    // 0
     /*

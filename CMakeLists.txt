@@ -96,7 +96,8 @@ else()
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+        add_executable(${PROJECT_NAME} ${PROJECT_SOURCES}
+            json/SummonProperties.json)
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
