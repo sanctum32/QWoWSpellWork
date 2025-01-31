@@ -1142,13 +1142,6 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
             result += QString("EffectChainTarget = %1<br>").arg(effectInfo->getEffectChainTargets());
         }
 
-        if (effectInfo->getEffectMechanic() != MECHANIC_NONE)
-        {
-            result += QString("Effect Mechanic = %1 (%2)<br>")
-                    .arg(effectInfo->getEffectMechanic())
-                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
-        }
-
         result += "<br>";
     }
 
