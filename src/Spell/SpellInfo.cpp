@@ -1211,15 +1211,29 @@ QString const SpellEntry::PrintBaseInfo(uint8_t scalingLevel) const
 
 void SpellEffectEntry::GenerateExtraInfo()
 {
-    const auto* effectJsonInfo = sSpellWorkJson->GetSpellEffectInfo(getEffect());
-    if (effectJsonInfo == nullptr || effectJsonInfo->extraDetailFormatStr.isEmpty())
+    if (getEffectAura() != SPELL_AURA_NONE)
+    {
+        const auto* auraEffJsonInfo = sSpellWorkJson->GetSpellAuraEffectInfo(getEffectAura());
+        if (auraEffJsonInfo != nullptr && !auraEffJsonInfo->extraDetailFormatStr.isEmpty())
+        {
+            m_extraInformation = auraEffJsonInfo->extraDetailFormatStr;
+        }
+    }
+    else if (getEffect() != SPELL_EFFECT_NONE)
+    {
+        const auto* effectJsonInfo = sSpellWorkJson->GetSpellEffectInfo(getEffect());
+        if (effectJsonInfo != nullptr && !effectJsonInfo->extraDetailFormatStr.isEmpty())
+        {
+            m_extraInformation = effectJsonInfo->extraDetailFormatStr;
+        }
+    }
+
+    if (m_extraInformation.isEmpty())
     {
         return;
     }
 
-    m_extraInformation = effectJsonInfo->extraDetailFormatStr;
-
-    using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*val*/>;
+    using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*effectValue*/>;
 
     {
         const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", getEffectMiscValue() }, { ":MiscValueB:", getEffectMiscValueB() } }};
