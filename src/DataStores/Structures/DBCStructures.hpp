@@ -6,7 +6,9 @@
 
 #include "DBCFileLoader.hpp"
 #include "Enums/SpellEnums.hpp"
+#ifdef SPELLWORK_BUILD_SQL
 #include "mysql/mysql.h"
+#endif // SPELLWORK_BUILD_SQL
 
 enum class CompareTypes;
 
@@ -30,7 +32,10 @@ struct SpellEffectEntry
 {
     SpellEffectEntry() = default;
     SpellEffectEntry(DBCFileLoader::Record const& record);
+
+#ifdef SPELLWORK_BUILD_SQL
     SpellEffectEntry(const MYSQL_ROW& result);
+#endif // SPELLWORK_BUILD_SQL
 
     inline bool HasSpellClassMask() const { return getEffectSpellClassMaskA() != 0 || getEffectSpellClassMaskB() != 0 || getEffectSpellClassMaskC() != 0; }
     static constexpr const char* GetDBCFormat()
@@ -614,8 +619,10 @@ struct SpellEntry
 {
     SpellEntry() = default;
     explicit SpellEntry(const DBCFileLoader::Record& record);
-    explicit SpellEntry(const MYSQL_ROW& sqlRow);
 
+#ifdef SPELLWORK_BUILD_SQL
+    explicit SpellEntry(const MYSQL_ROW& sqlRow);
+#endif // SPELLWORK_BUILD_SQL
 
     const auto getId() const { return _fields[0].uint32Val; };                 // 0
     const auto getAttribute0() const { return _fields[1].uint32Val; }          // 1

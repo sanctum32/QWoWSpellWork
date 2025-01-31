@@ -35,6 +35,7 @@ SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
     _getEffectAttributes()          = record.getUInt(26);
 }
 
+#ifdef SPELLWORK_BUILD_SQL
 SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
 {
     _getId()                        = std::stoul(row[0]);
@@ -64,6 +65,7 @@ SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
     _getSpellID()                   = std::stoul(row[24]);
     _getEffectIndex()               = std::stoul(row[25]);
 }
+#endif // SPELLWORK_BUILD_SQL
 
 SpellCategoryEntry::SpellCategoryEntry(DBCFileLoader::Record const& record)
 {
@@ -459,6 +461,7 @@ SpellEntry::SpellEntry(DBCFileLoader::Record const& record)
     }
 }
 
+#ifdef SPELLWORK_BUILD_SQL
 SpellEntry::SpellEntry(const MYSQL_ROW& row)
 {
     m_IsServerSide = true;
@@ -498,6 +501,7 @@ SpellEntry::SpellEntry(const MYSQL_ROW& row)
         _fields[1 + i] = static_cast<uint32_t>(atoi(row[1 + i]));
     }
 }
+#endif // SPELLWORK_BUILD_SQL
 
 FactionEntry::FactionEntry(DBCFileLoader::Record const& record)
 {
