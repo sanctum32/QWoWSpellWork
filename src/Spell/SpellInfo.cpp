@@ -1430,6 +1430,19 @@ void SpellEffectEntry::GenerateExtraInfo()
         }
     }
 
+    {
+        const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunityMiscVal:", getEffectMiscValue() }, { ":MechanicImmunityMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [strToRep, value] : mechanicImmunities)
+        {
+            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            {
+                continue;
+            }
+
+            m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellMechanicName(value).toString(), Qt::CaseInsensitive);
+        }
+    }
+
     if (m_extraInformation.contains(":EffectItemType:", Qt::CaseInsensitive))
     {
         m_extraInformation.replace(":EffectItemType:", QString::number(getEffectItemType()), Qt::CaseInsensitive);

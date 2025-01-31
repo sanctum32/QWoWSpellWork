@@ -76,7 +76,7 @@
     { "Id":74, "Name":"SPELL_AURA_REFLECT_SPELLS_SCHOOL", "EffectDetail": null },
     { "Id":75, "Name":"SPELL_AURA_MOD_LANGUAGE", "EffectDetail": null },
     { "Id":76, "Name":"SPELL_AURA_FAR_SIGHT", "EffectDetail": null },
-    { "Id":77, "Name":"SPELL_AURA_MECHANIC_IMMUNITY", "EffectDetail": "Effected mechanic immunities: :MechanicImmunitiesMiscVal:" },
+    { "Id":77, "Name":"SPELL_AURA_MECHANIC_IMMUNITY", "EffectDetail": "Effected mechanic immunity: :MechanicImmunityMiscVal:" },
     { "Id":78, "Name":"SPELL_AURA_MOUNTED", "EffectDetail": null },
     { "Id":79, "Name":"SPELL_AURA_MOD_DAMAGE_PERCENT_DONE", "EffectDetail": null },
     { "Id":80, "Name":"SPELL_AURA_MOD_PERCENT_STAT", "EffectDetail": null },
