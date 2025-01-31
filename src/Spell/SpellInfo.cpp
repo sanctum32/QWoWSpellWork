@@ -1004,10 +1004,12 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
 
         if (effectInfo->getEffectAura() == 0)
         {
-            result += QString("EffectMiscValueA = %1, EffectMiscValueB = %2, EffectAmplitude = %3<br>")
+            result += QString("EffectMiscValueA = %1, EffectMiscValueB = %2, EffectAmplitude = %3, Mechanic = %4 (%5)<br>")
                     .arg(effectInfo->getEffectMiscValue())
                     .arg(effectInfo->getEffectMiscValueB())
-                    .arg(effectInfo->getEffectAmplitude());
+                    .arg(effectInfo->getEffectAmplitude())
+                    .arg(effectInfo->getEffectMechanic())
+                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
 
             if (effectInfo->HasExtraInfo())
             {
@@ -1017,14 +1019,15 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
         }
         else
         {
-            result += QString("Aura Id %1 (%2), value = %3, misc = %4")
+            result += QString("Aura Id %1 (%2), value = %3, misc = %4, miscB = %5, periodic = %6, mechanic = %7 (%8)<br>")
                     .arg(effectInfo->getEffectAura())
                     .arg(sSpellWorkJson->GetSpellAuraTypeName(effectInfo->getEffectAura()))
                     .arg(effectInfo->getEffectBasePoints())
-                    .arg(effectInfo->getEffectMiscValue());
-
-            result += QString(", miscB = %1").arg(effectInfo->getEffectMiscValueB());
-            result += QString(", periodic = %1<br>").arg(effectInfo->getEffectAuraPeriod());
+                    .arg(effectInfo->getEffectMiscValue())
+                    .arg(effectInfo->getEffectMiscValueB())
+                    .arg(effectInfo->getEffectAuraPeriod())
+                    .arg(effectInfo->getEffectMechanic())
+                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
 
             if (effectInfo->HasExtraInfo())
             {
@@ -1032,8 +1035,6 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                 result += "<br>";
             }
         }
-
-        result += QString("Effect entry mechanic = %1 (%2)<br>").arg(effectInfo->getEffectMechanic()).arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
 
         if (effectInfo->HasSpellClassMask())
         {
