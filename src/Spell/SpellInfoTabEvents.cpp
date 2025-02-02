@@ -4,11 +4,9 @@
 #include <QDate>
 // project
 #include "ValueComparition.hpp"
-#include "mainwindow.hpp"
-#include "searchFilter.hpp"
-#include "ui/ui_mainwindow.h"
+#include "MainWindowForm.hpp"
+#include "SearchFilterForm.hpp"
 #include "DataStorage.hpp"
-#include "SearchFiltersStore.hpp"
 #include <cassert>
 #include <optional>
 

@@ -1,7 +1,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
-#include "searchFilter.hpp"
+#include "SearchFilterForm.hpp"
 #include "SearchFiltersStore.hpp"
 #include "ValueComparition.hpp"
 #include "DBCStructures.hpp"

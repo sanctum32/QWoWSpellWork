@@ -1,6 +1,4 @@
-#include "mainwindow.hpp"
-#include "searchFilter.hpp"
-#include "ui/ui_mainwindow.h"
+#include "MainWindowForm.hpp"
 #include <QCloseEvent>
 
 Q_LOGGING_CATEGORY(SPELLINFO_TAB, "spellwork.json");

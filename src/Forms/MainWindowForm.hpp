@@ -1,6 +1,6 @@
 #pragma once
 #include "SearchFiltersStore.hpp"
-#include "searchFilter.hpp"
+#include "SearchFilterForm.hpp"
 #include "ui/ui_mainwindow.h"
 #include <QMainWindow>
 #include <QLabel>
