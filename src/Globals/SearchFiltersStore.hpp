@@ -2,8 +2,6 @@
 #include <QString>
 #include <array>
 
-enum class ConditionCompareType : uint8_t;
-
 namespace SpellWork::SearchFilters
 {
     struct GenericFilterData
@@ -54,7 +52,10 @@ namespace SpellWork::SearchFilters
         QString m_compareValue;
     };
 
-    extern GenericFilterData m_genericFilter;
-    extern std::array<AttributesFilterData, 2> m_spellEntryFilter;          // Spell.dbc entry fields filter
-    extern std::array<AttributesFilterData, 2> m_spellEffectFilter;         // SpellEffect.dbc entry fields filter
+    struct FilterData
+    {
+        GenericFilterData m_genericFilter;
+        std::array<AttributesFilterData, 2> m_spellEntryFilter;          // Spell.dbc entry fields filter
+        std::array<AttributesFilterData, 2> m_spellEffectFilter;         // SpellEffect.dbc entry fields filter
+    };
 }

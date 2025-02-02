@@ -3,10 +3,6 @@
 // extern variables
 namespace SpellWork::SearchFilters
 {
-GenericFilterData m_genericFilter;
-std::array<AttributesFilterData, 2> m_spellEntryFilter;
-std::array<AttributesFilterData, 2> m_spellEffectFilter;
-
 const uint32_t* GenericFilterData::GetSpellFamily() const
 {
     return m_spellFamily.first != -1 ? &m_spellFamily.second : nullptr;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SearchFilter</class>
- <widget class="QDialog" name="SearchFilter">
+ <class>SearchFilterForm</class>
+ <widget class="QDialog" name="SearchFilterForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -431,7 +431,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>SearchFilter</receiver>
+   <receiver>SearchFilterForm</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -447,7 +447,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>SearchFilter</receiver>
+   <receiver>SearchFilterForm</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

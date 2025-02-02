@@ -1,4 +1,5 @@
 #pragma once
+#include "SearchFiltersStore.hpp"
 #include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
 #include <QMainWindow>
@@ -43,6 +44,8 @@ private:
     QLabel m_db2Status;
     QLabel m_jsonStatus;
     QLabel m_sqlStatus;
+
+    SpellWork::SearchFilters::FilterData spellInfoTabFilter;
 
 // Generic functions
     void PerformSpellSearch();

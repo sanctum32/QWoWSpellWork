@@ -4,12 +4,12 @@
 #include "searchFilter.hpp"
 #include "SearchFiltersStore.hpp"
 #include "ValueComparition.hpp"
-#include "mainwindow.hpp"
 #include "DBCStructures.hpp"
 #include "JsonData.hpp"
 
-SearchFilter::SearchFilter(QWidget *parent /** nullptr*/) : QDialog(parent)
+SearchFilterForm::SearchFilterForm(SpellWork::SearchFilters::FilterData* filterData, QWidget* parent /*= nullptr*/) : QDialog(parent), m_filterData(filterData)
 {
+    assert(m_filterData != nullptr);
     ui.setupUi(this);
 
     // SpellFamilyFilter
@@ -60,40 +60,19 @@ SearchFilter::SearchFilter(QWidget *parent /** nullptr*/) : QDialog(parent)
         ++idVal;
     }
 
-    QObject::connect(ui.buttonBox, &QDialogButtonBox::clicked, this, &SearchFilter::onButtonClicked);
-    QObject::connect(ui.spellFamilyResetBtn, &QPushButton::clicked, this, &SearchFilter::spellFamilyResetBtnClick);
-    QObject::connect(ui.SpellAuraEffResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAuraEffResetBtnClick);
-    QObject::connect(ui.SpellEffResetBtn, &QPushButton::clicked, this, &SearchFilter::spellEffResetBtnClick);
-    QObject::connect(ui.SpellTargetAResetBtn, &QPushButton::clicked, this, &SearchFilter::spellTargetAResetBtnClick);
-    QObject::connect(ui.SpellTargetBResetBtn, &QPushButton::clicked, this, &SearchFilter::spellTargetBResetBtnClick);
-    QObject::connect(ui.SpellAttrFilter0ResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAttrFilter0ResetBtnClick);
-    QObject::connect(ui.SpellAttrFilter1ResetBtn, &QPushButton::clicked, this, &SearchFilter::spellAttrFilter1ResetBtnClick);
-    QObject::connect(ui.EffectAttrFilter0ResetBtn, &QPushButton::clicked, this, &SearchFilter::effectAttrFilter0ResetBtnClick);
-    QObject::connect(ui.EffectAttrFilter1ResetBtn, &QPushButton::clicked, this, &SearchFilter::effectAttrFilter1ResetBtnClick);
+    QObject::connect(ui.buttonBox, &QDialogButtonBox::clicked, this, &SearchFilterForm::onButtonClicked);
+    QObject::connect(ui.spellFamilyResetBtn, &QPushButton::clicked, this, &SearchFilterForm::spellFamilyResetBtnClick);
+    QObject::connect(ui.SpellAuraEffResetBtn, &QPushButton::clicked, this, &SearchFilterForm::spellAuraEffResetBtnClick);
+    QObject::connect(ui.SpellEffResetBtn, &QPushButton::clicked, this, &SearchFilterForm::spellEffResetBtnClick);
+    QObject::connect(ui.SpellTargetAResetBtn, &QPushButton::clicked, this, &SearchFilterForm::spellTargetAResetBtnClick);
+    QObject::connect(ui.SpellTargetBResetBtn, &QPushButton::clicked, this, &SearchFilterForm::spellTargetBResetBtnClick);
+    QObject::connect(ui.SpellAttrFilter0ResetBtn, &QPushButton::clicked, this, &SearchFilterForm::spellAttrFilter0ResetBtnClick);
+    QObject::connect(ui.SpellAttrFilter1ResetBtn, &QPushButton::clicked, this, &SearchFilterForm::spellAttrFilter1ResetBtnClick);
+    QObject::connect(ui.EffectAttrFilter0ResetBtn, &QPushButton::clicked, this, &SearchFilterForm::effectAttrFilter0ResetBtnClick);
+    QObject::connect(ui.EffectAttrFilter1ResetBtn, &QPushButton::clicked, this, &SearchFilterForm::effectAttrFilter1ResetBtnClick);
 }
 
-inline void UpdateMainWindowState(MainWindow* mainWindow)
-{
-    if (mainWindow == nullptr)
-    {
-        return;
-    }
-
-    using namespace SpellWork::SearchFilters;
-    const bool hasBasicFilters = m_genericFilter.HasData();
-    const bool hasSpellFieldFilters = std::ranges::any_of(m_spellEntryFilter, [](const auto& filter)
-    {
-        return filter.HasData();
-    });
-    const bool hasSpellEffectFilters = std::ranges::any_of(m_spellEffectFilter, [](const auto& filter)
-    {
-        return filter.HasData();
-    });
-
-    mainWindow->UpdateFilterStatus(hasBasicFilters || hasSpellFieldFilters || hasSpellEffectFilters);
-}
-
-void SearchFilter::onButtonClicked(QAbstractButton* button)
+void SearchFilterForm::onButtonClicked(QAbstractButton* button)
 {
     const auto* buttonBox = qobject_cast<QDialogButtonBox*>(sender());
     if (buttonBox == nullptr)
@@ -108,7 +87,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
         using namespace SpellWork::SearchFilters;
         // Generic filter
         {
-            auto& genericFilter = m_genericFilter;
+            auto& genericFilter = m_filterData->m_genericFilter;
             // SpellFamily
             {
                 auto& [id, value] = genericFilter.m_spellFamily;
@@ -145,7 +124,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
         {
             // Filter 0
             {
-                auto& filter = m_spellEntryFilter.at(0);
+                auto& filter = m_filterData->m_spellEntryFilter.at(0);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -162,7 +141,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
             }
             // Filter 1
             {
-                auto& filter = m_spellEntryFilter.at(1);
+                auto& filter = m_filterData->m_spellEntryFilter.at(1);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -181,10 +160,10 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
         }
         // Spell effect filter
         {
-            auto& genericFilter = m_genericFilter;
+            auto& genericFilter = m_filterData->m_genericFilter;
             // Filter 0
             {
-                auto& filter = m_spellEffectFilter.at(0);
+                auto& filter = m_filterData->m_spellEffectFilter.at(0);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -201,7 +180,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
             }
             // Filter 1
             {
-                auto& filter = m_spellEffectFilter.at(1);
+                auto& filter = m_filterData->m_spellEffectFilter.at(1);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -218,7 +197,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
             }
         }
 
-        UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
+        OnCloseOrApplyEventFn();
 
         QMessageBox msgBox;
         msgBox.setText("Filter settings were applied!");
@@ -228,10 +207,7 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
     case QDialogButtonBox::Cancel:
     case QDialogButtonBox::Close:
     {
-        if (MainWindow* mainWindow = dynamic_cast<MainWindow*>(parentWidget()))
-        {
-            UpdateMainWindowState(mainWindow);
-        }
+        OnCloseOrApplyEventFn();
     }
     case QDialogButtonBox::Reset:
     {
@@ -263,90 +239,93 @@ void SearchFilter::onButtonClicked(QAbstractButton* button)
     }
 }
 
-void SearchFilter::spellFamilyResetBtnClick()
+void SearchFilterForm::spellFamilyResetBtnClick()
 {
     ui.SpellFamilyFilter->setCurrentIndex(-1);
 }
 
-void SearchFilter::spellAuraEffResetBtnClick()
+void SearchFilterForm::spellAuraEffResetBtnClick()
 {
     ui.SpellAuraTypeFilter->setCurrentIndex(-1);
 }
 
-void SearchFilter::spellEffResetBtnClick()
+void SearchFilterForm::spellEffResetBtnClick()
 {
     ui.SpellEffectFilter->setCurrentIndex(-1);
 }
 
-void SearchFilter::spellTargetAResetBtnClick()
+void SearchFilterForm::spellTargetAResetBtnClick()
 {
     ui.SpellTargetFilterA->setCurrentIndex(-1);
 }
 
-void SearchFilter::spellTargetBResetBtnClick()
+void SearchFilterForm::spellTargetBResetBtnClick()
 {
     ui.SpellTargetFilterB->setCurrentIndex(-1);
 }
 
-void SearchFilter::spellAttrFilter0ResetBtnClick()
+void SearchFilterForm::spellAttrFilter0ResetBtnClick()
 {
     ui.spellAttrFieldName0->setCurrentIndex(-1);
     ui.spellAttrCompareType0->setCurrentIndex(-1);
     ui.spellAttrInput0->clear();
 }
 
-void SearchFilter::spellAttrFilter1ResetBtnClick()
+void SearchFilterForm::spellAttrFilter1ResetBtnClick()
 {
     ui.spellAttrFieldName1->setCurrentIndex(-1);
     ui.spellAttrCompareType1->setCurrentIndex(-1);
     ui.spellAttrInput1->clear();
 }
 
-void SearchFilter::effectAttrFilter0ResetBtnClick()
+void SearchFilterForm::effectAttrFilter0ResetBtnClick()
 {
     ui.effectFieldName0->setCurrentIndex(-1);
     ui.effectAttrCompareType0->setCurrentIndex(-1);
     ui.effectAttrInput0->clear();
 }
 
-void SearchFilter::effectAttrFilter1ResetBtnClick()
+void SearchFilterForm::effectAttrFilter1ResetBtnClick()
 {
     ui.effectFieldName1->setCurrentIndex(-1);
     ui.effectAttrCompareType1->setCurrentIndex(-1);
     ui.effectAttrInput1->clear();
 }
 
-void SearchFilter::closeEvent(QCloseEvent* e)
+void SearchFilterForm::closeEvent(QCloseEvent* e)
 {
     hide();
     e->ignore();
 
-    UpdateMainWindowState(dynamic_cast<MainWindow*>(parentWidget()));
+    OnCloseOrApplyEventFn();
 }
 
-void SearchFilter::showEvent(QShowEvent* /*event*/)
+void SearchFilterForm::showEvent(QShowEvent* /*event*/)
 {
     using namespace SpellWork::SearchFilters;
     // Generic filter
-    ui.SpellFamilyFilter->setCurrentIndex(m_genericFilter.m_spellFamily.first);
-    ui.SpellAuraTypeFilter->setCurrentIndex(m_genericFilter.m_spellAuraType.first);
-    ui.SpellEffectFilter->setCurrentIndex(m_genericFilter.m_spellEffect.first);
-    ui.SpellTargetFilterA->setCurrentIndex(m_genericFilter.m_spellTargetA.first);
-    ui.SpellTargetFilterB->setCurrentIndex(m_genericFilter.m_spellTargetB.first);
+    const auto& genericFilter = m_filterData->m_genericFilter;
+    ui.SpellFamilyFilter->setCurrentIndex(genericFilter.m_spellFamily.first);
+    ui.SpellAuraTypeFilter->setCurrentIndex(genericFilter.m_spellAuraType.first);
+    ui.SpellEffectFilter->setCurrentIndex(genericFilter.m_spellEffect.first);
+    ui.SpellTargetFilterA->setCurrentIndex(genericFilter.m_spellTargetA.first);
+    ui.SpellTargetFilterB->setCurrentIndex(genericFilter.m_spellTargetB.first);
 
     // Spell.dbc filter
-    ui.spellAttrCompareType0->setCurrentIndex(m_spellEntryFilter.at(0).m_compareType.first);
-    ui.spellAttrCompareType1->setCurrentIndex(m_spellEntryFilter.at(1).m_compareType.first);
-    ui.spellAttrFieldName0->setCurrentIndex(m_spellEntryFilter.at(0).m_entryField.first);
-    ui.spellAttrFieldName1->setCurrentIndex(m_spellEntryFilter.at(1).m_entryField.first);
-    ui.spellAttrInput0->setText(m_spellEntryFilter.at(0).m_compareValue);
-    ui.spellAttrInput1->setText(m_spellEntryFilter.at(1).m_compareValue);
+    const auto& spellEntryFilter = m_filterData->m_spellEntryFilter;
+    ui.spellAttrCompareType0->setCurrentIndex(spellEntryFilter.at(0).m_compareType.first);
+    ui.spellAttrCompareType1->setCurrentIndex(spellEntryFilter.at(1).m_compareType.first);
+    ui.spellAttrFieldName0->setCurrentIndex(spellEntryFilter.at(0).m_entryField.first);
+    ui.spellAttrFieldName1->setCurrentIndex(spellEntryFilter.at(1).m_entryField.first);
+    ui.spellAttrInput0->setText(spellEntryFilter.at(0).m_compareValue);
+    ui.spellAttrInput1->setText(spellEntryFilter.at(1).m_compareValue);
 
     // SpellEffect.dbc filter
-    ui.effectFieldName0->setCurrentIndex(m_spellEffectFilter.at(0).m_entryField.first);
-    ui.effectFieldName1->setCurrentIndex(m_spellEffectFilter.at(1).m_entryField.first);
-    ui.effectAttrCompareType0->setCurrentIndex(m_spellEffectFilter.at(0).m_compareType.first);
-    ui.effectAttrCompareType1->setCurrentIndex(m_spellEffectFilter.at(1).m_compareType.first);
-    ui.effectAttrInput0->setText(m_spellEffectFilter.at(0).m_compareValue);
-    ui.effectAttrInput1->setText(m_spellEffectFilter.at(1).m_compareValue);
+    const auto& spellEffectFilter = m_filterData->m_spellEntryFilter;
+    ui.effectFieldName0->setCurrentIndex(spellEffectFilter.at(0).m_entryField.first);
+    ui.effectFieldName1->setCurrentIndex(spellEffectFilter.at(1).m_entryField.first);
+    ui.effectAttrCompareType0->setCurrentIndex(spellEffectFilter.at(0).m_compareType.first);
+    ui.effectAttrCompareType1->setCurrentIndex(spellEffectFilter.at(1).m_compareType.first);
+    ui.effectAttrInput0->setText(spellEffectFilter.at(0).m_compareValue);
+    ui.effectAttrInput1->setText(spellEffectFilter.at(1).m_compareValue);
 }
