@@ -688,6 +688,24 @@ struct SpellEntry
         return QString("%1, Rank name: %2").arg(getSpellName(), getRank());
     }
 
+    uint32_t GetAttribute(uint8_t attrIndex) const
+    {
+        switch (attrIndex)
+        {
+        case 0: return getAttribute0();
+        case 1: return getAttribute1();
+        case 2: return getAttribute2();
+        case 3: return getAttribute3();
+        case 4: return getAttribute4();
+        case 5: return getAttribute5();
+        case 6: return getAttribute6();
+        case 7: return getAttribute7();
+        case 8: return getAttribute8();
+        case 9: return getAttribute9();
+        case 10: return getAttribute10();
+        default: return 0;
+        }
+    }
     bool HasAttribute(SpellAttr0 attr) const { return (getAttribute0() & attr) != 0; }
     bool HasAttribute(SpellAttr1 attr) const { return (getAttribute1() & attr) != 0; }
     bool HasAttribute(SpellAttr2 attr) const { return (getAttribute2() & attr) != 0; }
@@ -725,8 +743,8 @@ struct SpellEntry
     const SpellShapeshiftEntry* m_spellShapeshiftEntry{};
     const SpellTargetRestrictionsEntry* m_spellTargetRestrictionsEntry{};
 
+    QString m_AttributesStr;
     bool m_IsServerSide{false};
-
 private:
     std::array<DbcEntryValues, 48> _fields;
     auto& _getID() { return _fields[0]; }

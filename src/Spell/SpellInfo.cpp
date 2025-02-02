@@ -7,8 +7,6 @@
 #include <cmath>
 #include <random>
 
-constexpr char const* line = "==============================================<br>";
-
 inline float frand(float min, float max)
 {
     std::random_device rd;
@@ -128,45 +126,6 @@ inline void PrintSpellCategory(QString& result, const SpellCategoriesEntry* spel
         result += QString("Category id = 0 (SPELL_CATEGORY_NONE)<br>");
         result += QString("DispelType = 0 (%1)<br>").arg(sSpellWorkJson->GetDispelName(DISPEL_NONE));
         result += QString("Mechanic = 0 (%1)<br>").arg(sSpellWorkJson->GetSpellMechanicName(MECHANIC_NONE));
-    }
-}
-
-inline void PrintAttributes(QString& result, const std::vector<uint32_t>& attributes)
-{
-    if (attributes.empty() || !std::ranges::any_of(attributes, [](uint32_t attr){ return attr != 0; }))
-    {
-        return;
-    }
-
-    result += line;
-    for (uint8_t attribute = 0; attribute < MAX_SPELL_ATTRIBUTES; ++attribute)
-    {
-        const auto& attributeMask = attributes[attribute];
-        if (attributeMask == 0)
-        {
-            continue;
-        }
-
-        QString attributeStr;
-        for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
-        {
-            const uint32_t mask = 1u << id;
-            if ((mask & attributeMask) == 0)
-            {
-                continue;
-            }
-
-            if (!attributeStr.isEmpty())
-            {
-                attributeStr += ", ";
-            }
-
-            attributeStr += sSpellWorkJson->GetSpellAttributeName(attribute, mask);
-        }
-
-        result += QString("Attributes%1: %2<br><br>")
-                      .arg(attribute)
-                      .arg(attributeStr);
     }
 }
 
@@ -291,7 +250,7 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
 
     if (skillLine != nullptr && skillLineAbility != nullptr)
     {
-        result += line;
+        result += printLine;
         result += QString("Skill (Id %1) \"%2\"<br>").arg(skillLineAbility->SkillLine).arg(skillLine->name);
         result += QString("MinSkillLineRank %1<br>").arg(skillLineAbility->MinSkillLineRank);
 
@@ -495,7 +454,7 @@ inline void PrintSpellAuraOptions(QString& result, const SpellAuraOptionsEntry* 
 
     if (!procNames.isEmpty())
     {
-        result += line;
+        result += printLine;
         result += procNames + "<br>";
     }
 }
@@ -938,7 +897,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
     QString result;
     for (uint8_t effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
     {
-        result += line;
+        result += printLine;
 
         const auto* effectInfo = m_spellEffects[effIndex];
         if (effectInfo == nullptr)
@@ -988,7 +947,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                 .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetA()))
                 .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetB()));
 
-        result += line;
+        result += printLine;
 
         if (effectInfo->getEffectAura() == 0)
         {
@@ -1103,7 +1062,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                 if (const auto* triggerAuraOptions = sDataStorage->GetSpellAuraOptionsEntry(triggerSpell->getSpellAuraOptionsId()))
                 {
                     result += QString("Charges - %1<br>").arg(triggerAuraOptions->ProcCharges);
-                    result += line;
+                    result += printLine;
 
                     for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
                     {
@@ -1115,7 +1074,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                         }
                     }
 
-                    result += line;
+                    result += printLine;
                 }
             }
             else
@@ -1143,17 +1102,17 @@ QString const SpellEntry::PrintBaseInfo(uint8_t scalingLevel) const
                      .arg(getId())
                      .arg(GetSpellNameRank());
 
-    spellText += line;
+    spellText += printLine;
 
     if (!getDescription().isEmpty())
     {
         spellText += getDescription();
         spellText += "<br>";
-        spellText += line;
+        spellText += printLine;
     }
 
     spellText += QString("ToolTip: %1<br>").arg(getToolTip());
-    spellText += line;
+    spellText += printLine;
     spellText += QString("Category = %1, SpellIconID = %2, activeIconID = %3, SpellVisual = (%4, %5)<br>")
                      .arg(getSpellCategoriesId())
                      .arg(getSpellIconID())
@@ -1166,17 +1125,14 @@ QString const SpellEntry::PrintBaseInfo(uint8_t scalingLevel) const
 
     PrintSpellClassOptions(spellText, m_spellClassOptionsEntry);
     PrintSpellCategory(spellText, m_spellCategoriesEntry);
-    PrintAttributes(spellText, {getAttribute0(), getAttribute1(), getAttribute2(),
-                                getAttribute3(), getAttribute4(), getAttribute5(),
-                                getAttribute6(), getAttribute7(), getAttribute8(),
-                                getAttribute9(), getAttribute10()});
+    spellText += m_AttributesStr;
     PrintTargetRestrictions(spellText, m_spellTargetRestrictionsEntry, m_spellLevelsEntry, HasAttribute(SPELL_ATTR5_LIMIT_N));
     PrintShapeShiftingInfo(spellText, m_spellShapeshiftEntry);
     PrintSkillLinks(spellText, getId());
     PrintReagents(spellText, m_spellReagentsEntry);
     PrintSpellEquipmentInfo(spellText, m_spellEquipedItemsEntry);
 
-    spellText += line;
+    spellText += printLine;
 
     PrintSpellRangeInfo(spellText, m_spellRangeEntry);
     PrintSpellAuraOptions(spellText, m_spellAuraOptionsEntry);

@@ -1,5 +1,7 @@
 #include "DataStorage.hpp"
 #include "DB2FileLoader.hpp"
+#include "JsonData.hpp"
+#include "SharedDefines.hpp"
 #ifdef SPELLWORK_BUILD_SQL
 #include "SQL/sqlConnection.hpp"
 #endif // SPELLWORK_BUILD_SQL
@@ -447,6 +449,43 @@ void DataStorage::GenerateExtraDataInfo()
         spellInfo.m_spellReagentsEntry = GetSpellReagentsEntry(spellInfo.getSpellReagentsId());
         spellInfo.m_spellShapeshiftEntry = GetSpellShapeshiftEntry(spellInfo.getSpellShapeshiftId());
         spellInfo.m_spellTargetRestrictionsEntry = GetSpellTargetRestrictionsEntry(spellInfo.getSpellTargetRestrictionsId());
+
+        bool lineAdded = false;
+        for (uint8_t attributeId = 0; attributeId < MAX_SPELL_ATTRIBUTES; ++attributeId)
+        {
+            const uint32_t attributeMask = spellInfo.GetAttribute(attributeId);
+            if (attributeMask == 0)
+            {
+                continue;
+            }
+
+            if (!lineAdded)
+            {
+                spellInfo.m_AttributesStr += printLine;
+                lineAdded = true;
+            }
+
+            QString attributeStr;
+            for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+            {
+                const uint32_t mask = 1u << id;
+                if ((mask & attributeMask) == 0)
+                {
+                    continue;
+                }
+
+                if (!attributeStr.isEmpty())
+                {
+                    attributeStr += ", ";
+                }
+
+                attributeStr += sSpellWorkJson->GetSpellAttributeName(attributeId, mask);
+            }
+
+            spellInfo.m_AttributesStr += QString("Attributes%1: %2<br><br>")
+                .arg(attributeId)
+                .arg(attributeStr);
+        }
     }
 
     for (auto& spellEffectItr : m_SpellEffectEntries)

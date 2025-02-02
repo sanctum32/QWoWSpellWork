@@ -8,3 +8,5 @@ struct LocalizedString
 {
     std::array<const char*, TOTAL_LOCALES> Str;
 };
+
+constexpr char const* printLine = "==============================================<br>";
