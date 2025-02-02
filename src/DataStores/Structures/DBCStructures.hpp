@@ -688,6 +688,18 @@ struct SpellEntry
         return QString("%1, Rank name: %2").arg(getSpellName(), getRank());
     }
 
+    bool HasAttribute(SpellAttr0 attr) const { return (getAttribute0() & attr) != 0; }
+    bool HasAttribute(SpellAttr1 attr) const { return (getAttribute1() & attr) != 0; }
+    bool HasAttribute(SpellAttr2 attr) const { return (getAttribute2() & attr) != 0; }
+    bool HasAttribute(SpellAttr3 attr) const { return (getAttribute3() & attr) != 0; }
+    bool HasAttribute(SpellAttr4 attr) const { return (getAttribute4() & attr) != 0; }
+    bool HasAttribute(SpellAttr5 attr) const { return (getAttribute5() & attr) != 0; }
+    bool HasAttribute(SpellAttr6 attr) const { return (getAttribute6() & attr) != 0; }
+    bool HasAttribute(SpellAttr7 attr) const { return (getAttribute7() & attr) != 0; }
+    bool HasAttribute(SpellAttr8 attr) const { return (getAttribute8() & attr) != 0; }
+    bool HasAttribute(SpellAttr9 attr) const { return (getAttribute9() & attr) != 0; }
+    bool HasAttribute(SpellAttr10 attr) const { return (getAttribute10() & attr) != 0; }
+
     QString const PrintBaseInfo(uint8_t scalingLevel) const;
     QString const PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t comboPoints) const;
 

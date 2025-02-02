@@ -825,7 +825,7 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
                 else if (level < uint8_t(spellEntry->m_spellLevelsEntry->baseLevel))
                     level = uint8_t(spellEntry->m_spellLevelsEntry->baseLevel);
 
-                if ((spellEntry->getAttribute0() & SPELL_ATTR0_PASSIVE) == 0)
+                if (!spellEntry->HasAttribute(SPELL_ATTR0_PASSIVE))
                     level -= uint8_t(spellEntry->m_spellLevelsEntry->spellLevel);
             }
 
@@ -868,11 +868,11 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
     for (float& value : basePoints)
     {
         // bonus amount from combo points
-        if (comboPoints > 0 && (spellEntry->getAttribute1() & SPELL_ATTR1_FINISHING_MOVE_DAMAGE) != 0 && comboDamage != 0.f)
+        if (comboPoints > 0 && spellEntry->HasAttribute(SPELL_ATTR1_FINISHING_MOVE_DAMAGE) && comboDamage != 0.f)
             value += comboDamage * comboPoints;
 
         if (spellEntry->m_spellLevelsEntry != nullptr && spellEntry->m_spellLevelsEntry->spellLevel > 0 && spellEntry->m_spellLevelsEntry->spellLevel != selectedLevel &&
-            !basePointsPerLevel && (spellEntry->getAttribute0() & SPELL_ATTR0_SCALES_WITH_CREATURE_LEVEL) != 0)
+            !basePointsPerLevel && spellEntry->HasAttribute(SPELL_ATTR0_SCALES_WITH_CREATURE_LEVEL))
         {
             bool canEffectScale = false;
             switch (effectInfo->getEffect())
@@ -956,7 +956,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                       .arg(effectInfo->getEffect())
                       .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->getEffect()));
 
-        if ((getAttribute10() & SPELL_ATTR10_USE_SPELL_BASE_LEVEL_FOR_SCALING) != 0)
+        if (HasAttribute(SPELL_ATTR10_USE_SPELL_BASE_LEVEL_FOR_SCALING))
         {
             if (m_spellLevelsEntry != nullptr)
             {
@@ -1170,7 +1170,7 @@ QString const SpellEntry::PrintBaseInfo(uint8_t scalingLevel) const
                                 getAttribute3(), getAttribute4(), getAttribute5(),
                                 getAttribute6(), getAttribute7(), getAttribute8(),
                                 getAttribute9(), getAttribute10()});
-    PrintTargetRestrictions(spellText, m_spellTargetRestrictionsEntry, m_spellLevelsEntry, (getAttribute5() & SPELL_ATTR5_LIMIT_N) != 0);
+    PrintTargetRestrictions(spellText, m_spellTargetRestrictionsEntry, m_spellLevelsEntry, HasAttribute(SPELL_ATTR5_LIMIT_N));
     PrintShapeShiftingInfo(spellText, m_spellShapeshiftEntry);
     PrintSkillLinks(spellText, getId());
     PrintReagents(spellText, m_spellReagentsEntry);
