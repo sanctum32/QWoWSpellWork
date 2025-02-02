@@ -4,11 +4,9 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QLoggingCategory>
+#include <QTableWidget>
 
 Q_DECLARE_LOGGING_CATEGORY(SPELLINFO_TAB)
-
-// Forward declarations
-class QTableWidgetItem;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -47,10 +45,11 @@ private:
     struct
     {
         SpellWork::Filters::SpellSearchFilter m_spellSearchFilter;
-        int32_t m_lastSpellSearchRowId{-1};    // Last select search list row id
+
+        // Stores selected spell result list row id
+        int32_t m_selectedSpellRowId{-1};
     } spellInfoTab;
 
     // Generic functions
-    void PerformSpellSearch();
-
+    static void PerformSpellSearch(QStringView spellNameOrId, bool searchById, bool searchByName, QTableWidget* resultList, const SpellWork::Filters::SpellSearchFilter& filter, QLabel* resultCounterLabel);
 };
