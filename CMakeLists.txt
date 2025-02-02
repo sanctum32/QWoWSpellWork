@@ -33,14 +33,14 @@ set(TS_FILES
 
 set(UI_FILES
     src/Forms/searchFilter.ui
-    src/Forms/SearchFilterForm.hpp
-    src/Forms/SearchFilterForm.cpp
     src/Forms/mainwindow.ui
-    src/Forms/MainWindowForm.hpp
-    src/Forms/MainWindowForm.cpp
 )
 
 set(PROJECT_SOURCES
+    src/Forms/MainWindowForm.hpp
+    src/Forms/MainWindowForm.cpp
+    src/Forms/SearchFilterForm.hpp
+    src/Forms/SearchFilterForm.cpp
     src/DataStores/Loaders/DB2FileLoader.hpp
     src/DataStores/Loaders/DB2FileLoader.cpp
     src/DataStores/Loaders/DBCFileLoader.hpp
@@ -61,8 +61,8 @@ set(PROJECT_SOURCES
     src/Globals/SharedDefines.hpp
     src/Globals/ValueComparition.hpp
     src/Globals/ValueComparition.cpp
-    src/Globals/SearchFiltersStore.hpp
-    src/Globals/SearchFiltersStore.cpp
+    src/Globals/SpellSearchFilter.hpp
+    src/Globals/SpellSearchFilter.cpp
     src/Enums/SpellEnums.hpp
     src/Enums/UnitDefines.hpp
     src/Enums/CreatureDefines.hpp

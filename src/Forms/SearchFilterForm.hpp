@@ -1,11 +1,10 @@
 #pragma once
 #include <QDialog>
-#include <functional>
 #include "ui/ui_searchFilter.h"
 
-namespace SpellWork::SearchFilters
+namespace SpellWork::Filters
 {
-    struct FilterData;
+    struct SpellSearchFilter;
 };
 
 QT_BEGIN_NAMESPACE
@@ -19,7 +18,7 @@ class SearchFilterForm : public QDialog
     Q_OBJECT
 
 public:
-    SearchFilterForm(SpellWork::SearchFilters::FilterData* filterData, QWidget* parent = nullptr);
+    SearchFilterForm(SpellWork::Filters::SpellSearchFilter* filterData, QWidget* parent = nullptr);
 
     // used to perform certain tasks on form closure or settings applying
     std::function<void()> OnCloseOrApplyEventFn;
@@ -45,5 +44,5 @@ private:
     void closeEvent(QCloseEvent* /*e*/) override;
     void showEvent(QShowEvent *event) override;
     Ui::SearchFilterForm ui;
-    SpellWork::SearchFilters::FilterData* m_filterData;
+    SpellWork::Filters::SpellSearchFilter* m_filterData;
 };

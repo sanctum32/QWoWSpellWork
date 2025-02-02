@@ -2,12 +2,12 @@
 #include <QCloseEvent>
 
 #include "SearchFilterForm.hpp"
-#include "SearchFiltersStore.hpp"
+#include "SpellSearchFilter.hpp"
 #include "ValueComparition.hpp"
 #include "DBCStructures.hpp"
 #include "JsonData.hpp"
 
-SearchFilterForm::SearchFilterForm(SpellWork::SearchFilters::FilterData* filterData, QWidget* parent /*= nullptr*/) : QDialog(parent), m_filterData(filterData)
+SearchFilterForm::SearchFilterForm(SpellWork::Filters::SpellSearchFilter *filterData, QWidget* parent /*= nullptr*/) : QDialog(parent), m_filterData(filterData)
 {
     assert(m_filterData != nullptr);
     ui.setupUi(this);
@@ -84,7 +84,6 @@ void SearchFilterForm::onButtonClicked(QAbstractButton* button)
     {
     case QDialogButtonBox::Apply:
     {
-        using namespace SpellWork::SearchFilters;
         // Generic filter
         {
             auto& genericFilter = m_filterData->m_genericFilter;
@@ -124,7 +123,7 @@ void SearchFilterForm::onButtonClicked(QAbstractButton* button)
         {
             // Filter 0
             {
-                auto& filter = m_filterData->m_spellEntryFilter.at(0);
+                auto& filter = m_filterData->m_spellEntryFieldsFilter.at(0);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -141,7 +140,7 @@ void SearchFilterForm::onButtonClicked(QAbstractButton* button)
             }
             // Filter 1
             {
-                auto& filter = m_filterData->m_spellEntryFilter.at(1);
+                auto& filter = m_filterData->m_spellEntryFieldsFilter.at(1);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -163,7 +162,7 @@ void SearchFilterForm::onButtonClicked(QAbstractButton* button)
             auto& genericFilter = m_filterData->m_genericFilter;
             // Filter 0
             {
-                auto& filter = m_filterData->m_spellEffectFilter.at(0);
+                auto& filter = m_filterData->m_spellEffectFieldsFilter.at(0);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -180,7 +179,7 @@ void SearchFilterForm::onButtonClicked(QAbstractButton* button)
             }
             // Filter 1
             {
-                auto& filter = m_filterData->m_spellEffectFilter.at(1);
+                auto& filter = m_filterData->m_spellEffectFieldsFilter.at(1);
                 // Field id
                 {
                     auto& [id, value] = filter.m_entryField;
@@ -302,7 +301,6 @@ void SearchFilterForm::closeEvent(QCloseEvent* e)
 
 void SearchFilterForm::showEvent(QShowEvent* /*event*/)
 {
-    using namespace SpellWork::SearchFilters;
     // Generic filter
     const auto& genericFilter = m_filterData->m_genericFilter;
     ui.SpellFamilyFilter->setCurrentIndex(genericFilter.m_spellFamily.first);
@@ -312,7 +310,7 @@ void SearchFilterForm::showEvent(QShowEvent* /*event*/)
     ui.SpellTargetFilterB->setCurrentIndex(genericFilter.m_spellTargetB.first);
 
     // Spell.dbc filter
-    const auto& spellEntryFilter = m_filterData->m_spellEntryFilter;
+    const auto& spellEntryFilter = m_filterData->m_spellEntryFieldsFilter;
     ui.spellAttrCompareType0->setCurrentIndex(spellEntryFilter.at(0).m_compareType.first);
     ui.spellAttrCompareType1->setCurrentIndex(spellEntryFilter.at(1).m_compareType.first);
     ui.spellAttrFieldName0->setCurrentIndex(spellEntryFilter.at(0).m_entryField.first);
@@ -321,7 +319,7 @@ void SearchFilterForm::showEvent(QShowEvent* /*event*/)
     ui.spellAttrInput1->setText(spellEntryFilter.at(1).m_compareValue);
 
     // SpellEffect.dbc filter
-    const auto& spellEffectFilter = m_filterData->m_spellEntryFilter;
+    const auto& spellEffectFilter = m_filterData->m_spellEffectFieldsFilter;
     ui.effectFieldName0->setCurrentIndex(spellEffectFilter.at(0).m_entryField.first);
     ui.effectFieldName1->setCurrentIndex(spellEffectFilter.at(1).m_entryField.first);
     ui.effectAttrCompareType0->setCurrentIndex(spellEffectFilter.at(0).m_compareType.first);

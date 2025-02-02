@@ -2,15 +2,15 @@
 #include <QString>
 #include <array>
 
-namespace SpellWork::SearchFilters
+namespace SpellWork::Filters
 {
-    struct GenericFilterData
+    struct GenericSearchFilter
     {
-        GenericFilterData() = default;
+        GenericSearchFilter() = default;
 
         // Prevent copies
-        GenericFilterData(const GenericFilterData&) = delete;
-        GenericFilterData& operator=(const GenericFilterData&) = delete;
+        GenericSearchFilter(const GenericSearchFilter&) = delete;
+        GenericSearchFilter& operator=(const GenericSearchFilter&) = delete;
 
         inline bool HasData() const
         {
@@ -30,13 +30,13 @@ namespace SpellWork::SearchFilters
         std::pair<int /*comboBoxindex*/, uint32_t /*value*/> m_spellTargetB{-1, 0};
     };
 
-    struct AttributesFilterData
+    struct AdvancedSearchData
     {
-        AttributesFilterData() = default;
+        AdvancedSearchData() = default;
 
         // Prevent copies
-        AttributesFilterData(const AttributesFilterData&) = delete;
-        AttributesFilterData& operator=(const AttributesFilterData&) = delete;
+        AdvancedSearchData(const AdvancedSearchData&) = delete;
+        AdvancedSearchData& operator=(const AdvancedSearchData&) = delete;
 
         inline bool HasData() const
         {
@@ -52,10 +52,10 @@ namespace SpellWork::SearchFilters
         QString m_compareValue;
     };
 
-    struct FilterData
+    struct SpellSearchFilter
     {
-        GenericFilterData m_genericFilter;
-        std::array<AttributesFilterData, 2> m_spellEntryFilter;          // Spell.dbc entry fields filter
-        std::array<AttributesFilterData, 2> m_spellEffectFilter;         // SpellEffect.dbc entry fields filter
+        GenericSearchFilter m_genericFilter;
+        std::array<AdvancedSearchData, 2> m_spellEntryFieldsFilter;          // Spell.dbc entry fields filter
+        std::array<AdvancedSearchData, 2> m_spellEffectFieldsFilter;         // SpellEffect.dbc entry fields filter
     };
 }

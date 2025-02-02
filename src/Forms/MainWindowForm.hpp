@@ -1,6 +1,5 @@
 #pragma once
-#include "SearchFiltersStore.hpp"
-#include "SearchFilterForm.hpp"
+#include "SpellSearchFilter.hpp"
 #include "ui/ui_mainwindow.h"
 #include <QMainWindow>
 #include <QLabel>
@@ -47,7 +46,7 @@ private:
 
     struct
     {
-        SpellWork::SearchFilters::FilterData spellInfoTabFilter;
+        SpellWork::Filters::SpellSearchFilter m_spellSearchFilter;
         int32_t m_lastSpellSearchRowId{-1};    // Last select search list row id
     } spellInfoTab;
 

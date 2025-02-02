@@ -98,27 +98,27 @@ void MainWindow::PerformSpellSearch()
     std::optional<uint32_t> spellTargetA;
     std::optional<uint32_t> spellTargetB;
 
-    if (const auto* spellFamily = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellFamily())
+    if (const auto* spellFamily = spellInfoTab.m_spellSearchFilter.m_genericFilter.GetSpellFamily())
     {
         spellFamilyId = *spellFamily;
     }
 
-    if (const auto* spellAuraType = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellAuraType())
+    if (const auto* spellAuraType = spellInfoTab.m_spellSearchFilter.m_genericFilter.GetSpellAuraType())
     {
         auraTypeId = *spellAuraType;
     }
 
-    if (const auto* spellEffect = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellEffect())
+    if (const auto* spellEffect = spellInfoTab.m_spellSearchFilter.m_genericFilter.GetSpellEffect())
     {
         spellEffectId = *spellEffect;
     }
 
-    if (const auto* spellTarget_A = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellTargetA())
+    if (const auto* spellTarget_A = spellInfoTab.m_spellSearchFilter.m_genericFilter.GetSpellTargetA())
     {
         spellTargetA = *spellTarget_A;
     }
 
-    if (const auto* spelltarget_B = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellTargetB())
+    if (const auto* spelltarget_B = spellInfoTab.m_spellSearchFilter.m_genericFilter.GetSpellTargetB())
     {
         spellTargetB = *spelltarget_B;
     }
@@ -129,9 +129,10 @@ void MainWindow::PerformSpellSearch()
     {
         // Spell.dbc filter
         {
-            const auto* fieldId = spellInfoTab.spellInfoTabFilter.m_spellEntryFilter.at(i).GetFieldId();
-            const auto* cmpType = spellInfoTab.spellInfoTabFilter.m_spellEntryFilter.at(i).GetCompareType();
-            const auto& cmpValue = spellInfoTab.spellInfoTabFilter.m_spellEntryFilter.at(i).GetCompareValue();
+            const auto& spellDbcFilter = spellInfoTab.m_spellSearchFilter.m_spellEntryFieldsFilter.at(i);
+            const auto* fieldId = spellDbcFilter.GetFieldId();
+            const auto* cmpType = spellDbcFilter.GetCompareType();
+            const auto& cmpValue = spellDbcFilter.GetCompareValue();
             if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
             {
                 spellAttrFilter.at(i).SetValues(SpellEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
@@ -140,9 +141,10 @@ void MainWindow::PerformSpellSearch()
 
         // SpellEffect.dbc filter
         {
-            const auto* fieldId = spellInfoTab.spellInfoTabFilter.m_spellEffectFilter.at(i).GetFieldId();
-            const auto* cmpType = spellInfoTab.spellInfoTabFilter.m_spellEffectFilter.at(i).GetCompareType();
-            const auto& cmpValue = spellInfoTab.spellInfoTabFilter.m_spellEffectFilter.at(i).GetCompareValue();
+            const auto& spellEffectsDbcFilter = spellInfoTab.m_spellSearchFilter.m_spellEffectFieldsFilter.at(i);
+            const auto* fieldId = spellEffectsDbcFilter.GetFieldId();
+            const auto* cmpType = spellEffectsDbcFilter.GetCompareType();
+            const auto& cmpValue = spellEffectsDbcFilter.GetCompareValue();
             if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
             {
                 spellEffectAttrFilter.at(i).SetValues(SpellEffectEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
@@ -322,18 +324,17 @@ void MainWindow::onScalingSliderUpdate()
 
 void MainWindow::onFiltersBtnClick()
 {
-    SearchFilterForm* filter = new SearchFilterForm(&spellInfoTab.spellInfoTabFilter, this);
+    SearchFilterForm* filter = new SearchFilterForm(&spellInfoTab.m_spellSearchFilter, this);
     filter->setAttribute(Qt::WA_DeleteOnClose);
 
     filter->OnCloseOrApplyEventFn = [this]()
     {
-        using namespace SpellWork::SearchFilters;
-        const bool hasBasicFilters = spellInfoTab.spellInfoTabFilter.m_genericFilter.HasData();
-        const bool hasSpellFieldFilters = std::ranges::any_of(spellInfoTab.spellInfoTabFilter.m_spellEntryFilter, [](const auto& filter)
+        const bool hasBasicFilters = spellInfoTab.m_spellSearchFilter.m_genericFilter.HasData();
+        const bool hasSpellFieldFilters = std::ranges::any_of(spellInfoTab.m_spellSearchFilter.m_spellEntryFieldsFilter, [](const auto& filter)
         {
             return filter.HasData();
         });
-        const bool hasSpellEffectFilters = std::ranges::any_of(spellInfoTab.spellInfoTabFilter.m_spellEffectFilter, [](const auto& filter)
+        const bool hasSpellEffectFilters = std::ranges::any_of(spellInfoTab.m_spellSearchFilter.m_spellEffectFieldsFilter, [](const auto& filter)
         {
             return filter.HasData();
         });
