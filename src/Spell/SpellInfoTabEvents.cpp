@@ -24,15 +24,15 @@ void MainWindow::onSpellIdNameInputReturnPressed()
 
 void MainWindow::onResultListClick(QTableWidgetItem *item)
 {
-    if (m_lastSpellSearchRowId == item->row())
+    if (spellInfoTab.m_lastSpellSearchRowId == item->row())
     {
         return;
     }
 
-    m_lastSpellSearchRowId = item->row();
+    spellInfoTab.m_lastSpellSearchRowId = item->row();
 
     // Select only number field
-    const auto* spellRowItem = ui.resultList->item(m_lastSpellSearchRowId, 0);
+    const auto* spellRowItem = ui.resultList->item(spellInfoTab.m_lastSpellSearchRowId, 0);
     if (spellRowItem == nullptr)
     {
         return;
@@ -61,7 +61,7 @@ void MainWindow::PerformSpellSearch()
 
     auto* resultList = ui.resultList;
     resultList->clearContents();
-    m_lastSpellSearchRowId = -1;
+    spellInfoTab.m_lastSpellSearchRowId = -1;
 
     if (sDataStorage->GetSpellEntries().empty())
     {
@@ -100,27 +100,27 @@ void MainWindow::PerformSpellSearch()
     std::optional<uint32_t> spellTargetA;
     std::optional<uint32_t> spellTargetB;
 
-    if (const auto* spellFamily = spellInfoTabFilter.m_genericFilter.GetSpellFamily())
+    if (const auto* spellFamily = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellFamily())
     {
         spellFamilyId = *spellFamily;
     }
 
-    if (const auto* spellAuraType = spellInfoTabFilter.m_genericFilter.GetSpellAuraType())
+    if (const auto* spellAuraType = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellAuraType())
     {
         auraTypeId = *spellAuraType;
     }
 
-    if (const auto* spellEffect = spellInfoTabFilter.m_genericFilter.GetSpellEffect())
+    if (const auto* spellEffect = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellEffect())
     {
         spellEffectId = *spellEffect;
     }
 
-    if (const auto* spellTarget_A = spellInfoTabFilter.m_genericFilter.GetSpellTargetA())
+    if (const auto* spellTarget_A = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellTargetA())
     {
         spellTargetA = *spellTarget_A;
     }
 
-    if (const auto* spelltarget_B = spellInfoTabFilter.m_genericFilter.GetSpellTargetB())
+    if (const auto* spelltarget_B = spellInfoTab.spellInfoTabFilter.m_genericFilter.GetSpellTargetB())
     {
         spellTargetB = *spelltarget_B;
     }
@@ -131,9 +131,9 @@ void MainWindow::PerformSpellSearch()
     {
         // Spell.dbc filter
         {
-            const auto* fieldId = spellInfoTabFilter.m_spellEntryFilter.at(i).GetFieldId();
-            const auto* cmpType = spellInfoTabFilter.m_spellEntryFilter.at(i).GetCompareType();
-            const auto& cmpValue = spellInfoTabFilter.m_spellEntryFilter.at(i).GetCompareValue();
+            const auto* fieldId = spellInfoTab.spellInfoTabFilter.m_spellEntryFilter.at(i).GetFieldId();
+            const auto* cmpType = spellInfoTab.spellInfoTabFilter.m_spellEntryFilter.at(i).GetCompareType();
+            const auto& cmpValue = spellInfoTab.spellInfoTabFilter.m_spellEntryFilter.at(i).GetCompareValue();
             if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
             {
                 spellAttrFilter.at(i).SetValues(SpellEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
@@ -142,9 +142,9 @@ void MainWindow::PerformSpellSearch()
 
         // SpellEffect.dbc filter
         {
-            const auto* fieldId = spellInfoTabFilter.m_spellEffectFilter.at(i).GetFieldId();
-            const auto* cmpType = spellInfoTabFilter.m_spellEffectFilter.at(i).GetCompareType();
-            const auto& cmpValue = spellInfoTabFilter.m_spellEffectFilter.at(i).GetCompareValue();
+            const auto* fieldId = spellInfoTab.spellInfoTabFilter.m_spellEffectFilter.at(i).GetFieldId();
+            const auto* cmpType = spellInfoTab.spellInfoTabFilter.m_spellEffectFilter.at(i).GetCompareType();
+            const auto& cmpValue = spellInfoTab.spellInfoTabFilter.m_spellEffectFilter.at(i).GetCompareValue();
             if (fieldId != nullptr && cmpType != nullptr && !cmpValue.isEmpty())
             {
                 spellEffectAttrFilter.at(i).SetValues(SpellEffectEntryFields, *fieldId, ConditionCompareType(*cmpType), cmpValue);
@@ -324,18 +324,18 @@ void MainWindow::onScalingSliderUpdate()
 
 void MainWindow::onFiltersBtnClick()
 {
-    SearchFilterForm* filter = new SearchFilterForm(&spellInfoTabFilter, this);
+    SearchFilterForm* filter = new SearchFilterForm(&spellInfoTab.spellInfoTabFilter, this);
     filter->setAttribute(Qt::WA_DeleteOnClose);
 
     filter->OnCloseOrApplyEventFn = [this]()
     {
         using namespace SpellWork::SearchFilters;
-        const bool hasBasicFilters = spellInfoTabFilter.m_genericFilter.HasData();
-        const bool hasSpellFieldFilters = std::ranges::any_of(spellInfoTabFilter.m_spellEntryFilter, [](const auto& filter)
+        const bool hasBasicFilters = spellInfoTab.spellInfoTabFilter.m_genericFilter.HasData();
+        const bool hasSpellFieldFilters = std::ranges::any_of(spellInfoTab.spellInfoTabFilter.m_spellEntryFilter, [](const auto& filter)
         {
             return filter.HasData();
         });
-        const bool hasSpellEffectFilters = std::ranges::any_of(spellInfoTabFilter.m_spellEffectFilter, [](const auto& filter)
+        const bool hasSpellEffectFilters = std::ranges::any_of(spellInfoTab.spellInfoTabFilter.m_spellEffectFilter, [](const auto& filter)
         {
             return filter.HasData();
         });
@@ -348,7 +348,7 @@ void MainWindow::onFiltersBtnClick()
 
 void MainWindow::onClearResultsBtn()
 {
-    m_lastSpellSearchRowId = -1;
+    spellInfoTab.m_lastSpellSearchRowId = -1;
     ui.spellInfoText->clear();
     ui.resultList->clearContents();
     ui.spellIdNameInput->clear();

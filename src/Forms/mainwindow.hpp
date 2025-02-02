@@ -45,9 +45,13 @@ private:
     QLabel m_jsonStatus;
     QLabel m_sqlStatus;
 
-    SpellWork::SearchFilters::FilterData spellInfoTabFilter;
+    struct
+    {
+        SpellWork::SearchFilters::FilterData spellInfoTabFilter;
+        int32_t m_lastSpellSearchRowId{-1};    // Last select search list row id
+    } spellInfoTab;
 
-// Generic functions
+    // Generic functions
     void PerformSpellSearch();
-    int32_t m_lastSpellSearchRowId{-1};    // Last select search list row id
+
 };
