@@ -427,16 +427,40 @@ bool DataStorage::LoadDB2Datas()
 
 void DataStorage::GenerateExtraDataInfo()
 {
+    for (auto& spellEntry : m_spellEntries)
+    {
+        auto& spellInfo = spellEntry.second;
+        spellInfo.m_scalingEntry = GetSpellScalingEntry(spellInfo.getSpellScalingId());
+        spellInfo.m_spellCastingTimeEntry = GetSpellCastTimesEntry(spellInfo.getCastingTimeIndex());
+        spellInfo.m_spellDurationEntry = GetSpellDurationEntry(spellInfo.getDurationIndex());
+        spellInfo.m_spellRangeEntry = GetSpellRangeEntry(spellInfo.getRangeIndex());
+        spellInfo.m_spellAuraOptionsEntry = GetSpellAuraOptionsEntry(spellInfo.getSpellAuraOptionsId());
+        spellInfo.m_spellRestrictionsEntry = GetSpellAuraRestrictionsEntry(spellInfo.getSpellAuraRestrictionsId());
+        spellInfo.m_spellCastingReqEntry = GetSpellCastingRequirementsEntry(spellInfo.getSpellCastingRequirementsId());
+        spellInfo.m_spellCategoriesEntry = GetSpellCategoriesEntry(spellInfo.getSpellCategoriesId());
+        spellInfo.m_spellClassOptionsEntry = GetSpellClassOptionsEntry(spellInfo.getSpellClassOptionsId());
+        spellInfo.m_spellCooldownEntry = GetSpellCooldownsEntry(spellInfo.getSpellCooldownsId());
+        spellInfo.m_spellEquipedItemsEntry = GetSpellEquippedItemsEntry(spellInfo.getSpellEquippedItemsId());
+        spellInfo.m_spellInterruptsEntry = GetSpellInterruptsEntry(spellInfo.getSpellInterruptsId());
+        spellInfo.m_spellLevelsEntry = GetSpellLevelsEntry(spellInfo.getSpellLevelsId());
+        spellInfo.m_spellPowerEntry = GetSpellPowerEntry(spellInfo.getSpellPowerId());
+        spellInfo.m_spellReagentsEntry = GetSpellReagentsEntry(spellInfo.getSpellReagentsId());
+        spellInfo.m_spellShapeshiftEntry = GetSpellShapeshiftEntry(spellInfo.getSpellShapeshiftId());
+        spellInfo.m_spellTargetRestrictionsEntry = GetSpellTargetRestrictionsEntry(spellInfo.getSpellTargetRestrictionsId());
+    }
+
     for (auto& spellEffectItr : m_SpellEffectEntries)
     {
         auto& effectEntry = spellEffectItr.second;
         assert(effectEntry.getEffectIndex() < MAX_SPELL_EFFECTS);
 
-        // link spell related pointers
-        auto spellEntryItr = m_spellEntries.find(effectEntry.getSpellID());
-        if (spellEntryItr != m_spellEntries.end())
+        // link spell effect dbc pointers
         {
-            spellEntryItr->second.m_spellEffects[effectEntry.getEffectIndex()] = &effectEntry;
+            auto spellEntryItr = m_spellEntries.find(effectEntry.getSpellID());
+            if (spellEntryItr != m_spellEntries.end())
+            {
+                spellEntryItr->second.m_spellEffects[effectEntry.getEffectIndex()] = &effectEntry;
+            }
         }
 
         // Generate effect extra details

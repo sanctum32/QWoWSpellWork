@@ -18,7 +18,7 @@ struct SQLSettings
 
 struct AppSettings
 {
-    std::string dbcFilePath;
+    std::string dbcFilePath{"./"};
     QString themeName;
     bool loadDBCSpells{};
     bool loadSQLSpells{};

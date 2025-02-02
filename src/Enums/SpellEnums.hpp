@@ -1522,3 +1522,10 @@ enum SummonPropFlags
     SUMMON_PROP_FLAG_TOTEM           = 0x00100000,           // Totems
     SUMMON_PROP_FLAG_COMPANION       = 0x00200000
 };
+
+enum SpellCategory
+{
+    SPELL_CATEGORY_NONE             = 0,
+    SPELL_CATEGORY_FOOD             = 11,
+    SPELL_CATEGORY_DRINK            = 59
+};

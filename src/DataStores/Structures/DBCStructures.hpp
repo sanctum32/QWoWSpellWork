@@ -693,8 +693,26 @@ struct SpellEntry
 
     const auto& GetField(uint8_t index) const { return _fields.at(index); }
 
-    // Other data
+    // Linked dbc entries
     std::array<const SpellEffectEntry*, MAX_SPELL_EFFECTS> m_spellEffects{};
+    const SpellScalingEntry* m_scalingEntry{};
+    const SpellDurationEntry* m_spellDurationEntry{};
+    const SpellRangeEntry* m_spellRangeEntry{};
+    const SpellCastTimesEntry* m_spellCastingTimeEntry{};
+    const SpellAuraOptionsEntry* m_spellAuraOptionsEntry{};
+    const SpellAuraRestrictionsEntry* m_spellRestrictionsEntry{};
+    const SpellCastingRequirementsEntry* m_spellCastingReqEntry{};
+    const SpellCategoriesEntry* m_spellCategoriesEntry{};
+    const SpellClassOptionsEntry* m_spellClassOptionsEntry{};
+    const SpellCooldownsEntry* m_spellCooldownEntry{};
+    const SpellEquippedItemsEntry* m_spellEquipedItemsEntry{};
+    const SpellInterruptsEntry* m_spellInterruptsEntry{};
+    const SpellLevelsEntry* m_spellLevelsEntry{};
+    const SpellPowerEntry* m_spellPowerEntry{};
+    const SpellReagentsEntry* m_spellReagentsEntry{};
+    const SpellShapeshiftEntry* m_spellShapeshiftEntry{};
+    const SpellTargetRestrictionsEntry* m_spellTargetRestrictionsEntry{};
+
     bool m_IsServerSide{false};
 
 private:
