@@ -226,34 +226,34 @@ void MainWindow::UpdateFilterStatus(bool hasFilter)
         if (auraTypeId.has_value() || spellEffectId.has_value() || spellTargetA.has_value() || spellTargetB.has_value())
         {
             if (!std::ranges::any_of(_spellInfo.m_spellEffects, [&](const auto* effectInfo)
-            {
-                if (effectInfo == nullptr)
                 {
-                    return false;
-                }
+                    if (effectInfo == nullptr)
+                    {
+                        return false;
+                    }
 
-                if (auraTypeId.has_value() && effectInfo->getEffectAura() != *auraTypeId)
-                {
-                    return false;
-                }
+                    if (auraTypeId.has_value() && effectInfo->getEffectAura() != *auraTypeId)
+                    {
+                        return false;
+                    }
 
-                if (spellEffectId.has_value() && effectInfo->getEffect() != *spellEffectId)
-                {
-                    return false;
-                }
+                    if (spellEffectId.has_value() && effectInfo->getEffect() != *spellEffectId)
+                    {
+                        return false;
+                    }
 
-                if (spellTargetA.has_value() && effectInfo->getEffectImplicitTargetA() != *spellTargetA)
-                {
-                    return false;
-                }
+                    if (spellTargetA.has_value() && effectInfo->getEffectImplicitTargetA() != *spellTargetA)
+                    {
+                        return false;
+                    }
 
-                if (spellTargetB.has_value() && effectInfo->getEffectImplicitTargetB() != *spellTargetB)
-                {
-                    return false;
-                }
+                    if (spellTargetB.has_value() && effectInfo->getEffectImplicitTargetB() != *spellTargetB)
+                    {
+                        return false;
+                    }
 
-                return true;
-            }))
+                    return true;
+                }))
             {
                 continue;
             }
@@ -261,9 +261,9 @@ void MainWindow::UpdateFilterStatus(bool hasFilter)
 
         // Spell.dbc filter
         if (std::ranges::any_of(spellAttrFilter, [_spellInfo](const auto& compareParam)
-                                {
-                                    return !compareParam.DoCheck(_spellInfo);
-                                }))
+            {
+                return !compareParam.DoCheck(_spellInfo);
+            }))
         {
             continue;
         }
@@ -271,9 +271,9 @@ void MainWindow::UpdateFilterStatus(bool hasFilter)
         // SpellEffect.dbc filter
         // return spells which has least one effect having effect matching field value
         if (std::ranges::any_of(spellEffectAttrFilter, [](const auto& compareParam)
-                                {
-                                    return compareParam.hasData;
-                                }))
+            {
+                return compareParam.hasData;
+            }))
         {
             canInsert = false;
             for (const auto& filter : spellEffectAttrFilter)
@@ -284,9 +284,9 @@ void MainWindow::UpdateFilterStatus(bool hasFilter)
                 }
 
                 if (std::ranges::any_of(_spellInfo.m_spellEffects, [filter](const auto* effectInfo)
-                                        {
-                                            return effectInfo != nullptr && filter.DoCheck(*effectInfo);
-                                        }))
+                    {
+                        return effectInfo != nullptr && filter.DoCheck(*effectInfo);
+                    }))
                 {
                     canInsert = true;
                     break;
