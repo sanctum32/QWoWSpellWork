@@ -1,4 +1,5 @@
 {
+    "dbcPath" : "./dbc",
     "ThemeName" : "materialDarkDefault",
     "LoadDBCSpells": true,
     "LoadSQLSpells": true,

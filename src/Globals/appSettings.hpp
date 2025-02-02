@@ -18,11 +18,11 @@ struct SQLSettings
 
 struct AppSettings
 {
-    std::string dbcFilePath{"./"};
+    std::string dbcFilePath{"./dbc"};
     QString themeName;
-    bool loadDBCSpells{};
-    bool loadSQLSpells{};
-    bool useQtFusionStyle{};
+    bool loadDBCSpells{true};
+    bool loadSQLSpells{false};
+    bool useQtFusionStyle{true};
 };
 
 class SpellWorkConfig
