@@ -1,4 +1,5 @@
 #pragma once
+#include "searchFilter.hpp"
 #include "ui/ui_mainwindow.h"
 #include <QMainWindow>
 #include <QLabel>
@@ -8,7 +9,6 @@ Q_DECLARE_LOGGING_CATEGORY(SPELLINFO_TAB)
 
 // Forward declarations
 class QTableWidgetItem;
-class SearchFilter;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -43,8 +43,6 @@ private:
     QLabel m_db2Status;
     QLabel m_jsonStatus;
     QLabel m_sqlStatus;
-
-    std::unique_ptr<SearchFilter> m_searchFilter;
 
 // Generic functions
     void PerformSpellSearch();

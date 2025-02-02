@@ -10,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
 
-    m_searchFilter = std::make_unique<SearchFilter>(this);
-
     // resultList
     ui.resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     ui.resultList->horizontalHeader()->resizeSection(0, 55);

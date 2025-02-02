@@ -324,7 +324,9 @@ void MainWindow::onScalingSliderUpdate()
 
 void MainWindow::onFiltersBtnClick()
 {
-    m_searchFilter->open();
+    SearchFilter* filter = new SearchFilter(this);
+    filter->setAttribute(Qt::WA_DeleteOnClose);
+    filter->open();
 }
 
 void MainWindow::onClearResultsBtn()

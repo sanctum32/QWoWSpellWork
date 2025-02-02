@@ -8,7 +8,7 @@
 #include "DBCStructures.hpp"
 #include "JsonData.hpp"
 
-SearchFilter::SearchFilter(QWidget *parent) : QDialog(parent)
+SearchFilter::SearchFilter(QWidget *parent /** nullptr*/) : QDialog(parent)
 {
     ui.setupUi(this);
 

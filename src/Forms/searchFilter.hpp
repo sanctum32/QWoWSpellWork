@@ -13,7 +13,7 @@ class SearchFilter : public QDialog
     Q_OBJECT
 
 public:
-    SearchFilter(QWidget* parent);
+    SearchFilter(QWidget* parent = nullptr);
 
 private slots:
     void onButtonClicked(QAbstractButton* button);
