@@ -3,6 +3,8 @@
 #include <QLoggingCategory>
 #include <QString>
 
+Q_DECLARE_LOGGING_CATEGORY(appConfig)
+
 struct SQLSettings
 {
     QString hostname;
