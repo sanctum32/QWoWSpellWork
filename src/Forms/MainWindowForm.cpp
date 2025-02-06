@@ -1,5 +1,6 @@
 #include "MainWindowForm.hpp"
 #include "DataStorage.hpp"
+#include "SearchFilterForm.hpp"
 #include "ValueComparition.hpp"
 #include <QCloseEvent>
 #include <QDateTime>
@@ -14,8 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     UpdateAdvFilterStatus(false);
 
     // resultList
-    ui.resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    ui.resultList->horizontalHeader()->resizeSection(0, 55);
+    ClearResults(ui.resultList);
 
     // statusBar
     ui.statusBar->addPermanentWidget(&m_advFilterStatusLabel);
@@ -57,26 +57,123 @@ void MainWindow::UpdateAdvFilterStatus(bool hasFilter)
     }
 }
 
+void MainWindow::onSearchBtnClicked()
+{
+    PerformSpellSearch(ui.spellIdNameInput->text(), ui.searchByIdCheckBox->isChecked(), ui.searchByNameCheckBox->isChecked(), ui.resultList, spellInfoTab.m_spellSearchFilter, ui.resultCountLabel);
+    spellInfoTab.m_selectedSpellRowId = -1;
+}
+
+void MainWindow::onSpellIdNameInputReturnPressed()
+{
+    PerformSpellSearch(ui.spellIdNameInput->text(), ui.searchByIdCheckBox->isChecked(), ui.searchByNameCheckBox->isChecked(), ui.resultList, spellInfoTab.m_spellSearchFilter, ui.resultCountLabel);
+    spellInfoTab.m_selectedSpellRowId = -1;
+}
+
+void MainWindow::onResultListClick(QTableWidgetItem *item)
+{
+    if (spellInfoTab.m_selectedSpellRowId == item->row())
+    {
+        return;
+    }
+
+    spellInfoTab.m_selectedSpellRowId = item->row();
+
+    // Select only number field
+    const auto* spellRowItem = ui.resultList->item(spellInfoTab.m_selectedSpellRowId, 0);
+    if (spellRowItem == nullptr)
+    {
+        return;
+    }
+
+    const uint32_t spellId = spellRowItem->text().toUInt();
+    if (spellId == 0)
+    {
+        return;
+    }
+
+    const auto* spell = sDataStorage->GetSpellEntry(spellId);
+    const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
+    const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
+    ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
+}
+
+void MainWindow::onScalingSliderUpdate()
+{
+    const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
+    const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
+
+    ui.levelScalingText->setText(QString("Selected Level %1, (max 85)").arg(selectedLevel));
+    ui.comboScalingText->setText(QString("Combo Points: %1").arg(comboPoints));
+    const auto* item = ui.resultList->currentItem();
+    if (item == nullptr)
+    {
+        return;
+    }
+
+    QTableWidgetItem const* spellRowItem = item->column() != 0 ? ui.resultList->item(ui.resultList->row(item), 0) : item;
+    if (spellRowItem == nullptr)
+    {
+        return;
+    }
+
+    // Extract entry
+    bool ok = false;
+    uint32_t spellId = spellRowItem->text().toUInt(&ok);
+    if (!ok || spellId == 0)
+    {
+        qCDebug(SPELLINFO_TAB) << "spell id was 0";
+        return;
+    }
+
+    if (const auto* spell = sDataStorage->GetSpellEntry(spellId))
+    {
+        ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
+    }
+}
+
+void MainWindow::onFiltersBtnClick()
+{
+    SearchFilterForm* filter = new SearchFilterForm(&spellInfoTab.m_spellSearchFilter, this);
+    filter->setAttribute(Qt::WA_DeleteOnClose);
+
+    filter->OnCloseOrApplyEventFn = [this]()
+    {
+        const bool hasBasicFilters = spellInfoTab.m_spellSearchFilter.m_genericFilter.HasData();
+        const bool hasSpellFieldFilters = std::ranges::any_of(spellInfoTab.m_spellSearchFilter.m_spellEntryFieldsFilter, [](const auto& filter)
+                                                              {
+                                                                  return filter.HasData();
+                                                              });
+        const bool hasSpellEffectFilters = std::ranges::any_of(spellInfoTab.m_spellSearchFilter.m_spellEffectFieldsFilter, [](const auto& filter)
+                                                               {
+                                                                   return filter.HasData();
+                                                               });
+
+        UpdateAdvFilterStatus(hasBasicFilters || hasSpellFieldFilters || hasSpellEffectFilters);
+    };
+
+    filter->open();
+}
+
+void MainWindow::onClearResultsBtn()
+{
+    spellInfoTab.m_selectedSpellRowId = -1;
+    ui.spellIdNameInput->clear();
+    ui.resultCountLabel->setText("Found 0 results");
+    ui.levelScalingSlider->setValue(1);
+    ui.levelScalingText->setText("Selected Level 1, (max 85)");
+    ui.comboPointsSlider->setValue(0);
+    ui.comboScalingText->setText("Combo Points: 0");
+    ui.spellInfoText->clear();
+    ClearResults(ui.resultList);
+}
+
 // General functions
 /*static*/ void MainWindow::PerformSpellSearch(QStringView spellNameOrId, bool searchById, bool searchByName, QTableWidget* resultList, const SpellWork::Filters::SpellSearchFilter& filter, QLabel* resultCounterLabel)
 {
     assert(resultList != nullptr);
     const auto startMS = QDateTime::currentMSecsSinceEpoch();
 
-    for (int row = 0; row < resultList->rowCount(); ++row) {
-        for (int col = 0; col < resultList->columnCount(); ++col) {
-            QWidget *widget = resultList->cellWidget(row, col);
-            if (widget) {
-                delete widget;  // Free allocated memory
-            }
-        }
-    }
-
-    resultList->clear();
-    resultList->setColumnCount(2);
-    resultList->setRowCount(0);
-    resultList->verticalHeader()->setVisible(false);
-    resultList->setHorizontalHeaderLabels(QStringList() << "ID" << "Name");
+    ClearResults(resultList);
 
     if (sDataStorage->GetSpellEntries().empty())
     {
@@ -279,4 +376,26 @@ void MainWindow::UpdateAdvFilterStatus(bool hasFilter)
     }
 
     resultCounterLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(resultList->rowCount()).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+}
+
+/*static*/ void MainWindow::ClearResults(QTableWidget* resultList)
+{
+    for (int row = 0; row < resultList->rowCount(); ++row)
+    {
+        for (int col = 0; col < resultList->columnCount(); ++col)
+        {
+            QWidget *widget = resultList->cellWidget(row, col);
+            if (widget) {
+                delete widget;
+            }
+        }
+    }
+
+    resultList->clear();
+    resultList->setColumnCount(2);
+    resultList->setRowCount(0);
+    resultList->verticalHeader()->setVisible(false);
+    resultList->setHorizontalHeaderLabels(QStringList() << "ID" << "Name");
+    resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    resultList->horizontalHeader()->resizeSection(0, 55);
 }

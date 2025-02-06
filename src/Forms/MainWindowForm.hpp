@@ -47,4 +47,5 @@ private:
 
     // Generic functions
     static void PerformSpellSearch(QStringView spellNameOrId, bool searchById, bool searchByName, QTableWidget* resultList, const SpellWork::Filters::SpellSearchFilter& filter, QLabel* resultCounterLabel);
+    static void ClearResults(QTableWidget* resultList);
 };

@@ -53,7 +53,6 @@ set(PROJECT_SOURCES
     src/DataStores/DataStorage.hpp
     src/DataStores/DataStorage.cpp
     src/Spell/SpellInfo.cpp
-    src/Spell/SpellInfoTabEvents.cpp
     src/JsonData/JsonData.hpp
     src/JsonData/JsonData.cpp
     src/Globals/appSettings.hpp
