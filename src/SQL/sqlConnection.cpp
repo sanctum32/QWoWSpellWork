@@ -19,17 +19,13 @@ SpellWorkSQL::~SpellWorkSQL()
 
 bool SpellWorkSQL::Init()
 {
+    assert(!initialized);
+
     const auto& settings = sSpellWorkConfig->GetSQLConfig();
     if (!settings.enable)
     {
         qCDebug(SQL) << "Connection is disabled";
         return false;
-    }
-
-    if (initialized)
-    {
-        qCDebug(SQL) << "Attempted to initialize SQL connection twice";
-        return m_connection != nullptr;
     }
 
     initialized = true;
