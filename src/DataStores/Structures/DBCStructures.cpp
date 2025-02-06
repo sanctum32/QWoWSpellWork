@@ -563,6 +563,24 @@ SummonPropertiesEntry::SummonPropertiesEntry(const DBCFileLoader::Record& record
     Flags = record.getUInt(5);
 }
 
+SpellDifficultyEntry::SpellDifficultyEntry(const DBCFileLoader::Record& record)
+{
+    Id = record.getUInt(0);
+    for (uint8_t i = 0; i < MAX_DUNGEON_DIFFICULTY; ++i)
+    {
+        DifficultySpellID[i] = record.getUInt(1 + i);
+    }
+}
+
+SpellDifficultyEntry::SpellDifficultyEntry(const MYSQL_ROW &sqlRow)
+{
+    Id = static_cast<uint32_t>(std::stoul(sqlRow[0]));
+    for (uint8_t i = 0; i < MAX_DUNGEON_DIFFICULTY; ++i)
+    {
+        DifficultySpellID[i] = static_cast<uint32_t>(std::stoul(sqlRow[1 + i]));
+    }
+}
+
 const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEntryFields =
 {
     {0, {"Id", CompareTypes::UnsignedNumber }},

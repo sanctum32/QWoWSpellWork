@@ -12,6 +12,9 @@
 
 enum class CompareTypes;
 
+// 0 - regular/10man normal, 1 - heroic/25man normal, 2 - 10man heroic, 3 - 25man heroic
+constexpr uint8_t MAX_DUNGEON_DIFFICULTY = 4;
+
 struct DbcEntryValues
 {
     DbcEntryValues() = default;
@@ -614,6 +617,23 @@ struct SpellRadiusEntry
     }
 };
 
+// SpellDifficulty.dbc
+struct SpellDifficultyEntry
+{
+    explicit SpellDifficultyEntry(DBCFileLoader::Record const& record);
+
+#ifdef SPELLWORK_BUILD_SQL
+    explicit SpellDifficultyEntry(const MYSQL_ROW& sqlRow);
+#endif // SPELLWORK_BUILD_SQL
+
+    uint32_t   Id{};                                                    // 0
+    std::array<uint32_t, MAX_DUNGEON_DIFFICULTY> DifficultySpellID;      // 1 - 4 instance modes: 10N, 25N, 10H, 25H or Normal/Heroic if only 1-2 is set, if 3-4 is 0 then Mode-2
+
+    static constexpr const char* GetDBCFormat()
+    {
+        return "iiiii";
+    }
+};
 
 struct SpellEntry
 {
@@ -742,6 +762,7 @@ struct SpellEntry
     const SpellReagentsEntry* m_spellReagentsEntry{};
     const SpellShapeshiftEntry* m_spellShapeshiftEntry{};
     const SpellTargetRestrictionsEntry* m_spellTargetRestrictionsEntry{};
+    const SpellDifficultyEntry* m_spellDifficultyEntry{};
 
     QString m_AttributesStr;
     bool m_IsServerSide{false};

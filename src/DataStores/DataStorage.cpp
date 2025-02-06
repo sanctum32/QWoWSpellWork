@@ -70,6 +70,31 @@ bool DataStorage::LoadDBCData()
     return true;
 }
 
+const SpellDifficultyEntry* DataStorage::GetSpellDifficultyByContainedEntry(uint32_t spellId) const
+{
+    // Database entries uses direct id for difficulty data
+    auto itr = m_SpellDifficultyEntries.find(spellId);
+
+    // continue search in dbc storage and find first entry which contains spell id
+    if (itr == m_SpellDifficultyEntries.end())
+    {
+        itr = std::ranges::find_if(m_SpellDifficultyEntries, [spellId](const auto& diffItr)
+        {
+            for (const auto& diffSpellId : diffItr.second.DifficultySpellID)
+            {
+                if (diffSpellId == spellId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
+    return itr != m_SpellDifficultyEntries.end() ? &itr->second : nullptr;
+}
+
 bool DataStorage::LoadDBCDatas()
 {
     const auto& dbcFolderPath = sSpellWorkConfig->GetAppConfig().dbcFilePath;
@@ -103,7 +128,8 @@ bool DataStorage::LoadDBCDatas()
         !OpenAndReadDBC(dbcFolderPath, "Faction.dbc",                   m_FactionEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SpellScaling.dbc",              m_SpellScalingEntries) ||
         !OpenAndReadDBC(dbcFolderPath, "SummonProperties.dbc",          m_SummonPropertiesEntries) ||
-        (sSpellWorkConfig->GetAppConfig().loadDBCSpells && (!OpenAndReadDBC(dbcFolderPath, "Spell.dbc", m_spellEntries) || !OpenAndReadDBC(dbcFolderPath, "SpellEffect.dbc", m_SpellEffectEntries)))
+        (sSpellWorkConfig->GetAppConfig().loadDBCSpells && (!OpenAndReadDBC(dbcFolderPath, "Spell.dbc", m_spellEntries) || !OpenAndReadDBC(dbcFolderPath, "SpellEffect.dbc", m_SpellEffectEntries))) ||
+        !OpenAndReadDBC(dbcFolderPath, "SpellDifficulty.dbc",           m_SpellDifficultyEntries)
     )
     {
         return false;
@@ -218,7 +244,7 @@ bool DataStorage::LoadSqlDBCData()
         auto* result = mysql_store_result(connection);
         if (result == nullptr)
         {
-            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to fetch result data from spell_dbc query; Error: " << mysql_error(connection);
+            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to fetch result data from spelleffect_dbc query; Error: " << mysql_error(connection);
             return false;
         }
 
@@ -232,6 +258,42 @@ bool DataStorage::LoadSqlDBCData()
 
         qCDebug(DataStores) << "DataStores::LoadSqlDBCData: loaded " << count << " entries from spelleffect_dbc";
     }
+
+    // Load spelldifficulty_dbc
+    {
+        std::stringstream query;
+        query << "SELECT "
+              << "`id`, "
+              << "`spellid0`, "
+              << "`spellid1`, "
+              << "`spellid2`, "
+              << "`spellid3` "
+              << "FROM `spelldifficulty_dbc`";
+
+        if (mysql_query(connection, query.str().c_str()) != 0)
+        {
+            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to execute spelldifficulty_dbc query. Error: " << mysql_error(connection);
+            return false;
+        }
+
+        auto* result = mysql_store_result(connection);
+        if (result == nullptr)
+        {
+            qCDebug(DataStores) << "DataStores::LoadSqlDBCData: failed to fetch result data from spelldifficulty_dbc query; Error: " << mysql_error(connection);
+            return false;
+        }
+
+        uint32_t count = 0;
+        while (auto row = mysql_fetch_row(result))
+        {
+            m_SpellDifficultyEntries.try_emplace(static_cast<uint32_t>(std::stoul(row[0])), row);
+            ++count;
+        }
+        mysql_free_result(result);
+
+        qCDebug(DataStores) << "DataStores::LoadSqlDBCData: loaded " << count << " entries from spelldifficulty_dbc";
+    }
+
     return true;
 #else
     return true;
@@ -449,42 +511,46 @@ void DataStorage::GenerateExtraDataInfo()
         spellInfo.m_spellReagentsEntry = GetSpellReagentsEntry(spellInfo.getSpellReagentsId());
         spellInfo.m_spellShapeshiftEntry = GetSpellShapeshiftEntry(spellInfo.getSpellShapeshiftId());
         spellInfo.m_spellTargetRestrictionsEntry = GetSpellTargetRestrictionsEntry(spellInfo.getSpellTargetRestrictionsId());
+        spellInfo.m_spellDifficultyEntry = GetSpellDifficultyByContainedEntry(spellInfo.getId());
 
-        bool lineAdded = false;
-        for (uint8_t attributeId = 0; attributeId < MAX_SPELL_ATTRIBUTES; ++attributeId)
+        // Generate spell attributes string
         {
-            const uint32_t attributeMask = spellInfo.GetAttribute(attributeId);
-            if (attributeMask == 0)
+            bool lineAdded = false;
+            for (uint8_t attributeId = 0; attributeId < MAX_SPELL_ATTRIBUTES; ++attributeId)
             {
-                continue;
-            }
-
-            if (!lineAdded)
-            {
-                spellInfo.m_AttributesStr += printLine;
-                lineAdded = true;
-            }
-
-            QString attributeStr;
-            for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
-            {
-                const uint32_t mask = 1u << id;
-                if ((mask & attributeMask) == 0)
+                const uint32_t attributeMask = spellInfo.GetAttribute(attributeId);
+                if (attributeMask == 0)
                 {
                     continue;
                 }
 
-                if (!attributeStr.isEmpty())
+                if (!lineAdded)
                 {
-                    attributeStr += ", ";
+                    spellInfo.m_AttributesStr += printLine;
+                    lineAdded = true;
                 }
 
-                attributeStr += sSpellWorkJson->GetSpellAttributeName(attributeId, mask);
-            }
+                QString attributeStr;
+                for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+                {
+                    const uint32_t mask = 1u << id;
+                    if ((mask & attributeMask) == 0)
+                    {
+                        continue;
+                    }
 
-            spellInfo.m_AttributesStr += QString("Attributes%1: %2<br><br>")
-                .arg(attributeId)
-                .arg(attributeStr);
+                    if (!attributeStr.isEmpty())
+                    {
+                        attributeStr += ", ";
+                    }
+
+                    attributeStr += sSpellWorkJson->GetSpellAttributeName(attributeId, mask);
+                }
+
+                spellInfo.m_AttributesStr += QString("Attributes%1: %2<br><br>")
+                    .arg(attributeId)
+                    .arg(attributeStr);
+            }
         }
     }
 

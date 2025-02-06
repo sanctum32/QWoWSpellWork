@@ -1102,6 +1102,16 @@ QString const SpellEntry::PrintBaseInfo(uint8_t scalingLevel) const
                      .arg(getId())
                      .arg(GetSpellNameRank());
 
+    if (m_spellDifficultyEntry != nullptr)
+    {
+        spellText += printLine;
+        spellText += QString("<b><i>Difficulty entries:</i></b> %1 (normal/10man), %2 (heroic/25man), %3 (10man hc), %4 (25 man hc)<br>")
+                         .arg(m_spellDifficultyEntry->DifficultySpellID.at(0))
+                         .arg(m_spellDifficultyEntry->DifficultySpellID.at(1))
+                         .arg(m_spellDifficultyEntry->DifficultySpellID.at(2))
+                         .arg(m_spellDifficultyEntry->DifficultySpellID.at(3));
+    }
+
     spellText += printLine;
 
     if (!getDescription().isEmpty())
