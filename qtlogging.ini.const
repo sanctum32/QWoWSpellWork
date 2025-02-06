@@ -3,4 +3,4 @@ spellwork.json.debug=true
 spellwork.sql.debug=true
 spellwork.dataStores.debug=true
 spellwork.json.debug=true
-spellwork.appConfig=true
+spellwork.appConfig.debug=true

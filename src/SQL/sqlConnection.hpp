@@ -3,14 +3,19 @@
 #include <QLoggingCategory>
 #include <mysql/mysql.h>
 #include <atomic>
+#include <thread>
 
 extern std::atomic_bool isSQLShuttingDown;
 Q_DECLARE_LOGGING_CATEGORY(SQL)
 
+class MainWindow;
+
 class SpellWorkSQL
 {
+    std::jthread sqlPingThread;
     MYSQL* m_connection{nullptr};
     bool initialized{false};
+
     SpellWorkSQL() = default;
     ~SpellWorkSQL();
 
@@ -26,7 +31,7 @@ public:
 
     // Initializes sql connection and tests world and hotfix databases
     // Must be called only once!
-    bool Init();
+    void Init(MainWindow& mainWindow);
 
     // Returns active sql connection
     auto* GetConnection() const { return m_connection; }
