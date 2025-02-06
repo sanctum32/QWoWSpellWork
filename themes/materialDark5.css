@@ -1,24 +1,24 @@
 QToolTip {
-    color: #000000; // Black text
-    background-color: #ffffff; // White background
-    border: 1px solid #000000; // Black border
+    color: #000000;             /*Black text*/
+    background-color: #ffffff;  /*White background*/
+    border: 1px solid #000000;  /*Black border*/
 }
 QWidget {
-    background-color: #121212; // Dark background, similar to Android/iOS dark mode
-    color: #f0f0f0; // Light gray text color
+    background-color: #121212;  /*Dark background, similar to Android/iOS dark mode*/
+    color: #f0f0f0;             /*Light gray text color*/
 }
 QPushButton {
-    background-color: #323232;  // Dark button background
-    border: 1px solid #474747;  // Slightly lighter gray border
+    background-color: #323232;  /*Dark button background*/
+    border: 1px solid #474747;  /*Slightly lighter gray border*/
     padding: 8px;
-    color: #f0f0f0;  // Light gray text color
+    color: #f0f0f0;             /*Light gray text color*/
 }
 QPushButton:hover {
-    background-color: #424242;  // Hover effect, slightly lighter gray
+    background-color: #424242;  /*Hover effect, slightly lighter gray*/
 }
 QLineEdit {
-    background-color: #1e1e1e; // Slightly lighter gray for text input
-    color: #ffffff; // White text
+    background-color: #1e1e1e;  /*Slightly lighter gray for text input*/
+    color: #ffffff;             /*White text*/
 }
 QCheckBox {
     spacing: 5px;
@@ -28,10 +28,10 @@ QCheckBox::indicator {
     height: 18px;
 }
 QCheckBox::indicator:checked {
-    background-color: #2196F3;  // Blue accent color, similar to Android/iOS
+    background-color: #2196F3;  /*Blue accent color, similar to Android/iOS*/
     border: 1px solid #757575;
 }
 QCheckBox::indicator:unchecked {
-    background-color: #323232;  // Dark gray
+    background-color: #323232;  /*Dark gray*/
     border: 1px solid #757575;
 }

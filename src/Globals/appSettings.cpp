@@ -24,7 +24,11 @@ bool SpellWorkConfig::ReadSettings()
             m_appSettings.dbcFilePath = "./dbc";
         }
 
-        m_appSettings.themeName = document.value("ThemeName").toString();
+        if (!document.value("ThemeName").isNull())
+        {
+            m_appSettings.themeName = document.value("ThemeName").toString();
+        }
+
         m_appSettings.loadDBCSpells = document.value("LoadDBCSpells").toBool(true);
         m_appSettings.loadSQLSpells = document.value("LoadSQLSpells").toBool(true);
         m_appSettings.useQtFusionStyle = document.value("UseQtFusionStyle").toBool(false);

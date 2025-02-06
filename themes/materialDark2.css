@@ -28,7 +28,7 @@ QCheckBox::indicator {
     height: 18px;
 }
 QCheckBox::indicator:checked {
-    background-color: #009688;  // Teal
+    background-color: #009688;  /*Teal*/
     border: 1px solid #757575;
 }
 QCheckBox::indicator:unchecked {

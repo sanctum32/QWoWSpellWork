@@ -1,6 +1,6 @@
 {
     "dbcPath" : "./dbc",
-    "ThemeName" : "materialDarkDefault",
+    "ThemeName" : null,
     "LoadDBCSpells": true,
     "LoadSQLSpells": true,
     "UseQtFusionStyle": false,
