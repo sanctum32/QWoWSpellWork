@@ -1,4 +1,5 @@
 #include "DBCStructures.hpp"
+#include "DataStorage.hpp"
 #include "ValueComparition.hpp"
 
 SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
@@ -20,13 +21,12 @@ SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
     _getEffectMiscValue()           = record.getInt(12);
     _getEffectMiscValueB()          = record.getInt(13);
     _getEffectPointsPerResource()   = record.getFloat(14);
-    _getEffectRadiusIndex()         = record.getUInt(15);
-    _getEffectRadiusMaxIndex()      = record.getUInt(16);
+    _getEffectMinRadiusIndex()      = record.getUInt(15);
+    _getEffectMaxRadiusIndex()      = record.getUInt(16);
     _getEffectRealPointsPerLevel()  = record.getFloat(17);
     _getEffectSpellClassMaskA()     = record.getUInt(18);
     _getEffectSpellClassMaskB()     = record.getUInt(19);
     _getEffectSpellClassMaskC()     = record.getUInt(20);
-
     _getEffectTriggerSpell()        = record.getUInt(21);
     _getEffectImplicitTargetA()     = record.getUInt(22);
     _getEffectImplicitTargetB()     = record.getUInt(23);
@@ -35,6 +35,8 @@ SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
     _getEffectAttributes()          = record.getUInt(26);
 
     GenerateExtraInfo();
+    m_spellMinRadiusEntry = sDataStorage->GetSpellRadiusEntry(getEffectMinRadiusIndex());
+    m_spellMaxRadiusEntry = sDataStorage->GetSpellRadiusEntry(getEffectMaxRadiusIndex());
 }
 
 #ifdef SPELLWORK_BUILD_SQL
@@ -55,8 +57,8 @@ SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
     _getEffectMiscValue()           = std::stoi(row[12]);
     _getEffectMiscValueB()          = std::stoi(row[13]);
     _getEffectPointsPerResource()   = std::atof(row[14]);
-    _getEffectRadiusIndex()         = std::stoul(row[15]);
-    _getEffectRadiusMaxIndex()      = std::stoul(row[16]);
+    _getEffectMinRadiusIndex()      = std::stoul(row[15]);
+    _getEffectMaxRadiusIndex()      = std::stoul(row[16]);
     _getEffectRealPointsPerLevel()  = std::atof(row[17]);
     _getEffectSpellClassMaskA()     = std::stoul(row[18]);
     _getEffectSpellClassMaskB()     = std::stoul(row[19]);
@@ -68,6 +70,8 @@ SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
     _getEffectIndex()               = std::stoul(row[25]);
 
     GenerateExtraInfo();
+    m_spellMinRadiusEntry = sDataStorage->GetSpellRadiusEntry(getEffectMinRadiusIndex());
+    m_spellMaxRadiusEntry = sDataStorage->GetSpellRadiusEntry(getEffectMaxRadiusIndex());
 }
 #endif // SPELLWORK_BUILD_SQL
 

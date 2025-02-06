@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     sSpellWorkJson->LoadJsonData();
     sDataStorage->LoadDBC();
     sDataStorage->LoadDB2();
+    sDataStorage->GenerateExtraDataInfo();
 
     QApplication app(argc, argv);
 

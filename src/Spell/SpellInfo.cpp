@@ -5,9 +5,9 @@
 #include "SharedDefines.hpp"
 #include "UnitDefines.hpp"
 #include <cmath>
-#include <random>
+//#include <random>
 
-inline float frand(float min, float max)
+/*inline float frand(float min, float max)
 {
     std::random_device rd;
     std::mt19937 eng(rd());
@@ -21,7 +21,7 @@ inline int irand(int min, int max)
     std::mt19937 eng(rd());
     std::uniform_int_distribution<int> distr(min, max);
     return distr(eng);
-}
+}*/
 
 // Returns first found school mask's name
 inline QString GetFirstSchoolMaskNameStr(uint32_t mask)
@@ -73,11 +73,11 @@ inline void PrintSpellClassOptions(QString& result, const SpellClassOptionsEntry
     {
         result += QString("Modal Next Spell: %1<br>").arg(spellClassOptionsEntry->modalNextSpell);
         result += QString("FamilyName %1 (%2), flat [0] 0x%3 [1] 0x%4 [2] 0x%5<br>")
-                         .arg(spellClassOptionsEntry->SpellFamilyName)
-                         .arg(sSpellWorkJson->GetSpellFamilyName(spellClassOptionsEntry->SpellFamilyName))
-                         .arg(spellClassOptionsEntry->SpellFamilyFlags[0], 8, 16, QLatin1Char('0'))
-                         .arg(spellClassOptionsEntry->SpellFamilyFlags[1], 8, 16, QLatin1Char('0'))
-                         .arg(spellClassOptionsEntry->SpellFamilyFlags[2], 8, 16, QLatin1Char('0'));
+                    .arg(spellClassOptionsEntry->SpellFamilyName)
+                    .arg(sSpellWorkJson->GetSpellFamilyName(spellClassOptionsEntry->SpellFamilyName))
+                    .arg(spellClassOptionsEntry->SpellFamilyFlags[0], 8, 16, QLatin1Char('0'))
+                    .arg(spellClassOptionsEntry->SpellFamilyFlags[1], 8, 16, QLatin1Char('0'))
+                    .arg(spellClassOptionsEntry->SpellFamilyFlags[2], 8, 16, QLatin1Char('0'));
     }
     else
     {
@@ -90,34 +90,12 @@ inline void PrintSpellCategory(QString& result, const SpellCategoriesEntry* spel
 {
     if (spellCategoriesEntry != nullptr)
     {
-        // Damage/defense type
-        result += QString("DamageClass = %1 (%2)<br>")
-                      .arg(spellCategoriesEntry->DefenseType)
-                      .arg(sSpellWorkJson->GetSpellDamageTypeName(spellCategoriesEntry->DefenseType));
-
-        // Prevention type
-        result += QString("PreventionType = %1 (%2)<br>")
-                      .arg(spellCategoriesEntry->PreventionType)
-                      .arg(sSpellWorkJson->GetSpellPreventionTypeName(spellCategoriesEntry->PreventionType));
-
-        // Category
+        result += QString("DamageClass = %1 (%2)<br>").arg(spellCategoriesEntry->DefenseType).arg(sSpellWorkJson->GetSpellDamageTypeName(spellCategoriesEntry->DefenseType));
+        result += QString("PreventionType = %1 (%2)<br>").arg(spellCategoriesEntry->PreventionType).arg(sSpellWorkJson->GetSpellPreventionTypeName(spellCategoriesEntry->PreventionType));
         result += QString("Category id = %1").arg(spellCategoriesEntry->Category);
-        if (const auto* spellCategoryInfo = sDataStorage->GetSpellCategoryEntry(spellCategoriesEntry->Id))
-        {
-            result += QString(" (%1)").arg(spellCategoryInfo->GetName());
-        }
-
         result += "<br>";
-
-        // Dispel info
-        result += QString("DispelType = %1 (%2)<br>")
-                      .arg(spellCategoriesEntry->DispelType)
-                      .arg(sSpellWorkJson->GetDispelName(spellCategoriesEntry->DispelType));
-
-        // Mechanic
-        result += QString("Mechanic = %1 (%2)<br>")
-                      .arg(spellCategoriesEntry->Mechanic)
-                      .arg(sSpellWorkJson->GetSpellMechanicName(spellCategoriesEntry->Mechanic));
+        result += QString("DispelType = %1 (%2)<br>").arg(spellCategoriesEntry->DispelType).arg(sSpellWorkJson->GetDispelName(spellCategoriesEntry->DispelType));
+        result += QString("Mechanic = %1 (%2)<br>").arg(spellCategoriesEntry->Mechanic).arg(sSpellWorkJson->GetSpellMechanicName(spellCategoriesEntry->Mechanic));
     }
     else
     {
@@ -253,14 +231,8 @@ inline void PrintSkillLinks(QString& result, uint32_t spellId)
         result += printLine;
         result += QString("Skill (Id %1) \"%2\"<br>").arg(skillLineAbility->SkillLine).arg(skillLine->name);
         result += QString("MinSkillLineRank %1<br>").arg(skillLineAbility->MinSkillLineRank);
-
-        result += QString("SupercedesSpell = %1, MinMaxValue (%2, %3)<br>")
-                      .arg(skillLineAbility->MinSkillLineRank)
-                      .arg(skillLineAbility->TrivialSkillLineRankLow)
-                      .arg(skillLineAbility->TrivialSkillLineRankHigh);
-
-        result += QString(", NumSkillups (%1)<br>")
-                      .arg(skillLineAbility->NumSkillUps);
+        result += QString("SupercedesSpell = %1, MinMaxValue (%2, %3)<br>").arg(skillLineAbility->MinSkillLineRank).arg(skillLineAbility->TrivialSkillLineRankLow).arg(skillLineAbility->TrivialSkillLineRankHigh);
+        result += QString(", NumSkillups (%1)<br>").arg(skillLineAbility->NumSkillUps);
     }
 }
 
@@ -280,10 +252,8 @@ inline void PrintReagents(QString& result, const SpellReagentsEntry* spellReagen
         }
 
         const auto* itemEntry = sDataStorage->GetItemEntry(spellReagentsEntry->Reagents[i]);
-        result += QString("Item: %1 (\"%2\"), required amount %3<br>")
-            .arg(spellReagentsEntry->Reagents[i])
-            .arg(itemEntry != nullptr ? itemEntry->GetName() : "Unknown")
-            .arg(spellReagentsEntry->ReagentCount[i]);
+        QStringView itemName = itemEntry != nullptr ? itemEntry->GetName() : "Unknown";
+        result += QString("Item: %1 (\"%2\"), required amount %3<br>").arg(spellReagentsEntry->Reagents[i]).arg(itemName).arg(spellReagentsEntry->ReagentCount[i]);
     }
 }
 
@@ -720,23 +690,20 @@ inline void PrintSpellCastRequirements(QString& result, const SpellCastingRequir
     result += "<br>";
 }
 
-inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, uint8_t effIndex, uint8_t selectedLevel, uint8_t comboPoints)
+inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, const SpellEffectEntry* effectEntry, uint8_t selectedLevel, uint8_t comboPoints)
 {
-    assert(spellEntry != nullptr);
-    const auto* effectInfo = spellEntry->m_spellEffects.at(effIndex);
-    assert(effectInfo != nullptr);
-
-    result += QString("BasePoints = %1<br>").arg(effectInfo->getEffectBasePoints() + ((effectInfo->getEffectDieSides() == 0) ? 0 : 1));
+    assert(spellEntry != nullptr && effectEntry != nullptr);
+    result += QString("BasePoints = %1<br>").arg(effectEntry->getEffectBasePoints() + ((effectEntry->getEffectDieSides() == 0) ? 0 : 1));
 
 
     // Ported from SpellInfo::CalValue
-    float basePointsPerLevel = effectInfo->getEffectRealPointsPerLevel();
-    std::array<float, 2> basePoints = { static_cast<float>(effectInfo->getEffectBasePoints()), static_cast<float>(effectInfo->getEffectBasePoints())};
-    float comboDamage = effectInfo->getEffectPointsPerResource();
-    int32_t randomPoints = effectInfo->getEffectDieSides();
+    float basePointsPerLevel = effectEntry->getEffectRealPointsPerLevel();
+    std::array<float, 2> basePoints = { static_cast<float>(effectEntry->getEffectBasePoints()), static_cast<float>(effectEntry->getEffectBasePoints())};
+    float comboDamage = effectEntry->getEffectPointsPerResource();
+    int32_t randomPoints = effectEntry->getEffectDieSides();
 
     // base amount modification based on spell lvl vs caster lvl
-    if (spellEntry->m_scalingEntry != nullptr && spellEntry->m_scalingEntry->Coefficient.at(effectInfo->getEffectIndex()) != 0.0f)
+    if (spellEntry->m_scalingEntry != nullptr && spellEntry->m_scalingEntry->Coefficient.at(effectEntry->getEffectIndex()) != 0.0f)
     {
         float value = 0.0f;
         if (selectedLevel > 0 && spellEntry->m_scalingEntry->Class > 0)
@@ -751,17 +718,17 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
                 value *= ((((1.0 - spellEntry->m_scalingEntry->NerfFactor) * (selectedLevel - 1)) / (spellEntry->m_scalingEntry->NerfMaxLevel - 1)) + spellEntry->m_scalingEntry->NerfFactor);
         }
 
-        if (spellEntry->m_scalingEntry->ComboPointsCoefficient.at(effectInfo->getEffectIndex()) > 0.0f)
-            comboDamage = spellEntry->m_scalingEntry->ComboPointsCoefficient.at(effectInfo->getEffectIndex()) * value;
+        if (spellEntry->m_scalingEntry->ComboPointsCoefficient.at(effectEntry->getEffectIndex()) > 0.0f)
+            comboDamage = spellEntry->m_scalingEntry->ComboPointsCoefficient.at(effectEntry->getEffectIndex()) * value;
 
-        value *= spellEntry->m_scalingEntry->Coefficient.at(effectInfo->getEffectIndex());
+        value *= spellEntry->m_scalingEntry->Coefficient.at(effectEntry->getEffectIndex());
         if (value >= 0.0f && value < 1.0f)
             value = 1.0f;
 
         basePoints.fill(value);
-        if (spellEntry->m_scalingEntry->Variance.at(effectInfo->getEffectIndex()))
+        if (spellEntry->m_scalingEntry->Variance.at(effectEntry->getEffectIndex()))
         {
-            float delta = std::fabs(spellEntry->m_scalingEntry->Variance.at(effectInfo->getEffectIndex()) * value * 0.5f);
+            float delta = std::fabs(spellEntry->m_scalingEntry->Variance.at(effectEntry->getEffectIndex()) * value * 0.5f);
             //value += frand(-delta, delta);
 
             basePoints.at(0) += -delta;
@@ -834,7 +801,7 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
             !basePointsPerLevel && spellEntry->HasAttribute(SPELL_ATTR0_SCALES_WITH_CREATURE_LEVEL))
         {
             bool canEffectScale = false;
-            switch (effectInfo->getEffect())
+            switch (effectEntry->getEffect())
             {
             case SPELL_EFFECT_SCHOOL_DAMAGE:
             case SPELL_EFFECT_DUMMY:
@@ -854,7 +821,7 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
                 break;
             }
 
-            switch (effectInfo->getEffectAura())
+            switch (effectEntry->getEffectAura())
             {
             case SPELL_AURA_PERIODIC_DAMAGE:
             case SPELL_AURA_DUMMY:
@@ -892,151 +859,73 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
     result += QString("Calculated BasePoints (before modifiers). Min = %1, max = %2, random points = %3, SpellScalingId = %4<br>").arg(basePointsMinINT).arg(basePointsMaxINT).arg(randomPoints).arg(spellEntry->getSpellLevelsId());
 }
 
-QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t comboPoints) const
+QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints) const
 {
-    QString result;
-    for (uint8_t effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
+    if (HasAttribute(SPELL_ATTR10_USE_SPELL_BASE_LEVEL_FOR_SCALING))
     {
-        result += printLine;
+        scalingLevel = m_spellLevelsEntry != nullptr ? m_spellLevelsEntry->baseLevel : 1;
+    }
 
-        const auto* effectInfo = m_spellEffects[effIndex];
-        if (effectInfo == nullptr)
+    auto printSpellClassOptionsInfo = [this](QString& result, const SpellEffectEntry* effectInfo)
+    {
+        if (effectInfo->HasSpellClassMask() == 0)
         {
-            result += QString("<b>Effect %1: Id %2 (%3)</b><br>")
-                          .arg(effIndex)
-                          .arg(SPELL_EFFECT_NONE)
-                          .arg(sSpellWorkJson->GetSpellEffectName(SPELL_EFFECT_NONE));
-
-            continue;
+            return;
         }
 
-        result += QString("<b>Effect %1: Id %2 (%3)</b><br>")
-                      .arg(effIndex)
-                      .arg(effectInfo->getEffect())
-                      .arg(sSpellWorkJson->GetSpellEffectName(effectInfo->getEffect()));
-
-        if (HasAttribute(SPELL_ATTR10_USE_SPELL_BASE_LEVEL_FOR_SCALING))
+        const auto* thisEffClassOptions = m_spellClassOptionsEntry;
+        if (thisEffClassOptions == nullptr)
         {
-            if (m_spellLevelsEntry != nullptr)
+            return;
+        }
+
+        result += QString("SpellClassMask = 0x%1 0x%2 0x%3<br>")
+                      .arg(effectInfo->getEffectSpellClassMaskA(), 8, 16, QLatin1Char('0'))
+                      .arg(effectInfo->getEffectSpellClassMaskB(), 8, 16, QLatin1Char('0'))
+                      .arg(effectInfo->getEffectSpellClassMaskC(), 8, 16, QLatin1Char('0'));
+
+        for (const auto&[otherSpellId, otherSpellInfo] : sDataStorage->GetSpellEntries())
+        {
+            if (getId() == otherSpellId)
             {
-                scalingLevel = m_spellLevelsEntry->baseLevel;
+                continue;
             }
-            else
+
+            const auto* otherSpellClassOpts = otherSpellInfo.m_spellClassOptionsEntry;
+            if (otherSpellClassOpts == nullptr || otherSpellClassOpts->SpellFamilyName != thisEffClassOptions->SpellFamilyName)
             {
-                scalingLevel = 1;
+                continue;
             }
-        }
 
-        PrintEffectBaseValues(result, this, effIndex, scalingLevel, comboPoints);
-
-        if (effectInfo->getEffectBonusCoefficient() > 1.0f)
-        {
-            result += QString(" x %1").arg(effectInfo->getEffectBonusCoefficient());
-        }
-
-        if (effectInfo->getEffectAmplitude() > 0.0f)
-        {
-            result += QString("  Multiple = %1").arg(effectInfo->getEffectAmplitude());
-        }
-
-        result += "<br>";
-
-        result += QString("Targets: (%1, %2) (%3, %4)<br>")
-                .arg(effectInfo->getEffectImplicitTargetA())
-                .arg(effectInfo->getEffectImplicitTargetB())
-                .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetA()))
-                .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetB()));
-
-        result += printLine;
-
-        if (effectInfo->getEffectAura() == 0)
-        {
-            result += QString("EffectMiscValueA = %1, EffectMiscValueB = %2, EffectAmplitude = %3, Mechanic = %4 (%5)<br>")
-                    .arg(effectInfo->getEffectMiscValue())
-                    .arg(effectInfo->getEffectMiscValueB())
-                    .arg(effectInfo->getEffectAmplitude())
-                    .arg(effectInfo->getEffectMechanic())
-                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
-
-            if (effectInfo->HasExtraInfo())
             {
-                result += effectInfo->GetExtraInfo();
-                result += "<br>";
-            }
-        }
-        else
-        {
-            result += QString("Aura Id %1 (%2), value = %3, misc = %4, miscB = %5, periodic = %6, mechanic = %7 (%8)<br>")
-                    .arg(effectInfo->getEffectAura())
-                    .arg(sSpellWorkJson->GetSpellAuraTypeName(effectInfo->getEffectAura()))
-                    .arg(effectInfo->getEffectBasePoints())
-                    .arg(effectInfo->getEffectMiscValue())
-                    .arg(effectInfo->getEffectMiscValueB())
-                    .arg(effectInfo->getEffectAuraPeriod())
-                    .arg(effectInfo->getEffectMechanic())
-                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
-
-            if (effectInfo->HasExtraInfo())
-            {
-                result += effectInfo->GetExtraInfo();
-                result += "<br>";
-            }
-        }
-
-        if (effectInfo->HasSpellClassMask())
-        {
-            if (const auto* thisEffClassOptions = sDataStorage->GetSpellClassOptionsEntry(getSpellClassOptionsId()))
-            {
-                result += QString("SpellClassMask = 0x%1 0x%2 0x%3<br>")
-                              .arg(effectInfo->getEffectSpellClassMaskA(), 8, 16, QLatin1Char('0'))
-                              .arg(effectInfo->getEffectSpellClassMaskB(), 8, 16, QLatin1Char('0'))
-                              .arg(effectInfo->getEffectSpellClassMaskC(), 8, 16, QLatin1Char('0'));
-
-                for (const auto&[entry, spellInfo] : sDataStorage->GetSpellEntries())
+                bool hasFamilyFlag = false;
+                for (uint8_t i = 0; i < MAX_SPELL_FAMILY_FLAGS; ++i)
                 {
-                    const auto* otherSpellClassOpts = sDataStorage->GetSpellClassOptionsEntry(spellInfo.getSpellClassOptionsId());
-                    if (otherSpellClassOpts == nullptr || otherSpellClassOpts->SpellFamilyName != thisEffClassOptions->SpellFamilyName)
+                    if (thisEffClassOptions->SpellFamilyFlags[i] & otherSpellClassOpts->SpellFamilyFlags[i])
                     {
-                        continue;
+                        hasFamilyFlag = true;
+                        break;
                     }
+                }
 
-                    {
-                        bool hasFamilyFlag = false;
-                        for (uint8_t i = 0; i < 3; ++i)
-                        {
-                            if (thisEffClassOptions->SpellFamilyFlags[i] & otherSpellClassOpts->SpellFamilyFlags[i])
-                            {
-                                hasFamilyFlag = true;
-                                break;
-                            }
-                        }
-
-                        if (!hasFamilyFlag)
-                        {
-                            continue;
-                        }
-                    }
-
-                    const auto& skillLineAbilities = sDataStorage->GetSkillLineAbilityEntries();
-                    const bool skillAbilityFound = std::ranges::any_of(skillLineAbilities, [entry](const auto& skillAbility)
-                    {
-                        return skillAbility.second.Spell == entry;
-                    });
-
-                    result += (skillAbilityFound ? "<span style=\"color:green\">\t+" : "<span style=\"color:red\">\t-</span>") + QString("%1 - %2</span><br>").arg(entry).arg(spellInfo.getSpellName());
+                if (!hasFamilyFlag)
+                {
+                    continue;
                 }
             }
-        }
 
-        if (effectInfo->getEffectRadiusIndex() != 0)
-        {
-            if (const auto* spellRadius = sDataStorage->GetSpellRadiusEntry(effectInfo->getEffectRadiusIndex()))
+            const auto& skillLineAbilities = sDataStorage->GetSkillLineAbilityEntries();
+            const bool skillAbilityFound = std::ranges::any_of(skillLineAbilities, [otherSpellId](const auto& skillAbility)
             {
-                result += QString("Min radius: %1, max radius: %2<br>").arg(spellRadius->RadiusMin).arg(spellRadius->RadiusMax);
-            }
-        }
+                return skillAbility.second.Spell == otherSpellId;
+            });
 
-        // append trigger spell
+            result += (skillAbilityFound ? "<span style=\"color:green\">\t+" : "<span style=\"color:red\">\t-</span>") + QString("%1 - %2</span><br>").arg(otherSpellId).arg(otherSpellInfo.getSpellName());
+        }
+    };
+
+    auto printSpellTriggerInfo = [this](QString& result, const SpellEffectEntry* effectInfo)
+    {
         if (effectInfo->getEffectTriggerSpell() != 0)
         {
             if (const auto* triggerSpell = sDataStorage->GetSpellEntry(effectInfo->getEffectTriggerSpell()))
@@ -1044,8 +933,8 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                 result += "<span style=\"color:green; font-weight: bold\">";
                 result += QString("   Trigger spell (%1) %2. Chance = %3<br>")
                               .arg(triggerSpell->getId())
-                                 .arg(triggerSpell->GetSpellNameRank())
-                                 .arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
+                              .arg(triggerSpell->GetSpellNameRank())
+                              .arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
 
                 if (!triggerSpell->getDescription().isEmpty())
                 {
@@ -1082,8 +971,86 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
                 result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
             }
         }
+    };
 
-        if (effectInfo->getEffectChainTargets() != 0)
+    QString result;
+    for (uint8_t i = 0; i < MAX_SPELL_EFFECTS; ++i)
+    {
+        const auto* effectInfo = m_spellEffects.at(i);
+        result += printLine;
+
+        if (effectInfo == nullptr)
+        {
+            result += QString("<b>Effect %1: Id %2 (%3)</b><br>").arg(i).arg(SPELL_EFFECT_NONE).arg(sSpellWorkJson->GetSpellEffectName(SPELL_EFFECT_NONE));
+            continue;
+        }
+
+        result += QString("<b>Effect %1: Id %2 (%3)</b><br>").arg(i).arg(effectInfo->getEffect()).arg(sSpellWorkJson->GetSpellEffectName(effectInfo->getEffect()));
+
+        PrintEffectBaseValues(result, this, effectInfo, scalingLevel, comboPoints);
+
+        if (effectInfo->getEffectBonusCoefficient() > 1.0f)
+        {
+            result += QString(" x %1").arg(effectInfo->getEffectBonusCoefficient());
+        }
+
+        if (effectInfo->getEffectAmplitude() > 0.0f)
+        {
+            result += QString("  Multiple = %1").arg(effectInfo->getEffectAmplitude());
+        }
+
+        result += "<br>";
+        result += QString("Targets: (%1, %2) (%3, %4)<br>")
+                  .arg(effectInfo->getEffectImplicitTargetA())
+                  .arg(effectInfo->getEffectImplicitTargetB())
+                  .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetA()))
+                  .arg(sSpellWorkJson->GetSpellTargetName(effectInfo->getEffectImplicitTargetB()));
+        result += printLine;
+
+        if (effectInfo->getEffectAura() == 0)
+        {
+            result += QString("EffectMiscValueA = %1, EffectMiscValueB = %2, EffectAmplitude = %3, Mechanic = %4 (%5)<br>")
+                    .arg(effectInfo->getEffectMiscValue())
+                    .arg(effectInfo->getEffectMiscValueB())
+                    .arg(effectInfo->getEffectAmplitude())
+                    .arg(effectInfo->getEffectMechanic())
+                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
+
+            if (effectInfo->HasExtraInfo())
+            {
+                result += effectInfo->GetExtraInfo();
+                result += "<br>";
+            }
+        }
+        else
+        {
+            result += QString("Aura Id %1 (%2), value = %3, misc = %4, miscB = %5, periodic = %6, mechanic = %7 (%8)<br>")
+                    .arg(effectInfo->getEffectAura())
+                    .arg(sSpellWorkJson->GetSpellAuraTypeName(effectInfo->getEffectAura()))
+                    .arg(effectInfo->getEffectBasePoints())
+                    .arg(effectInfo->getEffectMiscValue())
+                    .arg(effectInfo->getEffectMiscValueB())
+                    .arg(effectInfo->getEffectAuraPeriod())
+                    .arg(effectInfo->getEffectMechanic())
+                    .arg(sSpellWorkJson->GetSpellMechanicName(effectInfo->getEffectMechanic()));
+
+            if (effectInfo->HasExtraInfo())
+            {
+                result += effectInfo->GetExtraInfo();
+                result += "<br>";
+            }
+        }
+
+        printSpellClassOptionsInfo(result, effectInfo);
+
+        if (effectInfo->m_spellMinRadiusEntry != nullptr && effectInfo->m_spellMaxRadiusEntry != nullptr)
+        {
+            result += QString("Min radius: %1, max radius: %2<br>").arg(effectInfo->m_spellMinRadiusEntry->RadiusMin).arg(effectInfo->m_spellMaxRadiusEntry->RadiusMax);
+        }
+
+        printSpellTriggerInfo(result, effectInfo);
+
+        if (effectInfo->getEffectChainTargets() > 0)
         {
             result += QString("EffectChainTarget = %1<br>").arg(effectInfo->getEffectChainTargets());
         }
@@ -1094,7 +1061,7 @@ QString const SpellEntry::PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t com
     return result;
 }
 
-QString const SpellEntry::PrintBaseInfo(uint8_t scalingLevel) const
+QString const SpellEntry::PrintBaseInfo(int scalingLevel) const
 {
     QString spellText;
 

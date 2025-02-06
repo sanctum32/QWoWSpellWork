@@ -5,6 +5,7 @@
 #include <QCloseEvent>
 #include <QDateTime>
 #include <optional>
+#include <qmessagebox.h>
 
 Q_LOGGING_CATEGORY(SPELLINFO_TAB, "spellwork.json");
 
@@ -71,17 +72,9 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
 {
     // Select only number field
     const auto* spellRowItem = ui.resultList->item(item->row(), 0);
-    if (spellRowItem == nullptr)
-    {
-        return;
-    }
 
+    // Spell id in result list always non 0
     const uint32_t spellId = spellRowItem->text().toUInt();
-    if (spellId == 0)
-    {
-        return;
-    }
-
     const auto* spell = sDataStorage->GetSpellEntry(spellId);
     const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
     const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
@@ -90,8 +83,8 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
 
 void MainWindow::onScalingSliderUpdate()
 {
-    const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
-    const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
+    const auto selectedLevel = ui.levelScalingSlider->value();
+    const auto comboPoints = ui.comboPointsSlider->value();
 
     ui.levelScalingText->setText(QString("Selected Level %1, (max 85)").arg(selectedLevel));
     ui.comboScalingText->setText(QString("Combo Points: %1").arg(comboPoints));
@@ -101,7 +94,7 @@ void MainWindow::onScalingSliderUpdate()
         return;
     }
 
-    QTableWidgetItem const* spellRowItem = item->column() != 0 ? ui.resultList->item(ui.resultList->row(item), 0) : item;
+    const auto* spellRowItem = item->column() != 0 ? ui.resultList->item(ui.resultList->row(item), 0) : item;
     if (spellRowItem == nullptr)
     {
         return;
@@ -164,10 +157,12 @@ void MainWindow::PerformSpellSearch()
     const auto startMS = QDateTime::currentMSecsSinceEpoch();
     if (sDataStorage->GetSpellEntries().empty())
     {
-        if (ui.resultCountLabel != nullptr)
-        {
-            ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
-        }
+        ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+
+        QMessageBox msgBox;
+        msgBox.setText("Spell storage is empty! Spell search cannot be processed!");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
         return;
     }
 
@@ -178,6 +173,11 @@ void MainWindow::PerformSpellSearch()
     if (!searchById && !searchByName)
     {
         ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+
+        QMessageBox msgBox;
+        msgBox.setText("You must search for spell by least name or id!");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
         return;
     }
 
@@ -358,8 +358,8 @@ void MainWindow::ClearAndResetSearchResults()
     {
         for (int col = 0; col < ui.resultList->columnCount(); ++col)
         {
-            QWidget *widget = ui.resultList->cellWidget(row, col);
-            if (widget) {
+            if (auto *widget = ui.resultList->cellWidget(row, col))
+            {
                 delete widget;
             }
         }

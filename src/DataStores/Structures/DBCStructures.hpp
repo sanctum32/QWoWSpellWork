@@ -12,8 +12,13 @@
 
 enum class CompareTypes;
 
-// 0 - regular/10man normal, 1 - heroic/25man normal, 2 - 10man heroic, 3 - 25man heroic
-constexpr uint8_t MAX_DUNGEON_DIFFICULTY = 4;
+enum DBCBaseEnums : uint8_t
+{
+    // 0 - regular/10man normal, 1 - heroic/25man normal, 2 - 10man heroic, 3 - 25man heroic
+    MAX_DUNGEON_DIFFICULTY  = 4,
+
+    MAX_SPELL_FAMILY_FLAGS  = 3,
+};
 
 struct DbcEntryValues
 {
@@ -31,6 +36,7 @@ struct DbcEntryValues
 };
 
 // SpellEffect.dbc
+struct SpellRadiusEntry;
 struct SpellEffectEntry
 {
     SpellEffectEntry() = default;
@@ -66,8 +72,8 @@ struct SpellEffectEntry
     const auto getEffectMiscValue() const { return _fields[12].int32Val; }        // 12
     const auto getEffectMiscValueB() const { return _fields[13].int32Val; }       // 13
     const auto getEffectPointsPerResource() const { return _fields[14].floatVal; }// 14
-    const auto getEffectRadiusIndex() const { return _fields[15].uint32Val; }     // 15
-    const auto getEffectRadiusMaxIndex() const { return _fields[16].uint32Val; }  // 16
+    const auto getEffectMinRadiusIndex() const { return _fields[15].uint32Val; }     // 15
+    const auto getEffectMaxRadiusIndex() const { return _fields[16].uint32Val; }  // 16
     const auto getEffectRealPointsPerLevel() const { return _fields[17].floatVal; } // 17
     const uint32_t getEffectSpellClassMaskA() const { return _fields[18].uint32Val; } // 18
     const uint32_t getEffectSpellClassMaskB() const { return _fields[19].uint32Val; } // 19
@@ -80,6 +86,8 @@ struct SpellEffectEntry
     const auto getEffectAttributes() const { return _fields[26].uint32Val; }      // 26
 
     const auto& GetField(uint8_t index) const { return _fields.at(index); }
+    const SpellRadiusEntry* m_spellMinRadiusEntry{};
+    const SpellRadiusEntry* m_spellMaxRadiusEntry{};
 
 private:
     std::array<DbcEntryValues, 27> _fields;
@@ -98,8 +106,8 @@ private:
     auto& _getEffectMiscValue() { return _fields[12].int32Val; }        // 12
     auto& _getEffectMiscValueB() { return _fields[13].int32Val; }       // 13
     auto& _getEffectPointsPerResource() { return _fields[14].floatVal; }// 14
-    auto& _getEffectRadiusIndex() { return _fields[15].uint32Val; }     // 15
-    auto& _getEffectRadiusMaxIndex() { return _fields[16].uint32Val; }  // 16
+    auto& _getEffectMinRadiusIndex() { return _fields[15].uint32Val; }     // 15
+    auto& _getEffectMaxRadiusIndex() { return _fields[16].uint32Val; }  // 16
     auto& _getEffectRealPointsPerLevel() { return _fields[17].floatVal; } // 17
     auto& _getEffectSpellClassMaskA() { return _fields[18].uint32Val; } // 18
     auto& _getEffectSpellClassMaskB() { return _fields[19].uint32Val; } // 19
@@ -145,7 +153,7 @@ struct SpellCategoriesEntry
     uint32_t    DispelType{};                                   // 3        m_dispelType
     uint32_t    Mechanic{};                                     // 4        m_mechanic
     uint32_t    PreventionType{};                               // 5      m_preventionType
-    //uint32_t    StartRecoveryCategory{};                        // 6      m_startRecoveryCategory
+    //uint32_t    StartRecoveryCategory{};                      // 6      m_startRecoveryCategory
 
     static constexpr const char* GetDBCFormat()
     {
@@ -160,7 +168,7 @@ struct SpellClassOptionsEntry
 
     uint32_t    Id{};                                         // 0
     uint32_t    modalNextSpell{};                             // 1       m_modalNextSpell not used
-    std::array<uint32_t, 3> SpellFamilyFlags{};               // 2-4
+    std::array<uint32_t, MAX_SPELL_FAMILY_FLAGS> SpellFamilyFlags{};               // 2-4
     uint32_t    SpellFamilyName{};                            // 5       m_spellClassSet
     //QString     Description;                                // 6       4.0.0
 
@@ -738,8 +746,8 @@ struct SpellEntry
     bool HasAttribute(SpellAttr9 attr) const { return (getAttribute9() & attr) != 0; }
     bool HasAttribute(SpellAttr10 attr) const { return (getAttribute10() & attr) != 0; }
 
-    QString const PrintBaseInfo(uint8_t scalingLevel) const;
-    QString const PrintSpellEffectInfo(uint8_t scalingLevel, uint8_t comboPoints) const;
+    QString const PrintBaseInfo(int scalingLevel) const;
+    QString const PrintSpellEffectInfo(int scalingLevel, int comboPoints) const;
 
     const auto& GetField(uint8_t index) const { return _fields.at(index); }
 
