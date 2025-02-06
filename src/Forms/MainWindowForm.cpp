@@ -100,7 +100,20 @@ void MainWindow::UpdateFilterStatus(bool hasFilter)
     assert(resultList != nullptr);
     const auto startMS = QDateTime::currentMSecsSinceEpoch();
 
-    resultList->clearContents();
+    for (int row = 0; row < resultList->rowCount(); ++row) {
+        for (int col = 0; col < resultList->columnCount(); ++col) {
+            QWidget *widget = resultList->cellWidget(row, col);
+            if (widget) {
+                delete widget;  // Free allocated memory
+            }
+        }
+    }
+
+    resultList->clear();
+    resultList->setColumnCount(2);
+    resultList->setRowCount(0);
+    resultList->verticalHeader()->setVisible(false);
+    resultList->setHorizontalHeaderLabels(QStringList() << "ID" << "Name");
 
     if (sDataStorage->GetSpellEntries().empty())
     {
@@ -191,7 +204,6 @@ void MainWindow::UpdateFilterStatus(bool hasFilter)
         }
     }
 
-    std::vector<std::pair<QTableWidgetItem* /*id*/, QTableWidgetItem* /*name*/>> foundEntries;
     for (const auto& itr : sDataStorage->GetSpellEntries())
     {
         const auto _id = itr.first;
@@ -294,41 +306,14 @@ void MainWindow::UpdateFilterStatus(bool hasFilter)
             }
         }
 
-        if (!canInsert)
+        if (canInsert)
         {
-            continue;
+            int rowId = resultList->rowCount();
+            resultList->insertRow(rowId);
+            resultList->setItem(rowId, 0, new QTableWidgetItem(QString::number(_id)));
+            resultList->setItem(rowId, 1, new QTableWidgetItem(_spellInfo.getSpellName()));
         }
-
-        QTableWidgetItem* idItem = new QTableWidgetItem();
-        idItem->setData(Qt::EditRole, _id);
-
-        QTableWidgetItem* spell = new QTableWidgetItem();
-        spell->setData(Qt::EditRole, _spellInfo.getSpellName());
-
-        foundEntries.emplace_back(idItem, spell);
     }
 
-    if (foundEntries.empty())
-    {
-        if (resultCounterLabel != nullptr)
-        {
-            resultCounterLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
-        }
-        return;
-    }
-
-    resultList->setRowCount(static_cast<int>(foundEntries.size()));
-
-    int rowId = 0;
-    for (const auto& [_spellId, _spellname] : foundEntries)
-    {
-        resultList->setItem(rowId, 0, _spellId);
-        resultList->setItem(rowId, 1, _spellname);
-        ++rowId;
-    }
-
-    if (resultCounterLabel != nullptr)
-    {
-        resultCounterLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(QString::number(foundEntries.size())).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
-    }
+    resultCounterLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(resultList->rowCount()).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
 }

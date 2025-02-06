@@ -36,20 +36,16 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
         return;
     }
 
-    // Extract entry
-    bool ok = false;
-    const uint32_t spellId = spellRowItem->text().toUInt(&ok);
-    if (!ok)
+    const uint32_t spellId = spellRowItem->text().toUInt();
+    if (spellId == 0)
     {
         return;
     }
 
-    if (const auto* spell = sDataStorage->GetSpellEntry(spellId))
-    {
-        const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
-        const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
-        ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
-    }
+    const auto* spell = sDataStorage->GetSpellEntry(spellId);
+    const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
+    const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
+    ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
 }
 
 void MainWindow::onScalingSliderUpdate()
@@ -112,12 +108,26 @@ void MainWindow::onFiltersBtnClick()
 void MainWindow::onClearResultsBtn()
 {
     spellInfoTab.m_selectedSpellRowId = -1;
-    ui.spellInfoText->clear();
-    ui.resultList->clearContents();
     ui.spellIdNameInput->clear();
     ui.resultCountLabel->setText("Found 0 results");
     ui.levelScalingSlider->setValue(1);
     ui.levelScalingText->setText("Selected Level 1, (max 85)");
     ui.comboPointsSlider->setValue(0);
     ui.comboScalingText->setText("Combo Points: 0");
+    ui.spellInfoText->clear();
+
+    for (int row = 0; row < ui.resultList->rowCount(); ++row) {
+        for (int col = 0; col < ui.resultList->columnCount(); ++col) {
+            QWidget *widget = ui.resultList->cellWidget(row, col);
+            if (widget) {
+                delete widget;  // Free allocated memory
+            }
+        }
+    }
+
+    ui.resultList->clear();
+    ui.resultList->setColumnCount(2);
+    ui.resultList->setRowCount(0);
+    ui.resultList->verticalHeader()->setVisible(false);
+    ui.resultList->setHorizontalHeaderLabels(QStringList() << "ID" << "Name");
 }

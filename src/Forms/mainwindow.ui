@@ -58,7 +58,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5">
     <property name="sizeConstraint">
-     <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+     <enum>QLayout::SetDefaultConstraint</enum>
     </property>
     <item>
      <widget class="QTabWidget" name="tabWidget">
@@ -92,7 +92,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="sizeConstraint">
-         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+         <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <item>
          <layout class="QVBoxLayout" name="LeftSide">
@@ -127,7 +127,7 @@
         <item>
          <layout class="QVBoxLayout" name="RightSide">
           <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+           <enum>QLayout::SetDefaultConstraint</enum>
           </property>
           <item>
            <widget class="QGroupBox" name="SearchGroup">
@@ -162,7 +162,7 @@
                 <string/>
                </property>
                <property name="inputMethodHints">
-                <set>Qt::InputMethodHint::ImhNone</set>
+                <set>Qt::ImhNone</set>
                </property>
                <property name="text">
                 <string/>
@@ -277,13 +277,13 @@
                 <number>85</number>
                </property>
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
                <property name="invertedAppearance">
                 <bool>false</bool>
                </property>
                <property name="tickPosition">
-                <enum>QSlider::TickPosition::TicksBelow</enum>
+                <enum>QSlider::TicksBelow</enum>
                </property>
                <property name="tickInterval">
                 <number>9</number>
@@ -312,7 +312,7 @@
                 <number>5</number>
                </property>
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -338,19 +338,19 @@
              </sizepolicy>
             </property>
             <property name="editTriggers">
-             <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+             <set>QAbstractItemView::NoEditTriggers</set>
             </property>
             <property name="selectionMode">
-             <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+             <enum>QAbstractItemView::NoSelection</enum>
             </property>
             <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
+             <enum>QAbstractItemView::SelectItems</enum>
             </property>
             <property name="showGrid">
              <bool>true</bool>
             </property>
             <property name="gridStyle">
-             <enum>Qt::PenStyle::NoPen</enum>
+             <enum>Qt::NoPen</enum>
             </property>
             <attribute name="horizontalHeaderCascadingSectionResizes">
              <bool>false</bool>
@@ -359,18 +359,8 @@
              <bool>true</bool>
             </attribute>
             <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
+             <bool>true</bool>
             </attribute>
-            <column>
-             <property name="text">
-              <string>id</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Name</string>
-             </property>
-            </column>
            </widget>
           </item>
           <item>
@@ -416,7 +406,7 @@
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="layoutDirection">
-    <enum>Qt::LayoutDirection::LeftToRight</enum>
+    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">padding: 5px;</string>
