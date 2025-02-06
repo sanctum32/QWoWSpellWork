@@ -32,6 +32,7 @@ bool SpellWorkConfig::ReadSettings()
         m_appSettings.loadDBCSpells = document.value("LoadDBCSpells").toBool(true);
         m_appSettings.loadSQLSpells = document.value("LoadSQLSpells").toBool(true);
         m_appSettings.useQtFusionStyle = document.value("UseQtFusionStyle").toBool(false);
+        m_appSettings.loadLoggingRules = document.value("LoadLoggingRules").toBool(false);
 
         if (document.value("Sql").isObject())
         {

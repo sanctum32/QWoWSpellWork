@@ -8,7 +8,7 @@
 Q_LOGGING_CATEGORY(JSON, "spellwork.json");
 
 template<class T>
-inline bool ReadBasicArrayFromFile(const QString fileName, T& container, const QString keyName = "Id", const QString nameValName = "Name")
+bool ReadBasicArrayFromFile(const QString fileName, T& container, const QString keyName = "Id", const QString nameValName = "Name")
 {
     return SpellWorkJson::OpenJson(fileName, [&](const QJsonDocument& json)
     {
@@ -79,8 +79,6 @@ bool SpellWorkJson::OpenJson(const QString& fileName, std::function<bool(const Q
 
 bool SpellWorkJson::LoadJsonData()
 {
-    QLoggingCategory::setFilterRules("spellwork.json.debug=true");
-
     if (!OpenJson("./json/SpellSchools.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())

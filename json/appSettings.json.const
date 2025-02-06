@@ -4,6 +4,7 @@
     "LoadDBCSpells": true,
     "LoadSQLSpells": true,
     "UseQtFusionStyle": false,
+    "LoadLoggingRules": false,
     "Sql":
     {
         "Enable": false,

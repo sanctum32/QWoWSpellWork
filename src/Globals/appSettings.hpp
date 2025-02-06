@@ -25,6 +25,7 @@ struct AppSettings
     bool loadDBCSpells{true};
     bool loadSQLSpells{false};
     bool useQtFusionStyle{true};
+    bool loadLoggingRules{false};
 };
 
 class SpellWorkConfig

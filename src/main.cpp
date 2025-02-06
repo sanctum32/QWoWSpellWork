@@ -8,6 +8,8 @@
 #include <QStatusBar>
 #include <QJsonArray>
 #include <QFile>
+#include <QSettings>
+#include <QStyleFactory>
 
 // App
 #include "MainWindowForm.hpp"
@@ -21,24 +23,40 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+    sSpellWorkConfig->ReadSettings();
+    const auto& appSettings = sSpellWorkConfig->GetAppConfig();
+
+    // Load logging settings
+    if (appSettings.loadLoggingRules)
+    {
+        QSettings settings("./qtlogging.ini", QSettings::IniFormat);
+
+        settings.beginGroup("Rules");
+        QStringList keys = settings.allKeys();
+
+        for (const QString &key : keys) {
+            QString rule = key + "=" + settings.value(key).toString();
+            QLoggingCategory::setFilterRules(rule);
+        }
+    }
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
         const QString baseName = "QSpellWork_" + QLocale(locale).name();
         if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
+            app.installTranslator(&translator);
             break;
         }
     }
 
-    MainWindow mainWindow;
-    sSpellWorkConfig->ReadSettings();
-    if (sSpellWorkConfig->GetAppConfig().useQtFusionStyle)
+    if (appSettings.useQtFusionStyle)
     {
-        QApplication::setStyle("Fusion");
+        app.setStyle(QStyleFactory::create("Fusion"));
     }
+
+    MainWindow mainWindow;
 
 #ifdef SPELLWORK_BUILD_SQL
     sSpellWorkSQL->Init(mainWindow);
@@ -58,8 +76,7 @@ int main(int argc, char *argv[])
         QFile file("./themes/" + sSpellWorkConfig->GetAppConfig().themeName + ".css");
         if (file.open(QFile::ReadOnly))
         {
-            QString styleSheet = QLatin1String(file.readAll());
-            a.setStyleSheet(styleSheet);
+            app.setStyleSheet(QLatin1String(file.readAll()));
         }
     }
 
@@ -69,5 +86,5 @@ int main(int argc, char *argv[])
     mainWindow.UpdateDB2Status(db2Loaded);
 
     mainWindow.show();
-    return a.exec();
+    return app.exec();
 }
