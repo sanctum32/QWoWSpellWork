@@ -11,16 +11,15 @@ Q_LOGGING_CATEGORY(SPELLINFO_TAB, "spellwork.json");
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
+    UpdateAdvFilterStatus(false);
 
     // resultList
     ui.resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     ui.resultList->horizontalHeader()->resizeSection(0, 55);
 
     // statusBar
-    ui.statusBar->addPermanentWidget(&m_dbcStatus);
-    ui.statusBar->addPermanentWidget(&m_db2Status);
-    ui.statusBar->addPermanentWidget(&m_jsonStatus);
-    ui.statusBar->addPermanentWidget(&m_sqlStatus);
+    ui.statusBar->addPermanentWidget(&m_advFilterStatusLabel);
+    ui.statusBar->addPermanentWidget(&m_connectionStatusLabel);
 
     // Signal connections
     QObject::connect(ui.searchBtn,        &QPushButton::clicked,     this, &MainWindow::onSearchBtnClicked);
@@ -38,59 +37,23 @@ void MainWindow::UpdateSqlStatus(bool success)
 {
     if (success)
     {
-        m_sqlStatus.setText("SQL: <span style=\"color:green\">connected</span>");
+        m_connectionStatusLabel.setText("SQL: <span style=\"color:green\">connected</span>");
     }
     else
     {
-        m_sqlStatus.setText("SQL: <span style=\"color:red\">not connected</span>");
+        m_connectionStatusLabel.setText("SQL: <span style=\"color:red\">not connected</span>");
     }
 }
 
-void MainWindow::UpdateDBCStatus(bool success)
-{
-    if (success)
-    {
-        m_dbcStatus.setText("DBC: <span style=\"color:green\">loaded</span>");
-    }
-    else
-    {
-        m_dbcStatus.setText("DBC: <span style=\"color:red\">not loaded</span>");
-    }
-}
-
-void MainWindow::UpdateDB2Status(bool success)
-{
-    if (success)
-    {
-        m_db2Status.setText("DB2: <span style=\"color:green\">loaded</span>");
-    }
-    else
-    {
-        m_db2Status.setText("DB2: <span style=\"color:red\">not loaded</span>");
-    }
-}
-
-void MainWindow::UpdateJsonStatus(bool success)
-{
-    if (success)
-    {
-        m_jsonStatus.setText("JSON: <span style=\"color:green\">loaded</span>");
-    }
-    else
-    {
-        m_jsonStatus.setText("JSON: <span style=\"color:red\">not loaded</span>");
-    }
-}
-
-void MainWindow::UpdateFilterStatus(bool hasFilter)
+void MainWindow::UpdateAdvFilterStatus(bool hasFilter)
 {
     if (hasFilter)
     {
-        ui.filtersStatus->setText("Extra filters: <span style=\"color:green\">active</span>");
+        m_advFilterStatusLabel.setText("Extra filters: <span style=\"color:green\">active</span>");
     }
     else
     {
-        ui.filtersStatus->setText("Extra filters: <span style=\"color:red\">inactive</span>");
+        m_advFilterStatusLabel.setText("Extra filters: <span style=\"color:red\">inactive</span>");
     }
 }
 

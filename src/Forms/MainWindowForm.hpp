@@ -22,10 +22,7 @@ public:
     ~MainWindow();
 
     void UpdateSqlStatus(bool success);
-    void UpdateDBCStatus(bool success);
-    void UpdateDB2Status(bool success);
-    void UpdateJsonStatus(bool success);
-    void UpdateFilterStatus(bool hasFilter);
+    void UpdateAdvFilterStatus(bool hasFilter);
 
 private slots:
     void onSearchBtnClicked();
@@ -37,10 +34,8 @@ private slots:
 
 private:
     Ui::MainWindow ui;
-    QLabel m_dbcStatus;
-    QLabel m_db2Status;
-    QLabel m_jsonStatus;
-    QLabel m_sqlStatus;
+    QLabel m_connectionStatusLabel;
+    QLabel m_advFilterStatusLabel;
 
     struct
     {

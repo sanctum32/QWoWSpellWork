@@ -212,21 +212,11 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="2" colspan="2">
-              <widget class="QLabel" name="filtersStatus">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Extra filters: &lt;span style=&quot;color:red&quot;&gt;inactive&lt;/span&gt;</string>
-               </property>
-              </widget>
-             </item>
             </layout>
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBox_2">
+           <widget class="QGroupBox" name="spellScalingGroup">
             <property name="title">
              <string>Spell scaling</string>
             </property>
@@ -406,7 +396,7 @@
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+    <enum>Qt::RightToLeft</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">padding: 5px;</string>

@@ -71,12 +71,6 @@ set(PROJECT_SOURCES
     ${TS_FILES}
 )
 
-if (WITH_SQL_SUPPORT)
-    list(APPEND PROJECT_SOURCES
-        src/SQL/sqlConnection.hpp
-        src/SQL/sqlConnection.cpp)
-endif()
-
 set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_SOURCE_DIR}/src/Forms")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

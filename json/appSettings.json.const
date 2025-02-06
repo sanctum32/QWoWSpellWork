@@ -1,8 +1,6 @@
 {
     "dbcPath" : "./dbc",
     "ThemeName" : null,
-    "LoadDBCSpells": true,
-    "LoadSQLSpells": true,
     "UseQtFusionStyle": false,
     "LoadLoggingRules": false,
     "Sql":
@@ -13,8 +11,6 @@
         "Username": "root",
         "Password": "password",
         "WorldDB": "world_db_name",
-        "HotfixDB": "hotfix_db_name",
-        "PingDelayInMS": 10000,
-        "CanReconnect": true
+        "HotfixDB": "hotfix_db_name"
     }
 }

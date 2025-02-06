@@ -17,17 +17,31 @@
 #include "JsonData/JsonData.hpp"
 #include "Globals/appSettings.hpp"
 
-#ifdef SPELLWORK_BUILD_SQL
-#include "SQL/sqlConnection.hpp"
-#endif // SPELLWORK_BUILD_SQL
-
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
     sSpellWorkConfig->ReadSettings();
     const auto& appSettings = sSpellWorkConfig->GetAppConfig();
 
-    // Load logging settings
+    sSpellWorkJson->LoadJsonData();
+    sDataStorage->LoadDBC();
+    sDataStorage->LoadDB2();
+
+    QApplication app(argc, argv);
+
+    if (appSettings.useQtFusionStyle)
+    {
+        app.setStyle(QStyleFactory::create("Fusion"));
+    }
+
+    if (!appSettings.themeName.isEmpty())
+    {
+        QFile file("./themes/" + appSettings.themeName + ".css");
+        if (file.open(QFile::ReadOnly))
+        {
+            app.setStyleSheet(QLatin1String(file.readAll()));
+        }
+    }
+
     if (appSettings.loadLoggingRules)
     {
         QSettings settings("./qtlogging.ini", QSettings::IniFormat);
@@ -51,40 +65,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (appSettings.useQtFusionStyle)
-    {
-        app.setStyle(QStyleFactory::create("Fusion"));
-    }
-
     MainWindow mainWindow;
-
-#ifdef SPELLWORK_BUILD_SQL
-    sSpellWorkSQL->Init(mainWindow);
-#else
-    mainWindow.UpdateSqlStatus(false);
-#endif
-
-    const bool dbcLoaded = sDataStorage->LoadDBCData();
-    const bool db2Loaded = sDataStorage->LoadDB2Datas();
-    const bool jsonLoaded = sSpellWorkJson->LoadJsonData();
-
-    sDataStorage->GenerateExtraDataInfo();
-
-    // Load the CSS file
-    if (!sSpellWorkConfig->GetAppConfig().themeName.isEmpty())
-    {
-        QFile file("./themes/" + sSpellWorkConfig->GetAppConfig().themeName + ".css");
-        if (file.open(QFile::ReadOnly))
-        {
-            app.setStyleSheet(QLatin1String(file.readAll()));
-        }
-    }
-
-    mainWindow.UpdateDBCStatus(dbcLoaded);
-    mainWindow.UpdateJsonStatus(jsonLoaded);
-    mainWindow.UpdateFilterStatus(false);
-    mainWindow.UpdateDB2Status(db2Loaded);
-
     mainWindow.show();
     return app.exec();
 }

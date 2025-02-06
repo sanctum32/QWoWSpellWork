@@ -5,67 +5,10 @@
 #include "DBCStructures.hpp"
 
 Q_DECLARE_LOGGING_CATEGORY(DataStores)
+Q_DECLARE_LOGGING_CATEGORY(SQL)
 
 class DataStorage
 {
-public:
-    static DataStorage* instance()
-    {
-        static DataStorage storage;
-        return &storage;
-    }
-
-    // DBC data
-    bool LoadDBCData();
-    const auto& GetSpellEntries() const { return m_spellEntries; }
-    const auto* GetSpellEntry(uint32_t id) const { return GetEntryFromStorage(id, m_spellEntries); }
-    const auto* GetSpellScalingEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellScalingEntries); }
-    const auto* GetSpellCategoryEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCategoryEntries); }
-    const auto* GetSpellCategoriesEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCategories); }
-    const auto* GetSpellClassOptionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellClassOptions); }
-    const auto* GetSpellTargetRestrictionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellTargetRestrictions); }
-    const auto* GetSpellShapeshiftEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellShapeshiftEntries); }
-    const auto* GetSkillLineAbilityEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SkillLineAbilityEntries); }
-    const auto& GetSkillLineAbilityEntries() const { return m_SkillLineAbilityEntries; }
-    const auto* GetSkillLineEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SkillLineEntries); }
-    const auto& GetSkillLineEntries() const { return m_SkillLineEntries; }
-    const auto* GetSpellLevelsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellLevelsEntries); }
-    const auto* GetSpellReagentsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellReagentsEntries); }
-    const auto* GetSpellEquippedItemsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellEquippedItemsEntries); }
-    const auto* GetSpellRangeEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellRangeEntries); }
-    const auto* GetSpellAuraOptionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellAuraOptionsEntries); }
-    const auto* GetSpellCastTimesEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCastTimesEntries); }
-    const auto* GetSpellCooldownsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCooldownsEntries); }
-    const auto* GetSpellDurationEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellDurationEntries); }
-    const auto* GetSpellPowerEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellPowerEntries); }
-    const auto* GetSpellInterruptsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellInterruptsEntries); }
-    const auto* GetSpellAuraRestrictionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellAuraRestrictionsEntries); }
-    const auto* GetAreaGroupEntry(uint32_t id) const { return GetEntryFromStorage(id, m_AreaGroupEntries); }
-    const auto* GetAreaTableEntry(uint32_t id) const { return GetEntryFromStorage(id, m_AreaTableEntries); }
-    const auto* GetSpellCastingRequirementsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCastingRequirementsEntries); }
-    const auto* GetGtSpellScalingEntry(uint32_t id) const { return GetEntryFromStorage(id, m_GtSpellScalingEntries); }
-    const auto* GetGtNPCManaCostScalerEntry(uint32_t id) const { return GetEntryFromStorage(id, m_GtNPCManaCostScalerEntries); }
-    const auto* GetOverrideSpellDataEntry(uint32_t id) const { return GetEntryFromStorage(id, m_OverrideSpellDataEntries); }
-    const auto* GetScreenEffectEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ScreenEffectEntries); }
-    const auto* GetSpellRadiusEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellRadiusEntries); }
-    const auto* GetFactionEntry(uint32_t id) const { return GetEntryFromStorage(id, m_FactionEntries); }
-    const auto* GetSummonPropertiesEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SummonPropertiesEntries); }
-    const auto* GetSpellDifficultyEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellDifficultyEntries); }
-
-    const SpellDifficultyEntry* GetSpellDifficultyByContainedEntry(uint32_t spellId) const;
-
-    // DB2 data
-    bool LoadDB2Datas();
-    const auto* GetItemEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ItemSparseEntries); }
-
-    // Generates extra and links information to dbc data
-    void GenerateExtraDataInfo();
-
-private:
-    bool LoadDBCDatas();
-    bool LoadSqlDBCData();
-    void LoadSqlDB2Data();
-
     template<class T>
     T const* GetEntryFromStorage(uint32_t id, std::map<uint32_t, T> const& storage) const
     {
@@ -114,6 +57,59 @@ private:
 
     // DB2 stores
     std::map<uint32_t, ItemSparseEntry>              m_ItemSparseEntries;                        // Item-sparse.db2
+
+public:
+    static DataStorage* instance()
+    {
+        static DataStorage storage;
+        return &storage;
+    }
+
+    // DBC data
+    const auto& GetSpellEntries() const { return m_spellEntries; }
+    const auto* GetSpellEntry(uint32_t id) const { return GetEntryFromStorage(id, m_spellEntries); }
+    const auto* GetSpellScalingEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellScalingEntries); }
+    const auto* GetSpellCategoryEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCategoryEntries); }
+    const auto* GetSpellCategoriesEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCategories); }
+    const auto* GetSpellClassOptionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellClassOptions); }
+    const auto* GetSpellTargetRestrictionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellTargetRestrictions); }
+    const auto* GetSpellShapeshiftEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellShapeshiftEntries); }
+    const auto* GetSkillLineAbilityEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SkillLineAbilityEntries); }
+    const auto& GetSkillLineAbilityEntries() const { return m_SkillLineAbilityEntries; }
+    const auto* GetSkillLineEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SkillLineEntries); }
+    const auto& GetSkillLineEntries() const { return m_SkillLineEntries; }
+    const auto* GetSpellLevelsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellLevelsEntries); }
+    const auto* GetSpellReagentsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellReagentsEntries); }
+    const auto* GetSpellEquippedItemsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellEquippedItemsEntries); }
+    const auto* GetSpellRangeEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellRangeEntries); }
+    const auto* GetSpellAuraOptionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellAuraOptionsEntries); }
+    const auto* GetSpellCastTimesEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCastTimesEntries); }
+    const auto* GetSpellCooldownsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCooldownsEntries); }
+    const auto* GetSpellDurationEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellDurationEntries); }
+    const auto* GetSpellPowerEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellPowerEntries); }
+    const auto* GetSpellInterruptsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellInterruptsEntries); }
+    const auto* GetSpellAuraRestrictionsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellAuraRestrictionsEntries); }
+    const auto* GetAreaGroupEntry(uint32_t id) const { return GetEntryFromStorage(id, m_AreaGroupEntries); }
+    const auto* GetAreaTableEntry(uint32_t id) const { return GetEntryFromStorage(id, m_AreaTableEntries); }
+    const auto* GetSpellCastingRequirementsEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellCastingRequirementsEntries); }
+    const auto* GetGtSpellScalingEntry(uint32_t id) const { return GetEntryFromStorage(id, m_GtSpellScalingEntries); }
+    const auto* GetGtNPCManaCostScalerEntry(uint32_t id) const { return GetEntryFromStorage(id, m_GtNPCManaCostScalerEntries); }
+    const auto* GetOverrideSpellDataEntry(uint32_t id) const { return GetEntryFromStorage(id, m_OverrideSpellDataEntries); }
+    const auto* GetScreenEffectEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ScreenEffectEntries); }
+    const auto* GetSpellRadiusEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellRadiusEntries); }
+    const auto* GetFactionEntry(uint32_t id) const { return GetEntryFromStorage(id, m_FactionEntries); }
+    const auto* GetSummonPropertiesEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SummonPropertiesEntries); }
+    const auto* GetSpellDifficultyEntry(uint32_t id) const { return GetEntryFromStorage(id, m_SpellDifficultyEntries); }
+    const SpellDifficultyEntry* GetSpellDifficultyByContainedEntry(uint32_t spellId) const;
+
+    // DB2 data
+    const auto* GetItemEntry(uint32_t id) const { return GetEntryFromStorage(id, m_ItemSparseEntries); }
+
+    void LoadDBC();
+    void LoadDB2();
+
+    // Generates extra and links information to dbc data
+    void GenerateExtraDataInfo();
 };
 
 #define sDataStorage DataStorage::instance()

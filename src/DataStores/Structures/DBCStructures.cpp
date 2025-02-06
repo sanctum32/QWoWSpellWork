@@ -33,6 +33,8 @@ SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
     _getSpellID()                   = record.getUInt(24);
     _getEffectIndex()               = record.getUInt(25);
     _getEffectAttributes()          = record.getUInt(26);
+
+    GenerateExtraInfo();
 }
 
 #ifdef SPELLWORK_BUILD_SQL
@@ -64,6 +66,8 @@ SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
     _getEffectImplicitTargetB()     = std::stoul(row[23]);
     _getSpellID()                   = std::stoul(row[24]);
     _getEffectIndex()               = std::stoul(row[25]);
+
+    GenerateExtraInfo();
 }
 #endif // SPELLWORK_BUILD_SQL
 

@@ -99,7 +99,7 @@ void MainWindow::onFiltersBtnClick()
             return filter.HasData();
         });
 
-        UpdateFilterStatus(hasBasicFilters || hasSpellFieldFilters || hasSpellEffectFilters);
+        UpdateAdvFilterStatus(hasBasicFilters || hasSpellFieldFilters || hasSpellEffectFilters);
     };
 
     filter->open();

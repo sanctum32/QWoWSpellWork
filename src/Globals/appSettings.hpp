@@ -13,16 +13,13 @@ struct SQLSettings
     QString worldDB;
     QString hotfixDB;
     unsigned int port{};
-    unsigned int pingDelayInMS{};
     bool enable{};
-    bool canReconnect{};
 };
 
 struct AppSettings
 {
-    std::string dbcFilePath{"./dbc"};
+    QString dbcFilePath{"./dbc"};
     QString themeName;
-    bool loadDBCSpells{true};
     bool loadSQLSpells{false};
     bool useQtFusionStyle{true};
     bool loadLoggingRules{false};
