@@ -22,11 +22,13 @@ bool SpellWorkSQL::Init()
     const auto& settings = sSpellWorkConfig->GetSQLConfig();
     if (!settings.enable)
     {
+        qCDebug(SQL) << "Connection is disabled";
         return false;
     }
 
     if (initialized)
     {
+        qCDebug(SQL) << "Attempted to initialize SQL connection twice";
         return m_connection != nullptr;
     }
 
@@ -37,6 +39,7 @@ bool SpellWorkSQL::Init()
     if (m_connection == nullptr)
     {
         qCDebug(SQL) << "Failed to initialize connection. Error: " << mysql_error(m_connection);
+        return false;
     }
 
     mysql_options(m_connection, MYSQL_OPT_RECONNECT, &settings.canReconnect);
@@ -60,6 +63,7 @@ bool SpellWorkSQL::Init()
     {
         qCDebug(SQL) << "Failed to connect to world database. Error: " << mysql_error(m_connection);
         mysql_close(m_connection);
+        m_connection = nullptr;
         return false;
     }
 
@@ -71,6 +75,7 @@ bool SpellWorkSQL::Init()
     {
         qCDebug(SQL) << "Failed to connect to hotfix database. Error: " << mysql_error(m_connection);
         mysql_close(m_connection);
+        m_connection = nullptr;
         return false;
     }
 
