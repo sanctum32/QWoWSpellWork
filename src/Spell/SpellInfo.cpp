@@ -264,9 +264,7 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
         return;
     }
 
-    result += QString("EquippedItemClass = %1 (%2)<br>")
-              .arg(spellEquipedItemsEntry->EquippedItemClass)
-              .arg(sSpellWorkJson->GetItemClassName(spellEquipedItemsEntry->EquippedItemClass));
+    result += QString("EquippedItemClass = %1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemClass).arg(sSpellWorkJson->GetItemClassName(spellEquipedItemsEntry->EquippedItemClass));
 
     if (spellEquipedItemsEntry->EquippedItemSubClassMask != 0)
     {
@@ -596,62 +594,50 @@ static void PrintSpellRestrictionsInfo(QString& result, const SpellAuraRestricti
 
     if (restrictionsEntry->CasterAuraState != 0)
     {
-        result += QString("CasterAuraState = %1 (%2)<br>")
-                      .arg(restrictionsEntry->CasterAuraState)
-                      .arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->CasterAuraState));
+        result += QString("CasterAuraState = %1 (%2)<br>").arg(restrictionsEntry->CasterAuraState).arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->CasterAuraState));
     }
 
     if (restrictionsEntry->CasterAuraStateNot != 0)
     {
-        result += QString("CasterAuraStateNot = %1 (%2)<br>")
-                      .arg(restrictionsEntry->CasterAuraStateNot)
-                      .arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->CasterAuraStateNot));
+        result += QString("CasterAuraStateNot = %1 (%2)<br>").arg(restrictionsEntry->CasterAuraStateNot).arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->CasterAuraStateNot));
     }
 
     if (restrictionsEntry->TargetAuraState != 0)
     {
-        result += QString("TargetAuraState = %1 (%2)<br>")
-                      .arg(restrictionsEntry->TargetAuraState)
-                      .arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->TargetAuraState));
+        result += QString("TargetAuraState = %1 (%2)<br>").arg(restrictionsEntry->TargetAuraState).arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->TargetAuraState));
     }
 
     if (restrictionsEntry->TargetAuraStateNot != 0)
     {
-        result += QString("TargetAuraStateNot = %1 (%2)<br>")
-                      .arg(restrictionsEntry->TargetAuraStateNot)
-                      .arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->TargetAuraStateNot));
+        result += QString("TargetAuraStateNot = %1 (%2)<br>").arg(restrictionsEntry->TargetAuraStateNot).arg(sSpellWorkJson->GetSpellAuraStateName(restrictionsEntry->TargetAuraStateNot));
     }
 
     if (restrictionsEntry->casterAuraSpell != 0)
     {
         const auto* auraSpell = sDataStorage->GetSpellEntry(restrictionsEntry->casterAuraSpell);
-        result += QString("  Caster Aura Spell (%1) %2<br>")
-                      .arg(restrictionsEntry->casterAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->getSpellName() : "unknown");
+        QStringView auraSpellName = auraSpell != nullptr ? auraSpell->getSpellName() : "unknown";
+        result += QString("  Caster Aura Spell (%1) %2<br>").arg(restrictionsEntry->casterAuraSpell).arg(auraSpellName);
     }
 
     if (restrictionsEntry->targetAuraSpell != 0)
     {
         const auto* auraSpell = sDataStorage->GetSpellEntry(restrictionsEntry->targetAuraSpell);
-        result += QString("  Target Aura Spell (%1) %2<br>")
-                      .arg(restrictionsEntry->targetAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->getSpellName() : "unknown");
+        QStringView auraSpellName = auraSpell != nullptr ? auraSpell->getSpellName() : "unknown";
+        result += QString("  Target Aura Spell (%1) %2<br>").arg(restrictionsEntry->targetAuraSpell).arg(auraSpellName);
     }
 
     if (restrictionsEntry->excludeCasterAuraSpell != 0)
     {
         const auto* auraSpell = sDataStorage->GetSpellEntry(restrictionsEntry->excludeCasterAuraSpell);
-        result += QString("  Ex Caster Aura Spell (%1) %2<br>")
-                      .arg(restrictionsEntry->excludeCasterAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->getSpellName() : "unknown");
+        QStringView auraSpellName = auraSpell != nullptr ? auraSpell->getSpellName() : "unknown";
+        result += QString("  Ex Caster Aura Spell (%1) %2<br>").arg(restrictionsEntry->excludeCasterAuraSpell).arg(auraSpellName);
     }
 
     if (restrictionsEntry->excludeTargetAuraSpell != 0)
     {
         const auto* auraSpell = sDataStorage->GetSpellEntry(restrictionsEntry->excludeTargetAuraSpell);
-        result += QString("  Ex Target Aura Spell (%1) %2<br>")
-                      .arg(restrictionsEntry->excludeTargetAuraSpell)
-                      .arg(auraSpell != nullptr ? auraSpell->getSpellName() : "unknown");
+        QStringView auraSpellName = auraSpell != nullptr ? auraSpell->getSpellName() : "unknown";
+        result += QString("  Ex Target Aura Spell (%1) %2<br>").arg(restrictionsEntry->excludeTargetAuraSpell).arg(auraSpellName);
     }
 }
 
@@ -854,8 +840,8 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
         value = floor(value + 0.5f);
     }
 
-    int32_t basePointsMinINT = static_cast<int32_t>(std::min(basePoints.at(0), basePoints.at(1)));
-    int32_t basePointsMaxINT = static_cast<int32_t>(std::max(basePoints.at(0), basePoints.at(1)));
+    const int32_t basePointsMinINT = static_cast<int32_t>(std::min(basePoints.at(0), basePoints.at(1)));
+    const int32_t basePointsMaxINT = static_cast<int32_t>(std::max(basePoints.at(0), basePoints.at(1)));
     result += QString("Calculated BasePoints (before modifiers). Min = %1, max = %2, random points = %3, SpellScalingId = %4<br>").arg(basePointsMinINT).arg(basePointsMaxINT).arg(randomPoints).arg(spellEntry->getSpellLevelsId());
 }
 
@@ -897,21 +883,20 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
                 continue;
             }
 
-            {
-                bool hasFamilyFlag = false;
-                for (uint8_t i = 0; i < MAX_SPELL_FAMILY_FLAGS; ++i)
-                {
-                    if (thisEffClassOptions->SpellFamilyFlags[i] & otherSpellClassOpts->SpellFamilyFlags[i])
-                    {
-                        hasFamilyFlag = true;
-                        break;
-                    }
-                }
 
-                if (!hasFamilyFlag)
+            bool hasFamilyFlag = false;
+            for (uint8_t i = 0; i < MAX_SPELL_FAMILY_FLAGS; ++i)
+            {
+                if (thisEffClassOptions->SpellFamilyFlags[i] & otherSpellClassOpts->SpellFamilyFlags[i])
                 {
-                    continue;
+                    hasFamilyFlag = true;
+                    break;
                 }
+            }
+
+            if (!hasFamilyFlag)
+            {
+                continue;
             }
 
             const auto& skillLineAbilities = sDataStorage->GetSkillLineAbilityEntries();
@@ -926,50 +911,52 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
 
     auto printSpellTriggerInfo = [this](QString& result, const SpellEffectEntry* effectInfo)
     {
-        if (effectInfo->getEffectTriggerSpell() != 0)
+        if (effectInfo->getEffectTriggerSpell() == 0)
         {
-            if (const auto* triggerSpell = sDataStorage->GetSpellEntry(effectInfo->getEffectTriggerSpell()))
+            return;
+        }
+
+        const auto* triggerSpell = sDataStorage->GetSpellEntry(effectInfo->getEffectTriggerSpell());
+        if (triggerSpell == nullptr)
+        {
+            result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
+            return;
+        }
+
+        result += "<span style=\"color:green; font-weight: bold\">";
+        result += QString("   Trigger spell (%1) %2. Chance = %3<br>")
+                      .arg(triggerSpell->getId())
+                      .arg(triggerSpell->GetSpellNameRank())
+                      .arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
+
+        if (!triggerSpell->getDescription().isEmpty())
+        {
+            result += QString("   Description: %1<br>").arg(triggerSpell->getDescription());
+        }
+
+        if (!triggerSpell->getToolTip().isEmpty())
+        {
+            result += QString("ToolTip: %1<br>").arg(triggerSpell->getToolTip());
+        }
+
+        result += "</span>";
+
+        if (const auto* triggerAuraOptions = sDataStorage->GetSpellAuraOptionsEntry(triggerSpell->getSpellAuraOptionsId()))
+        {
+            result += QString("Charges - %1<br>").arg(triggerAuraOptions->ProcCharges);
+            result += printLine;
+
+            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                result += "<span style=\"color:green; font-weight: bold\">";
-                result += QString("   Trigger spell (%1) %2. Chance = %3<br>")
-                              .arg(triggerSpell->getId())
-                              .arg(triggerSpell->GetSpellNameRank())
-                              .arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
-
-                if (!triggerSpell->getDescription().isEmpty())
+                const uint32_t mask = 1U << i;
+                if ((triggerAuraOptions->ProcTypeMask & mask) != 0)
                 {
-                    result += QString("   Description: %1<br>").arg(triggerSpell->getDescription());
-                }
-
-                if (!triggerSpell->getToolTip().isEmpty())
-                {
-                    result += QString("ToolTip: %1<br>").arg(triggerSpell->getToolTip());
-                }
-
-                result += "</span>";
-
-                if (const auto* triggerAuraOptions = sDataStorage->GetSpellAuraOptionsEntry(triggerSpell->getSpellAuraOptionsId()))
-                {
-                    result += QString("Charges - %1<br>").arg(triggerAuraOptions->ProcCharges);
-                    result += printLine;
-
-                    for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
-                    {
-                        const uint32_t mask = 1U << i;
-                        if ((triggerAuraOptions->ProcTypeMask & mask) != 0)
-                        {
-                            result += sSpellWorkJson->GetSpellProcDescription(mask);
-                            result += "<br>";
-                        }
-                    }
-
-                    result += printLine;
+                    result += sSpellWorkJson->GetSpellProcDescription(mask);
+                    result += "<br>";
                 }
             }
-            else
-            {
-                result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
-            }
+
+            result += printLine;
         }
     };
 
@@ -1152,81 +1139,70 @@ void SpellEffectEntry::GenerateExtraInfo()
 
     using strRepFormatData = std::pair<QString /*strToRep*/, int32_t /*effectValue*/>;
 
+    auto FormatMiscValueSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> miscValues = {{ {":MiscValue:", getEffectMiscValue() }, { ":MiscValueB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : miscValues)
         {
-            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                continue;
+                m_extraInformation.replace(strToRep, QString::number(value), Qt::CaseInsensitive);
             }
-
-            m_extraInformation.replace(strToRep, QString::number(value), Qt::CaseInsensitive);
         }
-    }
+    };
 
+    auto FormatAreaEntryNameSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> areaEntryNames = {{ {":AreaEntryNameMiscVal:", getEffectMiscValue() }, { ":AreaEntryNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : areaEntryNames)
         {
-            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                continue;
+                const auto* areaInfo = sDataStorage->GetAreaTableEntry(value);
+                m_extraInformation.replace(strToRep, areaInfo != nullptr ? areaInfo->GetName().toString() : "Unknown", Qt::CaseInsensitive);
             }
-
-            const auto* areaInfo = sDataStorage->GetAreaTableEntry(value);
-            m_extraInformation.replace(strToRep, areaInfo != nullptr ? areaInfo->GetName().toString() : "Unknown", Qt::CaseInsensitive);
         }
-    }
+    };
 
+    auto FormatUnitModNameSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> unitModStat = {{ {":UnitModNameMiscVal:", getEffectMiscValue() }, { ":UnitModNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : unitModStat)
         {
-            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                continue;
+                m_extraInformation.replace(strToRep, sSpellWorkJson->GetUnitModName(value).toString(), Qt::CaseInsensitive);
             }
-
-            const auto statName = sSpellWorkJson->GetUnitModName(value);
-            m_extraInformation.replace(strToRep, QString(statName.data()), Qt::CaseInsensitive);
         }
-    }
+    };
 
+    auto FormatSpellModNameSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> spellMod = {{ {":SpellModNameMiscVal:", getEffectMiscValue() }, { ":SpellModNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : spellMod)
         {
-            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                continue;
+                m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellModName(value).toString(), Qt::CaseInsensitive);
             }
-
-            const auto statName = sSpellWorkJson->GetSpellModName(value);
-            m_extraInformation.replace(strToRep, QString(statName.data()), Qt::CaseInsensitive);
         }
-    }
+    };
 
+    auto FormatFactionNameSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> factionName = {{ {":FactionNameMiscVal:", getEffectMiscValue() }, { ":FactionNameMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : factionName)
         {
-            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                continue;
-            }
-
-            if (const auto* factionEntry = sDataStorage->GetFactionEntry(value))
-            {
-                m_extraInformation.replace(strToRep, factionEntry->Name, Qt::CaseInsensitive);
-            }
-            else
-            {
-                m_extraInformation.replace(strToRep, QString("<b>Cannot find entry %1 in Faction.dbc</b><br>").arg(value), Qt::CaseInsensitive);
+                const auto* factionEntry = sDataStorage->GetFactionEntry(value);
+                QString factionName = factionEntry != nullptr ? factionEntry->Name : QString("<b>Cannot find entry %1 in Faction.dbc</b><br>").arg(value);
+                m_extraInformation.replace(strToRep, factionName, Qt::CaseInsensitive);
             }
         }
-    }
+    };
 
+    auto FormatCombatRatingListSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> combatRating = {{ {":CBRatingListMiscVal:", getEffectMiscValue() }, { ":CBRatingListMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : combatRating)
@@ -1255,24 +1231,25 @@ void SpellEffectEntry::GenerateExtraInfo()
             {
                 ratingsStr = "Unknown";
             }
+
             m_extraInformation.replace(strToRep, ratingsStr, Qt::CaseInsensitive);
         }
-    }
+    };
 
+    auto FormatScreenEffectSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> screenEffect = {{ {":ScreenEffectMiscVal:", getEffectMiscValue() }, { ":ScreenEffectMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : screenEffect)
         {
-            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                continue;
+                const auto* _screenEffect = sDataStorage->GetScreenEffectEntry(value);
+                m_extraInformation.replace(strToRep, _screenEffect != nullptr ? _screenEffect->GetName().toString() : "unknown", Qt::CaseInsensitive);
             }
-
-            const auto* _screenEffect = sDataStorage->GetScreenEffectEntry(value);
-            m_extraInformation.replace(strToRep, _screenEffect != nullptr ? _screenEffect->GetName().toString() : "unknown", Qt::CaseInsensitive);
         }
-    }
+    };
 
+    auto FormatOverrideSpellSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> overrideSpellList = {{ {":OverrideSpellListMiscVal:", getEffectMiscValue() }, { ":OverrideSpellListMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : overrideSpellList)
@@ -1310,8 +1287,9 @@ void SpellEffectEntry::GenerateExtraInfo()
                 m_extraInformation.replace(strToRep, result, Qt::CaseInsensitive);
             }
         }
-    }
+    };
 
+    auto FormatMechanicImmunitiesSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunitiesMiscVal:", getEffectMiscValue() }, { ":MechanicImmunitiesMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : mechanicImmunities)
@@ -1345,28 +1323,35 @@ void SpellEffectEntry::GenerateExtraInfo()
 
             m_extraInformation.replace(strToRep, result, Qt::CaseInsensitive);
         }
-    }
+    };
 
+    auto FormatMechanicImmunityNameSymbol = [&]
     {
         const std::array<const strRepFormatData, 2> mechanicImmunities = {{ {":MechanicImmunityMiscVal:", getEffectMiscValue() }, { ":MechanicImmunityMiscValB:", getEffectMiscValueB() } }};
         for (const auto& [strToRep, value] : mechanicImmunities)
         {
-            if (!m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
+            if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                continue;
+                m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellMechanicName(value).toString(), Qt::CaseInsensitive);
             }
-
-            m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellMechanicName(value).toString(), Qt::CaseInsensitive);
         }
-    }
+    };
 
-    if (m_extraInformation.contains(":EffectItemType:", Qt::CaseInsensitive))
+    auto FormatEffectItemTypeSymbol = [&]
     {
-        m_extraInformation.replace(":EffectItemType:", QString::number(getEffectItemType()), Qt::CaseInsensitive);
-    }
+        if (m_extraInformation.contains(":EffectItemType:", Qt::CaseInsensitive))
+        {
+            m_extraInformation.replace(":EffectItemType:", QString::number(getEffectItemType()), Qt::CaseInsensitive);
+        }
+    };
 
-    if (m_extraInformation.contains(":EffectItemTypeName:", Qt::CaseInsensitive))
+    auto FormatEffectItemTypeNameSymbol = [&]
     {
+        if (!m_extraInformation.contains(":EffectItemTypeName:", Qt::CaseInsensitive))
+        {
+            return;
+        }
+
         QString itemName;
         if (getEffectItemType() == 0)
         {
@@ -1379,136 +1364,121 @@ void SpellEffectEntry::GenerateExtraInfo()
         }
 
         m_extraInformation.replace(":EffectItemTypeName:", itemName, Qt::CaseInsensitive);
-    }
+    };
+
+    auto FormatSummonPropertyIdSymbol = [&]
+    {
+        if (!m_extraInformation.contains(":SummonCategoryId:", Qt::CaseInsensitive))
+        {
+            return;
+        }
+
+        const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
+        m_extraInformation.replace(":SummonCategoryId:", QString::number(summonProp != nullptr ? summonProp->Id : 0), Qt::CaseInsensitive);
+    };
+
+    auto FormatSummonPropertyNameSymbol = [&]
+    {
+        if (!m_extraInformation.contains(":SummonCategoryName:", Qt::CaseInsensitive))
+        {
+            return;
+        }
+
+        const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
+        QString categoryName = sSpellWorkJson->GetSummonCategoryName(summonProp != nullptr ? summonProp->CategoryId : 0).toString();
+        m_extraInformation.replace(":SummonCategoryName:", categoryName, Qt::CaseInsensitive);
+    };
+
+    auto FormatSummonTypeNameIdSymbol = [&]
+    {
+        if (!m_extraInformation.contains(":SummonPropTitleId:", Qt::CaseInsensitive))
+        {
+            return;
+        }
+
+        const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
+        m_extraInformation.replace(":SummonPropTitleId:", QString::number(summonProp != nullptr ? summonProp->SummonTypeNameId : 0), Qt::CaseInsensitive);
+    };
+
+    auto FormatSummonTypeNameSymbol = [&]
+    {
+        if (!m_extraInformation.contains(":SummonPropTitleName:", Qt::CaseInsensitive))
+        {
+            return;
+        }
+
+        const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
+        QString summonTypeName = sSpellWorkJson->GetSummonTypeName(summonProp != nullptr ? summonProp->SummonTypeNameId : 0).toString();
+        m_extraInformation.replace(":SummonPropTitleName:", summonTypeName, Qt::CaseInsensitive);
+    };
+
+    auto FormatSummonFlagsSymbol = [&]
+    {
+        if (!m_extraInformation.contains(":SummonPropFlags:", Qt::CaseInsensitive))
+        {
+            return;
+        }
+
+        const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
+        m_extraInformation.replace(":SummonPropFlags:", QString::number(summonProp != nullptr ? summonProp->Flags : 0), Qt::CaseInsensitive);
+    };
+
+    auto FormatSummonFlagNamesSymbol = [&]
+    {
+        if (!m_extraInformation.contains(":SummonPropFlagNames:", Qt::CaseInsensitive))
+        {
+            return;
+        }
+
+        const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
+        QString result;
+        if (summonProp != nullptr && summonProp->Flags != 0)
+        {
+            for (uint8_t id = 1; id <= MAX_UINT32_BITMASK_INDEX; ++id)
+            {
+                const uint32_t flag = 1U << (id - 1);
+                if ((summonProp->Flags & flag) == 0)
+                {
+                    continue;
+                }
+
+                if (!result.isEmpty())
+                {
+                    result += ", ";
+                }
+
+                result += sSpellWorkJson->GetSummonPropertyFlagName(flag);
+            }
+        }
+
+        if (result.isEmpty())
+        {
+            result = "None";
+        }
+        m_extraInformation.replace(":SummonPropFlagNames:", result, Qt::CaseInsensitive);
+    };
+
+    // Apply formatting
+    FormatMiscValueSymbol();
+    FormatAreaEntryNameSymbol();
+    FormatUnitModNameSymbol();
+    FormatSpellModNameSymbol();
+    FormatFactionNameSymbol();
+    FormatCombatRatingListSymbol();
+    FormatScreenEffectSymbol();
+    FormatOverrideSpellSymbol();
+    FormatMechanicImmunitiesSymbol();
+    FormatMechanicImmunityNameSymbol();
+    FormatEffectItemTypeSymbol();
+    FormatEffectItemTypeNameSymbol();
 
     if (getEffect() == SPELL_EFFECT_SUMMON || getEffect() == SPELL_EFFECT_SUMMON_PET)
     {
-        auto GenSummonPropertyId = [&]
-        {
-            if (!m_extraInformation.contains(":SummonCategoryId:", Qt::CaseInsensitive))
-            {
-                return;
-            }
-
-            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
-            {
-                m_extraInformation.replace(":SummonCategoryId:", QString::number(summonProp->Id), Qt::CaseInsensitive);
-            }
-            else
-            {
-                m_extraInformation.replace(":SummonCategoryId:", "0", Qt::CaseInsensitive);
-            }
-
-        };
-
-        auto GenSummonPropertyName = [&]
-        {
-            if (!m_extraInformation.contains(":SummonCategoryName:", Qt::CaseInsensitive))
-            {
-                return;
-            }
-
-            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
-            {
-                m_extraInformation.replace(":SummonCategoryName:", sSpellWorkJson->GetSummonCategoryName(summonProp->CategoryId).toString(), Qt::CaseInsensitive);
-            }
-            else
-            {
-                m_extraInformation.replace(":SummonCategoryName:", sSpellWorkJson->GetSummonCategoryName(0).toString(), Qt::CaseInsensitive);
-            }
-        };
-
-        auto GenSummonTypeNameId = [&]
-        {
-            if (!m_extraInformation.contains(":SummonPropTitleId:", Qt::CaseInsensitive))
-            {
-                return;
-            }
-
-            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
-            {
-                m_extraInformation.replace(":SummonPropTitleId:", QString::number(summonProp->SummonTypeNameId), Qt::CaseInsensitive);
-            }
-            else
-            {
-                m_extraInformation.replace(":SummonPropTitleId:", "0", Qt::CaseInsensitive);
-            }
-        };
-
-        auto GenSummonTypeName = [&]
-        {
-            if (!m_extraInformation.contains(":SummonPropTitleName:", Qt::CaseInsensitive))
-            {
-                return;
-            }
-
-            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
-            {
-                m_extraInformation.replace(":SummonPropTitleName:", sSpellWorkJson->GetSummonTypeName(summonProp->SummonTypeNameId).toString(), Qt::CaseInsensitive);
-            }
-            else
-            {
-                m_extraInformation.replace(":SummonPropTitleName:", sSpellWorkJson->GetSummonTypeName(0).toString(), Qt::CaseInsensitive);
-            }
-        };
-
-        auto GenSummonFlags = [&]
-        {
-            if (!m_extraInformation.contains(":SummonPropFlags:", Qt::CaseInsensitive))
-            {
-                return;
-            }
-
-            if (const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB()))
-            {
-                m_extraInformation.replace(":SummonPropFlags:", QString::number(summonProp->Flags), Qt::CaseInsensitive);
-            }
-            else
-            {
-                m_extraInformation.replace(":SummonPropFlags:", "0", Qt::CaseInsensitive);
-            }
-        };
-
-        auto GenSummonFlagNames = [&]
-        {
-            if (!m_extraInformation.contains(":SummonPropFlagNames:", Qt::CaseInsensitive))
-            {
-                return;
-            }
-
-            const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
-            QString result;
-            if (summonProp != nullptr && summonProp->Flags != 0)
-            {
-                for (uint8_t id = 1; id <= MAX_UINT32_BITMASK_INDEX; ++id)
-                {
-                    const uint32_t flag = 1U << (id - 1);
-                    if ((summonProp->Flags & flag) == 0)
-                    {
-                        continue;
-                    }
-
-                    if (!result.isEmpty())
-                    {
-                        result += ", ";
-                    }
-
-                    result += sSpellWorkJson->GetSummonPropertyFlagName(flag);
-                }
-            }
-
-            if (result.isEmpty())
-            {
-                result = "None";
-            }
-            m_extraInformation.replace(":SummonPropFlagNames:", result, Qt::CaseInsensitive);
-        };
-
-        GenSummonPropertyId();
-        GenSummonPropertyName();
-        GenSummonTypeNameId();
-        GenSummonTypeName();
-        GenSummonFlags();
-        GenSummonFlagNames();
+        FormatSummonPropertyIdSymbol();
+        FormatSummonPropertyNameSymbol();
+        FormatSummonTypeNameIdSymbol();
+        FormatSummonTypeNameSymbol();
+        FormatSummonFlagsSymbol();
+        FormatSummonFlagNamesSymbol();
     }
 }
