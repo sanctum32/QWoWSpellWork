@@ -37,15 +37,9 @@ private:
     QLabel m_connectionStatusLabel;
     QLabel m_advFilterStatusLabel;
 
-    struct
-    {
-        SpellWork::Filters::SpellSearchFilter m_spellSearchFilter;
+    SpellWork::Filters::SpellSearchFilter m_searchFilterData;
 
-        // Stores selected spell result list row id
-        int32_t m_selectedSpellRowId{-1};
-    } spellInfoTab;
-
-    // Generic functions
-    static void PerformSpellSearch(QStringView spellNameOrId, bool searchById, bool searchByName, QTableWidget* resultList, const SpellWork::Filters::SpellSearchFilter& filter, QLabel* resultCounterLabel);
-    static void ClearResults(QTableWidget* resultList);
+    // Shared functions
+    void PerformSpellSearch();
+    void ClearAndResetSearchResults();
 };

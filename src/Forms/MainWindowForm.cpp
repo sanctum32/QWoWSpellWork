@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     UpdateAdvFilterStatus(false);
 
     // resultList
-    ClearResults(ui.resultList);
+    ClearAndResetSearchResults();
 
     // statusBar
     ui.statusBar->addPermanentWidget(&m_advFilterStatusLabel);
@@ -59,27 +59,18 @@ void MainWindow::UpdateAdvFilterStatus(bool hasFilter)
 
 void MainWindow::onSearchBtnClicked()
 {
-    PerformSpellSearch(ui.spellIdNameInput->text(), ui.searchByIdCheckBox->isChecked(), ui.searchByNameCheckBox->isChecked(), ui.resultList, spellInfoTab.m_spellSearchFilter, ui.resultCountLabel);
-    spellInfoTab.m_selectedSpellRowId = -1;
+    PerformSpellSearch();
 }
 
 void MainWindow::onSpellIdNameInputReturnPressed()
 {
-    PerformSpellSearch(ui.spellIdNameInput->text(), ui.searchByIdCheckBox->isChecked(), ui.searchByNameCheckBox->isChecked(), ui.resultList, spellInfoTab.m_spellSearchFilter, ui.resultCountLabel);
-    spellInfoTab.m_selectedSpellRowId = -1;
+    PerformSpellSearch();
 }
 
 void MainWindow::onResultListClick(QTableWidgetItem *item)
 {
-    if (spellInfoTab.m_selectedSpellRowId == item->row())
-    {
-        return;
-    }
-
-    spellInfoTab.m_selectedSpellRowId = item->row();
-
     // Select only number field
-    const auto* spellRowItem = ui.resultList->item(spellInfoTab.m_selectedSpellRowId, 0);
+    const auto* spellRowItem = ui.resultList->item(item->row(), 0);
     if (spellRowItem == nullptr)
     {
         return;
@@ -133,20 +124,20 @@ void MainWindow::onScalingSliderUpdate()
 
 void MainWindow::onFiltersBtnClick()
 {
-    SearchFilterForm* filter = new SearchFilterForm(&spellInfoTab.m_spellSearchFilter, this);
+    SearchFilterForm* filter = new SearchFilterForm(&m_searchFilterData, this);
     filter->setAttribute(Qt::WA_DeleteOnClose);
 
     filter->OnCloseOrApplyEventFn = [this]()
     {
-        const bool hasBasicFilters = spellInfoTab.m_spellSearchFilter.m_genericFilter.HasData();
-        const bool hasSpellFieldFilters = std::ranges::any_of(spellInfoTab.m_spellSearchFilter.m_spellEntryFieldsFilter, [](const auto& filter)
-                                                              {
-                                                                  return filter.HasData();
-                                                              });
-        const bool hasSpellEffectFilters = std::ranges::any_of(spellInfoTab.m_spellSearchFilter.m_spellEffectFieldsFilter, [](const auto& filter)
-                                                               {
-                                                                   return filter.HasData();
-                                                               });
+        const bool hasBasicFilters = m_searchFilterData.m_genericFilter.HasData();
+        const bool hasSpellFieldFilters = std::ranges::any_of(m_searchFilterData.m_spellEntryFieldsFilter, [](const auto& filter)
+        {
+            return filter.HasData();
+        });
+        const bool hasSpellEffectFilters = std::ranges::any_of(m_searchFilterData.m_spellEffectFieldsFilter, [](const auto& filter)
+        {
+            return filter.HasData();
+        });
 
         UpdateAdvFilterStatus(hasBasicFilters || hasSpellFieldFilters || hasSpellEffectFilters);
     };
@@ -156,7 +147,6 @@ void MainWindow::onFiltersBtnClick()
 
 void MainWindow::onClearResultsBtn()
 {
-    spellInfoTab.m_selectedSpellRowId = -1;
     ui.spellIdNameInput->clear();
     ui.resultCountLabel->setText("Found 0 results");
     ui.levelScalingSlider->setValue(1);
@@ -164,43 +154,36 @@ void MainWindow::onClearResultsBtn()
     ui.comboPointsSlider->setValue(0);
     ui.comboScalingText->setText("Combo Points: 0");
     ui.spellInfoText->clear();
-    ClearResults(ui.resultList);
+    ClearAndResetSearchResults();
 }
 
-// General functions
-/*static*/ void MainWindow::PerformSpellSearch(QStringView spellNameOrId, bool searchById, bool searchByName, QTableWidget* resultList, const SpellWork::Filters::SpellSearchFilter& filter, QLabel* resultCounterLabel)
+void MainWindow::PerformSpellSearch()
 {
-    assert(resultList != nullptr);
+    ClearAndResetSearchResults();
+
     const auto startMS = QDateTime::currentMSecsSinceEpoch();
-
-    ClearResults(resultList);
-
     if (sDataStorage->GetSpellEntries().empty())
     {
-        if (resultCounterLabel != nullptr)
+        if (ui.resultCountLabel != nullptr)
         {
-            resultCounterLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+            ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         }
         return;
     }
 
+    QStringView spellNameOrId = ui.spellIdNameInput->text();
     uint32_t spellId = 0;
+    const bool searchById = ui.searchByIdCheckBox->isChecked();
+    const bool searchByName = ui.searchByNameCheckBox->isChecked();
     if (!searchById && !searchByName)
     {
-        resultCounterLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+        ui.resultCountLabel->setText(QString("Found: 0 records in %1 milliseconds").arg(QDateTime::currentMSecsSinceEpoch() - startMS));
         return;
     }
 
     if (searchById)
     {
-        try
-        {
-            spellId = spellNameOrId.toInt();
-        }
-        catch(...)
-        {
-            spellId = 0;
-        }
+        spellId = ui.spellIdNameInput->text().toInt();
     }
 
     // Prepare spell effect filter entries
@@ -210,27 +193,27 @@ void MainWindow::onClearResultsBtn()
     std::optional<uint32_t> spellTargetA;
     std::optional<uint32_t> spellTargetB;
 
-    if (const auto* spellFamily = filter.m_genericFilter.GetSpellFamily())
+    if (const auto* spellFamily = m_searchFilterData.m_genericFilter.GetSpellFamily())
     {
         spellFamilyId = *spellFamily;
     }
 
-    if (const auto* spellAuraType = filter.m_genericFilter.GetSpellAuraType())
+    if (const auto* spellAuraType = m_searchFilterData.m_genericFilter.GetSpellAuraType())
     {
         auraTypeId = *spellAuraType;
     }
 
-    if (const auto* spellEffect = filter.m_genericFilter.GetSpellEffect())
+    if (const auto* spellEffect = m_searchFilterData.m_genericFilter.GetSpellEffect())
     {
         spellEffectId = *spellEffect;
     }
 
-    if (const auto* spellTarget_A = filter.m_genericFilter.GetSpellTargetA())
+    if (const auto* spellTarget_A = m_searchFilterData.m_genericFilter.GetSpellTargetA())
     {
         spellTargetA = *spellTarget_A;
     }
 
-    if (const auto* spelltarget_B = filter.m_genericFilter.GetSpellTargetB())
+    if (const auto* spelltarget_B = m_searchFilterData.m_genericFilter.GetSpellTargetB())
     {
         spellTargetB = *spelltarget_B;
     }
@@ -241,7 +224,7 @@ void MainWindow::onClearResultsBtn()
     {
         // Spell.dbc filter
         {
-            const auto& spellDbcFilter = filter.m_spellEntryFieldsFilter.at(i);
+            const auto& spellDbcFilter = m_searchFilterData.m_spellEntryFieldsFilter.at(i);
             const auto* fieldId = spellDbcFilter.GetFieldId();
             const auto* cmpType = spellDbcFilter.GetCompareType();
             const auto& cmpValue = spellDbcFilter.GetCompareValue();
@@ -253,7 +236,7 @@ void MainWindow::onClearResultsBtn()
 
         // SpellEffect.dbc filter
         {
-            const auto& spellEffectsDbcFilter = filter.m_spellEffectFieldsFilter.at(i);
+            const auto& spellEffectsDbcFilter = m_searchFilterData.m_spellEffectFieldsFilter.at(i);
             const auto* fieldId = spellEffectsDbcFilter.GetFieldId();
             const auto* cmpType = spellEffectsDbcFilter.GetCompareType();
             const auto& cmpValue = spellEffectsDbcFilter.GetCompareValue();
@@ -268,14 +251,14 @@ void MainWindow::onClearResultsBtn()
     {
         const auto _id = itr.first;
         const auto& _spellInfo = itr.second;
-        bool canInsert = spellNameOrId.isEmpty();
-        if (!canInsert && spellId != 0 && _id == spellId)
+        bool canInsert = false;
+        if (spellId != 0 && _id == spellId)
         {
             canInsert = true;
         }
 
         // Find by name
-        if (!canInsert && searchByName && _spellInfo.getSpellName().contains(spellNameOrId.toString(), Qt::CaseInsensitive))
+        if (!canInsert && searchByName && _spellInfo.getSpellName().contains(spellNameOrId, Qt::CaseInsensitive))
         {
             canInsert = true;
         }
@@ -332,20 +315,14 @@ void MainWindow::onClearResultsBtn()
         }
 
         // Spell.dbc filter
-        if (std::ranges::any_of(spellAttrFilter, [_spellInfo](const auto& compareParam)
-            {
-                return !compareParam.DoCheck(_spellInfo);
-            }))
+        if (std::ranges::any_of(spellAttrFilter, [_spellInfo](const auto& compareParam) { return !compareParam.DoCheck(_spellInfo); }))
         {
             continue;
         }
 
         // SpellEffect.dbc filter
         // return spells which has least one effect having effect matching field value
-        if (std::ranges::any_of(spellEffectAttrFilter, [](const auto& compareParam)
-            {
-                return compareParam.hasData;
-            }))
+        if (std::ranges::any_of(spellEffectAttrFilter, [](const auto& compareParam) { return compareParam.hasData; }))
         {
             canInsert = false;
             for (const auto& filter : spellEffectAttrFilter)
@@ -355,10 +332,7 @@ void MainWindow::onClearResultsBtn()
                     continue;
                 }
 
-                if (std::ranges::any_of(_spellInfo.m_spellEffects, [filter](const auto* effectInfo)
-                    {
-                        return effectInfo != nullptr && filter.DoCheck(*effectInfo);
-                    }))
+                if (std::ranges::any_of(_spellInfo.m_spellEffects, [filter](const auto* effectInfo) { return effectInfo != nullptr && filter.DoCheck(*effectInfo); }))
                 {
                     canInsert = true;
                     break;
@@ -368,34 +342,34 @@ void MainWindow::onClearResultsBtn()
 
         if (canInsert)
         {
-            int rowId = resultList->rowCount();
-            resultList->insertRow(rowId);
-            resultList->setItem(rowId, 0, new QTableWidgetItem(QString::number(_id)));
-            resultList->setItem(rowId, 1, new QTableWidgetItem(_spellInfo.getSpellName()));
+            int rowId = ui.resultList->rowCount();
+            ui.resultList->insertRow(rowId);
+            ui.resultList->setItem(rowId, 0, new QTableWidgetItem(QString::number(_id)));
+            ui.resultList->setItem(rowId, 1, new QTableWidgetItem(_spellInfo.getSpellName()));
         }
     }
 
-    resultCounterLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(resultList->rowCount()).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
+    ui.resultCountLabel->setText(QString("Found: %1 records in %2 milliseconds").arg(ui.resultList->rowCount()).arg(QDateTime::currentMSecsSinceEpoch() - startMS));
 }
 
-/*static*/ void MainWindow::ClearResults(QTableWidget* resultList)
+void MainWindow::ClearAndResetSearchResults()
 {
-    for (int row = 0; row < resultList->rowCount(); ++row)
+    for (int row = 0; row < ui.resultList->rowCount(); ++row)
     {
-        for (int col = 0; col < resultList->columnCount(); ++col)
+        for (int col = 0; col < ui.resultList->columnCount(); ++col)
         {
-            QWidget *widget = resultList->cellWidget(row, col);
+            QWidget *widget = ui.resultList->cellWidget(row, col);
             if (widget) {
                 delete widget;
             }
         }
     }
 
-    resultList->clear();
-    resultList->setColumnCount(2);
-    resultList->setRowCount(0);
-    resultList->verticalHeader()->setVisible(false);
-    resultList->setHorizontalHeaderLabels(QStringList() << "ID" << "Name");
-    resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    resultList->horizontalHeader()->resizeSection(0, 55);
+    ui.resultList->clear();
+    ui.resultList->setColumnCount(2);
+    ui.resultList->setRowCount(0);
+    ui.resultList->verticalHeader()->setVisible(false);
+    ui.resultList->setHorizontalHeaderLabels(QStringList() << "ID" << "Name");
+    ui.resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    ui.resultList->horizontalHeader()->resizeSection(0, 55);
 }
