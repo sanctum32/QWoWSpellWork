@@ -86,12 +86,14 @@ void LoadSQLData(const char* tableName, const char* query, T& container, const S
                            nullptr, 0) == nullptr)
     {
         qCDebug(SQL) << "Failed to connect. Error: " << mysql_error(sqlConn);
+        mysql_close(sqlConn);
         return;
     }
 
     if (mysql_query(sqlConn, query) != 0)
     {
         qCDebug(DataStores) << "failed to data from \"" << tableName << "\" SQL table. Error: " << mysql_error(sqlConn);
+        mysql_close(sqlConn);
         return;
     }
 
@@ -99,6 +101,7 @@ void LoadSQLData(const char* tableName, const char* query, T& container, const S
     if (result == nullptr)
     {
         qCDebug(DataStores) << "failed to data from \"" << tableName << "\" SQL table. Error: " << mysql_error(sqlConn);
+        mysql_close(sqlConn);
         return;
     }
 
