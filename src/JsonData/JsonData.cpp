@@ -8,7 +8,53 @@
 Q_LOGGING_CATEGORY(JSON, "spellwork.json");
 
 template<class T>
-bool ReadBasicArrayFromFile(const QString fileName, T& container, const QString keyName = "Id", const QString nameValName = "Name")
+void ReadBasicJsonArrayPairData(T& container, const QJsonArray& jsonArray, QString jsonFileName, QString arrayName, QString keyName, QString keyValueName)
+{
+    for (const auto& dataArray : jsonArray)
+    {
+        if (!dataArray.isObject())
+        {
+            continue;
+        }
+
+        const auto& dataArrayObj = dataArray.toObject();
+        if (!dataArrayObj.contains(keyName) || !dataArrayObj.contains(keyName))
+        {
+            continue;
+        }
+
+        using keyType = typename T::key_type;
+        const keyType _keyId = static_cast<keyType>(dataArrayObj.value(keyName).toDouble());
+
+        if (container.contains(_keyId))
+        {
+            if (!arrayName.isEmpty())
+            {
+                qCDebug(JSON) << "Tried to load array \"" << arrayName << "\" (" << keyName << ": " << _keyId << ") data, but value data already exists! Skipped";
+            }
+            else
+            {
+                qCDebug(JSON) << "Tried to load array data for " << keyName << " '" << _keyId << "', but value data already exists! Skipped";
+            }
+        }
+        else
+        {
+            container[_keyId] = dataArrayObj.value(keyValueName).toString();
+        }
+    }
+
+    if (!arrayName.isEmpty())
+    {
+        qCDebug(JSON) << "Loaded " << container.size() << " \"" << arrayName << "\" array data from file \"" << jsonFileName << "\"!";
+    }
+    else
+    {
+        qCDebug(JSON) << "Loaded " << container.size() << " array data from file \"" << jsonFileName << "\"!";
+    }
+}
+
+template<class T>
+bool ReadBasicArrayPairFromFile(QString fileName, T& container, QString keyName = "Id", QString keyValueName = "Name")
 {
     return SpellWorkJson::OpenJson(fileName, [&](const QJsonDocument& json)
     {
@@ -18,37 +64,12 @@ bool ReadBasicArrayFromFile(const QString fileName, T& container, const QString 
             return false;
         }
 
-        const auto& jsonArray = json.array();
-        for (const auto& jsonArrayItem : std::as_const(jsonArray))
-        {
-            const auto& arrayObj = jsonArrayItem.toObject();
-
-            using keyType = typename T::key_type;
-            const keyType _keyId = static_cast<keyType>(arrayObj.value(keyName).toDouble());
-            const QString _nameStr = arrayObj.value(nameValName).toString();
-
-            if (container.contains(_keyId))
-            {
-                qCDebug(JSON) << fileName << "\" has duplicate Id " << QString::number(_keyId) << ". Skipping";
-                continue;
-            }
-
-            container[_keyId] = _nameStr;
-        }
-
-        if (container.empty())
-        {
-            qCDebug(JSON) << "Failed to load data from " << fileName << " data. Related container is empty!";
-            return false;
-        }
-
+        ReadBasicJsonArrayPairData(container, json.array(), fileName, {}, keyName, keyValueName);
         return true;
     });
 }
 
-// Reads json file
-// returns 1 on failure
-bool SpellWorkJson::OpenJson(const QString& fileName, std::function<bool(const QJsonDocument& json)> handle)
+/*static*/ bool SpellWorkJson::OpenJson(const QString& fileName, std::function<void(const QJsonDocument& json)> readJsonDataFn)
 {
     qCDebug(JSON) << "Loading: " << fileName;
 
@@ -66,266 +87,139 @@ bool SpellWorkJson::OpenJson(const QString& fileName, std::function<bool(const Q
             return false;
         }
 
-        if (handle(json))
-        {
-            qCDebug(JSON) << "Successfully loaded data from " << fileName << ".";
-            return true;
-        }
+        readJsonDataFn(json);
+        qCDebug(JSON) << "Successfully loaded data from " << fileName << ".";
+        return true;
     }
 
     qCDebug(JSON) << "Failed to loaded data from " << fileName << ".";
     return false;
 }
 
-bool SpellWorkJson::LoadJsonData()
+void SpellWorkJson::LoadJsonData()
 {
-    if (!OpenJson("./json/SpellSchools.json", [&](const QJsonDocument& json)
+    OpenJson("./json/SpellSchools.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())
         {
             qCDebug(JSON) << "Json file \"SpellSchools.json\" is not object type";
-            return false;
+            return;
         }
 
-        const auto& document = json.object();
-        const auto& schoolArrayObj = document.value("SpellSchool").toArray();
-        for (const auto& objArray : std::as_const(schoolArrayObj))
+        const auto& jsonFileObject = json.object();
+
+        if (jsonFileObject.contains("SpellSchool") && jsonFileObject.value("SpellSchool").isArray())
         {
-            const auto& schoolArray = objArray.toObject();
-            const uint32_t _keyId = static_cast<uint32_t>(schoolArray.value("Id").toDouble());
-
-            if (m_spellSchoolNames.contains(_keyId))
-            {
-                qCDebug(JSON) << "\"./json/SpellSchools.json\" has duplicate SpellSchool Id " << QString::number(_keyId) << ". Skipping";
-                continue;
-            }
-
-            m_spellSchoolNames[_keyId] = schoolArray.value("Name").toString();
+            ReadBasicJsonArrayPairData(m_spellSchoolNames, jsonFileObject.value("SpellSchool").toArray(), "SpellSchools.json", "SpellSchool", "Id", "Name");
         }
-
-        if (m_spellSchoolNames.empty())
+        else
         {
-            qCDebug(JSON) << "Failed to load SpellSchools data!";
-            return false;
+            qCDebug(JSON) << "Array \"SpellSchool\" does not exists or is not array in file \"SpellSchools.json\"!";
         }
 
-        const auto& schoolMaskArray = document.value("SpellSchoolMask").toArray();
-        for (const auto& objArray : std::as_const(schoolMaskArray))
+        if (jsonFileObject.contains("SpellSchoolMask") && jsonFileObject.value("SpellSchoolMask").isArray())
         {
-            const auto& schoolArray = objArray.toObject();
-            const uint32_t _keyId = static_cast<uint32_t>(schoolArray.value("Id").toDouble());
-
-            if (m_spellSchoolMaskNames.contains(_keyId))
-            {
-                qCDebug(JSON) << "\"./json/SpellSchools.json\" has duplicate SpellSchoolMask Id " << QString::number(_keyId) << ". Skipping";
-                continue;
-            }
-
-            m_spellSchoolMaskNames[_keyId] = schoolArray.value("Name").toString();
+            ReadBasicJsonArrayPairData(m_spellSchoolMaskNames, jsonFileObject.value("SpellSchool").toArray(), "SpellSchools.json", "SpellSchoolMask", "Id", "Name");
         }
-
-        if (m_spellSchoolMaskNames.empty())
+        else
         {
-            qCDebug(JSON) << "Failed to load SpellSchools mask data!";
-            return false;
+            qCDebug(JSON) << "Array \"SpellSchoolMask\" does not exists or is not array in file \"SpellSchools.json\"!";
         }
+    });
 
-        return true;
-    }))
-    {
-        return false;
-    }
-
-    if (!OpenJson("./json/SpellInterrupt.json", [&](const QJsonDocument& json)
+    OpenJson("./json/SpellInterrupt.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())
         {
             qCDebug(JSON) << "Json file \"SpellInterrupt.json\" is not Object type";
-            return false;
+            return;
         }
 
-        const auto& document = json.object();
+        const auto& jsonFileObject = json.object();
+
+        if (jsonFileObject.contains("SpellInterruptFlags") && jsonFileObject.value("SpellInterruptFlags").isArray())
         {
-            const auto& jsonArray = document.value("SpellInterruptFlags").toArray();
-            for (const auto& spellInterruptFlag : std::as_const(jsonArray))
-            {
-                const auto& spellinterruptObj = spellInterruptFlag.toObject();
-                const uint32_t _keyId = static_cast<uint32_t>(spellinterruptObj.value("Flag").toDouble());
-
-                if (m_spellInterruptFlagNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SpellInterrupt.json\" has duplicate SpellInterruptFlags Id " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_spellInterruptFlagNames[_keyId] = spellinterruptObj.value("Name").toString();
-            }
-
-            if (m_spellInterruptFlagNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load SpellInterruptFlags data!";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_spellInterruptFlagNames, jsonFileObject.value("SpellInterruptFlags").toArray(), "SpellInterrupt.json", "SpellInterruptFlags", "Id", "Name");
         }
-
+        else
         {
-            auto& _AuraInterruptFlags = m_auraInterruptFlagNames[0];
-            const auto& jsonArray = document.value("AuraInterruptFlags").toArray();
-            for (const auto& auraInterruptFlag : std::as_const(jsonArray))
-            {
-                const auto& auraInterruptObj = auraInterruptFlag.toObject();
-                const uint32_t _keyId = static_cast<uint32_t>(auraInterruptObj.value("Flag").toDouble());
-
-                if (_AuraInterruptFlags.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags Id " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                _AuraInterruptFlags[_keyId] = auraInterruptObj.value("Name").toString();
-            }
-
-            if (_AuraInterruptFlags.empty())
-            {
-                qCDebug(JSON) << "Failed to load AuraInterruptFlags data!";
-                return false;
-            }
+            qCDebug(JSON) << "Array \"SpellInterruptFlags\" does not exists or is not array in file \"SpellInterrupt.json\"!";
         }
 
+        if (jsonFileObject.contains("AuraInterruptFlags") && jsonFileObject.value("AuraInterruptFlags").isArray())
         {
-            auto& _AuraInterruptFlags = m_auraInterruptFlagNames[1];
-            const auto& jsonArray = document.value("AuraInterruptFlags2").toArray();
-            for (const auto& auraInterruptFlag : std::as_const(jsonArray))
-            {
-                const auto& auraInterruptObj = auraInterruptFlag.toObject();
-                const uint32_t _keyId = static_cast<uint32_t>(auraInterruptObj.value("Flag").toDouble());
-
-                if (_AuraInterruptFlags.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SpellInterrupt.json\" has duplicate AuraInterruptFlags2 Id " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                _AuraInterruptFlags[_keyId] = auraInterruptObj.value("Name").toString();
-            }
-
-            if (_AuraInterruptFlags.empty())
-            {
-                qCDebug(JSON) << "Failed to load AuraInterruptFlags2 data!";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_auraInterruptFlagNames[0], jsonFileObject.value("AuraInterruptFlags").toArray(), "SpellInterrupt.json", "AuraInterruptFlags", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"AuraInterruptFlags\" does not exists or is not array in file \"SpellInterrupt.json\"!";
         }
 
-        return true;
-        }))
-    {
-        return false;
-    }
+        if (jsonFileObject.contains("AuraInterruptFlags2") && jsonFileObject.value("AuraInterruptFlags2").isArray())
+        {
+            ReadBasicJsonArrayPairData(m_auraInterruptFlagNames[1], jsonFileObject.value("AuraInterruptFlags2").toArray(), "SpellInterrupt.json", "AuraInterruptFlags2", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"AuraInterruptFlags2\" does not exists or is not array in file \"SpellInterrupt.json\"!";
+        }
+    });
 
-    if (!OpenJson("./json/SpellAttributes.json", [&](const QJsonDocument& json)
+    OpenJson("./json/SpellAttributes.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())
         {
             qCDebug(JSON) << "Json file \"SpellAttributes.json\" is not Object type";
-            return false;
+            return;
         }
 
-        const auto& jsonObj = json.object();
+        const auto& jsonFileObject = json.object();
+
         for (uint8_t i = 0; i < MAX_SPELL_ATTRIBUTES; ++i)
         {
-            QString attributeName("AttributesEx" + QString::number(i));
-            const auto& attrArray = jsonObj.value(attributeName).toArray();
-            for (const auto& attrData : std::as_const(attrArray))
+            QString attributeName = QString("AttributesEx" + QString::number(i));
+
+            if (jsonFileObject.contains(attributeName) && jsonFileObject.value(attributeName).isArray())
             {
-                const auto& attrObj = attrData.toObject();
-                const uint32_t _keyId = attrObj.value("Flag").toInt();
-
-                if (m_spellAttributeNames[i].contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SpellAttributes.json\" has duplicate " << attributeName << " Flag " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_spellAttributeNames[i][attrObj.value("Flag").toInt()] = attrObj.value("Name").toString();
+                ReadBasicJsonArrayPairData(m_spellAttributeNames[i], jsonFileObject.value(attributeName).toArray(), "SpellAttributes.json", "AuraInterruptFlags2", "Flag", "Name");
             }
-
-            if (m_spellAttributeNames[i].empty())
+            else
             {
-                qCDebug(JSON) << "Failed to load " << attributeName << " from SpellAttributes";
-                return false;
+                qCDebug(JSON) << "Array \"" << attributeName << "\" does not exists or is not array in file \"SpellAttributes.json\"!";
             }
         }
+    });
 
-        return true;
-    }))
-    {
-        return false;
-    }
-
-    if (!OpenJson("./json/SpellTargets.json", [&](const QJsonDocument& json)
+    OpenJson("./json/SpellTargets.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())
         {
             qCDebug(JSON) << "Json file \"Spelltargets.json\" is not Object type";
-            return false;
+            return;
         }
 
-        const auto& jsonObj = json.object();
-        // SpellTargetNames
+        const auto& jsonFileObject = json.object();
+
+        if (jsonFileObject.contains("SpellTargetNames") && jsonFileObject.value("SpellTargetNames").isArray())
         {
-            const auto& attrArray = jsonObj.value("SpellTargetNames").toArray();
-            for (const auto& attrData : std::as_const(attrArray))
-            {
-                const auto& attrObj = attrData.toObject();
-                const uint32_t _keyId = attrObj.value("Id").toInt();
-
-                if (m_spellTargetNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SpellTargets.json\" has duplicate SpellTargetNames entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_spellTargetNames[_keyId] = attrObj.value("Name").toString();
-            }
-
-            if (m_spellTargetNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load SpellTargetNames from SpellTargets.json";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_spellTargetNames, jsonFileObject.value("SpellTargetNames").toArray(), "SpellTargets.json", "SpellTargetNames", "Id", "Name");
         }
-
-        // SpellCastTargetFlags
+        else
         {
-            const auto& attrArray = jsonObj.value("SpellCastTargetFlags").toArray();
-            for (const auto& attrData : std::as_const(attrArray))
-            {
-                const auto& attrObj = attrData.toObject();
-                const uint32_t _keyId = attrObj.value("Flag").toInt();
-
-                if (m_SpellTargetFlagNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SpellTargets.json\" has duplicate SpellCastTargetFlags entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_SpellTargetFlagNames[_keyId] = attrObj.value("Name").toString();
-            }
-
-            if (m_SpellTargetFlagNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load SpellTargetFlags from SpellTargets.json";
-                return false;
-            }
+            qCDebug(JSON) << "Array \"SpellTargetNames\" does not exists or is not array in file \"SpellTargets.json\"!";
         }
 
-        return true;
-      }))
-    {
-        return false;
-    }
+        if (jsonFileObject.contains("SpellCastTargetFlags") && jsonFileObject.value("SpellCastTargetFlags").isArray())
+        {
+            ReadBasicJsonArrayPairData(m_SpellTargetFlagNames, jsonFileObject.value("SpellCastTargetFlags").toArray(), "SpellTargets.json", "SpellCastTargetFlags", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"SpellCastTargetFlags\" does not exists or is not array in file \"SpellTargets.json\"!";
+        }
+    });
 
-    if (!OpenJson("./json/ItemSubclass.json", [&](const QJsonDocument& json)
+    OpenJson("./json/ItemSubclass.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())
         {
@@ -333,98 +227,61 @@ bool SpellWorkJson::LoadJsonData()
             return false;
         }
 
-        const auto& jsonObj = json.object();
-        // ItemSubclassWeapon
+        const auto& jsonFileObject = json.object();
+
+        if (jsonFileObject.contains("ItemSubclassWeapon") && jsonFileObject.value("ItemSubclassWeapon").isArray())
         {
-            const auto& attrArray = jsonObj.value("ItemSubclassWeapon").toArray();
-            for (const auto& attrData : std::as_const(attrArray))
-            {
-                const auto& attrObj = attrData.toObject();
-                const uint32_t _keyId = attrObj.value("Id").toInt();
-
-                if (m_itemSubClassWeaponNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/ItemSubclass.json\" has duplicate ItemSubclassWeapon entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_itemSubClassWeaponNames[_keyId] = attrObj.value("Name").toString();
-            }
-
-            if (m_itemSubClassWeaponNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load ItemSubclassWeapon entries from Itemsubclass.json";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_itemSubClassWeaponNames, jsonFileObject.value("ItemSubclassWeapon").toArray(), "ItemSubclass.json", "ItemSubclassWeapon", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"ItemSubclassWeapon\" does not exists or is not array in file \"ItemSubclass.json\"!";
         }
 
-        // ItemSubclassArmor
+        if (jsonFileObject.contains("ItemSubclassArmor") && jsonFileObject.value("ItemSubclassArmor").isArray())
         {
-            const auto& attrArray = jsonObj.value("ItemSubclassArmor").toArray();
-            for (const auto& attrData : std::as_const(attrArray))
-            {
-                const auto& attrObj = attrData.toObject();
-                const uint32_t _keyId = attrObj.value("Id").toInt();
-
-                if (m_itemSubclassArmorNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/ItemSubclass.json\" has duplicate ItemSubclassArmor entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_itemSubclassArmorNames[_keyId] = attrObj.value("Name").toString();
-            }
-
-            if (m_itemSubclassArmorNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load ItemSubclassArmor entries from Itemsubclass.json";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_itemSubclassArmorNames, jsonFileObject.value("ItemSubclassArmor").toArray(), "ItemSubclass.json", "ItemSubclassArmor", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"ItemSubclassArmor\" does not exists or is not array in file \"ItemSubclass.json\"!";
         }
 
-        // ItemSubclassJunk
+        if (jsonFileObject.contains("ItemSubclassJunk") && jsonFileObject.value("ItemSubclassJunk").isArray())
         {
-            const auto& attrArray = jsonObj.value("ItemSubclassJunk").toArray();
-            for (const auto& attrData : std::as_const(attrArray))
-            {
-                const auto& attrObj = attrData.toObject();
-                const uint32_t _keyId = attrObj.value("Id").toInt();
-
-                if (m_itemSubclassJunkNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/ItemSubclass.json\" has duplicate ItemSubclassJunk entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_itemSubclassJunkNames[_keyId] = attrObj.value("Name").toString();
-            }
-
-            if (m_itemSubclassJunkNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load ItemSubclassJunk entries from Itemsubclass.json";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_itemSubclassJunkNames, jsonFileObject.value("ItemSubclassJunk").toArray(), "SpellTargets.json", "ItemSubclassJunk", "Id", "Name");
         }
+        else
+        {
+            qCDebug(JSON) << "Array \"ItemSubclassArmor\" does not exists or is not array in file \"ItemSubclass.json\"!";
+        }
+
         return true;
-    }))
-    {
-        return false;
-    }
+    });
 
-    if (!OpenJson("./json/SpellEffects.json", [&](const QJsonDocument& json)
+    OpenJson("./json/SpellEffects.json", [&](const QJsonDocument& json)
     {
         if (!json.isArray())
         {
             qCDebug(JSON) << "Json file \"SpellEffects.json\" is not Array type";
-            return false;
+            return;
         }
 
         const auto& jsonArray = json.array();
         for (const auto& attrData : std::as_const(jsonArray))
         {
-            const auto& arrayData = attrData.toObject();
-            const uint32_t _keyId = arrayData.value("Id").toInt();
+            if (!attrData.isObject())
+            {
+                continue;
+            }
 
+            const auto& arrayData = attrData.toObject();
+            if (!arrayData.contains("Id") || !arrayData.contains("Name"))
+            {
+                continue;
+            }
+
+            const uint32_t _keyId = arrayData.value("Id").toInt();
             if (m_spellEffectInfo.contains(_keyId))
             {
                 qCDebug(JSON) << "\"./json/SpellEffects.json\" has duplicate entry " << QString::number(_keyId) << ". Skipping";
@@ -432,7 +289,8 @@ bool SpellWorkJson::LoadJsonData()
             }
 
             auto& effectInfo = m_spellEffectInfo[_keyId];
-            effectInfo.name                 = arrayData.value("Name").toString();
+            effectInfo.name = arrayData.value("Name").toString();
+
             if (!arrayData.value("EffectDetail").isNull())
             {
                 effectInfo.extraDetailFormatStr         = arrayData.value("EffectDetail").toString();
@@ -442,27 +300,26 @@ bool SpellWorkJson::LoadJsonData()
         if (m_spellEffectInfo.empty())
         {
             qCDebug(JSON) << "Failed to load entries from SpellEffects.json";
-            return false;
         }
+    });
 
-        return true;
-    }))
-    {
-        return false;
-    }
-
-    if (!OpenJson("./json/SpellAuraTypes.json", [&](const QJsonDocument& json)
+    OpenJson("./json/SpellAuraTypes.json", [&](const QJsonDocument& json)
     {
         if (!json.isArray())
         {
             qCDebug(JSON) << "Json file \"SpellAuraTypes.json\" is not Array type";
-            return false;
+            return;
         }
 
         const auto& jsonArray = json.array();
-        for (const auto& attrData : std::as_const(jsonArray))
+        for (const auto& attrData : jsonArray)
         {
             const auto& arrayData = attrData.toObject();
+            if (!arrayData.contains("Id") || !arrayData.contains("Name"))
+            {
+                continue;
+            }
+
             const uint32_t _keyId = arrayData.value("Id").toInt();
 
             if (m_spellAuraTypeNames.contains(_keyId))
@@ -473,111 +330,71 @@ bool SpellWorkJson::LoadJsonData()
 
             auto& effectInfo    = m_spellAuraTypeNames[_keyId];
             effectInfo.name     = arrayData.value("Name").toString();
-            if (!arrayData.value("EffectDetail").isNull())
+
+            if (arrayData.contains("EffectDetail") && !arrayData.value("EffectDetail").isNull())
             {
-                effectInfo.extraDetailFormatStr         = arrayData.value("EffectDetail").toString();
+                effectInfo.extraDetailFormatStr = arrayData.value("EffectDetail").toString();
             }
         }
 
         if (m_spellAuraTypeNames.empty())
         {
             qCDebug(JSON) << "Failed to load entries from SpellAuraTypes.json";
-            return false;
         }
+    });
 
-        return true;
-    }))
-    {
-        return false;
-    }
-
-    if (!OpenJson("./json/SummonProperties.json", [&](const QJsonDocument& json)
+    OpenJson("./json/SummonProperties.json", [&](const QJsonDocument& json)
     {
         if (!json.isObject())
         {
             qCDebug(JSON) << "Json file \"SummonProperties.json\" is not Object type";
-            return false;
+            return;
         }
 
-        const auto& jsonObj = json.object();
-        // SummonCategory
+        const auto& jsonFileObject = json.object();
+        if (jsonFileObject.contains("SummonCategory") && jsonFileObject.value("SummonCategory").isArray())
         {
-            const auto& categoryArray = jsonObj.value("SummonCategory").toArray();
-            for (const auto& category : std::as_const(categoryArray))
-            {
-                const auto& categoryObj = category.toObject();
-                const uint32_t _keyId = categoryObj.value("Id").toInt();
-
-                if (m_SummonPropCategoryNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has duplicate SummonCategory entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_SummonPropCategoryNames[_keyId] = categoryObj.value("Name").toString();
-            }
-
-            if (m_SummonPropCategoryNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load SummonCategory entries from SummonProperties.json";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_SummonPropCategoryNames, jsonFileObject.value("SummonCategory").toArray(), "SummonProperties.json", "SummonCategory", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"SummonCategory\" does not exists or is not array in file \"ItemSubclass.json\"!";
         }
 
-        // SummonTypeName
+        if (jsonFileObject.contains("SummonTypeName") && jsonFileObject.value("SummonTypeName").isArray())
         {
-            const auto& summTitleArray = jsonObj.value("SummonTypeName").toArray();
-            for (const auto& summTitle : std::as_const(summTitleArray))
-            {
-                const auto& summTitleObj = summTitle.toObject();
-                const uint32_t _keyId = summTitleObj.value("Id").toInt();
-
-                if (m_SummonPropSummTypeNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has duplicate SummonTypeName entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_SummonPropSummTypeNames[_keyId] = summTitleObj.value("Name").toString();
-            }
-
-            if (m_SummonPropSummTypeNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load SummonTypeName entries from SummonProperties.json";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_SummonPropSummTypeNames, jsonFileObject.value("SummonTypeName").toArray(), "SummonProperties.json", "SummonTypeName", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"SummonTypeName\" does not exists or is not array in file \"ItemSubclass.json\"!";
         }
 
-        // SummonFlags
+        if (jsonFileObject.contains("SummonFlags") && jsonFileObject.value("SummonFlags").isArray())
         {
-            const auto& summFlagsArray = jsonObj.value("SummonFlags").toArray();
-            for (const auto& summFlag : std::as_const(summFlagsArray))
-            {
-                const auto& summFlagObj = summFlag.toObject();
-                const uint32_t _keyId = summFlagObj.value("Flag").toInt();
-
-                if (m_SummonPropSummFlagNames.contains(_keyId))
-                {
-                    qCDebug(JSON) << "\"./json/SummonProperties.json\" has duplicate SummonFlags entry " << QString::number(_keyId) << ". Skipping";
-                    continue;
-                }
-
-                m_SummonPropSummFlagNames[_keyId] = summFlagObj.value("Name").toString();
-            }
-
-            if (m_SummonPropSummFlagNames.empty())
-            {
-                qCDebug(JSON) << "Failed to load SummonFlags entries from SummonProperties.json";
-                return false;
-            }
+            ReadBasicJsonArrayPairData(m_SummonPropSummFlagNames, jsonFileObject.value("SummonFlags").toArray(), "SummonProperties.json", "SummonFlags", "Id", "Name");
+        }
+        else
+        {
+            qCDebug(JSON) << "Array \"SummonFlags\" does not exists or is not array in file \"ItemSubclass.json\"!";
         }
 
-        // TypeNameIdOverwrite
+        if (jsonFileObject.contains("TypeNameIdOverwrite") && jsonFileObject.value("TypeNameIdOverwrite").isArray())
         {
-            const auto& propExtraArray = jsonObj.value("TypeNameIdOverwrite").toArray();
+            const auto& propExtraArray = jsonFileObject.value("TypeNameIdOverwrite").toArray();
             for (const auto& propExtra : std::as_const(propExtraArray))
             {
+                if (!propExtra.isObject())
+                {
+                    continue;
+                }
+
                 const auto& propExtraObj = propExtra.toObject();
+                if (!propExtraObj.contains("PropertyId") || !propExtraObj.contains("SummonTypeNameId"))
+                {
+                    continue;
+                }
+
                 const uint32_t propertyId = propExtraObj.value("PropertyId").toInt();
                 auto* summonProperty = const_cast<SummonPropertiesEntry*>(sDataStorage->GetSummonPropertiesEntry(propertyId));
                 if (summonProperty == nullptr)
@@ -597,34 +414,23 @@ bool SpellWorkJson::LoadJsonData()
                 summonProperty->SummonTypeNameId = summonTypeNameId;
             }
         }
+    });
 
-        return true;
-    }))
-    {
-        return false;
-    }
-
-    if (!ReadBasicArrayFromFile("./json/SpellMod.json", m_spellModOpNames) ||
-        !ReadBasicArrayFromFile("./json/SpellProc.json", m_spellProcFlagNames, "Flag") ||
-        !ReadBasicArrayFromFile("./json/SpellFamily.json", m_spellFamilyNames) ||
-        !ReadBasicArrayFromFile("./json/CombatRating.json", m_combatRatingNames) ||
-        !ReadBasicArrayFromFile("./json/UnitMods.json", m_unitModsNames) ||
-        !ReadBasicArrayFromFile("./json/SpellAuraStates.json", m_spellAuraStatesNames) ||
-        !ReadBasicArrayFromFile("./json/PowerTypes.json", m_powerTypeNames) ||
-        !ReadBasicArrayFromFile("./json/SpellMechanics.json", m_spellMechanicNames) ||
-        !ReadBasicArrayFromFile("./json/SpellDispelTypes.json", m_dispelNames) ||
-        !ReadBasicArrayFromFile("./json/ItemInventoryTypes.json", m_itemInventoryNames) ||
-        !ReadBasicArrayFromFile("./json/ItemClass.json", m_itemClassNames) ||
-        !ReadBasicArrayFromFile("./json/ShapeShiftForms.json", m_shapeshiftFormNames) ||
-        !ReadBasicArrayFromFile("./json/CreatureTypes.json", m_creatureTypeNames) ||
-        !ReadBasicArrayFromFile("./json/SpellDamageTypes.json", m_spellDamageTypeNames) ||
-        !ReadBasicArrayFromFile("./json/SpellPreventionTypes.json", m_spellPreventionTypeNames)
-    )
-    {
-        return false;
-    }
-
-    return true;
+    ReadBasicArrayPairFromFile("./json/SpellMod.json", m_spellModOpNames);
+    ReadBasicArrayPairFromFile("./json/SpellProc.json", m_spellProcFlagNames, "Flag");
+    ReadBasicArrayPairFromFile("./json/SpellFamily.json", m_spellFamilyNames);
+    ReadBasicArrayPairFromFile("./json/CombatRating.json", m_combatRatingNames);
+    ReadBasicArrayPairFromFile("./json/UnitMods.json", m_unitModsNames);
+    ReadBasicArrayPairFromFile("./json/SpellAuraStates.json", m_spellAuraStatesNames);
+    ReadBasicArrayPairFromFile("./json/PowerTypes.json", m_powerTypeNames);
+    ReadBasicArrayPairFromFile("./json/SpellMechanics.json", m_spellMechanicNames);
+    ReadBasicArrayPairFromFile("./json/SpellDispelTypes.json", m_dispelNames);
+    ReadBasicArrayPairFromFile("./json/ItemInventoryTypes.json", m_itemInventoryNames);
+    ReadBasicArrayPairFromFile("./json/ItemClass.json", m_itemClassNames);
+    ReadBasicArrayPairFromFile("./json/ShapeShiftForms.json", m_shapeshiftFormNames);
+    ReadBasicArrayPairFromFile("./json/CreatureTypes.json", m_creatureTypeNames);
+    ReadBasicArrayPairFromFile("./json/SpellDamageTypes.json", m_spellDamageTypeNames);
+    ReadBasicArrayPairFromFile("./json/SpellPreventionTypes.json", m_spellPreventionTypeNames);
 }
 
 QStringView SpellWorkJson::GetSpellSchoolName(uint32_t id) const

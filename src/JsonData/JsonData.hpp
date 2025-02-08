@@ -65,10 +65,10 @@ public:
     }
 
     // Data load - must be called once
-    bool LoadJsonData();
+    void LoadJsonData();
 
     // Opens json
-    static bool OpenJson(const QString& fileName, std::function<bool(const QJsonDocument& json)> handle);
+    static bool OpenJson(const QString& fileName, std::function<void(const QJsonDocument& json)> handle);
 
     // Data functions
     QStringView GetSpellSchoolName(uint32_t id) const;
