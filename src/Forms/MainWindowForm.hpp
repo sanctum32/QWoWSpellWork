@@ -21,9 +21,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void UpdateSqlStatus(bool success);
-    void UpdateAdvFilterStatus(bool hasFilter);
-
 private slots:
     void onSearchBtnClicked();
     void onSpellIdNameInputReturnPressed();
@@ -34,8 +31,6 @@ private slots:
 
 private:
     Ui::MainWindow ui;
-    QLabel m_connectionStatusLabel;
-    QLabel m_advFilterStatusLabel;
 
     SpellWork::Filters::SpellSearchFilter m_searchFilterData;
 

@@ -20,8 +20,6 @@ class SearchFilterForm : public QDialog
 public:
     SearchFilterForm(SpellWork::Filters::SpellSearchFilter* filterData, QWidget* parent = nullptr);
 
-    // used to perform certain tasks on form closure or settings applying
-    std::function<void()> OnCloseOrApplyEventFn;
 private slots:
     void onButtonClicked(QAbstractButton* button);
 

@@ -13,14 +13,9 @@ Q_LOGGING_CATEGORY(SPELLINFO_TAB, "spellwork.json");
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
-    UpdateAdvFilterStatus(false);
 
     // resultList
     ClearAndResetSearchResults();
-
-    // statusBar
-    ui.statusBar->addPermanentWidget(&m_advFilterStatusLabel);
-    ui.statusBar->addPermanentWidget(&m_connectionStatusLabel);
 
     // Signal connections
     QObject::connect(ui.searchBtn,        &QPushButton::clicked,     this, &MainWindow::onSearchBtnClicked);
@@ -33,30 +28,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 }
 
 MainWindow::~MainWindow() = default;
-
-void MainWindow::UpdateSqlStatus(bool success)
-{
-    if (success)
-    {
-        m_connectionStatusLabel.setText("SQL: <span style=\"color:green\">connected</span>");
-    }
-    else
-    {
-        m_connectionStatusLabel.setText("SQL: <span style=\"color:red\">not connected</span>");
-    }
-}
-
-void MainWindow::UpdateAdvFilterStatus(bool hasFilter)
-{
-    if (hasFilter)
-    {
-        m_advFilterStatusLabel.setText("Extra filters: <span style=\"color:green\">active</span>");
-    }
-    else
-    {
-        m_advFilterStatusLabel.setText("Extra filters: <span style=\"color:red\">inactive</span>");
-    }
-}
 
 void MainWindow::onSearchBtnClicked()
 {
@@ -119,22 +90,6 @@ void MainWindow::onFiltersBtnClick()
 {
     SearchFilterForm* filter = new SearchFilterForm(&m_searchFilterData, this);
     filter->setAttribute(Qt::WA_DeleteOnClose);
-
-    filter->OnCloseOrApplyEventFn = [this]()
-    {
-        const bool hasBasicFilters = m_searchFilterData.m_genericFilter.HasData();
-        const bool hasSpellFieldFilters = std::ranges::any_of(m_searchFilterData.m_spellEntryFieldsFilter, [](const auto& filter)
-        {
-            return filter.HasData();
-        });
-        const bool hasSpellEffectFilters = std::ranges::any_of(m_searchFilterData.m_spellEffectFieldsFilter, [](const auto& filter)
-        {
-            return filter.HasData();
-        });
-
-        UpdateAdvFilterStatus(hasBasicFilters || hasSpellFieldFilters || hasSpellEffectFilters);
-    };
-
     filter->open();
 }
 
@@ -354,22 +309,6 @@ void MainWindow::PerformSpellSearch()
 
 void MainWindow::ClearAndResetSearchResults()
 {
-    for (int row = 0; row < ui.resultList->rowCount(); ++row)
-    {
-        for (int col = 0; col < ui.resultList->columnCount(); ++col)
-        {
-            if (auto *widget = ui.resultList->cellWidget(row, col))
-            {
-                delete widget;
-            }
-        }
-    }
-
-    ui.resultList->clear();
-    ui.resultList->setColumnCount(2);
+    ui.resultList->clearContents();
     ui.resultList->setRowCount(0);
-    ui.resultList->verticalHeader()->setVisible(false);
-    ui.resultList->setHorizontalHeaderLabels(QStringList() << "ID" << "Name");
-    ui.resultList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    ui.resultList->horizontalHeader()->resizeSection(0, 55);
 }

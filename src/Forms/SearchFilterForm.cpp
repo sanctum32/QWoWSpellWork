@@ -196,8 +196,6 @@ void SearchFilterForm::onButtonClicked(QAbstractButton* button)
             }
         }
 
-        OnCloseOrApplyEventFn();
-
         QMessageBox msgBox;
         msgBox.setText("Filter settings were applied!");
         msgBox.setIcon(QMessageBox::Information);
@@ -205,9 +203,6 @@ void SearchFilterForm::onButtonClicked(QAbstractButton* button)
     }break;
     case QDialogButtonBox::Cancel:
     case QDialogButtonBox::Close:
-    {
-        OnCloseOrApplyEventFn();
-    }
     case QDialogButtonBox::Reset:
     {
         ui.SpellFamilyFilter->setCurrentIndex(-1);
@@ -295,8 +290,6 @@ void SearchFilterForm::closeEvent(QCloseEvent* e)
 {
     hide();
     e->ignore();
-
-    OnCloseOrApplyEventFn();
 }
 
 void SearchFilterForm::showEvent(QShowEvent* /*event*/)
