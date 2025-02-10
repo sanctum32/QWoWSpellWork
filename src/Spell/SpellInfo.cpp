@@ -496,9 +496,9 @@ inline void PrintSpellPowerInfo(QString& result, const SpellPowerEntry* spellPow
 inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_spellInterruptsEntry)
 {
     result += "<br>";
-    uint32_t interruptFlags = 0;
-    std::array<uint32_t, 2> auraInterruptFlags{};
-    std::array<uint32_t, 2> channelInterruptFlags{};
+    std::bitset<32> interruptFlags = 0;
+    std::array<std::bitset<32>, 2> auraInterruptFlags{};
+    std::array<std::bitset<32>, 2> channelInterruptFlags{};
     if (m_spellInterruptsEntry != nullptr)
     {
         interruptFlags = m_spellInterruptsEntry->InterruptFlags;
@@ -507,21 +507,23 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
     }
 
     QString interruptFlagsStr;
-    for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+    if (interruptFlags.any())
     {
-        const uint32_t flag = 1U << i;
-        if ((interruptFlags & flag) != 0)
+        for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
         {
-            if (!interruptFlagsStr.isEmpty())
+            const uint32_t flag = 1U << i;
+            if (interruptFlags == flag)
             {
-                interruptFlagsStr += ", ";
-            }
+                if (!interruptFlagsStr.isEmpty())
+                {
+                    interruptFlagsStr += ", ";
+                }
 
-            interruptFlagsStr += sSpellWorkJson->GetSpellInterruptFlagName(flag);
+                interruptFlagsStr += sSpellWorkJson->GetSpellInterruptFlagName(flag);
+            }
         }
     }
-
-    if (interruptFlagsStr.isEmpty())
+    else
     {
         interruptFlagsStr += sSpellWorkJson->GetSpellInterruptFlagName(0);
     }
@@ -529,60 +531,58 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
     std::array<QString, 2> auraFlagsStr;
     for (uint8_t flagId = 0; flagId < 2; ++flagId)
     {
-        for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+        if (auraInterruptFlags[flagId].any())
         {
-            const uint32_t flag = 1U << i;
-            if ((auraInterruptFlags[flagId] & flag) != 0)
+            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                if (!auraFlagsStr[flagId].isEmpty())
+                const uint32_t flag = 1U << i;
+                if (auraInterruptFlags[flagId] == flag)
                 {
-                    auraFlagsStr[flagId] += ", ";
-                }
+                    if (!auraFlagsStr[flagId].isEmpty())
+                    {
+                        auraFlagsStr[flagId] += ", ";
+                    }
 
-                auraFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+                    auraFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+                }
             }
         }
-    }
-
-    for (uint8_t i = 0; i < 2; ++i)
-    {
-        if (auraFlagsStr[i].isEmpty())
+        else
         {
-            auraFlagsStr[i] += sSpellWorkJson->GetAuraInterruptFlagName(0, i);
+            auraFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(0, flagId);
         }
     }
 
     std::array<QString, 2> channelFlagsStr;
     for (uint8_t flagId = 0; flagId < 2; ++flagId)
     {
-        for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
+        if (channelInterruptFlags[flagId].any())
         {
-            const uint32_t flag = 1U << i;
-            if ((channelInterruptFlags[flagId] & flag) != 0)
+            for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                if (!channelFlagsStr[flagId].isEmpty())
+                const uint32_t flag = 1U << i;
+                if (channelInterruptFlags[flagId] == flag)
                 {
-                    channelFlagsStr[flagId] += ", ";
-                }
+                    if (!channelFlagsStr[flagId].isEmpty())
+                    {
+                        channelFlagsStr[flagId] += ", ";
+                    }
 
-                channelFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+                    channelFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+                }
             }
         }
-    }
-
-    for (uint8_t i = 0; i < 2; ++i)
-    {
-        if (channelFlagsStr[i].isEmpty())
+        else
         {
-            channelFlagsStr[i] += sSpellWorkJson->GetAuraInterruptFlagName(0, i);
+            channelFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(0, flagId);
         }
     }
 
-    result += QString("Spell interrupt flags: 0x%1 (%2)<br>").arg(interruptFlags, 8, 16, QLatin1Char('0')).arg(interruptFlagsStr);
-    result += QString("Aura interrupt flags: 0x%1 (%2)<br>").arg(auraInterruptFlags[0], 8, 16, QLatin1Char('0')).arg(auraFlagsStr[0]);
-    result += QString("Aura interrupt flags2: 0x%1 (%2)<br>").arg(auraInterruptFlags[1], 8, 16, QLatin1Char('0')).arg(auraFlagsStr[1]);
-    result += QString("Channel interrupt flags: 0x%1 (%2)<br>").arg(channelInterruptFlags[0], 8, 16, QLatin1Char('0')).arg(channelFlagsStr[0]);
-    result += QString("Channel interrupt flags2: 0x%1 (%2)<br>").arg(channelInterruptFlags[1], 8, 16, QLatin1Char('0')).arg(channelFlagsStr[1]);
+    result += QString("Spell interrupt flags: 0x%1 (%2)<br>").arg(interruptFlags.to_ulong(), 8, 16, QLatin1Char('0')).arg(interruptFlagsStr);
+    result += QString("Aura interrupt flags: 0x%1 (%2)<br>").arg(auraInterruptFlags[0].to_ulong(), 8, 16, QLatin1Char('0')).arg(auraFlagsStr[0]);
+    result += QString("Aura interrupt flags2: 0x%1 (%2)<br>").arg(auraInterruptFlags[1].to_ulong(), 8, 16, QLatin1Char('0')).arg(auraFlagsStr[1]);
+    result += QString("Channel interrupt flags: 0x%1 (%2)<br>").arg(channelInterruptFlags[0].to_ulong(), 8, 16, QLatin1Char('0')).arg(channelFlagsStr[0]);
+    result += QString("Channel interrupt flags2: 0x%1 (%2)<br>").arg(channelInterruptFlags[1].to_ulong(), 8, 16, QLatin1Char('0')).arg(channelFlagsStr[1]);
 }
 
 static void PrintSpellRestrictionsInfo(QString& result, const SpellAuraRestrictionsEntry* restrictionsEntry)

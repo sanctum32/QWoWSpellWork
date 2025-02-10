@@ -1,6 +1,7 @@
 #pragma once
 #include <QString>
 #include <array>
+#include <bitset>
 #include <cstdint>
 #include <map>
 
@@ -415,9 +416,9 @@ struct SpellInterruptsEntry
     explicit SpellInterruptsEntry(DBCFileLoader::Record const& record);
 
     uint32_t    Id{};                                           // 0
-    std::array<uint32_t, 2> AuraInterruptFlags{};               // 1 - 2       m_auraInterruptFlags
-    std::array<uint32_t, 2> ChannelInterruptFlags{};            // 3 - 4       m_channelInterruptFlags
-    uint32_t    InterruptFlags{};                               // 5       m_interruptFlags
+    std::array<std::bitset<32>, 2> AuraInterruptFlags{};        // 1 - 2       m_auraInterruptFlags
+    std::array<std::bitset<32>, 2> ChannelInterruptFlags{};     // 3 - 4       m_channelInterruptFlags
+    std::bitset<32>    InterruptFlags{};                        // 5       m_interruptFlags
 
     static constexpr const char* GetDBCFormat()
     {
