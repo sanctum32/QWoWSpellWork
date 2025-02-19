@@ -37,4 +37,4 @@ const uint8_t *AdvancedSearchData::GetCompareType() const
 {
     return m_compareType.first != -1 ? &m_compareType.second : nullptr;
 }
-}
+}  // namespace SpellWork::Filters

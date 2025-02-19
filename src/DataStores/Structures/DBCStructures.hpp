@@ -11,7 +11,7 @@
 #include "mysql/mysql.h"
 #endif // SPELLWORK_BUILD_SQL
 
-enum class CompareTypes;
+enum class CompareTypes : uint8_t;
 
 enum DBCBaseEnums : uint8_t
 {
@@ -41,10 +41,10 @@ struct SpellRadiusEntry;
 struct SpellEffectEntry
 {
     SpellEffectEntry() = default;
-    SpellEffectEntry(DBCFileLoader::Record const& record);
+    explicit SpellEffectEntry(DBCFileLoader::Record const& record);
 
 #ifdef SPELLWORK_BUILD_SQL
-    SpellEffectEntry(const MYSQL_ROW& result);
+    explicit SpellEffectEntry(const MYSQL_ROW& result);
 #endif // SPELLWORK_BUILD_SQL
 
     inline bool HasSpellClassMask() const { return getEffectSpellClassMaskA() != 0 || getEffectSpellClassMaskB() != 0 || getEffectSpellClassMaskC() != 0; }
@@ -636,7 +636,7 @@ struct SpellDifficultyEntry
 #endif // SPELLWORK_BUILD_SQL
 
     uint32_t   Id{};                                                    // 0
-    std::array<uint32_t, MAX_DUNGEON_DIFFICULTY> DifficultySpellID;      // 1 - 4 instance modes: 10N, 25N, 10H, 25H or Normal/Heroic if only 1-2 is set, if 3-4 is 0 then Mode-2
+    std::array<uint32_t, MAX_DUNGEON_DIFFICULTY> DifficultySpellID{};  // 1 - 4 instance modes: 10N, 25N, 10H, 25H or Normal/Heroic if only 1-2 is set, if 3-4 is 0 then Mode-2
 
     static constexpr const char* GetDBCFormat()
     {

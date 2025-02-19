@@ -88,7 +88,7 @@ void MainWindow::onScalingSliderUpdate()
 
 void MainWindow::onFiltersBtnClick()
 {
-    SearchFilterForm* filter = new SearchFilterForm(&m_searchFilterData, this);
+    auto* filter = new SearchFilterForm(&m_searchFilterData, this);
     filter->setAttribute(Qt::WA_DeleteOnClose);
     filter->open();
 }
@@ -309,6 +309,16 @@ void MainWindow::PerformSpellSearch()
 
 void MainWindow::ClearAndResetSearchResults()
 {
+    const int rowCount = ui.resultList->rowCount();
+    const int colCount = ui.resultList->columnCount();
+    for (int row = 0; row < rowCount; ++row)
+    {
+        for (int col = 0; col < colCount; ++col)
+        {
+            delete ui.resultList->takeItem(row, col);
+        }
+    }
+
     ui.resultList->clearContents();
     ui.resultList->setRowCount(0);
 }

@@ -10,7 +10,7 @@
 struct DBCFieldAttrInfo;
 
 // in actual defitions only one flag should be used.
-enum class CompareTypes
+enum class CompareTypes : uint8_t
 {
     None                = 0,
     SignedNumber        = 1,
@@ -111,12 +111,12 @@ struct DBCFieldDataCompare
 {
     bool hasData = false;
 
-    ConditionCompareType m_compareType;
+    ConditionCompareType m_compareType{};
     std::optional<int32_t> m_int32val;
     std::optional<uint32_t> m_uint32val;
     std::optional<float> m_floatVal;
     std::optional<QString> m_textVal;
-    uint8_t m_fieldId;
+    uint8_t m_fieldId{};
 
     /**
      * @brief SetValues

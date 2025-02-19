@@ -342,6 +342,8 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
             }
             break;
         }
+        default:
+            break;
         }
     }
 
@@ -492,7 +494,6 @@ inline void PrintSpellPowerInfo(QString& result, const SpellPowerEntry* spellPow
     result += "<br>";
 }
 
-// TODO: add secondary channel interrupt and aura interrupt flags output
 inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_spellInterruptsEntry)
 {
     result += "<br>";
@@ -676,11 +677,10 @@ inline void PrintSpellCastRequirements(QString& result, const SpellCastingRequir
     result += "<br>";
 }
 
-inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, const SpellEffectEntry* effectEntry, uint8_t selectedLevel, uint8_t comboPoints)
+inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, const SpellEffectEntry* effectEntry, int selectedLevel, uint8_t comboPoints)
 {
     assert(spellEntry != nullptr && effectEntry != nullptr);
     result += QString("BasePoints = %1<br>").arg(effectEntry->getEffectBasePoints() + ((effectEntry->getEffectDieSides() == 0) ? 0 : 1));
-
 
     // Ported from SpellInfo::CalValue
     float basePointsPerLevel = effectEntry->getEffectRealPointsPerLevel();
@@ -694,25 +694,36 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
         float value = 0.0f;
         if (selectedLevel > 0 && spellEntry->m_scalingEntry->Class > 0)
         {
-            if (GtSpellScalingEntry const* gtScaling = sDataStorage->GetGtSpellScalingEntry(((spellEntry->m_scalingEntry->Class > 0 ? spellEntry->m_scalingEntry->Class : ((MAX_CLASSES - 1 /*last class*/) - spellEntry->m_scalingEntry->Class)) - 1) * 100 + selectedLevel - 1))
+            const uint32_t gtScalingId = ((spellEntry->m_scalingEntry->Class > 0 ? spellEntry->m_scalingEntry->Class : ((MAX_CLASSES - 1 /*last class*/) - spellEntry->m_scalingEntry->Class)) - 1) * 100 + selectedLevel - 1;
+            if (GtSpellScalingEntry const* gtScaling = sDataStorage->GetGtSpellScalingEntry(gtScalingId))
+            {
                 value = gtScaling->value;
+            }
 
             if (selectedLevel < spellEntry->m_scalingEntry->CastTimeMaxLevel && spellEntry->m_scalingEntry->CastTimeMax)
+            {
                 value *= float(spellEntry->m_scalingEntry->CastTimeMin + (selectedLevel - 1) * (spellEntry->m_scalingEntry->CastTimeMax - spellEntry->m_scalingEntry->CastTimeMin) / (spellEntry->m_scalingEntry->CastTimeMaxLevel - 1)) / float(spellEntry->m_scalingEntry->CastTimeMax);
+            }
 
             if (selectedLevel < spellEntry->m_scalingEntry->NerfMaxLevel)
+            {
                 value *= ((((1.0 - spellEntry->m_scalingEntry->NerfFactor) * (selectedLevel - 1)) / (spellEntry->m_scalingEntry->NerfMaxLevel - 1)) + spellEntry->m_scalingEntry->NerfFactor);
+            }
         }
 
         if (spellEntry->m_scalingEntry->ComboPointsCoefficient.at(effectEntry->getEffectIndex()) > 0.0f)
+        {
             comboDamage = spellEntry->m_scalingEntry->ComboPointsCoefficient.at(effectEntry->getEffectIndex()) * value;
+        }
 
         value *= spellEntry->m_scalingEntry->Coefficient.at(effectEntry->getEffectIndex());
         if (value >= 0.0f && value < 1.0f)
+        {
             value = 1.0f;
+        }
 
         basePoints.fill(value);
-        if (spellEntry->m_scalingEntry->Variance.at(effectEntry->getEffectIndex()))
+        if (spellEntry->m_scalingEntry->Variance.at(effectEntry->getEffectIndex()) > 0.0f)
         {
             float delta = std::fabs(spellEntry->m_scalingEntry->Variance.at(effectEntry->getEffectIndex()) * value * 0.5f);
             //value += frand(-delta, delta);
@@ -721,24 +732,30 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
             basePoints.at(1) += delta;
         }
 
-        basePoints.at(0) = round(basePoints.at(0));
-        basePoints.at(1) += round(basePoints.at(1));
+        basePoints.at(0) = std::roundf(basePoints.at(0));
+        basePoints.at(1) += std::roundf(basePoints.at(1));
         //basePoints = int32_t(round(value));
     }
     else
     {
         if (basePointsPerLevel != 0.0f)
         {
-            uint8_t level = selectedLevel;
+            float level = static_cast<float>(selectedLevel);
             if (spellEntry->m_spellLevelsEntry != nullptr)
             {
-                if (level > uint8_t(spellEntry->m_spellLevelsEntry->maxLevel) && spellEntry->m_spellLevelsEntry->maxLevel > 0)
-                    level = uint8_t(spellEntry->m_spellLevelsEntry->maxLevel);
-                else if (level < uint8_t(spellEntry->m_spellLevelsEntry->baseLevel))
-                    level = uint8_t(spellEntry->m_spellLevelsEntry->baseLevel);
+                if (level > static_cast<float>(spellEntry->m_spellLevelsEntry->maxLevel) && spellEntry->m_spellLevelsEntry->maxLevel > 0)
+                {
+                    level = static_cast<float>(spellEntry->m_spellLevelsEntry->maxLevel);
+                }
+                else if (level < static_cast<float>(spellEntry->m_spellLevelsEntry->baseLevel))
+                {
+                    level = static_cast<float>(spellEntry->m_spellLevelsEntry->baseLevel);
+                }
 
                 if (!spellEntry->HasAttribute(SPELL_ATTR0_PASSIVE))
-                    level -= uint8_t(spellEntry->m_spellLevelsEntry->spellLevel);
+                {
+                    level -= static_cast<float>(spellEntry->m_spellLevelsEntry->spellLevel);
+                }
             }
 
             basePoints.fill(level * basePointsPerLevel);
@@ -764,11 +781,11 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
 
             if (randomPoints >= 1)
             {
-                basePoints.at(1) = basePoints.at(0) + randomPoints;
+                basePoints.at(1) = basePoints.at(0) + static_cast<float>(randomPoints);
             }
             else
             {
-                basePoints.at(0) = basePoints.at(0) + randomPoints;
+                basePoints.at(0) += static_cast<float>(randomPoints);
             }
 
             break;
@@ -781,10 +798,12 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
     {
         // bonus amount from combo points
         if (comboPoints > 0 && spellEntry->HasAttribute(SPELL_ATTR1_FINISHING_MOVE_DAMAGE) && comboDamage != 0.f)
-            value += comboDamage * comboPoints;
+        {
+            value += comboDamage * static_cast<float>(comboPoints);
+        }
 
         if (spellEntry->m_spellLevelsEntry != nullptr && spellEntry->m_spellLevelsEntry->spellLevel > 0 && spellEntry->m_spellLevelsEntry->spellLevel != selectedLevel &&
-            !basePointsPerLevel && spellEntry->HasAttribute(SPELL_ATTR0_SCALES_WITH_CREATURE_LEVEL))
+            basePointsPerLevel <= 0.0f && spellEntry->HasAttribute(SPELL_ATTR0_SCALES_WITH_CREATURE_LEVEL))
         {
             bool canEffectScale = false;
             switch (effectEntry->getEffect())
@@ -832,12 +851,14 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
                 {
                     value *= casterScaler->ratio / spellScaler->ratio;
                     if (selectedLevel > 80)
-                        value *= (selectedLevel - 80) * 4.4f; // Cataclysm creatures have a way higher jump in stats than previous expansions so we use this estimated value based on combat log packet research
+                    {
+                        value *= static_cast<float>(selectedLevel - 80) * 4.4f; // Cataclysm creatures have a way higher jump in stats than previous expansions so we use this estimated value based on combat log packet research
+                    }
                 }
             }
         }
 
-        value = floor(value + 0.5f);
+        value = std::floor(value + 0.5f);
     }
 
     const int32_t basePointsMinINT = static_cast<int32_t>(std::min(basePoints.at(0), basePoints.at(1)));
@@ -849,7 +870,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
 {
     if (HasAttribute(SPELL_ATTR10_USE_SPELL_BASE_LEVEL_FOR_SCALING))
     {
-        scalingLevel = m_spellLevelsEntry != nullptr ? m_spellLevelsEntry->baseLevel : 1;
+        scalingLevel = m_spellLevelsEntry != nullptr ? static_cast<int>(m_spellLevelsEntry->baseLevel) : 1;
     }
 
     auto printSpellClassOptionsInfo = [this](QString& result, const SpellEffectEntry* effectInfo)
@@ -919,7 +940,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
         const auto* triggerSpell = sDataStorage->GetSpellEntry(effectInfo->getEffectTriggerSpell());
         if (triggerSpell == nullptr)
         {
-            result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
+            result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0);
             return;
         }
 
@@ -927,7 +948,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
         result += QString("   Trigger spell (%1) %2. Chance = %3<br>")
                       .arg(triggerSpell->getId())
                       .arg(triggerSpell->GetSpellNameRank())
-                      .arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0.0f);
+                      .arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0);
 
         if (!triggerSpell->getDescription().isEmpty())
         {
@@ -1106,7 +1127,7 @@ QString const SpellEntry::PrintBaseInfo(int scalingLevel) const
     PrintSpellCastTimeInfo(spellText, m_spellCastingTimeEntry);
     PrintSpellCooldownInfo(spellText, m_spellCooldownEntry);
     PrintSpellDurationInfo(spellText, m_spellDurationEntry);
-    PrintSpellPowerInfo(spellText, m_spellPowerEntry, getPowerType());
+    PrintSpellPowerInfo(spellText, m_spellPowerEntry, static_cast<int8_t>(getPowerType()));
     PrintInterruptInfo(spellText, m_spellInterruptsEntry);
     PrintSpellRestrictionsInfo(spellText, m_spellRestrictionsEntry);
     PrintSpellCastRequirements(spellText, m_spellCastingReqEntry);

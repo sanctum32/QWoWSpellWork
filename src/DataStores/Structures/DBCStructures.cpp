@@ -4,8 +4,6 @@
 
 SpellEffectEntry::SpellEffectEntry(DBCFileLoader::Record const& record)
 {
-    uint8_t colId = 0;
-
     _getId()                        = record.getUInt(0);
     _getEffect()                    = record.getUInt(1);
     _getEffectAmplitude()           = record.getFloat(2);
@@ -44,22 +42,22 @@ SpellEffectEntry::SpellEffectEntry(const MYSQL_ROW& row)
 {
     _getId()                        = std::stoul(row[0]);
     _getEffect()                    = std::stoul(row[1]);
-    _getEffectAmplitude()           = std::atof(row[2]);
+    _getEffectAmplitude()           = std::strtof(row[2], nullptr);
     _getEffectAura()                = std::stoul(row[3]);
     _getEffectAuraPeriod()          = std::stoul(row[4]);
     _getEffectBasePoints()          = std::stoi(row[5]);
-    _getEffectBonusCoefficient()    = std::atof(row[6]);
-    _getEffectChainAmplitude()      = std::atof(row[7]);
+    _getEffectBonusCoefficient()    = std::strtof(row[6], nullptr);
+    _getEffectChainAmplitude()      = std::strtof(row[7], nullptr);
     _getEffectChainTargets()        = std::stoul(row[8]);
     _getEffectDieSides()            = std::stoi(row[9]);
     _getEffectItemType()            = std::stoul(row[10]);
     _getEffectMechanic()            = std::stoul(row[11]);
     _getEffectMiscValue()           = std::stoi(row[12]);
     _getEffectMiscValueB()          = std::stoi(row[13]);
-    _getEffectPointsPerResource()   = std::atof(row[14]);
+    _getEffectPointsPerResource()   = std::strtof(row[14], nullptr);
     _getEffectMinRadiusIndex()      = std::stoul(row[15]);
     _getEffectMaxRadiusIndex()      = std::stoul(row[16]);
-    _getEffectRealPointsPerLevel()  = std::atof(row[17]);
+    _getEffectRealPointsPerLevel()  = std::strtof(row[17], nullptr);
     _getEffectSpellClassMaskA()     = std::stoul(row[18]);
     _getEffectSpellClassMaskB()     = std::stoul(row[19]);
     _getEffectSpellClassMaskC()     = std::stoul(row[20]);
@@ -506,7 +504,7 @@ SpellEntry::SpellEntry(const MYSQL_ROW& row)
     // 1 - 11
     for (uint8_t i = 0; i < MAX_SPELL_ATTRIBUTES; ++i)
     {
-        _fields[1 + i] = static_cast<uint32_t>(atoi(row[1 + i]));
+        _fields[1 + i] = static_cast<uint32_t>(std::stoul(row[1 + i]));
     }
 }
 #endif // SPELLWORK_BUILD_SQL

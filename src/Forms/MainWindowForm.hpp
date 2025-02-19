@@ -18,8 +18,8 @@ class MainWindow : public QMainWindow
 
     friend class SearchFilter;
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
 
 private slots:
     void onSearchBtnClicked();
@@ -30,7 +30,7 @@ private slots:
     void onClearResultsBtn();
 
 private:
-    Ui::MainWindow ui;
+    Ui::MainWindow ui{};
 
     SpellWork::Filters::SpellSearchFilter m_searchFilterData;
 

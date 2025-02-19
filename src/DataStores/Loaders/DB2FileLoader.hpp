@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <string_view>
@@ -26,15 +25,15 @@ public:
         friend class DB2FileLoader;
 
     public:
-        float getFloat(size_t field) const;
-        uint32_t getUInt(size_t field) const;
-        int32_t getInt(size_t field) const;
-        uint8_t getUInt8(size_t field) const;
-        int8_t getInt8(size_t field) const;
-        uint64_t getUInt64(size_t field) const;
-        int64_t getInt64(size_t field) const;
+        [[nodiscard]] float getFloat(size_t field) const;
+        [[nodiscard]] uint32_t getUInt(size_t field) const;
+        [[nodiscard]] int32_t getInt(size_t field) const;
+        [[nodiscard]] uint8_t getUInt8(size_t field) const;
+        [[nodiscard]] int8_t getInt8(size_t field) const;
+        [[nodiscard]] uint64_t getUInt64(size_t field) const;
+        [[nodiscard]] int64_t getInt64(size_t field) const;
 
-        const char *getString(size_t field) const;
+        [[nodiscard]] const char *getString(size_t field) const;
     };
 
     // Get record by id
@@ -69,7 +68,7 @@ private:
         int m_locale{};        // WDB2
         int m_unk5{};          // WDB2
 
-        inline bool IsHeaderValid() const
+        bool IsHeaderValid() const
         {
             // 'WDB2'
             return header == 0x32424457;
@@ -80,4 +79,3 @@ private:
     unsigned char *m_data{nullptr};
     unsigned char *m_stringTable{nullptr};
 };
-

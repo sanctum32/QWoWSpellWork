@@ -8,6 +8,8 @@ namespace SpellWork::Filters
     {
         GenericSearchFilter() = default;
 
+        GenericSearchFilter(GenericSearchFilter &&) = delete;
+        GenericSearchFilter &operator=(GenericSearchFilter &&) = delete;
         // Prevent copies
         GenericSearchFilter(const GenericSearchFilter&) = delete;
         GenericSearchFilter& operator=(const GenericSearchFilter&) = delete;
@@ -34,6 +36,8 @@ namespace SpellWork::Filters
     {
         AdvancedSearchData() = default;
 
+        AdvancedSearchData(AdvancedSearchData &&) = delete;
+        AdvancedSearchData &operator=(AdvancedSearchData &&) = delete;
         // Prevent copies
         AdvancedSearchData(const AdvancedSearchData&) = delete;
         AdvancedSearchData& operator=(const AdvancedSearchData&) = delete;
@@ -58,4 +62,4 @@ namespace SpellWork::Filters
         std::array<AdvancedSearchData, 2> m_spellEntryFieldsFilter;          // Spell.dbc entry fields filter
         std::array<AdvancedSearchData, 2> m_spellEffectFieldsFilter;         // SpellEffect.dbc entry fields filter
     };
-}
+}  // namespace SpellWork::Filters

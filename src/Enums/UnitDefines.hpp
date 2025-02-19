@@ -1,8 +1,9 @@
 #pragma once
 
-constexpr unsigned short MAX_CLASSES = 12;
+#include <cstdint>
+constexpr uint16_t MAX_CLASSES = 12;
 
-enum CombatRating
+enum CombatRating : uint8_t
 {
     CR_WEAPON_SKILL                     = 0,
     CR_DEFENSE_SKILL                    = 1, // Removed in 4.0.1
@@ -32,7 +33,7 @@ enum CombatRating
     CR_MASTERY                          = 25,
 };
 
-enum UnitMods
+enum UnitMods : uint8_t
 {
     UNIT_MOD_STAT_STRENGTH                                  = 0,    // UNIT_MOD_STAT_STRENGTH..UNIT_MOD_STAT_SPIRIT must be in existed order, it's accessed by index values of Stats enum.
     UNIT_MOD_STAT_AGILITY                                   = 1,

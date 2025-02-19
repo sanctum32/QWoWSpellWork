@@ -18,7 +18,7 @@ class SearchFilterForm : public QDialog
     Q_OBJECT
 
 public:
-    SearchFilterForm(SpellWork::Filters::SpellSearchFilter* filterData, QWidget* parent = nullptr);
+    explicit SearchFilterForm(SpellWork::Filters::SpellSearchFilter* filterData, QWidget* parent = nullptr);
 
 private slots:
     void onButtonClicked(QAbstractButton* button);
@@ -41,6 +41,6 @@ private slots:
 private:
     void closeEvent(QCloseEvent* /*e*/) override;
     void showEvent(QShowEvent *event) override;
-    Ui::SearchFilterForm ui;
+    Ui::SearchFilterForm ui{};
     SpellWork::Filters::SpellSearchFilter* m_filterData;
 };

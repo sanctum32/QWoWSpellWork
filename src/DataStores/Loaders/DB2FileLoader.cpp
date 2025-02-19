@@ -1,6 +1,7 @@
 #include "DB2FileLoader.hpp"
 #include "SharedDefines.hpp"
 #include "DataStoresDefines.hpp"
+#include <cassert>
 #include <cstdio>
 #include <cstring>
 #include <format>
@@ -22,9 +23,11 @@ bool DB2FileLoader::Load(std::string_view filename, char const* fmt)
         m_data = nullptr;
     }
 
-    FILE* f = fopen(filename.data(), "rb");
+    FILE* f = fopen(filename.data(), "rbe");
     if (!f)
+    {
         return false;
+    }
 
     if (fread(&db2Header.header, 4, 1, f) != 1)                        // Signature
     {
@@ -140,9 +143,13 @@ bool DB2FileLoader::Load(std::string_view filename, char const* fmt)
     {
         m_fieldsOffset[i] = m_fieldsOffset[i - 1];
         if (fmt[i - 1] == 'b')
-            m_fieldsOffset[i] += 1;
+        {
+            ++m_fieldsOffset[i];
+        }
         else
+        {
             m_fieldsOffset[i] += 4;
+        }
     }
 
     m_data = new unsigned char[db2Header.m_recordSize * db2Header.m_recordCount + db2Header.m_stringSize];

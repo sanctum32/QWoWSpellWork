@@ -19,9 +19,9 @@ enum : uint8_t
 struct ItemSparseEntry
 {
     ItemSparseEntry() = default;
-    ItemSparseEntry(DB2FileLoader::Record const& record);
+    explicit ItemSparseEntry(DB2FileLoader::Record const& record);
 #ifdef SPELLWORK_BUILD_SQL
-    ItemSparseEntry(const MYSQL_ROW& row);
+    explicit ItemSparseEntry(const MYSQL_ROW& row);
 #endif // SPELLWORK_BUILD_SQL
 
     uint32_t     ID{};                                                    // 0

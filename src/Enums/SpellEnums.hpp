@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-enum
+enum : uint8_t
 {
     MAX_SPELL_ATTRIBUTES                = 11,   // Max spell attributes
     MAX_SPELL_REAGENTS                  = 8,
@@ -9,7 +9,7 @@ enum
     MAX_SPELL_EFFECTS                   = 3,    // Total effects of spell
 };
 
-enum SpellEffects
+enum SpellEffects : uint8_t
 {
     SPELL_EFFECT_NONE                               = 0,
     SPELL_EFFECT_INSTAKILL                          = 1,
@@ -197,7 +197,7 @@ enum SpellEffects
 };
 
 // Spell aura states
-enum AuraStateType
+enum AuraStateType : uint8_t
 {   // (C) used in caster aura state     (T) used in target aura state
     // (c) used in caster aura state-not (t) used in target aura state-not
     AURA_STATE_NONE                         = 0,            // C   |
@@ -227,7 +227,7 @@ enum AuraStateType
 };
 
 // Spell mechanics
-enum Mechanics
+enum Mechanics : uint8_t
 {
     MECHANIC_NONE             = 0,
     MECHANIC_CHARM            = 1,
@@ -265,7 +265,7 @@ enum Mechanics
 };
 
 // Spell dispel type
-enum DispelType
+enum DispelType : uint8_t
 {
     DISPEL_NONE         = 0,
     DISPEL_MAGIC        = 1,
@@ -281,7 +281,7 @@ enum DispelType
     DESPEL_OLD_UNUSED   = 11
 };
 
-enum Targets
+enum Targets : uint8_t
 {
     TARGET_NONE                                 = 0,
     TARGET_UNIT_CASTER                          = 1,
@@ -413,7 +413,7 @@ enum Targets
     TARGET_UNK_127                              = 127,
 };
 
-enum SpellDmgClass
+enum SpellDmgClass : uint8_t
 {
     SPELL_DAMAGE_CLASS_NONE     = 0,
     SPELL_DAMAGE_CLASS_MAGIC    = 1,
@@ -421,7 +421,7 @@ enum SpellDmgClass
     SPELL_DAMAGE_CLASS_RANGED   = 3,
 };
 
-enum SkillType
+enum SkillType : uint16_t
 {
     SKILL_NONE                     = 0,
 
@@ -601,7 +601,7 @@ enum SkillType
     SKILL_PET_HYDRA                = 824
 };
 
-enum SpellPreventionType
+enum SpellPreventionType : uint8_t
 {
     SPELL_PREVENTION_TYPE_NONE      = 0,
     SPELL_PREVENTION_TYPE_SILENCE   = 1,
@@ -636,7 +636,7 @@ enum SpellCastTargetFlags
     TARGET_FLAG_UNIT_PASSENGER  = 0x00100000,               // 21 guessed, used to validate target (if vehicle passenger)
 };
 
-enum ShapeshiftForm
+enum ShapeshiftForm : uint8_t
 {
     FORM_CAT                = 0x01,     // 1
     FORM_TREE               = 0x02,     // 2
@@ -673,7 +673,7 @@ enum ShapeshiftForm
     FORM_GLADIATOR_STANCE   = 0x21      // 33
 };
 
-enum Powers
+enum Powers : int8_t
 {
     POWER_MANA                          = 0,
     POWER_RAGE                          = 1,
@@ -690,7 +690,7 @@ enum Powers
     POWER_HEALTH                        = -2            // (-2 as signed value)
 };
 
-enum AuraType
+enum AuraType : uint16_t
 {
     SPELL_AURA_NONE                                         = 0,
     SPELL_AURA_BIND_SIGHT                                   = 1,
@@ -1523,7 +1523,7 @@ enum SummonPropFlags
     SUMMON_PROP_FLAG_COMPANION       = 0x00200000
 };
 
-enum SpellCategory
+enum SpellCategory : uint8_t
 {
     SPELL_CATEGORY_NONE             = 0,
     SPELL_CATEGORY_FOOD             = 11,

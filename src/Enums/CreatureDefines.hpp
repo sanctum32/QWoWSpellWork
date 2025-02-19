@@ -1,6 +1,8 @@
 #pragma once
 
-enum CreatureType
+#include <cstdint>
+
+enum CreatureType : uint8_t
 {
     CREATURE_TYPE_BEAST            = 1,
     CREATURE_TYPE_DRAGONKIN        = 2,

@@ -311,7 +311,7 @@ void DataStorage::GenerateExtraDataInfo()
                 QString attributeStr;
                 for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
                 {
-                    const uint32_t mask = 1u << id;
+                    const uint32_t mask = 1U << id;
                     if ((mask & attributeMask) == 0)
                     {
                         continue;
