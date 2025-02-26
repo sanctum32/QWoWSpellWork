@@ -1051,9 +1051,12 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
 
         printSpellClassOptionsInfo(result, effectInfo);
 
-        if (effectInfo->m_spellMinRadiusEntry != nullptr && effectInfo->m_spellMaxRadiusEntry != nullptr)
+        for (uint8_t i = 0; i < 2; ++i)
         {
-            result += QString("Min radius: %1, max radius: %2<br>").arg(effectInfo->m_spellMinRadiusEntry->RadiusMin).arg(effectInfo->m_spellMaxRadiusEntry->RadiusMax);
+            if (const auto* radiusEntry = effectInfo->m_spellTargetRadiusEntry.at(i))
+            {
+                result += QString("%1 radius - min %2, max %3<br>").arg(i == 0 ? "TargetA" : "TargetB").arg(radiusEntry->RadiusMin).arg(radiusEntry->RadiusMax);
+            }
         }
 
         printSpellTriggerInfo(result, effectInfo);

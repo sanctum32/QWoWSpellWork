@@ -73,8 +73,8 @@ struct SpellEffectEntry
     const auto getEffectMiscValue() const { return _fields[12].int32Val; }        // 12
     const auto getEffectMiscValueB() const { return _fields[13].int32Val; }       // 13
     const auto getEffectPointsPerResource() const { return _fields[14].floatVal; }// 14
-    const auto getEffectMinRadiusIndex() const { return _fields[15].uint32Val; }     // 15
-    const auto getEffectMaxRadiusIndex() const { return _fields[16].uint32Val; }  // 16
+    const auto getEffectTargetARadiusIndex() const { return _fields[15].uint32Val; }     // 15
+    const auto getEffectTargetBRadiusIndex() const { return _fields[16].uint32Val; }  // 16
     const auto getEffectRealPointsPerLevel() const { return _fields[17].floatVal; } // 17
     const uint32_t getEffectSpellClassMaskA() const { return _fields[18].uint32Val; } // 18
     const uint32_t getEffectSpellClassMaskB() const { return _fields[19].uint32Val; } // 19
@@ -87,8 +87,7 @@ struct SpellEffectEntry
     const auto getEffectAttributes() const { return _fields[26].uint32Val; }      // 26
 
     const auto& GetField(uint8_t index) const { return _fields.at(index); }
-    const SpellRadiusEntry* m_spellMinRadiusEntry{};
-    const SpellRadiusEntry* m_spellMaxRadiusEntry{};
+    std::array<const SpellRadiusEntry*, 2> m_spellTargetRadiusEntry{};
 
 private:
     std::array<DbcEntryValues, 27> _fields;
@@ -107,8 +106,8 @@ private:
     auto& _getEffectMiscValue() { return _fields[12].int32Val; }        // 12
     auto& _getEffectMiscValueB() { return _fields[13].int32Val; }       // 13
     auto& _getEffectPointsPerResource() { return _fields[14].floatVal; }// 14
-    auto& _getEffectMinRadiusIndex() { return _fields[15].uint32Val; }     // 15
-    auto& _getEffectMaxRadiusIndex() { return _fields[16].uint32Val; }  // 16
+    auto& _getEffectTargetARadiusIndex() { return _fields[15].uint32Val; }     // 15
+    auto& _getEffectTargetBRadiusIndex() { return _fields[16].uint32Val; }  // 16
     auto& _getEffectRealPointsPerLevel() { return _fields[17].floatVal; } // 17
     auto& _getEffectSpellClassMaskA() { return _fields[18].uint32Val; } // 18
     auto& _getEffectSpellClassMaskB() { return _fields[19].uint32Val; } // 19
