@@ -593,7 +593,7 @@ struct ScreenEffectEntry
 private:
     QString Name;                                               // 1
 public:
-    QStringView GetName() const { return Name; }
+    QString GetName() const { return Name; }
     //uint32_t    Unk0{};                                       // 2
     //float       Unk1{};                                       // 3
     //uint32_t    Unk2{};                                       // 4

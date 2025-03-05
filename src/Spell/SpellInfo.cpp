@@ -243,7 +243,7 @@ inline void PrintReagents(QString& result, const SpellReagentsEntry* spellReagen
         return;
     }
 
-    result += "<br><b>Required items (or reagents):</b><br>";
+    QStringList reagentsList;
     for (uint8_t i = 0; i < MAX_SPELL_REAGENTS; ++i)
     {
         if (spellReagentsEntry->Reagents[i] == 0)
@@ -253,7 +253,13 @@ inline void PrintReagents(QString& result, const SpellReagentsEntry* spellReagen
 
         const auto* itemEntry = sDataStorage->GetItemEntry(spellReagentsEntry->Reagents[i]);
         QStringView itemName = itemEntry != nullptr ? itemEntry->GetName() : "Unknown";
-        result += QString("Item: %1 (\"%2\"), required amount %3<br>").arg(spellReagentsEntry->Reagents[i]).arg(itemName).arg(spellReagentsEntry->ReagentCount[i]);
+        reagentsList += (QString("Item: %1 (\"%2\"), required amount %3<br>").arg(spellReagentsEntry->Reagents[i]).arg(itemName).arg(spellReagentsEntry->ReagentCount[i]));
+    }
+
+    if (!reagentsList.isEmpty())
+    {
+        result += "<br><b>Required items (or reagents):</b><br>";
+        result += reagentsList.join("");
     }
 }
 
@@ -272,7 +278,7 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
         {
         case ITEM_CLASS_WEAPON:
         {
-            QString subclassNames;
+            QStringList subclassNames;
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
                 if ((spellEquipedItemsEntry->EquippedItemClass & (1U << i)) == 0)
@@ -290,13 +296,13 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
 
             if (!subclassNames.isEmpty())
             {
-                result += QString("SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
+                result += QString("SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames.join(""));
             }
             break;
         }
         case ITEM_CLASS_ARMOR:
         {
-            QString subclassNames;
+            QStringList subclassNames;
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
                 if ((spellEquipedItemsEntry->EquippedItemSubClassMask & (1U << i)) == 0)
@@ -314,13 +320,13 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
 
             if (!subclassNames.isEmpty())
             {
-                result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
+                result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames.join(""));
             }
             break;
         }
         case ITEM_CLASS_MISCELLANEOUS:
         {
-            QString subclassNames;
+            QStringList subclassNames;
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
                 if ((spellEquipedItemsEntry->EquippedItemSubClassMask & (1U << i)) == 0)
@@ -338,7 +344,7 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
 
             if (!subclassNames.isEmpty())
             {
-                result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames);
+                result += QString("    SubClass mask 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemSubClassMask, 8, 16, QLatin1Char('0')).arg(subclassNames.join(""));
             }
             break;
         }
@@ -349,7 +355,7 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
 
     if (spellEquipedItemsEntry->EquippedItemInventoryTypeMask != 0)
     {
-        QString inventoryNames;
+        QStringList inventoryNames;
         for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
         {
             if ((spellEquipedItemsEntry->EquippedItemInventoryTypeMask & (1U << i)) == 0)
@@ -367,7 +373,7 @@ inline void PrintSpellEquipmentInfo(QString& result, const SpellEquippedItemsEnt
 
         if (!inventoryNames.isEmpty())
         {
-            result += QString("    InventoryType mask = 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemInventoryTypeMask, 8, 16, QLatin1Char('0')).arg(inventoryNames);
+            result += QString("    InventoryType mask = 0x%1 (%2)<br>").arg(spellEquipedItemsEntry->EquippedItemInventoryTypeMask, 8, 16, QLatin1Char('0')).arg(inventoryNames.join(""));
         }
     }
 }
@@ -409,8 +415,7 @@ inline void PrintSpellAuraOptions(QString& result, const SpellAuraOptionsEntry* 
                      .arg(spellAuraOptionsEntry->ProcChance)
                      .arg(spellAuraOptionsEntry->ProcCharges);
 
-    QString procNames;
-
+    QStringList procNames;
     for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
     {
         const uint32_t mask = 1U << i;
@@ -425,7 +430,7 @@ inline void PrintSpellAuraOptions(QString& result, const SpellAuraOptionsEntry* 
     if (!procNames.isEmpty())
     {
         result += printLine;
-        result += procNames + "<br>";
+        result += procNames.join("") + "<br>";
     }
 }
 
@@ -511,7 +516,7 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
     const auto& auraInterruptFlags = m_spellInterruptsEntry->AuraInterruptFlags;
     const auto& channelInterruptFlags = m_spellInterruptsEntry->ChannelInterruptFlags;
 
-    QString interruptFlagsStr;
+    QStringList interruptFlagsStr;
     if (interruptFlags.any())
     {
         for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
@@ -533,7 +538,7 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
         interruptFlagsStr += sSpellWorkJson->GetSpellInterruptFlagName(0);
     }
 
-    std::array<QString, 2> auraFlagsStr;
+    std::array<QStringList, 2> auraFlagsStr;
     for (uint8_t flagId = 0; flagId < 2; ++flagId)
     {
         if (auraInterruptFlags[flagId].any())
@@ -558,7 +563,7 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
         }
     }
 
-    std::array<QString, 2> channelFlagsStr;
+    std::array<QStringList, 2> channelFlagsStr;
     for (uint8_t flagId = 0; flagId < 2; ++flagId)
     {
         if (channelInterruptFlags[flagId].any())
@@ -583,11 +588,11 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
         }
     }
 
-    result += QString("Spell interrupt flags: 0x%1 (%2)<br>").arg(interruptFlags.to_ulong(), 8, 16, QLatin1Char('0')).arg(interruptFlagsStr);
-    result += QString("Aura interrupt flags: 0x%1 (%2)<br>").arg(auraInterruptFlags[0].to_ulong(), 8, 16, QLatin1Char('0')).arg(auraFlagsStr[0]);
-    result += QString("Aura interrupt flags2: 0x%1 (%2)<br>").arg(auraInterruptFlags[1].to_ulong(), 8, 16, QLatin1Char('0')).arg(auraFlagsStr[1]);
-    result += QString("Channel interrupt flags: 0x%1 (%2)<br>").arg(channelInterruptFlags[0].to_ulong(), 8, 16, QLatin1Char('0')).arg(channelFlagsStr[0]);
-    result += QString("Channel interrupt flags2: 0x%1 (%2)<br>").arg(channelInterruptFlags[1].to_ulong(), 8, 16, QLatin1Char('0')).arg(channelFlagsStr[1]);
+    result += QString("Spell interrupt flags: 0x%1 (%2)<br>").arg(interruptFlags.to_ulong(), 8, 16, QLatin1Char('0')).arg(interruptFlagsStr.join(""));
+    result += QString("Aura interrupt flags: 0x%1 (%2)<br>").arg(auraInterruptFlags[0].to_ulong(), 8, 16, QLatin1Char('0')).arg(auraFlagsStr[0].join(""));
+    result += QString("Aura interrupt flags2: 0x%1 (%2)<br>").arg(auraInterruptFlags[1].to_ulong(), 8, 16, QLatin1Char('0')).arg(auraFlagsStr[1].join(""));
+    result += QString("Channel interrupt flags: 0x%1 (%2)<br>").arg(channelInterruptFlags[0].to_ulong(), 8, 16, QLatin1Char('0')).arg(channelFlagsStr[0].join(""));
+    result += QString("Channel interrupt flags2: 0x%1 (%2)<br>").arg(channelInterruptFlags[1].to_ulong(), 8, 16, QLatin1Char('0')).arg(channelFlagsStr[1].join(""));
 }
 
 static void PrintSpellRestrictionsInfo(QString& result, const SpellAuraRestrictionsEntry* restrictionsEntry)
@@ -660,9 +665,8 @@ inline void PrintSpellCastRequirements(QString& result, const SpellCastingRequir
     {
         return;
     }
-    result += "<br>";
-    result += "<b>Allowed areas:</b><br>";
 
+    QStringList allowedAreas;
     uint32_t groupId = 0;
     do
     {
@@ -670,7 +674,7 @@ inline void PrintSpellCastRequirements(QString& result, const SpellCastingRequir
         {
             if (const auto* areaEntry = sDataStorage->GetAreaTableEntry(areaId))
             {
-                result += QString("%1 - %2(MapId: %3)<br>").arg(areaId).arg(areaEntry->GetName()).arg(areaEntry->ContinentID);
+                allowedAreas += QString("%1 - %2(MapId: %3)<br>").arg(areaId).arg(areaEntry->GetName()).arg(areaEntry->ContinentID);
             }
         }
 
@@ -678,11 +682,18 @@ inline void PrintSpellCastRequirements(QString& result, const SpellCastingRequir
     }
     while ((groupEntry = sDataStorage->GetAreaGroupEntry(groupId)) != nullptr);
 
-    result += "<br>";
+    if (!allowedAreas.isEmpty())
+    {
+        result += "<br>";
+        result += "<b>Allowed areas:</b><br>";
+        result += allowedAreas.join("");
+        result += "<br>";
+    }
 }
 
-inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry, const SpellEffectEntry* effectEntry, int selectedLevel, uint8_t comboPoints)
+inline QString PrintEffectBaseValues(const SpellEntry* spellEntry, const SpellEffectEntry* effectEntry, int selectedLevel, uint8_t comboPoints)
 {
+    QString result;
     assert(spellEntry != nullptr && effectEntry != nullptr);
     result += QString("BasePoints = %1<br>").arg(effectEntry->getEffectBasePoints() + ((effectEntry->getEffectDieSides() == 0) ? 0 : 1));
 
@@ -868,6 +879,7 @@ inline void PrintEffectBaseValues(QString& result, const SpellEntry* spellEntry,
     const int32_t basePointsMinINT = static_cast<int32_t>(std::min(basePoints.at(0), basePoints.at(1)));
     const int32_t basePointsMaxINT = static_cast<int32_t>(std::max(basePoints.at(0), basePoints.at(1)));
     result += QString("Calculated BasePoints (before modifiers). Min = %1, max = %2, random points = %3, SpellScalingId = %4<br>").arg(basePointsMinINT).arg(basePointsMaxINT).arg(randomPoints).arg(spellEntry->getSpellLevelsId());
+    return result;
 }
 
 QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints) const
@@ -877,17 +889,18 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
         scalingLevel = m_spellLevelsEntry != nullptr ? static_cast<int>(m_spellLevelsEntry->baseLevel) : 1;
     }
 
-    auto printSpellClassOptionsInfo = [this](QString& result, const SpellEffectEntry* effectInfo)
+    auto printSpellClassOptionsInfo = [&](const SpellEffectEntry* effectInfo)
     {
+        QString result;
         if (effectInfo->HasSpellClassMask() == 0)
         {
-            return;
+            return result;
         }
 
         const auto* thisEffClassOptions = m_spellClassOptionsEntry;
         if (thisEffClassOptions == nullptr)
         {
-            return;
+            return result;
         }
 
         result += QString("SpellClassMask = 0x%1 0x%2 0x%3<br>")
@@ -895,6 +908,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
                       .arg(effectInfo->getEffectSpellClassMaskB(), 8, 16, QLatin1Char('0'))
                       .arg(effectInfo->getEffectSpellClassMaskC(), 8, 16, QLatin1Char('0'));
 
+        QStringList abilitiesResult;
         for (const auto&[otherSpellId, otherSpellInfo] : sDataStorage->GetSpellEntries())
         {
             if (getId() == otherSpellId)
@@ -930,22 +944,30 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
                 return skillAbility.second.Spell == otherSpellId;
             });
 
-            result += (skillAbilityFound ? "<span style=\"color:green\">\t+" : "<span style=\"color:red\">\t-</span>") + QString("%1 - %2</span><br>").arg(otherSpellId).arg(otherSpellInfo.getSpellName());
+            abilitiesResult += (skillAbilityFound ? "<span style=\"color:green\">\t+" : "<span style=\"color:red\">\t-</span>") + QString("%1 - %2</span><br>").arg(otherSpellId).arg(otherSpellInfo.getSpellName());
         }
+
+        if (!abilitiesResult.isEmpty())
+        {
+            result += abilitiesResult.join("");
+        }
+
+        return result;
     };
 
-    auto printSpellTriggerInfo = [this](QString& result, const SpellEffectEntry* effectInfo)
+    auto printSpellTriggerInfo = [&](const SpellEffectEntry* effectInfo)
     {
+        QString result;
         if (effectInfo->getEffectTriggerSpell() == 0)
         {
-            return;
+            return result;
         }
 
         const auto* triggerSpell = sDataStorage->GetSpellEntry(effectInfo->getEffectTriggerSpell());
         if (triggerSpell == nullptr)
         {
             result += QString("Trigger spell (%1) Not found, Chance = %2<br>").arg(effectInfo->getEffectTriggerSpell()).arg(m_spellAuraOptionsEntry != nullptr ? m_spellAuraOptionsEntry->ProcChance : 0);
-            return;
+            return result;
         }
 
         result += "<span style=\"color:green; font-weight: bold\">";
@@ -971,21 +993,28 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
             result += QString("Charges - %1<br>").arg(triggerAuraOptions->ProcCharges);
             result += printLine;
 
+            QStringList procFlagNames;
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
                 const uint32_t mask = 1U << i;
                 if ((triggerAuraOptions->ProcTypeMask & mask) != 0)
                 {
-                    result += sSpellWorkJson->GetSpellProcDescription(mask);
-                    result += "<br>";
+                    procFlagNames += sSpellWorkJson->GetSpellProcDescription(mask);
+                    procFlagNames += "<br>";
                 }
             }
 
-            result += printLine;
+            if (!procFlagNames.isEmpty())
+            {
+                result += procFlagNames.join("");
+                result += printLine;
+            }
         }
+
+        return result;
     };
 
-    QString result;
+    QStringList result;
     for (uint8_t i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
         const auto* effectInfo = m_spellEffects.at(i);
@@ -999,7 +1028,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
 
         result += QString("<b>Effect %1: Id %2 (%3)</b><br>").arg(i).arg(effectInfo->getEffect()).arg(sSpellWorkJson->GetSpellEffectName(effectInfo->getEffect()));
 
-        PrintEffectBaseValues(result, this, effectInfo, scalingLevel, comboPoints);
+        result += PrintEffectBaseValues(this, effectInfo, scalingLevel, comboPoints);
 
         if (effectInfo->getEffectBonusCoefficient() > 1.0f)
         {
@@ -1053,7 +1082,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
             }
         }
 
-        printSpellClassOptionsInfo(result, effectInfo);
+        result += printSpellClassOptionsInfo(effectInfo);
 
         for (uint8_t i = 0; i < 2; ++i)
         {
@@ -1063,7 +1092,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
             }
         }
 
-        printSpellTriggerInfo(result, effectInfo);
+        result += printSpellTriggerInfo(effectInfo);
 
         if (effectInfo->getEffectChainTargets() > 0)
         {
@@ -1073,7 +1102,7 @@ QString const SpellEntry::PrintSpellEffectInfo(int scalingLevel, int comboPoints
         result += "<br>";
     }
 
-    return result;
+    return result.join("");
 }
 
 QString const SpellEntry::PrintBaseInfo(int scalingLevel) const
@@ -1199,7 +1228,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         {
             if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                m_extraInformation.replace(strToRep, sSpellWorkJson->GetUnitModName(value).toString(), Qt::CaseInsensitive);
+                m_extraInformation.replace(strToRep, sSpellWorkJson->GetUnitModName(value), Qt::CaseInsensitive);
             }
         }
     };
@@ -1211,7 +1240,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         {
             if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellModName(value).toString(), Qt::CaseInsensitive);
+                m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellModName(value), Qt::CaseInsensitive);
             }
         }
     };
@@ -1240,7 +1269,7 @@ void SpellEffectEntry::GenerateExtraInfo()
                 continue;
             }
 
-            QString ratingsStr;
+            QStringList ratingsStr;
             for (uint8_t ratingId = 0; ratingId <= MAX_UINT32_BITMASK_INDEX; ++ratingId)
             {
                 const uint32_t mask = 1U << ratingId;
@@ -1257,10 +1286,10 @@ void SpellEffectEntry::GenerateExtraInfo()
 
             if (ratingsStr.isEmpty())
             {
-                ratingsStr = "Unknown";
+                ratingsStr += "Unknown";
             }
 
-            m_extraInformation.replace(strToRep, ratingsStr, Qt::CaseInsensitive);
+            m_extraInformation.replace(strToRep, ratingsStr.join(""), Qt::CaseInsensitive);
         }
     };
 
@@ -1272,7 +1301,7 @@ void SpellEffectEntry::GenerateExtraInfo()
             if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
                 const auto* _screenEffect = sDataStorage->GetScreenEffectEntry(value);
-                m_extraInformation.replace(strToRep, _screenEffect != nullptr ? _screenEffect->GetName().toString() : "unknown", Qt::CaseInsensitive);
+                m_extraInformation.replace(strToRep, _screenEffect != nullptr ? _screenEffect->GetName() : "unknown", Qt::CaseInsensitive);
             }
         }
     };
@@ -1294,8 +1323,7 @@ void SpellEffectEntry::GenerateExtraInfo()
             }
             else
             {
-                bool first = false;
-                QString result;
+                QStringList result;
                 for (auto pSpellId : spellOverride->Spells)
                 {
                     if (pSpellId == 0)
@@ -1303,16 +1331,16 @@ void SpellEffectEntry::GenerateExtraInfo()
                         continue;
                     }
 
-                    if (!first)
+                    if (result.empty())
                     {
-                        first = true;
-                        result = "<b>Overriding Spells:</b><br>";
+                        result += "<b>Overriding Spells:</b><br>";
                     }
+
                     const auto* spell = sDataStorage->GetSpellEntry(pSpellId);
                     result += QString("<span style=\"color: orange\">- %1</span> %2<br>").arg(pSpellId).arg(spell != nullptr ? spell->getSpellName() : "unknown");
                 }
 
-                m_extraInformation.replace(strToRep, result, Qt::CaseInsensitive);
+                m_extraInformation.replace(strToRep, result.join(""), Qt::CaseInsensitive);
             }
         }
     };
@@ -1327,7 +1355,7 @@ void SpellEffectEntry::GenerateExtraInfo()
                 continue;
             }
 
-            QString result;
+            QStringList result;
             for (uint8_t id = 1; id <= MAX_UINT32_BITMASK_INDEX; ++id)
             {
                 const uint32_t flag = 1U << (id - 1);
@@ -1349,7 +1377,7 @@ void SpellEffectEntry::GenerateExtraInfo()
                 result += sSpellWorkJson->GetSpellMechanicName(MECHANIC_NONE);
             }
 
-            m_extraInformation.replace(strToRep, result, Qt::CaseInsensitive);
+            m_extraInformation.replace(strToRep, result.join(""), Qt::CaseInsensitive);
         }
     };
 
@@ -1360,7 +1388,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         {
             if (m_extraInformation.contains(strToRep, Qt::CaseInsensitive))
             {
-                m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellMechanicName(value).toString(), Qt::CaseInsensitive);
+                m_extraInformation.replace(strToRep, sSpellWorkJson->GetSpellMechanicName(value), Qt::CaseInsensitive);
             }
         }
     };
@@ -1413,7 +1441,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         }
 
         const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
-        QString categoryName = sSpellWorkJson->GetSummonCategoryName(summonProp != nullptr ? summonProp->CategoryId : 0).toString();
+        QString categoryName = sSpellWorkJson->GetSummonCategoryName(summonProp != nullptr ? summonProp->CategoryId : 0);
         m_extraInformation.replace(":SummonCategoryName:", categoryName, Qt::CaseInsensitive);
     };
 
@@ -1436,7 +1464,7 @@ void SpellEffectEntry::GenerateExtraInfo()
         }
 
         const auto* summonProp = sDataStorage->GetSummonPropertiesEntry(getEffectMiscValueB());
-        QString summonTypeName = sSpellWorkJson->GetSummonTypeName(summonProp != nullptr ? summonProp->SummonTypeNameId : 0).toString();
+        QString summonTypeName = sSpellWorkJson->GetSummonTypeName(summonProp != nullptr ? summonProp->SummonTypeNameId : 0);
         m_extraInformation.replace(":SummonPropTitleName:", summonTypeName, Qt::CaseInsensitive);
     };
 

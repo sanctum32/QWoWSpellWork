@@ -433,38 +433,38 @@ void SpellWorkJson::LoadJsonData()
     ReadBasicArrayPairFromFile("./json/SpellPreventionTypes.json", m_spellPreventionTypeNames);
 }
 
-QStringView SpellWorkJson::GetSpellSchoolName(uint32_t id) const
+const QString SpellWorkJson::GetSpellSchoolName(uint32_t id) const
 {
     const auto& itr = m_spellSchoolNames.find(id);
     return itr != m_spellSchoolNames.end() ? itr->second : QString("SPELL_SCHOOL_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellSchoolMaskName(uint32_t flag) const
+const QString SpellWorkJson::GetSpellSchoolMaskName(uint32_t flag) const
 {
     const auto& itr = m_spellSchoolMaskNames.find(flag);
     return itr != m_spellSchoolMaskNames.end() ? itr->second : QString("SPELL_SCHOOL_MASK_UNK_%1").arg(flag);
 }
 
-QStringView SpellWorkJson::GetSpellModName(uint32_t id) const
+const QString SpellWorkJson::GetSpellModName(uint32_t id) const
 {
     const auto& itr = m_spellModOpNames.find(id);
     return itr != m_spellModOpNames.end() ? itr->second : QString("SPELL_MOD_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellInterruptFlagName(uint32_t flag) const
+const QString SpellWorkJson::GetSpellInterruptFlagName(uint32_t flag) const
 {
     const auto& itr = m_spellInterruptFlagNames.find(flag);
     return itr != m_spellInterruptFlagNames.end() ? itr->second : QString("SPELL_INTERRUPT_FLAG_UNK_0x%1").arg(flag, 8, 16, QLatin1Char('0'));
 }
 
-QStringView SpellWorkJson::GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId) const
+const QString SpellWorkJson::GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId) const
 {
     assert(flagsId < 2);
     const auto& itr = m_auraInterruptFlagNames[flagsId].find(flag);
     return itr != m_auraInterruptFlagNames[flagsId].end() ? itr->second : QString("AURA_INTERRUPT_FLAG%1_UNK_%2").arg(flagsId).arg(flag, 8, 16, QLatin1Char('0'));
 }
 
-QStringView SpellWorkJson::GetSpellAuraTypeName(uint32_t id) const
+const QString SpellWorkJson::GetSpellAuraTypeName(uint32_t id) const
 {
     const auto& itr = m_spellAuraTypeNames.find(id);
     return itr != m_spellAuraTypeNames.end() ? itr->second.name : QString("SPELL_AURA_UNK_%1").arg(id);
@@ -476,19 +476,19 @@ const SpellEffectInfo* SpellWorkJson::GetSpellAuraEffectInfo(uint32_t id) const
     return itr != m_spellAuraTypeNames.end() ? &itr->second : nullptr;
 }
 
-QStringView SpellWorkJson::GetSpellProcDescription(uint32_t id) const
+const QString SpellWorkJson::GetSpellProcDescription(uint32_t id) const
 {
     const auto& itr = m_spellProcFlagNames.find(id);
     return itr != m_spellProcFlagNames.end() ? itr->second : "-- no description --";
 }
 
-QStringView SpellWorkJson::GetSpellFamilyName(uint32_t id) const
+const QString SpellWorkJson::GetSpellFamilyName(uint32_t id) const
 {
     const auto& itr = m_spellFamilyNames.find(id);
     return itr != m_spellFamilyNames.end() ? itr->second : QString("SPELLFAMILY_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellAttributeName(uint32_t attributeId, uint32_t attributeFlag) const
+const QString SpellWorkJson::GetSpellAttributeName(uint32_t attributeId, uint32_t attributeFlag) const
 {
     const auto nullResult = QString("SPELL_ATTR%1_UNK_%2").arg(attributeId).arg(attributeFlag);
     try
@@ -503,7 +503,7 @@ QStringView SpellWorkJson::GetSpellAttributeName(uint32_t attributeId, uint32_t 
     }
 }
 
-QStringView SpellWorkJson::GetSpellEffectName(uint32_t id) const
+const QString SpellWorkJson::GetSpellEffectName(uint32_t id) const
 {
     const auto& itr = m_spellEffectInfo.find(id);
     return itr != m_spellEffectInfo.end() ? itr->second.name : QString("SPELL_EFFECT_UNK_%1").arg(id);
@@ -515,121 +515,121 @@ const SpellEffectInfo* SpellWorkJson::GetSpellEffectInfo(uint32_t id) const
     return itr != m_spellEffectInfo.end() ? &itr->second : nullptr;
 }
 
-QStringView SpellWorkJson::GetSpellTargetName(uint32_t id) const
+const QString SpellWorkJson::GetSpellTargetName(uint32_t id) const
 {
     const auto& itr = m_spellTargetNames.find(id);
     return itr != m_spellTargetNames.end() ? itr->second : QString("TARGET_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellTargetFlagName(uint32_t flag) const
+const QString SpellWorkJson::GetSpellTargetFlagName(uint32_t flag) const
 {
     const auto& itr =  m_SpellTargetFlagNames.find(flag);
     return itr != m_SpellTargetFlagNames.end() ? itr->second : QString("TARGET_FLAG_UNK_%1").arg(flag);
 }
 
-QStringView SpellWorkJson::GetCombatRatingName(uint32_t id) const
+const QString SpellWorkJson::GetCombatRatingName(uint32_t id) const
 {
     const auto& itr = m_combatRatingNames.find(id);
     return itr != m_combatRatingNames.end() ? itr->second : QString("CR_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetUnitModName(uint32_t id) const
+const QString SpellWorkJson::GetUnitModName(uint32_t id) const
 {
     const auto& itr = m_unitModsNames.find(id);
     return itr != m_unitModsNames.end() ? itr->second : QString("UNIT_MOD_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellAuraStateName(uint32_t id) const
+const QString SpellWorkJson::GetSpellAuraStateName(uint32_t id) const
 {
     const auto& itr = m_spellAuraStatesNames.find(id);
     return itr != m_spellAuraStatesNames.end() ? itr->second : QString("AURA_STATE_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetPowerTypeName(int32_t id) const
+const QString SpellWorkJson::GetPowerTypeName(int32_t id) const
 {
     const auto& itr = m_powerTypeNames.find(id);
     return itr != m_powerTypeNames.end() ? itr->second : QString("POWER_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellMechanicName(uint32_t id) const
+const QString SpellWorkJson::GetSpellMechanicName(uint32_t id) const
 {
     const auto& itr = m_spellMechanicNames.find(id);
     return itr != m_spellMechanicNames.end() ? itr->second : QString("MECHANIC_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetDispelName(uint32_t id) const
+const QString SpellWorkJson::GetDispelName(uint32_t id) const
 {
     const auto& itr = m_dispelNames.find(id);
     return itr != m_dispelNames.end() ? itr->second : QString("DISPEL_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetItemInventoryName(uint32_t id) const
+const QString SpellWorkJson::GetItemInventoryName(uint32_t id) const
 {
     const auto& itr = m_itemInventoryNames.find(id);
     return itr != m_itemInventoryNames.end() ? itr->second : QString("INVTYPE_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetItemSubclassWeaponName(uint32_t id) const
+const QString SpellWorkJson::GetItemSubclassWeaponName(uint32_t id) const
 {
     const auto& itr = m_itemSubClassWeaponNames.find(id);
     return itr != m_itemSubClassWeaponNames.end() ? itr->second : QString("ITEM_SUBCLASS_WEAPON_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetItemSubclassArmorName(uint32_t id) const
+const QString SpellWorkJson::GetItemSubclassArmorName(uint32_t id) const
 {
     const auto& itr = m_itemSubclassArmorNames.find(id);
     return itr != m_itemSubclassArmorNames.end() ? itr->second : QString("ITEM_SUBCLASS_ARMOR_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetItemSubclassJunkName(uint32_t id) const
+const QString SpellWorkJson::GetItemSubclassJunkName(uint32_t id) const
 {
     const auto& itr = m_itemSubclassJunkNames.find(id);
     return itr != m_itemSubclassJunkNames.end() ? itr->second : QString("ITEM_SUBCLASS_JUNK_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetItemClassName(uint32_t id) const
+const QString SpellWorkJson::GetItemClassName(uint32_t id) const
 {
     const auto& itr = m_itemClassNames.find(id);
     return itr != m_itemClassNames.end() ? itr->second : QString("ITEM_CLASS_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetShapeshiftFormName(uint32_t id) const
+const QString SpellWorkJson::GetShapeshiftFormName(uint32_t id) const
 {
     const auto& itr = m_shapeshiftFormNames.find(id);
     return itr != m_shapeshiftFormNames.end() ? itr->second : QString("FORM_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetCreatureTypeName(uint32_t id) const
+const QString SpellWorkJson::GetCreatureTypeName(uint32_t id) const
 {
     const auto& itr = m_creatureTypeNames.find(id);
     return itr != m_creatureTypeNames.end() ? itr->second : QString("CREATURE_TYPE_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellDamageTypeName(uint32_t id) const
+const QString SpellWorkJson::GetSpellDamageTypeName(uint32_t id) const
 {
     const auto& itr = m_spellDamageTypeNames.find(id);
     return itr != m_spellDamageTypeNames.end() ? itr->second : QString("SPELL_DAMAGE_CLASS_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSpellPreventionTypeName(uint32_t id) const
+const QString SpellWorkJson::GetSpellPreventionTypeName(uint32_t id) const
 {
     const auto& itr = m_spellPreventionTypeNames.find(id);
     return itr != m_spellPreventionTypeNames.end() ? itr->second : QString("SPELL_PREVENTION_TYPE_UNK_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSummonCategoryName(uint32_t id) const
+const QString SpellWorkJson::GetSummonCategoryName(uint32_t id) const
 {
     const auto& itr = m_SummonPropCategoryNames.find(id);
     return itr != m_SummonPropCategoryNames.end() ? itr->second : QString("UNKNOWN_SUMMON_CATEGORY_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSummonTypeName(uint32_t id) const
+const QString SpellWorkJson::GetSummonTypeName(uint32_t id) const
 {
     const auto& itr = m_SummonPropSummTypeNames.find(id);
     return itr != m_SummonPropSummTypeNames.end() ? itr->second : QString("UNKNOWN_SUMMON_CONTROL_TITLE_%1").arg(id);
 }
 
-QStringView SpellWorkJson::GetSummonPropertyFlagName(uint32_t id) const
+const QString SpellWorkJson::GetSummonPropertyFlagName(uint32_t id) const
 {
     const auto& itr = m_SummonPropSummFlagNames.find(id);
     return itr != m_SummonPropSummFlagNames.end() ? itr->second : QString("SUMMON_PROP_FLAG_UNKNOWN_%1").arg(id);
