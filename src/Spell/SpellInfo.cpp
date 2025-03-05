@@ -497,30 +497,34 @@ inline void PrintSpellPowerInfo(QString& result, const SpellPowerEntry* spellPow
 inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_spellInterruptsEntry)
 {
     result += "<br>";
-    std::bitset<32> interruptFlags = 0;
-    std::array<std::bitset<32>, 2> auraInterruptFlags{};
-    std::array<std::bitset<32>, 2> channelInterruptFlags{};
-    if (m_spellInterruptsEntry != nullptr)
+    if (m_spellInterruptsEntry == nullptr)
     {
-        interruptFlags = m_spellInterruptsEntry->InterruptFlags;
-        auraInterruptFlags = m_spellInterruptsEntry->AuraInterruptFlags;
-        channelInterruptFlags = m_spellInterruptsEntry->ChannelInterruptFlags;
+        result += QString("Spell interrupt flags: 0x00000000 (%1)<br>").arg(sSpellWorkJson->GetSpellInterruptFlagName(0));
+        result += QString("Aura interrupt flags: 0x%1 (%1)<br>").arg(sSpellWorkJson->GetAuraInterruptFlagName(0, 0));
+        result += QString("Aura interrupt flags2: 0x%1 (%1)<br>").arg(sSpellWorkJson->GetAuraInterruptFlagName(0, 1));
+        result += QString("Channel interrupt flags: 0x%1 (%1)<br>").arg(sSpellWorkJson->GetAuraInterruptFlagName(0, 0));
+        result += QString("Channel interrupt flags2: 0x%1 (%1)<br>").arg(sSpellWorkJson->GetAuraInterruptFlagName(0, 1));
+        return;
     }
+
+    const auto& interruptFlags = m_spellInterruptsEntry->InterruptFlags;
+    const auto& auraInterruptFlags = m_spellInterruptsEntry->AuraInterruptFlags;
+    const auto& channelInterruptFlags = m_spellInterruptsEntry->ChannelInterruptFlags;
 
     QString interruptFlagsStr;
     if (interruptFlags.any())
     {
         for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
         {
-            const uint32_t flag = 1U << i;
-            if (interruptFlags == flag)
+            const std::bitset<32> flag = 1U << i;
+            if ((interruptFlags & flag) == flag)
             {
                 if (!interruptFlagsStr.isEmpty())
                 {
                     interruptFlagsStr += ", ";
                 }
 
-                interruptFlagsStr += sSpellWorkJson->GetSpellInterruptFlagName(flag);
+                interruptFlagsStr += sSpellWorkJson->GetSpellInterruptFlagName(flag.to_ulong());
             }
         }
     }
@@ -536,15 +540,15 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
         {
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                const uint32_t flag = 1U << i;
-                if (auraInterruptFlags[flagId] == flag)
+                const std::bitset<32> flag = 1U << i;
+                if ((auraInterruptFlags[flagId] & flag) == flag)
                 {
                     if (!auraFlagsStr[flagId].isEmpty())
                     {
                         auraFlagsStr[flagId] += ", ";
                     }
 
-                    auraFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+                    auraFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag.to_ulong(), flagId);
                 }
             }
         }
@@ -561,15 +565,15 @@ inline void PrintInterruptInfo(QString& result, const SpellInterruptsEntry* m_sp
         {
             for (uint8_t i = 0; i <= MAX_UINT32_BITMASK_INDEX; ++i)
             {
-                const uint32_t flag = 1U << i;
-                if (channelInterruptFlags[flagId] == flag)
+                const std::bitset<32> flag = 1U << i;
+                if ((channelInterruptFlags[flagId] & flag) == flag)
                 {
                     if (!channelFlagsStr[flagId].isEmpty())
                     {
                         channelFlagsStr[flagId] += ", ";
                     }
 
-                    channelFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag, flagId);
+                    channelFlagsStr[flagId] += sSpellWorkJson->GetAuraInterruptFlagName(flag.to_ulong(), flagId);
                 }
             }
         }

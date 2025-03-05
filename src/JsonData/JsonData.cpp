@@ -139,7 +139,7 @@ void SpellWorkJson::LoadJsonData()
 
         if (jsonFileObject.contains("SpellInterruptFlags") && jsonFileObject.value("SpellInterruptFlags").isArray())
         {
-            ReadBasicJsonArrayPairData(m_spellInterruptFlagNames, jsonFileObject.value("SpellInterruptFlags").toArray(), "SpellInterrupt.json", "SpellInterruptFlags", "Id", "Name");
+            ReadBasicJsonArrayPairData(m_spellInterruptFlagNames, jsonFileObject.value("SpellInterruptFlags").toArray(), "SpellInterrupt.json", "SpellInterruptFlags", "Flag", "Name");
         }
         else
         {
@@ -148,7 +148,7 @@ void SpellWorkJson::LoadJsonData()
 
         if (jsonFileObject.contains("AuraInterruptFlags") && jsonFileObject.value("AuraInterruptFlags").isArray())
         {
-            ReadBasicJsonArrayPairData(m_auraInterruptFlagNames[0], jsonFileObject.value("AuraInterruptFlags").toArray(), "SpellInterrupt.json", "AuraInterruptFlags", "Id", "Name");
+            ReadBasicJsonArrayPairData(m_auraInterruptFlagNames[0], jsonFileObject.value("AuraInterruptFlags").toArray(), "SpellInterrupt.json", "AuraInterruptFlags", "Flag", "Name");
         }
         else
         {
@@ -157,7 +157,7 @@ void SpellWorkJson::LoadJsonData()
 
         if (jsonFileObject.contains("AuraInterruptFlags2") && jsonFileObject.value("AuraInterruptFlags2").isArray())
         {
-            ReadBasicJsonArrayPairData(m_auraInterruptFlagNames[1], jsonFileObject.value("AuraInterruptFlags2").toArray(), "SpellInterrupt.json", "AuraInterruptFlags2", "Id", "Name");
+            ReadBasicJsonArrayPairData(m_auraInterruptFlagNames[1], jsonFileObject.value("AuraInterruptFlags2").toArray(), "SpellInterrupt.json", "AuraInterruptFlags2", "Flag", "Name");
         }
         else
         {
