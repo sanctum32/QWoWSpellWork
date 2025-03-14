@@ -578,6 +578,7 @@ SpellDifficultyEntry::SpellDifficultyEntry(const DBCFileLoader::Record& record)
     }
 }
 
+#ifdef SPELLWORK_BUILD_SQL
 SpellDifficultyEntry::SpellDifficultyEntry(const MYSQL_ROW &sqlRow)
 {
     Id = static_cast<uint32_t>(std::stoul(sqlRow[0]));
@@ -586,6 +587,7 @@ SpellDifficultyEntry::SpellDifficultyEntry(const MYSQL_ROW &sqlRow)
         DifficultySpellID[i] = static_cast<uint32_t>(std::stoul(sqlRow[1 + i]));
     }
 }
+#endif // SPELLWORK_BUILD_SQL
 
 const std::map<uint8_t /*fieldId*/, DBCFieldAttrInfo /*info*/> SpellEntryFields =
 {
