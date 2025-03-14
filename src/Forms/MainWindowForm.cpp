@@ -49,7 +49,8 @@ void MainWindow::onResultListClick(QTableWidgetItem *item)
     const auto* spell = sDataStorage->GetSpellEntry(spellId);
     const uint8_t selectedLevel = static_cast<uint8_t>(ui.levelScalingSlider->value());
     const uint8_t comboPoints = static_cast<uint8_t>(ui.comboPointsSlider->value());
-    ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
+    ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel));
+    ui.spellEffectText->setText(spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
 }
 
 void MainWindow::onScalingSliderUpdate()
@@ -82,7 +83,8 @@ void MainWindow::onScalingSliderUpdate()
 
     if (const auto* spell = sDataStorage->GetSpellEntry(spellId))
     {
-        ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel) + "<br>" + spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
+        ui.spellInfoText->setText(spell->PrintBaseInfo(selectedLevel));
+        ui.spellEffectText->setText(spell->PrintSpellEffectInfo(selectedLevel, comboPoints));
     }
 }
 
@@ -102,6 +104,7 @@ void MainWindow::onClearResultsBtn()
     ui.comboPointsSlider->setValue(0);
     ui.comboScalingText->setText("Combo Points: 0");
     ui.spellInfoText->clear();
+    ui.spellEffectText->clear();
     ClearAndResetSearchResults();
 }
 

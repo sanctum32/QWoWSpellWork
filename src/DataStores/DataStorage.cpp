@@ -293,7 +293,6 @@ void DataStorage::GenerateExtraDataInfo()
 
         // Generate spell attributes string
         {
-            bool lineAdded = false;
             for (uint8_t attributeId = 0; attributeId < MAX_SPELL_ATTRIBUTES; ++attributeId)
             {
                 const uint32_t attributeMask = spellInfo.GetAttribute(attributeId);
@@ -302,13 +301,7 @@ void DataStorage::GenerateExtraDataInfo()
                     continue;
                 }
 
-                if (!lineAdded)
-                {
-                    spellInfo.m_AttributesStr += printLine;
-                    lineAdded = true;
-                }
-
-                QString attributeStr;
+                QStringList attributeStr;
                 for (uint8_t id = 0; id <= MAX_UINT32_BITMASK_INDEX; ++id)
                 {
                     const uint32_t mask = 1U << id;
@@ -325,9 +318,14 @@ void DataStorage::GenerateExtraDataInfo()
                     attributeStr += sSpellWorkJson->GetSpellAttributeName(attributeId, mask);
                 }
 
-                spellInfo.m_AttributesStr += QString("Attributes%1: %2<br><br>")
+                if (attributeStr.empty())
+                {
+                    continue;
+                }
+
+                spellInfo.m_AttributesStr += QString("Attributes%1: %2<br>")
                     .arg(attributeId)
-                    .arg(attributeStr);
+                    .arg(attributeStr.join(""));
             }
         }
     }
