@@ -36,3 +36,5 @@ Misc value, Misc valueB - Spell effect's misc values. These field could have bit
 | :SummonPropFlagNames: | Prints SpellSummonProperties.dbc entry summon flag names | Can be used only for SPELL_EFFECT_SUMMON and SPELL_EFFECT_SUMMON_PET effects |
 | :PowerTypeNameMiscVal: | Prints power type name | Power type by misc value |
 | :PowerTypeNameMiscValB: | Prints power type name | Power type by misc valueB |
+| :SchoolsNamesByMaskVal: | Prints spell school mask names list | Spell school masks by misc value |
+| :SchoolsNamesByMaskValB: | Prints spell school mask names list | Spell school masks by misc valueB |

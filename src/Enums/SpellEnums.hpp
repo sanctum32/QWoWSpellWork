@@ -1472,6 +1472,18 @@ enum SpellSchools : uint8_t
     SPELL_SCHOOL_ARCANE                 = 6,
 };
 
+enum SpellSchoolMasks : uint32_t
+{
+    SPELL_SCHOOL_MASK_NONE              = 0x00000,
+    SPELL_SCHOOL_MASK_NORMAL            = 1U << SPELL_SCHOOL_NORMAL,
+    SPELL_SCHOOL_MASK_HOLY              = 1U << SPELL_SCHOOL_HOLY,
+    SPELL_SCHOOL_MASK_FIRE              = 1U << SPELL_SCHOOL_FIRE,
+    SPELL_SCHOOL_MASK_NATURE            = 1U << SPELL_SCHOOL_NATURE,
+    SPELL_SCHOOL_MASK_FROST             = 1U << SPELL_SCHOOL_FROST,
+    SPELL_SCHOOL_MASK_SHADOW            = 1U << SPELL_SCHOOL_SHADOW,
+    SPELL_SCHOOL_MASK_ARCANE            = 1U << SPELL_SCHOOL_ARCANE,
+};
+
 enum SpellFamilyNames : uint8_t
 {
     SPELLFAMILY_GENERIC     = 0,

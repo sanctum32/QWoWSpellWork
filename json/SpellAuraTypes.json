@@ -88,7 +88,7 @@
     { "Id":86, "Name":"SPELL_AURA_CHANNEL_DEATH_ITEM", "EffectDetail": null },
     { "Id":87, "Name":"SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN", "EffectDetail": null },
     { "Id":88, "Name":"SPELL_AURA_MOD_HEALTH_REGEN_PERCENT", "EffectDetail": null },
-    { "Id":89, "Name":"SPELL_AURA_PERIODIC_DAMAGE_PERCENT", "EffectDetail": null },
+    { "Id":89, "Name":"SPELL_AURA_PERIODIC_DAMAGE_PERCENT", "EffectDetail": "Damage schools: :SchoolsNamesByMaskVal:" },
     { "Id":90, "Name":"SPELL_AURA_90", "EffectDetail": null },
     { "Id":91, "Name":"SPELL_AURA_MOD_DETECT_RANGE", "EffectDetail": null },
     { "Id":92, "Name":"SPELL_AURA_PREVENTS_FLEEING", "EffectDetail": null },

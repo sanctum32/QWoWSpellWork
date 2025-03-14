@@ -1526,6 +1526,42 @@ void SpellEffectEntry::GenerateExtraInfo()
         }
     };
 
+    auto FormatSchoolsNamesByMaskVal = [&]
+    {
+        const std::array<const strRepFormatData, 2> powerTypeFmtData = {{ {":SchoolsNamesByMaskVal:", getEffectMiscValue() }, { ":SchoolsNamesByMaskValB:", getEffectMiscValueB() } }};
+        for (const auto& [fmtSymbol, schoolMask] : powerTypeFmtData)
+        {
+            if (!m_extraInformation.contains(fmtSymbol, Qt::CaseInsensitive))
+            {
+                continue;
+            }
+
+            QStringList schoolNamesList;
+            for (uint8_t i = 0; i < MAX_UINT32_BITMASK_INDEX; ++i)
+            {
+                const uint32_t mask = 1U << i;
+                if ((schoolMask & mask) == 0)
+                {
+                    continue;
+                }
+
+                if (!schoolNamesList.empty())
+                {
+                    schoolNamesList += ", ";
+                }
+
+                schoolNamesList += sSpellWorkJson->GetSpellSchoolMaskName(mask);
+            }
+
+            if (schoolNamesList.empty())
+            {
+                schoolNamesList += sSpellWorkJson->GetSpellSchoolMaskName(SPELL_SCHOOL_MASK_NONE);
+            }
+
+            m_extraInformation.replace(fmtSymbol, schoolNamesList.join(""));
+        }
+    };
+
     // Apply formatting
     FormatMiscValueSymbol();
     FormatAreaEntryNameSymbol();
@@ -1540,6 +1576,7 @@ void SpellEffectEntry::GenerateExtraInfo()
     FormatEffectItemTypeSymbol();
     FormatEffectItemTypeNameSymbol();
     FormatPowerNamesByMiscVal();
+    FormatSchoolsNamesByMaskVal();
 
     if (getEffect() == SPELL_EFFECT_SUMMON || getEffect() == SPELL_EFFECT_SUMMON_PET)
     {
