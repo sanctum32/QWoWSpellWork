@@ -1514,6 +1514,18 @@ void SpellEffectEntry::GenerateExtraInfo()
         m_extraInformation.replace(":SummonPropFlagNames:", result, Qt::CaseInsensitive);
     };
 
+    auto FormatPowerNamesByMiscVal = [&]
+    {
+        const std::array<const strRepFormatData, 2> powerTypeFmtData = {{ {":PowerTypeNameMiscVal:", getEffectMiscValue() }, { ":PowerTypeNameMiscValB:", getEffectMiscValueB() } }};
+        for (const auto& [fmtSymbol, powerTypeVal] : powerTypeFmtData)
+        {
+            if (m_extraInformation.contains(fmtSymbol, Qt::CaseInsensitive))
+            {
+                m_extraInformation.replace(fmtSymbol, sSpellWorkJson->GetPowerTypeName(powerTypeVal));
+            }
+        }
+    };
+
     // Apply formatting
     FormatMiscValueSymbol();
     FormatAreaEntryNameSymbol();
@@ -1527,6 +1539,7 @@ void SpellEffectEntry::GenerateExtraInfo()
     FormatMechanicImmunityNameSymbol();
     FormatEffectItemTypeSymbol();
     FormatEffectItemTypeNameSymbol();
+    FormatPowerNamesByMiscVal();
 
     if (getEffect() == SPELL_EFFECT_SUMMON || getEffect() == SPELL_EFFECT_SUMMON_PET)
     {

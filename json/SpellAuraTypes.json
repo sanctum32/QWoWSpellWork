@@ -20,7 +20,7 @@
     { "Id":18, "Name":"SPELL_AURA_MOD_INVISIBILITY", "EffectDetail": null },
     { "Id":19, "Name":"SPELL_AURA_MOD_INVISIBILITY_DETECT", "EffectDetail": null },
     { "Id":20, "Name":"SPELL_AURA_OBS_MOD_HEALTH", "EffectDetail": null },
-    { "Id":21, "Name":"SPELL_AURA_OBS_MOD_POWER", "EffectDetail": null },
+    { "Id":21, "Name":"SPELL_AURA_OBS_MOD_POWER", "EffectDetail": "Effected power type: :PowerTypeNameMiscVal:" },
     { "Id":22, "Name":"SPELL_AURA_MOD_RESISTANCE", "EffectDetail": null },
     { "Id":23, "Name":"SPELL_AURA_PERIODIC_TRIGGER_SPELL", "EffectDetail": null },
     { "Id":24, "Name":"SPELL_AURA_PERIODIC_ENERGIZE", "EffectDetail": null },
