@@ -43,8 +43,8 @@ public:
 
     bool ReadSettings();
 
-    const SQLSettings& GetSQLConfig() const { return m_sql; }
-    const AppSettings& GetAppConfig() const { return m_appSettings; }
+    [[nodiscard]] const SQLSettings& GetSQLConfig() const { return m_sql; }
+    [[nodiscard]] const AppSettings& GetAppConfig() const { return m_appSettings; }
 };
 
 #define sSpellWorkConfig SpellWorkConfig::instance()

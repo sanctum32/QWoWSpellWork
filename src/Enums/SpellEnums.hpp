@@ -1472,9 +1472,9 @@ enum SpellSchools : uint8_t
     SPELL_SCHOOL_ARCANE                 = 6,
 };
 
-enum SpellSchoolMasks : uint32_t
+enum SpellSchoolMasks : uint8_t
 {
-    SPELL_SCHOOL_MASK_NONE              = 0x00000,
+    SPELL_SCHOOL_MASK_NONE              = 0x00,
     SPELL_SCHOOL_MASK_NORMAL            = 1U << SPELL_SCHOOL_NORMAL,
     SPELL_SCHOOL_MASK_HOLY              = 1U << SPELL_SCHOOL_HOLY,
     SPELL_SCHOOL_MASK_FIRE              = 1U << SPELL_SCHOOL_FIRE,
@@ -1508,7 +1508,7 @@ enum SpellFamilyNames : uint8_t
 };
 
 // SummonProperties.dbc, col 5
-enum SummonPropFlags
+enum SummonPropFlags : uint32_t
 {
     SUMMON_PROP_FLAG_NONE            = 0x00000000,          // 1342 spells in 3.0.3
     SUMMON_PROP_FLAG_UNK1            = 0x00000001,          // 75 spells in 3.0.3, something unfriendly

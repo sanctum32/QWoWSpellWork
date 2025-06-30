@@ -18,15 +18,15 @@ public:
     class Record
     {
     public:
-        float getFloat(size_t field) const;
-        uint32_t getUInt(size_t field) const;
-        int32_t getInt(size_t field) const;
-        uint8_t getUInt8(size_t field) const;
-        int8_t getInt8(size_t field) const;
-        uint64_t getUInt64(size_t field) const;
-        int64_t getInt64(size_t field) const;
+        [[nodiscard]] float getFloat(size_t field) const;
+        [[nodiscard]] uint32_t getUInt(size_t field) const;
+        [[nodiscard]] int32_t getInt(size_t field) const;
+        [[nodiscard]] uint8_t getUInt8(size_t field) const;
+        [[nodiscard]] int8_t getInt8(size_t field) const;
+        [[nodiscard]] uint64_t getUInt64(size_t field) const;
+        [[nodiscard]] int64_t getInt64(size_t field) const;
 
-        std::string getString(size_t field) const;
+        [[nodiscard]] std::string getString(size_t field) const;
 
     private:
         Record(DBCFileLoader &file_, unsigned char *offset_): offset(offset_), file(file_) { }
@@ -40,32 +40,25 @@ public:
     Record getRecord(size_t id);
     /// Get begin iterator over records
 
-    uint32_t GetNumRows() const { return dbcHeader.recordCount; }
-    uint32_t GetRowSize() const { return dbcHeader.recordSize; }
-    uint32_t GetCols() const { return dbcHeader.fieldCount; }
-    uint32_t GetOffset(size_t id) const { return (fieldsOffset != nullptr && id < dbcHeader.fieldCount) ? fieldsOffset[id] : 0; }
-    bool IsLoaded() const { return data != nullptr; }
+    [[nodiscard]] uint32_t GetNumRows() const { return dbcHeader.recordCount; }
+    [[nodiscard]] uint32_t GetRowSize() const { return dbcHeader.recordSize; }
+    [[nodiscard]] uint32_t GetCols() const { return dbcHeader.fieldCount; }
+    [[nodiscard]] uint32_t GetOffset(size_t id) const { return (fieldsOffset != nullptr && id < dbcHeader.fieldCount) ? fieldsOffset[id] : 0; }
+    [[nodiscard]] bool IsLoaded() const { return data != nullptr; }
     static uint32_t GetFormatRecordSize(const char * format, int32_t * index_pos = nullptr);
 
 private:
     struct DBCHeader
     {
-        DBCHeader() :
-            header(0),
-            recordCount(0),
-            fieldCount(0),
-            recordSize(0),
-            stringSize(0)
-        {
-        }
+        DBCHeader() = default;
 
-        uint32_t header;
-        uint32_t recordCount;
-        uint32_t fieldCount;
-        uint32_t recordSize;
-        uint32_t stringSize;
+        uint32_t header{0};
+        uint32_t recordCount{0};
+        uint32_t fieldCount{0};
+        uint32_t recordSize{0};
+        uint32_t stringSize{0};
 
-        bool IsHeaderValid() const
+        [[nodiscard]] bool IsHeaderValid() const
         {
             //'WDBC'
             return header == 0x43424457;

@@ -92,7 +92,11 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="3" column="0">
-         <widget class="QTextEdit" name="spellEffectText"/>
+         <widget class="QTextEdit" name="spellEffectText">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QTextEdit" name="spellInfoText">

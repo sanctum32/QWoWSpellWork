@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         QSettings settings("./qtlogging.ini", QSettings::IniFormat);
 
         settings.beginGroup("Rules");
-        QStringList keys = settings.allKeys();
+        const QStringList keys = settings.allKeys();
 
         for (const QString &key : keys) {
             QString rule = key + "=" + settings.value(key).toString();

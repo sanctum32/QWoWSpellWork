@@ -8,7 +8,7 @@
 Q_LOGGING_CATEGORY(JSON, "spellwork.json");
 
 template<class T>
-void ReadBasicJsonArrayPairData(T& container, const QJsonArray& jsonArray, QString jsonFileName, QString arrayName, QString keyName, QString keyValueName)
+void ReadBasicJsonArrayPairData(T& container, const QJsonArray& jsonArray, const QString& jsonFileName, const QString& arrayName, const QString& keyName, const QString& keyValueName)
 {
     for (const auto& dataArray : jsonArray)
     {
@@ -69,7 +69,7 @@ bool ReadBasicArrayPairFromFile(QString fileName, T& container, QString keyName 
     });
 }
 
-/*static*/ bool SpellWorkJson::OpenJson(const QString& fileName, std::function<void(const QJsonDocument& json)> readJsonDataFn)
+/*static*/ bool SpellWorkJson::OpenJson(const QString& fileName, const std::function<void(const QJsonDocument& json)>& readJsonDataFn)
 {
     qCDebug(JSON) << "Loading: " << fileName;
 
@@ -114,7 +114,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SpellSchool\" does not exists or is not array in file \"SpellSchools.json\"!";
+            qCDebug(JSON) << R"(Array "SpellSchool" does not exists or is not array in file "SpellSchools.json"!)";
         }
 
         if (jsonFileObject.contains("SpellSchoolMask") && jsonFileObject.value("SpellSchoolMask").isArray())
@@ -123,7 +123,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SpellSchoolMask\" does not exists or is not array in file \"SpellSchools.json\"!";
+            qCDebug(JSON) << R"(Array "SpellSchoolMask" does not exists or is not array in file "SpellSchools.json"!)";
         }
     });
 
@@ -143,7 +143,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SpellInterruptFlags\" does not exists or is not array in file \"SpellInterrupt.json\"!";
+            qCDebug(JSON) << R"(Array "SpellInterruptFlags" does not exists or is not array in file "SpellInterrupt.json"!)";
         }
 
         if (jsonFileObject.contains("AuraInterruptFlags") && jsonFileObject.value("AuraInterruptFlags").isArray())
@@ -152,7 +152,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"AuraInterruptFlags\" does not exists or is not array in file \"SpellInterrupt.json\"!";
+            qCDebug(JSON) << R"(Array "AuraInterruptFlags" does not exists or is not array in file "SpellInterrupt.json"!)";
         }
 
         if (jsonFileObject.contains("AuraInterruptFlags2") && jsonFileObject.value("AuraInterruptFlags2").isArray())
@@ -161,7 +161,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"AuraInterruptFlags2\" does not exists or is not array in file \"SpellInterrupt.json\"!";
+            qCDebug(JSON) << R"(Array "AuraInterruptFlags2" does not exists or is not array in file "SpellInterrupt.json"!)";
         }
     });
 
@@ -185,7 +185,7 @@ void SpellWorkJson::LoadJsonData()
             }
             else
             {
-                qCDebug(JSON) << "Array \"" << attributeName << "\" does not exists or is not array in file \"SpellAttributes.json\"!";
+                qCDebug(JSON) << "Array \"" << attributeName << R"(" does not exists or is not array in file "SpellAttributes.json"!)";
             }
         }
     });
@@ -206,7 +206,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SpellTargetNames\" does not exists or is not array in file \"SpellTargets.json\"!";
+            qCDebug(JSON) << R"(Array "SpellTargetNames" does not exists or is not array in file "SpellTargets.json"!)";
         }
 
         if (jsonFileObject.contains("SpellCastTargetFlags") && jsonFileObject.value("SpellCastTargetFlags").isArray())
@@ -215,7 +215,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SpellCastTargetFlags\" does not exists or is not array in file \"SpellTargets.json\"!";
+            qCDebug(JSON) << R"(Array "SpellCastTargetFlags" does not exists or is not array in file "SpellTargets.json"!)";
         }
     });
 
@@ -235,7 +235,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"ItemSubclassWeapon\" does not exists or is not array in file \"ItemSubclass.json\"!";
+            qCDebug(JSON) << R"(Array "ItemSubclassWeapon" does not exists or is not array in file "ItemSubclass.json"!)";
         }
 
         if (jsonFileObject.contains("ItemSubclassArmor") && jsonFileObject.value("ItemSubclassArmor").isArray())
@@ -244,7 +244,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"ItemSubclassArmor\" does not exists or is not array in file \"ItemSubclass.json\"!";
+            qCDebug(JSON) << R"(Array "ItemSubclassArmor" does not exists or is not array in file "ItemSubclass.json"!)";
         }
 
         if (jsonFileObject.contains("ItemSubclassJunk") && jsonFileObject.value("ItemSubclassJunk").isArray())
@@ -253,7 +253,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"ItemSubclassArmor\" does not exists or is not array in file \"ItemSubclass.json\"!";
+            qCDebug(JSON) << R"(Array "ItemSubclassArmor" does not exists or is not array in file "ItemSubclass.json"!)";
         }
 
         return true;
@@ -358,7 +358,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SummonCategory\" does not exists or is not array in file \"ItemSubclass.json\"!";
+            qCDebug(JSON) << R"(Array "SummonCategory" does not exists or is not array in file "ItemSubclass.json"!)";
         }
 
         if (jsonFileObject.contains("SummonTypeName") && jsonFileObject.value("SummonTypeName").isArray())
@@ -367,7 +367,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SummonTypeName\" does not exists or is not array in file \"ItemSubclass.json\"!";
+            qCDebug(JSON) << R"(Array "SummonTypeName" does not exists or is not array in file "ItemSubclass.json"!)";
         }
 
         if (jsonFileObject.contains("SummonFlags") && jsonFileObject.value("SummonFlags").isArray())
@@ -376,7 +376,7 @@ void SpellWorkJson::LoadJsonData()
         }
         else
         {
-            qCDebug(JSON) << "Array \"SummonFlags\" does not exists or is not array in file \"ItemSubclass.json\"!";
+            qCDebug(JSON) << R"(Array "SummonFlags" does not exists or is not array in file "ItemSubclass.json"!)";
         }
 
         if (jsonFileObject.contains("TypeNameIdOverwrite") && jsonFileObject.value("TypeNameIdOverwrite").isArray())
@@ -490,7 +490,7 @@ const QString SpellWorkJson::GetSpellFamilyName(uint32_t id) const
 
 const QString SpellWorkJson::GetSpellAttributeName(uint32_t attributeId, uint32_t attributeFlag) const
 {
-    const auto nullResult = QString("SPELL_ATTR%1_UNK_%2").arg(attributeId).arg(attributeFlag);
+    auto nullResult = QString("SPELL_ATTR%1_UNK_%2").arg(attributeId).arg(attributeFlag);
     try
     {
         const auto& attributes = m_spellAttributeNames[attributeId];

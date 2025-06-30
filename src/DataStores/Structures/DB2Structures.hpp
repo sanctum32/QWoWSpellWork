@@ -98,7 +98,7 @@ struct ItemSparseEntry
     int32_t      CurrencySubstitutionCount{};                             // 132
     */
 
-    const QString& GetName() const { return Display; }
+    [[nodiscard]] const QString& GetName() const { return Display; }
     static constexpr const char* GetDB2Format()
     {
         //return "iiiiffiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiisssssiiiiiiiiiiiiiiiiiiiiiifiiifii";

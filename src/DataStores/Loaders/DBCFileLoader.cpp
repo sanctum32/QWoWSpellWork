@@ -121,7 +121,7 @@ DBCFileLoader::~DBCFileLoader()
 DBCFileLoader::Record DBCFileLoader::getRecord(size_t id)
 {
     assert(data);
-    return Record(*this, data + id * dbcHeader.recordSize);
+    return { *this, data + id * dbcHeader.recordSize };
 }
 
 uint32_t DBCFileLoader::GetFormatRecordSize(const char* format, int32_t* index_pos)

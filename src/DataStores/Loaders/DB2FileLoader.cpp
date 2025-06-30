@@ -176,7 +176,7 @@ DB2FileLoader::~DB2FileLoader()
 DB2FileLoader::Record DB2FileLoader::getRecord(size_t id)
 {
     assert(m_data);
-    return Record(*this, m_data + id*db2Header.m_recordSize);
+    return { *this, m_data + id*db2Header.m_recordSize };
 }
 
 uint32_t DB2FileLoader::GetFormatRecordSize(char const* format, int32_t* index_pos)
@@ -225,7 +225,7 @@ uint32_t DB2FileLoader::GetFormatStringFieldCount(char const* format)
 
 char* DB2FileLoader::AutoProduceData(char const* format, uint32_t& records, char**& indexTable)
 {
-    typedef char * ptr;
+    using ptr = char*;
     if (strlen(format) != db2Header.m_fieldCount)
         return nullptr;
 

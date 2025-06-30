@@ -40,11 +40,11 @@ public:
     Record getRecord(size_t id);
     /// Get begin iterator over records
 
-    uint32_t GetNumRows() const { return db2Header.m_recordCount;}
-    uint32_t GetCols() const { return db2Header.m_fieldCount; }
-    uint32_t GetOffset(size_t id) const { return (m_fieldsOffset != nullptr && id < db2Header.m_fieldCount) ? m_fieldsOffset[id] : 0; }
-    uint32_t GetHash() const { return db2Header.m_tableHash; }
-    bool IsLoaded() const { return (m_data != nullptr); }
+    [[nodiscard]] uint32_t GetNumRows() const { return db2Header.m_recordCount;}
+    [[nodiscard]] uint32_t GetCols() const { return db2Header.m_fieldCount; }
+    [[nodiscard]] uint32_t GetOffset(size_t id) const { return (m_fieldsOffset != nullptr && id < db2Header.m_fieldCount) ? m_fieldsOffset[id] : 0; }
+    [[nodiscard]] uint32_t GetHash() const { return db2Header.m_tableHash; }
+    [[nodiscard]] bool IsLoaded() const { return (m_data != nullptr); }
     char* AutoProduceData(char const* fmt, uint32_t& count, char**& indexTable);
     char* AutoProduceStringsArrayHolders(char const* fmt, char* dataTable);
     char* AutoProduceStrings(char const* format, char* dataTable, uint32_t locale);
@@ -68,7 +68,7 @@ private:
         int m_locale{};        // WDB2
         int m_unk5{};          // WDB2
 
-        bool IsHeaderValid() const
+        [[nodiscard]] bool IsHeaderValid() const
         {
             // 'WDB2'
             return header == 0x32424457;

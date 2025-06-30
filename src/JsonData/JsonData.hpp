@@ -68,48 +68,48 @@ public:
     void LoadJsonData();
 
     // Opens json
-    static bool OpenJson(const QString& fileName, std::function<void(const QJsonDocument& json)> handle);
+    static bool OpenJson(const QString& fileName, const std::function<void(const QJsonDocument& json)>& handle);
 
     // Data functions
-    const QString GetSpellSchoolName(uint32_t id) const;
-    const QString GetSpellSchoolMaskName(uint32_t flag) const;
-    const QString GetSpellModName(uint32_t id) const;
-    const QString GetSpellInterruptFlagName(uint32_t flag) const;
+    [[nodiscard]] const QString GetSpellSchoolName(uint32_t id) const;
+    [[nodiscard]] const QString GetSpellSchoolMaskName(uint32_t flag) const;
+    [[nodiscard]] const QString GetSpellModName(uint32_t id) const;
+    [[nodiscard]] const QString GetSpellInterruptFlagName(uint32_t flag) const;
 
     // flagsIds: 0 -> AuraInterruptFlags, 1 -> AuraInterruptFlags2
-    const QString GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId) const;
-    const QString GetSpellAuraTypeName(uint32_t id) const;
-    const SpellEffectInfo* GetSpellAuraEffectInfo(uint32_t id) const;
-    const auto& GetSpellAuraEffectData() const { return m_spellAuraTypeNames; }
-    const QString GetSpellProcDescription(uint32_t id) const;
-    const auto& GetSpellFamilyData() const { return m_spellFamilyNames; }
-    const QString GetSpellFamilyName(uint32_t id) const;
+    [[nodiscard]] const QString GetAuraInterruptFlagName(uint32_t flag, uint8_t flagsId) const;
+    [[nodiscard]] const QString GetSpellAuraTypeName(uint32_t id) const;
+    [[nodiscard]] const SpellEffectInfo* GetSpellAuraEffectInfo(uint32_t id) const;
+    [[nodiscard]] const auto& GetSpellAuraEffectData() const { return m_spellAuraTypeNames; }
+    [[nodiscard]] const QString GetSpellProcDescription(uint32_t id) const;
+    [[nodiscard]] const auto& GetSpellFamilyData() const { return m_spellFamilyNames; }
+    [[nodiscard]] const QString GetSpellFamilyName(uint32_t id) const;
 
-    const QString GetSpellAttributeName(uint32_t attributeId, uint32_t attributeFlag) const;
-    const QString GetSpellEffectName(uint32_t id) const;
-    const SpellEffectInfo* GetSpellEffectInfo(uint32_t id) const;
-    auto const& GetSpellEffectData() const { return m_spellEffectInfo; }
-    const QString GetSpellTargetName(uint32_t id) const;
-    auto const& GetSpellTargetData() const { return m_spellTargetNames; }
-    const QString GetSpellTargetFlagName(uint32_t flag) const;
-    const QString GetCombatRatingName(uint32_t id) const;
-    const QString GetUnitModName(uint32_t id) const;
-    const QString GetSpellAuraStateName(uint32_t id) const;
-    const QString GetPowerTypeName(int32_t id) const;
-    const QString GetSpellMechanicName(uint32_t id) const;
-    const QString GetDispelName(uint32_t id) const;
-    const QString GetItemInventoryName(uint32_t id) const;
-    const QString GetItemSubclassWeaponName(uint32_t id) const;
-    const QString GetItemSubclassArmorName(uint32_t id) const;
-    const QString GetItemSubclassJunkName(uint32_t id) const;
-    const QString GetItemClassName(uint32_t id) const;
-    const QString GetShapeshiftFormName(uint32_t id) const;
-    const QString GetCreatureTypeName(uint32_t id) const;
-    const QString GetSpellDamageTypeName(uint32_t id) const;
-    const QString GetSpellPreventionTypeName(uint32_t id) const;
-    const QString GetSummonCategoryName(uint32_t id) const;
-    const QString GetSummonTypeName(uint32_t id) const;
-    const QString GetSummonPropertyFlagName(uint32_t id) const;
+    [[nodiscard]] const QString GetSpellAttributeName(uint32_t attributeId, uint32_t attributeFlag) const;
+    [[nodiscard]] const QString GetSpellEffectName(uint32_t id) const;
+    [[nodiscard]] const SpellEffectInfo* GetSpellEffectInfo(uint32_t id) const;
+    [[nodiscard]] auto const& GetSpellEffectData() const { return m_spellEffectInfo; }
+    [[nodiscard]] const QString GetSpellTargetName(uint32_t id) const;
+    [[nodiscard]] auto const& GetSpellTargetData() const { return m_spellTargetNames; }
+    [[nodiscard]] const QString GetSpellTargetFlagName(uint32_t flag) const;
+    [[nodiscard]] const QString GetCombatRatingName(uint32_t id) const;
+    [[nodiscard]] const QString GetUnitModName(uint32_t id) const;
+    [[nodiscard]] const QString GetSpellAuraStateName(uint32_t id) const;
+    [[nodiscard]] const QString GetPowerTypeName(int32_t id) const;
+    [[nodiscard]] const QString GetSpellMechanicName(uint32_t id) const;
+    [[nodiscard]] const QString GetDispelName(uint32_t id) const;
+    [[nodiscard]] const QString GetItemInventoryName(uint32_t id) const;
+    [[nodiscard]] const QString GetItemSubclassWeaponName(uint32_t id) const;
+    [[nodiscard]] const QString GetItemSubclassArmorName(uint32_t id) const;
+    [[nodiscard]] const QString GetItemSubclassJunkName(uint32_t id) const;
+    [[nodiscard]] const QString GetItemClassName(uint32_t id) const;
+    [[nodiscard]] const QString GetShapeshiftFormName(uint32_t id) const;
+    [[nodiscard]] const QString GetCreatureTypeName(uint32_t id) const;
+    [[nodiscard]] const QString GetSpellDamageTypeName(uint32_t id) const;
+    [[nodiscard]] const QString GetSpellPreventionTypeName(uint32_t id) const;
+    [[nodiscard]] const QString GetSummonCategoryName(uint32_t id) const;
+    [[nodiscard]] const QString GetSummonTypeName(uint32_t id) const;
+    [[nodiscard]] const QString GetSummonPropertyFlagName(uint32_t id) const;
 };
 
 #define sSpellWorkJson SpellWorkJson::instance()
